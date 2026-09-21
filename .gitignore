@@ -1,0 +1,23 @@
+# Local environments and caches
+.venv/
+tmp/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Download fragments and temporary outputs
+*.tmp
+*.partial
+*.slow-partial
+*.part[0-9]
+
+# Reproducible data and trained artifacts (too large for Git)
+*.gz
+*.npz
+*.npy
+*.joblib
+
+# Course reference material that is not part of the project
+TTNT_UNG_DUNG_DANH SÁCH ĐỀ TÀI BÁO CÁO ĐỒ ÁN CUỐI KỲ_SV.pdf
+y_tuong_Tri_tue_nhan_tao_ung_dung.txt

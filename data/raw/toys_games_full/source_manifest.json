@@ -1,0 +1,15 @@
+{
+  "dataset": "Amazon Reviews 2023 - Toys and Games (raw)",
+  "source": "https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/review_categories/Toys_and_Games.jsonl.gz",
+  "downloaded_on": "2026-09-21",
+  "interaction_file": "Toys_and_Games.jsonl.gz",
+  "interaction_records": 16260406,
+  "compressed_bytes": 1948910944,
+  "uncompressed_bytes": 7316094780,
+  "sha256": "0ba8278988b3b83d99d51fe8c521ec18b7e87d4339404b534942792f5ef845cc",
+  "validation": "Read with Python gzip through EOF; gzip CRC passed and newline records were counted.",
+  "metadata_file": "../toys_games_5core/meta_Toys_and_Games.jsonl.gz",
+  "metadata_bytes": 658655829,
+  "metadata_sha256": "c69383112c0c0b0f10439eada942f2cf430511b993d2af8c665a5349c8749f07",
+  "metadata_note": "The existing metadata file is the matching full-category Amazon Reviews 2023 metadata and is reused without duplication."
+}

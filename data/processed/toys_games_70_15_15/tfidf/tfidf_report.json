@@ -1,0 +1,90 @@
+{
+  "fit_split": "train",
+  "fit_fields": [
+    "text"
+  ],
+  "parameters": {
+    "max_features": 20000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "lowercase": true,
+    "sublinear_tf": true,
+    "norm": "l2",
+    "dtype": "float32"
+  },
+  "versions": {
+    "scikit_learn": "1.6.1",
+    "numpy": "2.2.6",
+    "scipy": "1.17.1"
+  },
+  "zero_vector_policy": "Retain row and mark has_text_vector=0. Downstream ranking needs a fallback; no fabricated text.",
+  "verification": "Exact sparse serialization; all item IDs and norms; sampled retransformation; frozen vocabulary and IDF on validation/test.",
+  "splits": {
+    "train": {
+      "shape": [
+        113334,
+        20000
+      ],
+      "nonzero_values": 17300931,
+      "zero_vector_products": 16,
+      "zero_vector_ids": [
+        "B07BWF7VGL",
+        "B08QRR8N1Z",
+        "B001GLR2QM",
+        "B075L6DV2F",
+        "B07G5BBLPY",
+        "B01L8FSS0O",
+        "B015D9O7G0",
+        "B001U9CYK4",
+        "B01M747ST4",
+        "B071G514SR",
+        "B01K5VMTPW",
+        "B01DOOEE78",
+        "B08CXGQ41F",
+        "B083FQQB3T",
+        "B07MR4Z8R8",
+        "B002LUBAT2"
+      ],
+      "sparse_memory_mib": 132.43,
+      "matrix_file_bytes": 91834312,
+      "source_sha256": "8b905281734a3a2f9aa2d80c195cad9d8e34eb5277873138eff3990db37caad2",
+      "sample_rows_verified": 64
+    },
+    "validation": {
+      "shape": [
+        24413,
+        20000
+      ],
+      "nonzero_values": 3732683,
+      "zero_vector_products": 3,
+      "zero_vector_ids": [
+        "B078HQWJTT",
+        "B00JZPCJZK",
+        "B082R4PT4L"
+      ],
+      "sparse_memory_mib": 28.57,
+      "matrix_file_bytes": 19807639,
+      "source_sha256": "1d9122a03ab75781952ddb9bbfc1ff9d0786a12a56d05604e7c72583cd4abaf1",
+      "sample_rows_verified": 64
+    },
+    "test": {
+      "shape": [
+        24288,
+        20000
+      ],
+      "nonzero_values": 3723656,
+      "zero_vector_products": 1,
+      "zero_vector_ids": [
+        "B07JHG14TF"
+      ],
+      "sparse_memory_mib": 28.5,
+      "matrix_file_bytes": 19758185,
+      "source_sha256": "9de4d1309d87d9afbababe195e242fa12d838933de5f3fdc776607b92f7b95a0",
+      "sample_rows_verified": 64
+    }
+  },
+  "elapsed_seconds": 126.21
+}
