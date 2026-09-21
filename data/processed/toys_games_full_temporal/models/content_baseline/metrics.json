@@ -8,21 +8,21 @@
         "overall": {
           "samples": 40000,
           "recall@10": 0.2479,
-          "ndcg@10": 0.158325,
+          "ndcg@10": 0.158358,
           "mrr@10": 0.130993,
           "mean_rank": 42.037
         },
         "known_user": {
           "samples": 20601,
           "recall@10": 0.236979,
-          "ndcg@10": 0.149048,
+          "ndcg@10": 0.149045,
           "mrr@10": 0.122235,
           "mean_rank": 42.281
         },
         "empty_history": {
           "samples": 19399,
           "recall@10": 0.259498,
-          "ndcg@10": 0.168213,
+          "ndcg@10": 0.168247,
           "mrr@10": 0.140295,
           "mean_rank": 41.778
         },
@@ -44,14 +44,14 @@
           "cold": {
             "samples": 10000,
             "recall@10": 0.0615,
-            "ndcg@10": 0.018646,
+            "ndcg@10": 0.018641,
             "mrr@10": 0.006981,
             "mean_rank": 19.344
           },
           "warm": {
             "samples": 10000,
             "recall@10": 0.9301,
-            "ndcg@10": 0.614746,
+            "ndcg@10": 0.61479,
             "mrr@10": 0.516993,
             "mean_rank": 3.928
           }
@@ -61,21 +61,21 @@
         "overall": {
           "samples": 40000,
           "recall@10": 0.391925,
-          "ndcg@10": 0.260254,
+          "ndcg@10": 0.260367,
           "mrr@10": 0.219947,
           "mean_rank": 30.31
         },
         "known_user": {
           "samples": 20601,
           "recall@10": 0.516625,
-          "ndcg@10": 0.347168,
+          "ndcg@10": 0.347113,
           "mrr@10": 0.294951,
           "mean_rank": 19.512
         },
         "empty_history": {
           "samples": 19399,
           "recall@10": 0.259498,
-          "ndcg@10": 0.168213,
+          "ndcg@10": 0.168247,
           "mrr@10": 0.140295,
           "mean_rank": 41.778
         },
@@ -83,28 +83,28 @@
           "zero_shot": {
             "samples": 10000,
             "recall@10": 0.2772,
-            "ndcg@10": 0.186523,
+            "ndcg@10": 0.186491,
             "mrr@10": 0.158494,
             "mean_rank": 55.467
           },
           "extreme_cold": {
             "samples": 10000,
             "recall@10": 0.279,
-            "ndcg@10": 0.191528,
+            "ndcg@10": 0.191555,
             "mrr@10": 0.164588,
             "mean_rank": 35.007
           },
           "cold": {
             "samples": 10000,
             "recall@10": 0.3048,
-            "ndcg@10": 0.195801,
+            "ndcg@10": 0.195763,
             "mrr@10": 0.162906,
             "mean_rank": 19.287
           },
           "warm": {
             "samples": 10000,
             "recall@10": 0.7067,
-            "ndcg@10": 0.467529,
+            "ndcg@10": 0.467661,
             "mrr@10": 0.393799,
             "mean_rank": 11.481
           }
@@ -116,21 +116,21 @@
         "overall": {
           "samples": 40000,
           "recall@10": 0.2669,
-          "ndcg@10": 0.169067,
+          "ndcg@10": 0.169054,
           "mrr@10": 0.139323,
           "mean_rank": 38.474
         },
         "known_user": {
           "samples": 21092,
           "recall@10": 0.256495,
-          "ndcg@10": 0.161011,
+          "ndcg@10": 0.161027,
           "mrr@10": 0.13213,
           "mean_rank": 38.567
         },
         "empty_history": {
           "samples": 18908,
           "recall@10": 0.278506,
-          "ndcg@10": 0.177979,
+          "ndcg@10": 0.178009,
           "mrr@10": 0.147346,
           "mean_rank": 38.37
         },
@@ -152,14 +152,14 @@
           "cold": {
             "samples": 10000,
             "recall@10": 0.1113,
-            "ndcg@10": 0.034393,
+            "ndcg@10": 0.034382,
             "mrr@10": 0.013288,
             "mean_rank": 17.127
           },
           "warm": {
             "samples": 10000,
             "recall@10": 0.9563,
-            "ndcg@10": 0.641602,
+            "ndcg@10": 0.641835,
             "mrr@10": 0.544004,
             "mean_rank": 3.555
           }
@@ -169,21 +169,21 @@
         "overall": {
           "samples": 40000,
           "recall@10": 0.401275,
-          "ndcg@10": 0.265869,
+          "ndcg@10": 0.265799,
           "mrr@10": 0.224271,
           "mean_rank": 28.272
         },
         "known_user": {
           "samples": 21092,
           "recall@10": 0.511331,
-          "ndcg@10": 0.344482,
+          "ndcg@10": 0.3445,
           "mrr@10": 0.29323,
           "mean_rank": 19.219
         },
         "empty_history": {
           "samples": 18908,
           "recall@10": 0.278506,
-          "ndcg@10": 0.177979,
+          "ndcg@10": 0.178009,
           "mrr@10": 0.147346,
           "mean_rank": 38.37
         },
@@ -191,28 +191,28 @@
           "zero_shot": {
             "samples": 10000,
             "recall@10": 0.2816,
-            "ndcg@10": 0.192261,
+            "ndcg@10": 0.192259,
             "mrr@10": 0.164759,
             "mean_rank": 51.659
           },
           "extreme_cold": {
             "samples": 10000,
             "recall@10": 0.2874,
-            "ndcg@10": 0.197266,
+            "ndcg@10": 0.197258,
             "mrr@10": 0.169417,
             "mean_rank": 31.173
           },
           "cold": {
             "samples": 10000,
             "recall@10": 0.3296,
-            "ndcg@10": 0.204468,
+            "ndcg@10": 0.204429,
             "mrr@10": 0.167092,
             "mean_rank": 18.356
           },
           "warm": {
             "samples": 10000,
             "recall@10": 0.7065,
-            "ndcg@10": 0.469238,
+            "ndcg@10": 0.469251,
             "mrr@10": 0.395815,
             "mean_rank": 11.9
           }

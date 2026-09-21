@@ -29,21 +29,21 @@
       "overall": {
         "samples": 40000,
         "recall@10": 0.200325,
-        "ndcg@10": 0.12085,
+        "ndcg@10": 0.120842,
         "mrr@10": 0.096745,
         "mean_rank": 45.244
       },
       "known_user": {
         "samples": 20601,
         "recall@10": 0.144605,
-        "ndcg@10": 0.076172,
+        "ndcg@10": 0.076202,
         "mrr@10": 0.055736,
         "mean_rank": 48.508
       },
       "empty_history": {
         "samples": 19399,
         "recall@10": 0.259498,
-        "ndcg@10": 0.168213,
+        "ndcg@10": 0.168247,
         "mrr@10": 0.140295,
         "mean_rank": 41.778
       },
@@ -58,21 +58,21 @@
         "extreme_cold": {
           "samples": 10000,
           "recall@10": 0.0717,
-          "ndcg@10": 0.036957,
+          "ndcg@10": 0.036952,
           "mrr@10": 0.026559,
           "mean_rank": 48.581
         },
         "cold": {
           "samples": 10000,
           "recall@10": 0.1195,
-          "ndcg@10": 0.055359,
+          "ndcg@10": 0.055349,
           "mrr@10": 0.036762,
           "mean_rank": 30.968
         },
         "warm": {
           "samples": 10000,
           "recall@10": 0.6101,
-          "ndcg@10": 0.391113,
+          "ndcg@10": 0.391065,
           "mrr@10": 0.32366,
           "mean_rank": 18.113
         }
@@ -82,21 +82,21 @@
       "overall": {
         "samples": 40000,
         "recall@10": 0.21925,
-        "ndcg@10": 0.130981,
+        "ndcg@10": 0.131005,
         "mrr@10": 0.104348,
         "mean_rank": 42.422
       },
       "known_user": {
         "samples": 21092,
         "recall@10": 0.166129,
-        "ndcg@10": 0.088867,
+        "ndcg@10": 0.088868,
         "mrr@10": 0.065803,
         "mean_rank": 46.054
       },
       "empty_history": {
         "samples": 18908,
         "recall@10": 0.278506,
-        "ndcg@10": 0.177979,
+        "ndcg@10": 0.178009,
         "mrr@10": 0.147346,
         "mean_rank": 38.37
       },
@@ -111,21 +111,21 @@
         "extreme_cold": {
           "samples": 10000,
           "recall@10": 0.0775,
-          "ndcg@10": 0.039215,
+          "ndcg@10": 0.039212,
           "mrr@10": 0.027834,
           "mean_rank": 44.021
         },
         "cold": {
           "samples": 10000,
           "recall@10": 0.1498,
-          "ndcg@10": 0.064819,
+          "ndcg@10": 0.06485,
           "mrr@10": 0.040528,
           "mean_rank": 28.643
         },
         "warm": {
           "samples": 10000,
           "recall@10": 0.6497,
-          "ndcg@10": 0.419922,
+          "ndcg@10": 0.419957,
           "mrr@10": 0.349031,
           "mean_rank": 16.861
         }

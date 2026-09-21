@@ -2,7 +2,7 @@
 
 Hệ khuyến nghị sản phẩm mới trên thương mại điện tử, được xây dựng trên Amazon Reviews 2023 - Toys and Games.
 
-Phiên bản hiện tại đã có pipeline tiền xử lý theo thời gian, đặc trưng nội dung TF-IDF cho toàn bộ sản phẩm, content-based baseline và collaborative TruncatedSVD baseline. Bộ mẫu đánh giá cố định được dùng chung giữa các mô hình để so sánh công bằng.
+Phiên bản hiện tại đã có pipeline tiền xử lý theo thời gian, đặc trưng nội dung TF-IDF cho toàn bộ sản phẩm, content-based baseline, collaborative TruncatedSVD và hybrid reciprocal-rank fusion. Bộ mẫu đánh giá cố định được dùng chung giữa các mô hình để so sánh công bằng.
 
 ## Dữ liệu và quy mô
 
@@ -35,19 +35,21 @@ python src/build_full_content_features.py
 python src/build_recommender_samples.py
 python src/evaluate_content_baseline.py
 python src/train_evaluate_collaborative_svd.py
+python src/train_evaluate_hybrid_rrf.py
 ```
 
 Pipeline tự kiểm tra input, ghi file theo cách an toàn qua file tạm và từ chối ghi đè output đã hoàn thành. Các manifest, tham số và metric nhỏ được lưu trong `data/` để có thể kiểm tra lại thí nghiệm.
 
-## Kết quả baseline
+## Kết quả
 
 Đánh giá trên test sample cân bằng 40.000 trường hợp, mỗi trường hợp có 1 positive và 99 negative cố định:
 
 | Mô hình | Recall@10 | NDCG@10 | MRR@10 |
 |---|---:|---:|---:|
 | Popularity | 0.2669 | 0.1691 | 0.1393 |
-| TF-IDF content profile | **0.4013** | **0.2659** | **0.2243** |
+| TF-IDF content profile | 0.4013 | **0.2658** | **0.2243** |
 | Collaborative TruncatedSVD | 0.2193 | 0.1310 | 0.1043 |
+| Candidate-aware hybrid RRF | **0.4231** | 0.2657 | 0.2172 |
 
 Theo Recall@10 trên từng chế độ:
 
@@ -55,8 +57,18 @@ Theo Recall@10 trên từng chế độ:
 |---|---:|---:|---:|---:|
 | TF-IDF content profile | 0.2816 | 0.2874 | 0.3296 | **0.7065** |
 | Collaborative TruncatedSVD | 0.0000 | 0.0775 | 0.1498 | 0.6497 |
+| Candidate-aware hybrid RRF | 0.2731 | 0.2575 | 0.3146 | **0.8473** |
 
-Kết quả cho thấy content model xử lý cold-start tốt hơn, còn collaborative signal hữu ích nhất ở nhóm warm. Bước tiếp theo là học bộ trộn hai điểm số theo mức độ cold-start thay vì dùng một trọng số chung.
+Hybrid dùng RRF với trọng số theo train-frequency regime của từng candidate. Trọng số được chọn chỉ trên validation; test không tham gia tuning. Cổng phối hợp đã học được:
+
+| Candidate regime | Popularity | Content | Collaborative |
+|---|---:|---:|---:|
+| Zero-shot | 0.0 | 1.0 | 0.0 |
+| Extreme cold | 0.1 | 0.9 | 0.0 |
+| Cold | 0.1 | 0.9 | 0.0 |
+| Warm | 0.7 | 0.3 | 0.0 |
+
+Hybrid tăng Recall@10 thêm 5,4% tương đối so với content baseline và cải thiện mạnh nhóm warm; NDCG@10 gần như ngang nhau. Collaborative SVD được giữ làm baseline, nhưng validation đã chọn trọng số 0 cho tín hiệu này vì chưa mang lại giá trị bổ sung so với popularity và content.
 
 ## Cấu trúc chính
 
@@ -67,6 +79,9 @@ src/
   build_recommender_samples.py           # candidate set dùng chung
   evaluate_content_baseline.py           # popularity + content baseline
   train_evaluate_collaborative_svd.py    # collaborative SVD baseline
+  train_evaluate_hybrid_rrf.py            # tune trên validation + test hybrid
+docs/
+  Proposal.pdf
 data/
   README.md
   raw/**/source_manifest.json
