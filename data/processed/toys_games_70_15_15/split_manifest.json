@@ -1,0 +1,50 @@
+{
+  "seed": 42,
+  "method": "Group products sharing a normalized MAIN-image ID, then greedily balance groups by interaction count.",
+  "history_policy": "Original history was removed; rebuild from train-only earlier events.",
+  "target_ratios": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "interaction_rows": {
+    "train": 2703319,
+    "validation": 579284,
+    "test": 579283
+  },
+  "interaction_ratios": {
+    "train": 0.6999996892709935,
+    "validation": 0.15000028483492261,
+    "test": 0.15000002589408387
+  },
+  "product_counts": {
+    "train": 113334,
+    "validation": 24413,
+    "test": 24288
+  },
+  "product_overlap": {
+    "train_validation": 0,
+    "train_test": 0,
+    "validation_test": 0
+  },
+  "metadata_counts": {
+    "train": 113334,
+    "test": 24288,
+    "validation": 24413
+  },
+  "missing_metadata_products": 0,
+  "source_rows": 3861886,
+  "source_users": 432264,
+  "source_products": 162035,
+  "duplicate_interactions": 0,
+  "duplicate_metadata_records": 0,
+  "main_image_ids": 307654,
+  "shared_main_image_links": 2679,
+  "image_connected_components": 160584,
+  "largest_image_component_products": 111,
+  "excluded_metadata_fields": [
+    "average_rating",
+    "rating_number",
+    "bought_together"
+  ]
+}

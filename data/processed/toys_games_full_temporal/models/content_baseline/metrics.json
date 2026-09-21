@@ -1,0 +1,223 @@
+{
+  "candidate_protocol": "One positive plus 99 fixed sampled negatives shared across models.",
+  "content_model": "Sum TF-IDF vectors of the latest 10 history items; cosine dot-product against L2-normalized item vectors; popularity fallback/tie-break.",
+  "k": 10,
+  "splits": {
+    "validation": {
+      "popularity": {
+        "overall": {
+          "samples": 40000,
+          "recall@10": 0.2479,
+          "ndcg@10": 0.158325,
+          "mrr@10": 0.130993,
+          "mean_rank": 42.037
+        },
+        "known_user": {
+          "samples": 20601,
+          "recall@10": 0.236979,
+          "ndcg@10": 0.149048,
+          "mrr@10": 0.122235,
+          "mean_rank": 42.281
+        },
+        "empty_history": {
+          "samples": 19399,
+          "recall@10": 0.259498,
+          "ndcg@10": 0.168213,
+          "mrr@10": 0.140295,
+          "mean_rank": 41.778
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.0,
+            "ndcg@10": 0.0,
+            "mrr@10": 0.0,
+            "mean_rank": 93.669
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.0,
+            "ndcg@10": 0.0,
+            "mrr@10": 0.0,
+            "mean_rank": 51.207
+          },
+          "cold": {
+            "samples": 10000,
+            "recall@10": 0.0615,
+            "ndcg@10": 0.018646,
+            "mrr@10": 0.006981,
+            "mean_rank": 19.344
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.9301,
+            "ndcg@10": 0.614746,
+            "mrr@10": 0.516993,
+            "mean_rank": 3.928
+          }
+        }
+      },
+      "tfidf_profile": {
+        "overall": {
+          "samples": 40000,
+          "recall@10": 0.391925,
+          "ndcg@10": 0.260254,
+          "mrr@10": 0.219947,
+          "mean_rank": 30.31
+        },
+        "known_user": {
+          "samples": 20601,
+          "recall@10": 0.516625,
+          "ndcg@10": 0.347168,
+          "mrr@10": 0.294951,
+          "mean_rank": 19.512
+        },
+        "empty_history": {
+          "samples": 19399,
+          "recall@10": 0.259498,
+          "ndcg@10": 0.168213,
+          "mrr@10": 0.140295,
+          "mean_rank": 41.778
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.2772,
+            "ndcg@10": 0.186523,
+            "mrr@10": 0.158494,
+            "mean_rank": 55.467
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.279,
+            "ndcg@10": 0.191528,
+            "mrr@10": 0.164588,
+            "mean_rank": 35.007
+          },
+          "cold": {
+            "samples": 10000,
+            "recall@10": 0.3048,
+            "ndcg@10": 0.195801,
+            "mrr@10": 0.162906,
+            "mean_rank": 19.287
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.7067,
+            "ndcg@10": 0.467529,
+            "mrr@10": 0.393799,
+            "mean_rank": 11.481
+          }
+        }
+      }
+    },
+    "test": {
+      "popularity": {
+        "overall": {
+          "samples": 40000,
+          "recall@10": 0.2669,
+          "ndcg@10": 0.169067,
+          "mrr@10": 0.139323,
+          "mean_rank": 38.474
+        },
+        "known_user": {
+          "samples": 21092,
+          "recall@10": 0.256495,
+          "ndcg@10": 0.161011,
+          "mrr@10": 0.13213,
+          "mean_rank": 38.567
+        },
+        "empty_history": {
+          "samples": 18908,
+          "recall@10": 0.278506,
+          "ndcg@10": 0.177979,
+          "mrr@10": 0.147346,
+          "mean_rank": 38.37
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.0,
+            "ndcg@10": 0.0,
+            "mrr@10": 0.0,
+            "mean_rank": 88.288
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.0,
+            "ndcg@10": 0.0,
+            "mrr@10": 0.0,
+            "mean_rank": 44.926
+          },
+          "cold": {
+            "samples": 10000,
+            "recall@10": 0.1113,
+            "ndcg@10": 0.034393,
+            "mrr@10": 0.013288,
+            "mean_rank": 17.127
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.9563,
+            "ndcg@10": 0.641602,
+            "mrr@10": 0.544004,
+            "mean_rank": 3.555
+          }
+        }
+      },
+      "tfidf_profile": {
+        "overall": {
+          "samples": 40000,
+          "recall@10": 0.401275,
+          "ndcg@10": 0.265869,
+          "mrr@10": 0.224271,
+          "mean_rank": 28.272
+        },
+        "known_user": {
+          "samples": 21092,
+          "recall@10": 0.511331,
+          "ndcg@10": 0.344482,
+          "mrr@10": 0.29323,
+          "mean_rank": 19.219
+        },
+        "empty_history": {
+          "samples": 18908,
+          "recall@10": 0.278506,
+          "ndcg@10": 0.177979,
+          "mrr@10": 0.147346,
+          "mean_rank": 38.37
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.2816,
+            "ndcg@10": 0.192261,
+            "mrr@10": 0.164759,
+            "mean_rank": 51.659
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.2874,
+            "ndcg@10": 0.197266,
+            "mrr@10": 0.169417,
+            "mean_rank": 31.173
+          },
+          "cold": {
+            "samples": 10000,
+            "recall@10": 0.3296,
+            "ndcg@10": 0.204468,
+            "mrr@10": 0.167092,
+            "mean_rank": 18.356
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.7065,
+            "ndcg@10": 0.469238,
+            "mrr@10": 0.395815,
+            "mean_rank": 11.9
+          }
+        }
+      }
+    }
+  }
+}

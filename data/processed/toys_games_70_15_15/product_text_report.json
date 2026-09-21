@@ -1,0 +1,42 @@
+{
+  "source_fields": [
+    "title",
+    "features",
+    "description"
+  ],
+  "cleaning": "Remove HTML markup/script/style, decode entities, normalize NFC, remove selected invisible characters, collapse whitespace.",
+  "text_order": "title, features, description",
+  "policy": "Preserve language, case, numbers and punctuation; no truncation or model fitting; retain and report empty text.",
+  "splits": {
+    "train": {
+      "products": 113334,
+      "empty_text": 2,
+      "empty_title": 5,
+      "empty_features": 6557,
+      "empty_description": 36875,
+      "total_characters": 129922505,
+      "max_characters": 14686,
+      "mean_characters": 1146.37
+    },
+    "validation": {
+      "products": 24413,
+      "empty_text": 0,
+      "empty_title": 0,
+      "empty_features": 1449,
+      "empty_description": 7952,
+      "total_characters": 28033775,
+      "max_characters": 8248,
+      "mean_characters": 1148.31
+    },
+    "test": {
+      "products": 24288,
+      "empty_text": 0,
+      "empty_title": 1,
+      "empty_features": 1372,
+      "empty_description": 7797,
+      "total_characters": 27975259,
+      "max_characters": 14624,
+      "mean_characters": 1151.81
+    }
+  }
+}

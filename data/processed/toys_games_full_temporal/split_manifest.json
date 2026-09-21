@@ -1,0 +1,85 @@
+{
+  "source": "data\\raw\\toys_games_full\\Toys_and_Games.jsonl.gz",
+  "metadata": "data\\raw\\toys_games_5core\\meta_Toys_and_Games.jsonl.gz",
+  "policy": {
+    "positive_interaction": "verified_purchase is true and rating >= 4",
+    "duplicates": "Remove exact duplicates of user, parent item, rating and timestamp.",
+    "split": "Global chronological 80/10/10 split at UTC day boundaries.",
+    "history": "Prior positive interactions only; same-timestamp events cannot see each other; keep latest 50.",
+    "test_history": "Online-style history includes earlier train/validation events.",
+    "cold_start_regimes": {
+      "zero_shot": "0 train interactions",
+      "extreme_cold": "1-5 train interactions",
+      "cold": "6-20 train interactions",
+      "warm": ">20 train interactions"
+    }
+  },
+  "raw": {
+    "raw_records": 16260406,
+    "positive_verified_records": 11694415,
+    "unverified_records": 1401211,
+    "below_positive_rating_records": 3164780,
+    "invalid_records": 0,
+    "rating_counts": {
+      "1.0": 1631131,
+      "2.0": 767908,
+      "3.0": 1103648,
+      "4.0": 1797010,
+      "5.0": 10960709
+    }
+  },
+  "exact_duplicate_records": 121726,
+  "retained_unique_records": 11572689,
+  "retained_unique_users": 6158534,
+  "validation_start_utc": "2021-08-11T00:00:00+00:00",
+  "test_start_utc": "2022-07-16T00:00:00+00:00",
+  "interactions": {
+    "train": 9258647,
+    "test": 1154215,
+    "validation": 1159827
+  },
+  "interaction_ratios": {
+    "train": 0.8000428422469489,
+    "validation": 0.10022104629269826,
+    "test": 0.09973611146035291
+  },
+  "unique_items": {
+    "train": 584846,
+    "validation": 221259,
+    "test": 237011
+  },
+  "history_rows": {
+    "train": 4230848,
+    "test": 1154215,
+    "validation": 1159827
+  },
+  "empty_histories": {
+    "train": 0,
+    "test": 556232,
+    "validation": 574622
+  },
+  "users_by_split": {
+    "train": 5027680,
+    "validation": 852317,
+    "test": 807538
+  },
+  "regime_rows": {
+    "train": {
+      "cold": 601952,
+      "warm": 3259881,
+      "extreme_cold": 369015
+    },
+    "validation": {
+      "zero_shot": 269934,
+      "cold": 163409,
+      "warm": 595334,
+      "extreme_cold": 131150
+    },
+    "test": {
+      "zero_shot": 527084,
+      "warm": 424928,
+      "cold": 112385,
+      "extreme_cold": 89818
+    }
+  }
+}
