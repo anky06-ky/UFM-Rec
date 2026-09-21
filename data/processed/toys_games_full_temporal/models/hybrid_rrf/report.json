@@ -1,0 +1,212 @@
+{
+  "model": "Candidate-aware reciprocal-rank fusion of popularity, TF-IDF content and collaborative SVD.",
+  "leakage_policy": "Weights are selected on validation only. At ranking time each candidate uses the gate for its own train-frequency regime; the positive target identity and test labels are never used for gating.",
+  "components": [
+    "popularity",
+    "content",
+    "collaborative"
+  ],
+  "candidate_protocol": "Same fixed one-positive plus 99-negative samples as all baselines.",
+  "parameters": {
+    "rrf_constant": 60,
+    "weight_step": 0.1,
+    "coordinate_passes": 2,
+    "optimization_metric": "ndcg@10",
+    "tie_breakers": [
+      "recall@10",
+      "mrr@10",
+      "mean_rank"
+    ]
+  },
+  "gates": {
+    "zero_shot": {
+      "popularity": 0.0,
+      "content": 1.0,
+      "collaborative": 0.0
+    },
+    "extreme_cold": {
+      "popularity": 0.1,
+      "content": 0.9,
+      "collaborative": 0.0
+    },
+    "cold": {
+      "popularity": 0.1,
+      "content": 0.9,
+      "collaborative": 0.0
+    },
+    "warm": {
+      "popularity": 0.7,
+      "content": 0.3,
+      "collaborative": 0.0
+    }
+  },
+  "tuning": {
+    "global_weights": {
+      "popularity": 0.0,
+      "content": 1.0,
+      "collaborative": 0.0
+    },
+    "global_validation": {
+      "overall": {
+        "samples": 40000,
+        "recall@10": 0.391925,
+        "ndcg@10": 0.260367,
+        "mrr@10": 0.219947,
+        "mean_rank": 30.31
+      },
+      "known_user": {
+        "samples": 20601,
+        "recall@10": 0.516625,
+        "ndcg@10": 0.347113,
+        "mrr@10": 0.294951,
+        "mean_rank": 19.512
+      },
+      "empty_history": {
+        "samples": 19399,
+        "recall@10": 0.259498,
+        "ndcg@10": 0.168247,
+        "mrr@10": 0.140295,
+        "mean_rank": 41.778
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 10000,
+          "recall@10": 0.2772,
+          "ndcg@10": 0.186491,
+          "mrr@10": 0.158494,
+          "mean_rank": 55.467
+        },
+        "extreme_cold": {
+          "samples": 10000,
+          "recall@10": 0.279,
+          "ndcg@10": 0.191555,
+          "mrr@10": 0.164588,
+          "mean_rank": 35.007
+        },
+        "cold": {
+          "samples": 10000,
+          "recall@10": 0.3048,
+          "ndcg@10": 0.195763,
+          "mrr@10": 0.162906,
+          "mean_rank": 19.287
+        },
+        "warm": {
+          "samples": 10000,
+          "recall@10": 0.7067,
+          "ndcg@10": 0.467661,
+          "mrr@10": 0.393799,
+          "mean_rank": 11.481
+        }
+      }
+    },
+    "coordinate_passes_completed": 2
+  },
+  "metrics": {
+    "validation": {
+      "overall": {
+        "samples": 40000,
+        "recall@10": 0.411975,
+        "ndcg@10": 0.266104,
+        "mrr@10": 0.22106,
+        "mean_rank": 29.69
+      },
+      "known_user": {
+        "samples": 20601,
+        "recall@10": 0.555556,
+        "ndcg@10": 0.358251,
+        "mrr@10": 0.297112,
+        "mean_rank": 18.308
+      },
+      "empty_history": {
+        "samples": 19399,
+        "recall@10": 0.259498,
+        "ndcg@10": 0.168247,
+        "mrr@10": 0.140295,
+        "mean_rank": 41.778
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 10000,
+          "recall@10": 0.2703,
+          "ndcg@10": 0.207222,
+          "mrr@10": 0.187676,
+          "mean_rank": 56.454
+        },
+        "extreme_cold": {
+          "samples": 10000,
+          "recall@10": 0.2488,
+          "ndcg@10": 0.142421,
+          "mrr@10": 0.108947,
+          "mean_rank": 36.745
+        },
+        "cold": {
+          "samples": 10000,
+          "recall@10": 0.292,
+          "ndcg@10": 0.18718,
+          "mrr@10": 0.155214,
+          "mean_rank": 20.013
+        },
+        "warm": {
+          "samples": 10000,
+          "recall@10": 0.8368,
+          "ndcg@10": 0.527593,
+          "mrr@10": 0.432401,
+          "mean_rank": 5.549
+        }
+      }
+    },
+    "test": {
+      "overall": {
+        "samples": 40000,
+        "recall@10": 0.423125,
+        "ndcg@10": 0.265708,
+        "mrr@10": 0.217217,
+        "mean_rank": 27.574
+      },
+      "known_user": {
+        "samples": 21092,
+        "recall@10": 0.552769,
+        "ndcg@10": 0.344326,
+        "mrr@10": 0.279854,
+        "mean_rank": 17.895
+      },
+      "empty_history": {
+        "samples": 18908,
+        "recall@10": 0.278506,
+        "ndcg@10": 0.178009,
+        "mrr@10": 0.147346,
+        "mean_rank": 38.37
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 10000,
+          "recall@10": 0.2731,
+          "ndcg@10": 0.204737,
+          "mrr@10": 0.18364,
+          "mean_rank": 52.768
+        },
+        "extreme_cold": {
+          "samples": 10000,
+          "recall@10": 0.2575,
+          "ndcg@10": 0.142089,
+          "mrr@10": 0.10572,
+          "mean_rank": 32.95
+        },
+        "cold": {
+          "samples": 10000,
+          "recall@10": 0.3146,
+          "ndcg@10": 0.190309,
+          "mrr@10": 0.152672,
+          "mean_rank": 19.073
+        },
+        "warm": {
+          "samples": 10000,
+          "recall@10": 0.8473,
+          "ndcg@10": 0.525697,
+          "mrr@10": 0.426837,
+          "mean_rank": 5.504
+        }
+      }
+    }
+  }
+}

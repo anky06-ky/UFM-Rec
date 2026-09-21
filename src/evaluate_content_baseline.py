@@ -43,7 +43,9 @@ def rank_of_target(scores: np.ndarray, candidates: np.ndarray) -> int:
 
 
 def metrics(ranks: np.ndarray, mask: np.ndarray) -> dict:
-    selected = ranks[mask]
+    # Cast before arithmetic: NumPy may evaluate log2 on uint8 at reduced
+    # precision, which makes serialized and in-memory rank metrics disagree.
+    selected = ranks[mask].astype(np.int64, copy=False)
     if not len(selected):
         return {"samples": 0}
     hits = selected <= K

@@ -18,6 +18,6 @@ tmp/
 *.npy
 *.joblib
 
-# Course reference material that is not part of the project
-TTNT_UNG_DUNG_DANH SÁCH ĐỀ TÀI BÁO CÁO ĐỒ ÁN CUỐI KỲ_SV.pdf
-y_tuong_Tri_tue_nhan_tao_ung_dung.txt
+# Local-only course references and working notes
+docs/references/
+docs/notes/
