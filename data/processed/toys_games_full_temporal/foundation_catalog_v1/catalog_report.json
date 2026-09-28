@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "counts": {
+    "metadata_rows_scanned": 890874,
+    "matched_metadata": 767045,
+    "items": 767045,
+    "has_text": 767044,
+    "has_image_url": 767007,
+    "both": 767006,
+    "neither": 0,
+    "missing_metadata": 0
+  },
+  "regimes": {
+    "extreme_cold": {
+      "items": 388352,
+      "has_text": 388352,
+      "has_image_url": 388333,
+      "both": 388333,
+      "neither": 0,
+      "missing_metadata": 0
+    },
+    "cold": {
+      "items": 120002,
+      "has_text": 120001,
+      "has_image_url": 119995,
+      "both": 119994,
+      "neither": 0,
+      "missing_metadata": 0
+    },
+    "warm": {
+      "items": 76492,
+      "has_text": 76492,
+      "has_image_url": 76488,
+      "both": 76488,
+      "neither": 0,
+      "missing_metadata": 0
+    },
+    "zero_shot": {
+      "items": 182199,
+      "has_text": 182199,
+      "has_image_url": 182191,
+      "both": 182191,
+      "neither": 0,
+      "missing_metadata": 0
+    }
+  },
+  "sources_sha256": {
+    "items": "e67e6310a6076f1e66ff14b8ce68e3d28a1aba204498175ae77eb0b04d0050fc",
+    "text": "5e134cfd3ac4e94e78b3bdac9bbd40927fb57fbfa45874e57fceae7abe5aca13",
+    "split": "585f102f14e12bfae332f53d28bb1f853acde1586eb102555c4b118ccee75763",
+    "metadata": "c69383112c0c0b0f10439eada942f2cf430511b993d2af8c665a5349c8749f07"
+  },
+  "catalog_sha256": "65d63e7b58babb133db78f3369b3224db6a451d80c4f616a4b8c0023f73b9003",
+  "policy": "Existing row_index; one MAIN-preferred product image URL; no review images; train_count only; no learning or test evaluation.",
+  "limitations": [
+    "Image URL availability is NOT successful download/decode coverage.",
+    "Snapshot metadata may include later edits; no historical product-launch/image timestamp."
+  ]
+}
