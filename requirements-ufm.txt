@@ -1,0 +1,6 @@
+# Additional dependencies for frozen text/image features.
+# Keep FITLAB's existing CUDA PyTorch; do NOT install a CPU torch wheel there.
+# Local model-core checks used a separate temporary CPU environment, torch 2.6.0.
+transformers==4.57.6
+huggingface-hub==0.36.2
+pillow==12.3.0

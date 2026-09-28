@@ -1,0 +1,4 @@
+# Resume validates byte-level source SHA256. Do not rewrite Python newlines
+# between Windows and FITLAB checkouts (even when core.autocrlf is enabled).
+src/*.py -text
+tests/*.py -text
