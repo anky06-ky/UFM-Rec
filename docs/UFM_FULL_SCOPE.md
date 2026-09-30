@@ -1,5 +1,9 @@
 # UFM-Rec: phạm vi đầy đủ và mốc triển khai
 
+Snapshot tiến trình mới nhất: [báo cáo ngày 30/09/2026](../reports/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
+Demo TF-IDF, BPR-MF ba seed và calibration baseline đã được bổ sung sau mốc dưới đây;
+UFM full và những phần còn thiếu vẫn được theo dõi theo phạm vi đã chốt.
+
 Cập nhật 28/09/2026. Người dùng đã chọn **giữ đầy đủ proposal**, không thu gọn
 thành TF-IDF + Transformer. Hạn nộp chưa được cung cấp. Quyết định của người
 dùng chưa đồng nghĩa giảng viên đã duyệt thay đổi triển khai; không tự gửi thông

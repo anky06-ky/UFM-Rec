@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đề Xuất Đồ Án – UFM-Rec | Hệ Khuyến Nghị Sản Phẩm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── PRINT / SCREEN reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #1a1a2e;
+      --ink2:     #2d2d4e;
+      --ink3:     #4a4a6a;
+      --muted:    #6b6b8a;
+      --accent:   #1a3a6b;   /* dark navy – heading color */
+      --red:      #8b1a1a;
+      --line:     #c8c8d8;
+      --page-w:   820px;
+      --page-pad: 72px;
+    }
+
+    body {
+      background: #e8e8e8;
+      font-family: 'EB Garamond', 'Times New Roman', serif;
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 11.5pt;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      background: #fff;
+      width: var(--page-w);
+      min-height: 1122px;
+      margin: 32px auto;
+      padding: var(--page-pad);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      position: relative;
+    }
+
+    /* ── COVER PAGE ── */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 1000px;
+      text-align: center;
+      gap: 0;
+    }
+
+    .cover-course {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .cover-subject {
+      font-family: 'Inter', sans-serif;
+      font-size: 11pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink2);
+      margin-bottom: 32px;
+    }
+
+    .cover-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--accent);
+      margin: 0 auto 32px;
+    }
+
+    .cover-type {
+      font-family: 'Inter', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 6px;
+    }
+
+    .cover-topic-label {
+      font-size: 10pt;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 36px;
+    }
+
+    .cover-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 20pt;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .cover-subtitle {
+      font-size: 13pt;
+      color: var(--ink3);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .cover-subtitle-en {
+      font-size: 10.5pt;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 52px;
+    }
+
+    .cover-block {
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .cover-block-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .cover-gv {
+      font-size: 11pt;
+      color: var(--ink2);
+      font-weight: 500;
+    }
+
+    /* team table on cover */
+    .team-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.5pt;
+      margin-top: 6px;
+    }
+    .team-table th {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    .team-table td {
+      padding: 6px 10px;
+      color: var(--ink2);
+      border-bottom: 1px solid #eee;
+    }
+    .team-table td:first-child {
+      color: var(--muted);
+      width: 32px;
+      text-align: center;
+    }
+
+    .cover-date {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5pt;
+      color: var(--muted);
+      margin-top: 40px;
+      font-style: italic;
+    }
+
+    /* ── RUNNING HEADER (inner pages) ── */
+    .running-header {
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 0.5px solid var(--line);
+      margin-bottom: 28px;
+    }
+    .rh-left { font-style: italic; }
+    .rh-right { font-weight: 600; }
+
+    /* ── ABSTRACT ── */
+    .abstract-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 10pt;
+      font-weight: 700;
+      text-align: center;
+      color: var(--ink2);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+    .abstract-body {
+      font-size: 10.5pt;
+      color: var(--ink3);
+      text-align: justify;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    h2.sec {
+      font-family: 'Inter', sans-serif;
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 24px 0 8px;
+      counter-increment: sec;
+    }
+    h2.sec::before {
+      content: counter(sec) ". ";
+    }
+
+    h3.subsec {
+      font-family: 'Inter', sans-serif;
+      font-size: 10pt;
+      font-weight: 600;
+      color: var(--ink2);
+      margin: 16px 0 6px;
+      counter-increment: subsec;
+    }
+    h3.subsec::before {
+      content: counter(sec) "." counter(subsec) " ";
+    }
+
+    body { counter-reset: sec; }
+    h2.sec { counter-reset: subsec; }
+
+    /* ── BODY TEXT ── */
+    .body-text {
+      font-size: 10.5pt;
+      color: var(--ink);
+      text-align: justify;
+      line-height: 1.72;
+      margin-bottom: 10px;
+    }
+
+    /* ── BULLET LIST ── */
+    .bullet-list {
+      margin: 6px 0 10px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .bullet-list li {
+      font-size: 10.5pt;
+      color: var(--ink);
+      line-height: 1.72;
+      margin-bottom: 5px;
+      padding-left: 20px;
+      position: relative;
+      text-align: justify;
+    }
+    .bullet-list li::before {
+      content: '•';
+      position: absolute;
+      left: 4px;
+      color: var(--accent);
+    }
+
+    /* ── RESEARCH QUESTION ── */
+    .rq {
+      display: flex;
+      gap: 10px;
+      margin: 6px 0;
+    }
+    .rq-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--red);
+      min-width: 36px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .rq-text {
+      font-size: 10.5pt;
+      color: var(--ink);
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    /* ── FIGURE / CAPTION ── */
+    .fig-wrap {
+      margin: 18px 0 6px;
+      text-align: center;
+    }
+    .fig-caption {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      color: var(--muted);
+      margin-top: 6px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* pipeline diagram (SVG-like ASCII art turned to styled divs) */
+    .pipeline-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: center;
+      margin: 10px auto;
+      width: 100%;
+    }
+    .pipe-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      justify-content: center;
+    }
+    .pipe-box {
+      background: #f0f4ff;
+      border: 1px solid #b8c8f0;
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      color: var(--accent);
+      text-align: center;
+      font-weight: 600;
+      min-width: 120px;
+    }
+    .pipe-arrow {
+      font-size: 14pt;
+      color: var(--line);
+      padding: 0 8px;
+    }
+    .pipe-connector {
+      width: 1px;
+      height: 14px;
+      background: var(--line);
+      margin: 0 auto;
+    }
+    .pipe-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ── TABLES ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin: 10px 0 6px;
+    }
+    .data-table thead tr {
+      background: #f0f4ff;
+    }
+    .data-table th {
+      padding: 7px 10px;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--accent);
+      border-bottom: 1.5px solid #b8c8f0;
+    }
+    .data-table td {
+      padding: 6px 10px;
+      color: var(--ink3);
+      border-bottom: 0.5px solid #e8e8f0;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .data-table td.best { color: #1a6b3a; font-weight: 600; }
+    .data-table td.model { color: var(--ink); }
+
+    .table-caption {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+      margin: 4px 0 14px;
+    }
+
+    /* ── PLAN TABLE ── */
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 10px 0;
+    }
+    .plan-table th {
+      background: var(--accent);
+      color: white;
+      padding: 7px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 600;
+      text-align: left;
+    }
+    .plan-table td {
+      padding: 6px 10px;
+      border-bottom: 0.5px solid #e8e8f0;
+      font-size: 9pt;
+      color: var(--ink3);
+    }
+    .plan-table tr:nth-child(even) td { background: #f8f8fc; }
+    .status-done   { color: #1a6b3a; font-weight: 600; font-family: 'Inter', sans-serif; font-size: 8pt; }
+    .status-doing  { color: #7b5a1a; font-weight: 600; font-family: 'Inter', sans-serif; font-size: 8pt; }
+    .status-plan   { color: var(--muted); font-family: 'Inter', sans-serif; font-size: 8pt; }
+
+    /* ── RISK TABLE ── */
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 10px 0;
+    }
+    .risk-table th {
+      border: 1px solid #c8c8d8;
+      padding: 7px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--accent);
+      background: #f0f4ff;
+      text-align: left;
+    }
+    .risk-table td {
+      border: 1px solid #e0e0ee;
+      padding: 6px 10px;
+      color: var(--ink3);
+      font-size: 9pt;
+      vertical-align: top;
+    }
+
+    /* ── REFERENCES ── */
+    .refs ol {
+      padding-left: 20px;
+      font-size: 9.5pt;
+      color: var(--ink3);
+      line-height: 1.65;
+    }
+    .refs li { margin-bottom: 5px; }
+
+    /* ── PAGE NUMBER ── */
+    .page-num {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      color: var(--muted);
+      margin-top: 40px;
+      padding-top: 10px;
+      border-top: 0.5px solid var(--line);
+    }
+
+    /* ── ENV TABLE ── */
+    .env-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+    .env-table td {
+      padding: 5px 10px;
+      border-bottom: 0.5px solid #e8e8f0;
+      color: var(--ink3);
+    }
+    .env-table td:first-child {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--accent);
+      width: 140px;
+    }
+
+    /* Architecture diagram */
+    .arch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+    .arch-branch {
+      border: 1px solid #b8c8f0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafbff;
+    }
+    .arch-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #b8c8f0;
+    }
+    .arch-item {
+      font-size: 8.5pt;
+      color: var(--ink3);
+      text-align: center;
+      margin: 4px 0;
+      font-style: italic;
+    }
+    .arch-sep {
+      font-size: 8pt;
+      color: var(--line);
+      text-align: center;
+    }
+
+    @media print {
+      body { background: white; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ COVER PAGE ═══════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-course">HỌC PHẦN:</div>
+    <div class="cover-subject">HỌC MÁY ỨNG DỤNG</div>
+    <div class="cover-divider"></div>
+    <div class="cover-type">ĐỀ XUẤT ĐỒ ÁN</div>
+    <div class="cover-topic-label">Chủ đề: Hệ khuyến nghị</div>
+
+    <div class="cover-title">HỆ KHUYẾN NGHỊ SẢN PHẨM<br>TRÊN THƯƠNG MẠI ĐIỆN TỬ</div>
+    <div class="cover-subtitle">
+      So sánh content-based, collaborative và hybrid reciprocal-rank fusion
+    </div>
+    <div class="cover-subtitle-en">
+      Product Recommendation on E-Commerce:<br>
+      Content-Based, Collaborative SVD, and Hybrid RRF
+    </div>
+
+    <div class="cover-block">
+      <div class="cover-block-label">Giảng Viên Hướng Dẫn</div>
+      <div class="cover-gv">ThS. Nguyễn Thái Anh</div>
+    </div>
+
+    <div class="cover-block">
+      <div class="cover-block-label">Nhóm Thực Hiện</div>
+      <table class="team-table">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Họ và tên</th>
+            <th>MSSV</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Nguyễn Thành Phong</td><td></td></tr>
+          <tr><td>2</td><td>Kỳ</td><td></td></tr>
+          <tr><td>3</td><td>Hải</td><td></td></tr>
+          <tr><td>4</td><td>Hân</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cover-date">Tháng 9 năm 2026</div>
+  </div>
+</div><!-- end cover -->
+
+<!-- ═══════════════════════════ PAGE 2 – Abstract + Section 1–2 ═══════════════════════════ -->
+<div class="page">
+  <div class="running-header">
+    <span class="rh-left">Đề xuất đồ án &middot; Học máy ứng dụng</span>
+    <span class="rh-right">Hệ khuyến nghị sản phẩm trên thương mại điện tử</span>
+  </div>
+
+  <!-- Tóm tắt -->
+  <div class="abstract-title">Tóm tắt</div>
+  <div class="abstract-body">
+    Đồ án xây dựng và đánh giá một hệ khuyến nghị sản phẩm trên bộ dữ liệu Amazon Reviews 2023 – Toys and Games,
+    gồm hơn 16 triệu lượt đánh giá. Câu hỏi trung tâm là: kết hợp tín hiệu nội dung (TF-IDF) và lọc cộng tác
+    (TruncatedSVD) theo cơ chế Hybrid Reciprocal-Rank Fusion (RRF) có cải thiện chất lượng khuyến nghị so
+    với từng hướng đơn lẻ không, đặc biệt trên các chế độ cold-start khác nhau? Nhóm xây dựng một pipeline
+    hoàn chỉnh gồm sáu bước: lọc dữ liệu theo thời gian, xây đặc trưng TF-IDF 20.000 chiều cho 767.045 sản phẩm,
+    tạo bộ mẫu đánh giá cố định (1 positive + 99 negative cho 40.000 trường hợp), đánh giá baseline nội dung,
+    baseline cộng tác, và tối ưu trọng số Hybrid RRF trên tập validation. Kết quả sơ bộ cho thấy Hybrid RRF
+    đạt Recall@10 = 0.4231, tăng 5,4% tương đối so với content baseline (0.4013), nhờ cải thiện rõ rệt ở nhóm warm (0.8473).
+  </div>
+
+  <!-- Section 1 -->
+  <h2 class="sec">Đặt vấn đề</h2>
+  <p class="body-text">
+    Các sàn thương mại điện tử ngày nay phục vụ hàng trăm nghìn sản phẩm và hàng triệu người dùng.
+    Gán nhãn thủ công hay tổ chức sản phẩm theo danh mục cứng nhắc không đủ để cá nhân hóa trải nghiệm.
+    Hệ khuyến nghị tự động cho phép xếp hạng sản phẩm phù hợp cho từng người dùng dựa trên lịch sử mua hàng
+    và đặc trưng nội dung sản phẩm, từ đó tăng tỉ lệ chuyển đổi và sự hài lòng của khách hàng.
+  </p>
+  <p class="body-text">
+    Chất lượng khuyến nghị phụ thuộc vào ba yếu tố: (1) biểu diễn sản phẩm, (2) mô hình khuyến nghị,
+    và (3) khả năng xử lý cold-start – tình huống người dùng hoặc sản phẩm chưa có đủ lịch sử.
+    Với tiếng Anh và bộ dữ liệu Amazon quy mô lớn, chưa có nhiều so sánh có kiểm soát giữa content-based,
+    collaborative và hybrid trên cùng bộ mẫu đánh giá cố định, đặc biệt theo từng chế độ cold-start.
+  </p>
+  <p class="body-text">
+    Đồ án đặt mục tiêu thực hiện so sánh như vậy một cách công bằng, với pipeline tái lập hoàn toàn và
+    bộ test cố định dùng chung giữa các mô hình.
+  </p>
+
+  <!-- Section 2 -->
+  <h2 class="sec">Mục tiêu và câu hỏi nghiên cứu</h2>
+  <p class="body-text">
+    <strong>Mục tiêu tổng quát:</strong> xây dựng và đánh giá một hệ khuyến nghị sản phẩm trên Amazon Toys and Games,
+    so sánh có kiểm soát giữa content-based, collaborative filtering và hybrid RRF theo bốn chế độ cold-start.
+  </p>
+
+  <div class="rq">
+    <div class="rq-label">CH1.</div>
+    <div class="rq-text">Content-based TF-IDF có cho chất lượng khuyến nghị tốt hơn collaborative TruncatedSVD không,
+    và kết quả có ổn định qua các chế độ cold-start không?</div>
+  </div>
+  <div class="rq">
+    <div class="rq-label">CH2.</div>
+    <div class="rq-text">Nếu có khác biệt, nó đến từ đặc trưng nội dung hay từ tín hiệu tương tác người dùng?
+    (So sánh content-only, collaborative-only và hybrid.)</div>
+  </div>
+  <div class="rq">
+    <div class="rq-label">CH3.</div>
+    <div class="rq-text">Cơ chế kết hợp Hybrid RRF với trọng số theo train-frequency regime của candidate có
+    mang lại lợi ích bổ sung so với từng thành phần đơn lẻ không?</div>
+  </div>
+  <div class="rq">
+    <div class="rq-label">CH4.</div>
+    <div class="rq-text">Sự cải thiện (nếu có) đến từ nhóm user nào (zero-shot, extreme cold, cold, warm)
+    và tại sao một số nhóm không được hưởng lợi?</div>
+  </div>
+  <div class="rq">
+    <div class="rq-label">CH5.</div>
+    <div class="rq-text">Pipeline có tái lập hoàn toàn không, và bộ mẫu đánh giá cố định có đảm bảo
+    so sánh công bằng giữa các mô hình không?</div>
+  </div>
+
+  <div class="page-num">1</div>
+</div><!-- end page 2 -->
+
+<!-- ═══════════════════════════ PAGE 3 – Dữ liệu ═══════════════════════════ -->
+<div class="page">
+  <div class="running-header">
+    <span class="rh-left">Đề xuất đồ án &middot; Học máy ứng dụng</span>
+    <span class="rh-right">Hệ khuyến nghị sản phẩm trên thương mại điện tử</span>
+  </div>
+
+  <h2 class="sec">Dữ liệu</h2>
+
+  <h3 class="subsec">Nguồn và quy trình xử lý</h3>
+  <p class="body-text">
+    Dữ liệu được lấy từ bộ <strong>Amazon Reviews 2023</strong> (danh mục Toys and Games) do McAuley Lab
+    phát hành. Bộ dữ liệu gốc gồm 16.260.406 lượt đánh giá. Nhóm lọc giữ lại 11.572.689 tương tác mua hàng
+    đã xác minh (<em>verified purchase</em>) và có rating từ 4 trở lên. Chia theo thời gian 80/10/10
+    đảm bảo tập validation và test chỉ chứa các tương tác xảy ra sau tập train, mô phỏng điều kiện triển khai thực tế.
+  </p>
+
+  <!-- Pipeline diagram -->
+  <div class="fig-wrap">
+    <div class="pipeline-diagram">
+      <div class="pipe-row">
+        <div class="pipe-box">Amazon Reviews 2023<br><span style="font-weight:400;color:#666">16.260.406 reviews</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">Lọc<br><span style="font-weight:400;color:#666">Verified · Rating ≥ 4</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">11.572.689 tương tác</div>
+      </div>
+      <div class="pipe-connector"></div>
+      <div class="pipe-row">
+        <div class="pipe-box">Train (80%)<br>9.258.647</div>
+        <div class="pipe-arrow">·</div>
+        <div class="pipe-box">Validation (10%)<br>1.159.827</div>
+        <div class="pipe-arrow">·</div>
+        <div class="pipe-box">Test (10%)<br>1.154.215</div>
+      </div>
+    </div>
+    <div class="fig-caption">Hình 1. Quy trình lọc và chia dữ liệu theo thời gian. Vocabulary TF-IDF chỉ fit trên sản phẩm xuất hiện trong train.</div>
+  </div>
+
+  <h3 class="subsec">Đặc điểm bộ dữ liệu</h3>
+  <ul class="bullet-list">
+    <li><strong>Quy mô:</strong> 767.045 sản phẩm có vector TF-IDF 20.000 chiều. Bộ mẫu đánh giá gồm 40.000 trường hợp (1 positive + 99 negative cố định mỗi trường hợp), dùng chung giữa tất cả các mô hình.</li>
+    <li><strong>Bốn chế độ cold-start:</strong> <em>zero_shot</em> (không có lịch sử train), <em>extreme_cold</em> (rất ít), <em>cold</em> (thưa thớt) và <em>warm</em> (đủ dày). Phân loại dựa trên train-frequency của từng candidate.</li>
+    <li><strong>Đặc trưng nội dung:</strong> văn bản sản phẩm được ghép từ tiêu đề, mô tả và bullet points; vector TF-IDF được chuẩn hóa L2.</li>
+    <li><strong>Tái lập:</strong> seed của split/sampling là <code style="font-family:monospace;font-size:0.9em">42</code>. Phiên bản thư viện được ghim trong <code style="font-family:monospace;font-size:0.9em">requirements.txt</code>; checksum dữ liệu và các quy tắc lọc/split được ghi trong JSON manifest.</li>
+  </ul>
+
+  <table class="data-table" style="margin-top:14px">
+    <thead>
+      <tr>
+        <th>Tập dữ liệu</th>
+        <th>Tỉ lệ</th>
+        <th class="num">Số tương tác</th>
+        <th>Ghi chú</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="model">Train</td>
+        <td>80%</td>
+        <td class="num">9.258.647</td>
+        <td>Fit vocabulary TF-IDF, train SVD</td>
+      </tr>
+      <tr>
+        <td class="model">Validation</td>
+        <td>10%</td>
+        <td class="num">1.159.827</td>
+        <td>Tune trọng số Hybrid RRF</td>
+      </tr>
+      <tr>
+        <td class="model">Test</td>
+        <td>10%</td>
+        <td class="num">1.154.215</td>
+        <td>Đánh giá cuối, không tham gia tuning</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Bảng 1. Chia tập dữ liệu theo thời gian.</div>
+
+  <div class="page-num">2</div>
+</div><!-- end page 3 -->
+
+<!-- ═══════════════════════════ PAGE 4 – Phương pháp ═══════════════════════════ -->
+<div class="page">
+  <div class="running-header">
+    <span class="rh-left">Đề xuất đồ án &middot; Học máy ứng dụng</span>
+    <span class="rh-right">Hệ khuyến nghị sản phẩm trên thương mại điện tử</span>
+  </div>
+
+  <h2 class="sec">Phương pháp</h2>
+
+  <h3 class="subsec">Kiến trúc tổng thể</h3>
+  <p class="body-text">
+    Hình 2 mô tả kiến trúc hệ thống. Điểm then chốt về thiết kế là ba mô hình thành phần
+    (Popularity, Content TF-IDF, Collaborative SVD) đều cho điểm trên cùng một bộ candidate set cố định,
+    rồi điểm số được kết hợp qua RRF với trọng số phụ thuộc vào train-frequency regime của từng candidate.
+    Bộ mẫu test không tham gia bất kỳ bước tuning nào.
+  </p>
+
+  <div class="fig-wrap">
+    <div style="border:1px solid #c8d4f0; border-radius:8px; padding:16px; background:#fafbff;">
+      <div style="text-align:center; font-family:'Inter',sans-serif; font-size:8pt; font-weight:700; color:#6b7280; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px">
+        Amazon Toys &amp; Games · 16.2M reviews
+      </div>
+      <div class="arch">
+        <div class="arch-branch">
+          <div class="arch-label">Nhánh Nội Dung</div>
+          <div class="arch-item">Văn bản sản phẩm</div>
+          <div class="arch-sep">↓</div>
+          <div class="arch-item">TF-IDF 20K chiều (L2)</div>
+          <div class="arch-sep">↓</div>
+          <div class="arch-item">Content Profile Score</div>
+        </div>
+        <div class="arch-branch">
+          <div class="arch-label">Nhánh Cộng Tác</div>
+          <div class="arch-item">Ma trận User–Item</div>
+          <div class="arch-sep">↓</div>
+          <div class="arch-item">TruncatedSVD</div>
+          <div class="arch-sep">↓</div>
+          <div class="arch-item">Collaborative Score</div>
+        </div>
+      </div>
+      <div style="text-align:center; margin:10px 0; font-size:8pt; color:#9ca3af; font-style:italic">
+        + Popularity baseline (train frequency)
+      </div>
+      <div style="text-align:center; padding:8px; background:#1a3a6b10; border:1px solid #b8c8f0; border-radius:6px; font-family:'Inter',sans-serif; font-size:8.5pt; font-weight:700; color:#1a3a6b; margin: 4px 40px">
+        Hybrid Reciprocal-Rank Fusion<br>
+        <span style="font-weight:400; font-size:7.5pt; color:#6b7280">trọng số theo regime (zero-shot / extreme cold / cold / warm)</span>
+      </div>
+      <div style="text-align:center; margin-top:8px; font-size:8pt; font-family:'Inter',sans-serif; color:#6b7280; font-style:italic">
+        Bộ mẫu đánh giá: 40K cases · 1 positive + 99 negative · Recall@10 · NDCG@10 · MRR@10
+      </div>
+    </div>
+    <div class="fig-caption">Hình 2. Kiến trúc hệ thống. Ba thành phần cho điểm trên cùng candidate set; Hybrid RRF kết hợp theo regime của từng candidate. Tập test không tham gia tuning.</div>
+  </div>
+
+  <h3 class="subsec">Xây đặc trưng nội dung</h3>
+  <p class="body-text">
+    Văn bản sản phẩm được ghép từ tiêu đề, mô tả và bullet points, sau đó vectorize bằng TF-IDF
+    (vocabulary 20.000 từ, fit chỉ trên sản phẩm trong train, chuẩn hóa L2).
+    Vocabulary chỉ được fit trên tập train để tránh data leakage.
+    Đặc trưng nội dung được dùng để tính cosine similarity giữa lịch sử mua của người dùng
+    và từng candidate, tạo thành content profile score.
+  </p>
+
+  <h3 class="subsec">Collaborative filtering</h3>
+  <p class="body-text">
+    Ma trận tương tác User–Item (train) được phân rã bằng TruncatedSVD.
+    Điểm số collaborative được tính bằng tích vô hướng giữa vector người dùng
+    (trung bình embedding của các item đã mua trong train) và vector item.
+    Đây là baseline có chủ đích để thấy rõ đóng góp của tín hiệu cộng tác.
+  </p>
+
+  <h3 class="subsec">Hybrid Reciprocal-Rank Fusion</h3>
+  <p class="body-text">
+    Ba thành phần (Popularity, Content, Collaborative) được xếp hạng độc lập trên cùng candidate set.
+    Điểm RRF của mỗi candidate được tính theo công thức
+    <em>score = Σ w<sub>s</sub> / (k + rank<sub>s</sub>)</em> với k = 60.
+    Trọng số w<sub>s</sub> phụ thuộc vào train-frequency regime của candidate đó,
+    được chọn lưới trên tập validation; tập test không tham gia. Bảng 2 trình bày trọng số đã học được.
+  </p>
+
+  <div class="page-num">3</div>
+</div><!-- end page 4 -->
+
+<!-- ═══════════════════════════ PAGE 5 – Đánh giá + Môi trường ═══════════════════════════ -->
+<div class="page">
+  <div class="running-header">
+    <span class="rh-left">Đề xuất đồ án &middot; Học máy ứng dụng</span>
+    <span class="rh-right">Hệ khuyến nghị sản phẩm trên thương mại điện tử</span>
+  </div>
+
+  <h3 class="subsec">Giao thức đánh giá</h3>
+  <ul class="bullet-list">
+    <li><strong>Metric chính:</strong> Recall@10, NDCG@10, MRR@10 – tính trên 40.000 test cases, mỗi trường hợp gồm 1 positive và 99 negative cố định.</li>
+    <li><strong>Bộ mẫu dùng chung:</strong> candidate set được tạo một lần và dùng chung giữa tất cả các mô hình, đảm bảo so sánh công bằng.</li>
+    <li><strong>Phân tích theo cold-start regime:</strong> Recall@10 được báo cáo riêng cho bốn nhóm: zero_shot, extreme_cold, cold, warm – để hiểu lợi ích của hybrid theo từng nhóm.</li>
+    <li><strong>Tái lập:</strong> seed = 42 cho tất cả bước ngẫu nhiên; phiên bản thư viện được ghim; manifest JSON lưu checksum và các tham số chính.</li>
+  </ul>
+
+  <h2 class="sec">Môi trường thực nghiệm</h2>
+
+  <table class="env-table">
+    <tbody>
+      <tr><td>Ngôn ngữ</td><td>Python 3.11+</td></tr>
+      <tr><td>Học máy</td><td>scikit-learn 1.6.1 · scipy 1.17.1</td></tr>
+      <tr><td>Xử lý dữ liệu</td><td>numpy 2.2.6 · pandas 2.2.3 · joblib 1.6.0</td></tr>
+      <tr><td>Thử nghiệm GPU</td><td>PyTorch · sentence-transformers (FITLAB – Quadro RTX 6000 24 GB)</td></tr>
+      <tr><td>Mã nguồn</td><td>6 script pipeline chính · 11 script phụ trợ · 2 notebook giám sát</td></tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Bảng 2. Môi trường thực nghiệm.</div>
+
+  <h2 class="sec">Tính khả thi và kết quả sơ bộ</h2>
+  <p class="body-text">
+    Toàn bộ pipeline đã được dựng và chạy thông trên dữ liệu thật. Các kết quả dưới đây là kết quả cuối;
+    phân tích chi tiết theo từng cold-start regime đang được hoàn thiện.
+  </p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Mô hình</th>
+        <th class="num">Recall@10</th>
+        <th class="num">NDCG@10</th>
+        <th class="num">MRR@10</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="model">Popularity</td>
+        <td class="num">0.2669</td>
+        <td class="num">0.1691</td>
+        <td class="num">0.1393</td>
+      </tr>
+      <tr>
+        <td class="model">TF-IDF Content Profile</td>
+        <td class="num">0.4013</td>
+        <td class="num best">0.2658 ★</td>
+        <td class="num best">0.2243 ★</td>
+      </tr>
+      <tr>
+        <td class="model">Collaborative TruncatedSVD</td>
+        <td class="num">0.2193</td>
+        <td class="num">0.1310</td>
+        <td class="num">0.1043</td>
+      </tr>
+      <tr>
+        <td class="model">Candidate-aware Hybrid RRF</td>
+        <td class="num best">0.4231 ★</td>
+        <td class="num">0.2657</td>
+        <td class="num">0.2172</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Bảng 3. Kết quả đánh giá trên 40.000 test cases. ★ = tốt nhất theo metric.</div>
+
+  <table class="data-table" style="margin-top:14px">
+    <thead>
+      <tr>
+        <th>Mô hình</th>
+        <th class="num">Zero-shot</th>
+        <th class="num">Extreme cold</th>
+        <th class="num">Cold</th>
+        <th class="num">Warm</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="model">TF-IDF Content</td>
+        <td class="num">0.2816</td>
+        <td class="num">0.2874</td>
+        <td class="num">0.3296</td>
+        <td class="num">0.7065</td>
+      </tr>
+      <tr>
+        <td class="model">Collaborative SVD</td>
+        <td class="num">0.0000</td>
+        <td class="num">0.0775</td>
+        <td class="num">0.1498</td>
+        <td class="num">0.6497</td>
+      </tr>
+      <tr>
+        <td class="model">Hybrid RRF</td>
+        <td class="num">0.2731</td>
+        <td class="num">0.2575</td>
+        <td class="num">0.3146</td>
+        <td class="num best">0.8473 ★</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Bảng 4. Recall@10 theo chế độ cold-start. Hybrid RRF vượt trội ở nhóm warm.</div>
+
+  <p class="body-text">
+    Về CH3, Collaborative SVD được giữ làm baseline nhưng validation đã chọn trọng số = 0
+    cho tín hiệu này vì chưa mang lại giá trị bổ sung so với popularity và content.
+    Hybrid RRF tăng Recall@10 thêm 5,4% tương đối so với content baseline, chủ yếu nhờ cải thiện nhóm warm.
+  </p>
+
+  <div class="page-num">4</div>
+</div><!-- end page 5 -->
+
+<!-- ═══════════════════════════ PAGE 6 – Kế hoạch + Rủi ro ═══════════════════════════ -->
+<div class="page">
+  <div class="running-header">
+    <span class="rh-left">Đề xuất đồ án &middot; Học máy ứng dụng</span>
+    <span class="rh-right">Hệ khuyến nghị sản phẩm trên thương mại điện tử</span>
+  </div>
+
+  <h2 class="sec">Kế hoạch thực hiện</h2>
+
+  <table class="plan-table">
+    <thead>
+      <tr>
+        <th>Tuần</th>
+        <th>Giai đoạn</th>
+        <th>Nội dung chính</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="5" style="font-weight:600; color:#1a3a6b; text-align:center; vertical-align:middle;">1</td>
+        <td>Chuẩn bị</td>
+        <td>Môi trường ảo, kiểm tra thư viện, cài đặt joblib/sklearn</td>
+        <td><span class="status-done">Hoàn thành</span></td>
+      </tr>
+      <tr>
+        <td>Dữ liệu</td>
+        <td>Tải Amazon Reviews, lọc, khử trùng lặp, chia temporal 80/10/10</td>
+        <td><span class="status-done">Hoàn thành</span></td>
+      </tr>
+      <tr>
+        <td>Đặc trưng</td>
+        <td>Xây văn bản sản phẩm + TF-IDF 20K chiều</td>
+        <td><span class="status-done">Hoàn thành</span></td>
+      </tr>
+      <tr>
+        <td>Mẫu đánh giá</td>
+        <td>Tạo candidate set cố định (1 pos + 99 neg × 40K)</td>
+        <td><span class="status-done">Hoàn thành</span></td>
+      </tr>
+      <tr>
+        <td>Baseline</td>
+        <td>Popularity, Content TF-IDF, Collaborative SVD, Hybrid RRF</td>
+        <td><span class="status-done">Hoàn thành</span></td>
+      </tr>
+      <tr>
+        <td rowspan="4" style="font-weight:600; color:#1a3a6b; text-align:center; vertical-align:middle;">2</td>
+        <td>Phân tích</td>
+        <td>Phân tích sâu theo cold-start regime, giải thích kết quả</td>
+        <td><span class="status-doing">Đang thực hiện</span></td>
+      </tr>
+      <tr>
+        <td>Hoàn thiện</td>
+        <td>Đo chi phí tính toán; tinh chỉnh pipeline; thử nghiệm GPU Two-tower</td>
+        <td><span class="status-plan">Kế hoạch</span></td>
+      </tr>
+      <tr>
+        <td>Trình bày</td>
+        <td>Biểu đồ tổng hợp, bảng kết quả, sơ đồ kiến trúc</td>
+        <td><span class="status-plan">Kế hoạch</span></td>
+      </tr>
+      <tr>
+        <td>Báo cáo</td>
+        <td>Viết báo cáo cuối kỳ, slide, chuẩn bị bảo vệ</td>
+        <td><span class="status-plan">Kế hoạch</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Bảng 5. Kế hoạch thực hiện.</div>
+
+  <h2 class="sec">Rủi ro và giới hạn</h2>
+
+  <table class="risk-table">
+    <thead>
+      <tr>
+        <th style="width:32%">Rủi ro / Giới hạn</th>
+        <th>Ảnh hưởng và cách xử lý</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Collaborative SVD không bổ sung giá trị</td>
+        <td>Đã xác nhận trong thực nghiệm (trọng số = 0 được chọn trên validation). Giữ làm baseline để phân tích lý do.</td>
+      </tr>
+      <tr>
+        <td>Cold-start hoàn toàn (zero-shot)</td>
+        <td>SVD không dự đoán được (Recall = 0.0); Hybrid RRF tự động chuyển về content-only (trọng số 1.0) theo regime.</td>
+      </tr>
+      <tr>
+        <td>Bộ dữ liệu lớn, RAM cao</td>
+        <td>Pipeline dùng joblib + file tạm; từng bước kiểm tra input và từ chối ghi đè kết quả đã hoàn thành.</td>
+      </tr>
+      <tr>
+        <td>Thử nghiệm GPU Two-tower chưa ổn định</td>
+        <td>Chưa được xác nhận tốt hơn baseline. Báo cáo riêng như thử nghiệm phụ; kết quả chính dựa trên pipeline CPU.</td>
+      </tr>
+      <tr>
+        <td>Chất lượng TF-IDF phụ thuộc văn bản sản phẩm</td>
+        <td>Một số sản phẩm có mô tả ngắn hoặc thiếu. Ghi nhận như giới hạn; vocabulary được lọc theo min_df.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Bảng 6. Rủi ro, giới hạn và biện pháp xử lý.</div>
+
+  <div class="page-num">5</div>
+</div><!-- end page 6 -->
+
+<!-- ═══════════════════════════ PAGE 7 – Deliverables + References ═══════════════════════════ -->
+<div class="page">
+  <div class="running-header">
+    <span class="rh-left">Đề xuất đồ án &middot; Học máy ứng dụng</span>
+    <span class="rh-right">Hệ khuyến nghị sản phẩm trên thương mại điện tử</span>
+  </div>
+
+  <h2 class="sec">Sản phẩm bàn giao</h2>
+  <ul class="bullet-list">
+    <li>Mã nguồn đầy đủ, có thể tái lập: 6 script pipeline chính và các script phân tích phụ trợ, tổ chức theo thư mục <code style="font-family:monospace;font-size:0.9em">src/</code>.</li>
+    <li>Bộ mẫu đánh giá cố định: 40.000 trường hợp (1 positive + 99 negative), dùng chung giữa tất cả mô hình.</li>
+    <li>Manifest JSON lưu checksum dữ liệu, tham số và metric nhỏ cho từng bước pipeline, phục vụ tái lập thí nghiệm.</li>
+    <li>Báo cáo cuối kỳ trả lời năm câu hỏi nghiên cứu, kèm bảng kết quả đầy đủ theo metric và cold-start regime.</li>
+    <li>Slide trình bày và các hình trực quan hóa (biểu đồ Recall theo regime, bảng so sánh, sơ đồ kiến trúc).</li>
+    <li>(Thử nghiệm) Checkpoint Two-tower GPU và notebook giám sát huấn luyện trên FITLAB.</li>
+  </ul>
+
+  <h2 class="sec">Tài liệu tham khảo</h2>
+  <div class="refs">
+    <ol>
+      <li>J. McAuley et al. <em>Amazon Reviews 2023.</em> <a href="https://amazon-reviews-2023.github.io/" style="color:var(--accent)">amazon-reviews-2023.github.io</a>, 2023.</li>
+      <li>Y. Koren, R. Bell, C. Volinsky. Matrix factorization techniques for recommender systems. <em>IEEE Computer</em>, 42(8):30–37, 2009.</li>
+      <li>G. Linden, B. Smith, J. York. Amazon.com recommendations: Item-to-item collaborative filtering. <em>IEEE Internet Computing</em>, 7(1):76–80, 2003.</li>
+      <li>G. Salton, C. Buckley. Term-weighting approaches in automatic text retrieval. <em>Information Processing &amp; Management</em>, 24(5):513–523, 1988.</li>
+      <li>S. Deerwester et al. Indexing by latent semantic analysis. <em>Journal of the American Society for Information Science</em>, 41(6):391–407, 1990.</li>
+      <li>G. V. Cormack, C. L. A. Clarke, S. Buettcher. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In <em>Proc. SIGIR</em>, 2009.</li>
+      <li>F. Pedregosa et al. Scikit-learn: Machine learning in Python. <em>Journal of Machine Learning Research</em>, 12:2825–2830, 2011.</li>
+      <li>M. Halko, P.-G. Martinsson, J. A. Tropp. Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions. <em>SIAM Review</em>, 53(2):217–288, 2011.</li>
+    </ol>
+  </div>
+
+  <div class="page-num">6</div>
+</div><!-- end page 7 -->
+
+</body>
+</html>

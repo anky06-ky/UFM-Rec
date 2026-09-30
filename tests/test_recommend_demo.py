@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 import sys
+import shutil
 import threading
 import unittest
 import urllib.request
@@ -52,6 +53,10 @@ class DemoTests(unittest.TestCase):
         with self.assertRaises(ValueError): backend.recommend(['ASIN1']*21)
         self.assertEqual(self.catalog.item(10)['regime'],'zero_shot')
         self.assertEqual(self.catalog.item(6)['regime'],'cold')
+        unseen = backend.recommend(['ASIN11'],10,'zero_shot')
+        self.assertTrue(unseen)
+        self.assertTrue(all(r['train_count']==0 and r['asin']!='ASIN11' for r in unseen))
+        with self.assertRaises(ValueError): backend.recommend([],10,'unknown')
 
     def test_image_host_guard(self):
         self.assertEqual(safe_image('https://m.media-amazon.com/images/I/test.jpg'),'https://m.media-amazon.com/images/I/test.jpg')
@@ -71,6 +76,15 @@ class DemoTests(unittest.TestCase):
             if r['regime']=='zero_shot': self.assertEqual(r['weights'][0],0)
             self.assertTrue(np.isfinite(r['uncertainty']).all())
         self.assertEqual(a.recommend([],1)[0]['asin'],'ASIN8')
+        relocated = self.data/'relocated_clip'
+        shutil.copytree(self.fixture.features,relocated)
+        moved = UFMBackend(self.catalog,args.output,features=relocated,_allow_technical_smoke=True)
+        self.assertEqual(moved.features,relocated)
+        self.assertEqual([r['asin'] for r in moved.recommend(['ASIN1','ASIN2'],10)],
+                         [r['asin'] for r in one])
+        (relocated/'complete.json').write_text('{}')
+        with self.assertRaisesRegex(ValueError,'Feature marker changed'):
+            UFMBackend(self.catalog,args.output,features=relocated,_allow_technical_smoke=True)
 
     def test_http_end_to_end_and_cross_origin_rejection(self):
         server = ThreadingHTTPServer(('127.0.0.1',0),handler_for(ContentBackend(self.catalog)))
@@ -83,6 +97,14 @@ class DemoTests(unittest.TestCase):
             with urllib.request.urlopen(request) as r: response = json.load(r)
             self.assertEqual(len(response['results']),3)
             self.assertNotIn('ASIN1',[x['asin'] for x in response['results']])
+            self.assertGreaterEqual(response['elapsed_ms'],0)
+            with urllib.request.urlopen(url+'/api/examples') as r: examples = json.load(r)
+            self.assertEqual(examples[0]['asin'],'ASIN8')
+            for payload in [[],None,{'regime':[]},{'k':True},{'history':['not-in-catalog']},
+                            {'history':['ASIN1']*21}]:
+                request = urllib.request.Request(url+'/api/recommend',data=json.dumps(payload).encode())
+                with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(request)
+                self.assertEqual(caught.exception.code,400)
             bad = urllib.request.Request(url+'/api/status',headers={'Origin':'https://untrusted.test'})
             with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(bad)
             self.assertEqual(caught.exception.code,403)

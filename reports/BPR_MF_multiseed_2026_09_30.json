@@ -1,0 +1,49 @@
+{
+  "seeds": [
+    42,
+    7,
+    2026
+  ],
+  "runs": [
+    {
+      "seed": 42,
+      "epoch": 1,
+      "run": "data\\processed\\toys_games_full_temporal\\models\\bpr_mf",
+      "overall_ndcg": 0.135551,
+      "cold_macro_ndcg": 0.013553,
+      "warm_ndcg": 0.501546
+    },
+    {
+      "seed": 7,
+      "epoch": 1,
+      "run": "data\\processed\\toys_games_full_temporal\\models\\bpr_mf_seed7",
+      "overall_ndcg": 0.135203,
+      "cold_macro_ndcg": 0.013397333333333332,
+      "warm_ndcg": 0.50062
+    },
+    {
+      "seed": 2026,
+      "epoch": 1,
+      "run": "data\\processed\\toys_games_full_temporal\\models\\bpr_mf_seed2026",
+      "overall_ndcg": 0.135641,
+      "cold_macro_ndcg": 0.013855666666666667,
+      "warm_ndcg": 0.500998
+    }
+  ],
+  "split": "validation",
+  "selection": "Best cold macro NDCG@10 for each seed, fixed five-epoch budget",
+  "sample_standard_deviation_ddof": 1,
+  "test_evaluated": false,
+  "overall_ndcg": {
+    "mean": 0.135465,
+    "std": 0.00023131796298602733
+  },
+  "cold_macro_ndcg": {
+    "mean": 0.013602,
+    "std": 0.00023306246182324474
+  },
+  "warm_ndcg": {
+    "mean": 0.5010546666666666,
+    "std": 0.00046559352801920853
+  }
+}

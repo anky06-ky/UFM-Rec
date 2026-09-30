@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tóm Tắt Dự Án – UFM-Rec | Hệ Khuyến Nghị Sản Phẩm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #818cf8;
+      --accent: #06b6d4;
+      --accent2: #10b981;
+      --dark: #0f172a;
+      --dark2: #1e293b;
+      --dark3: #334155;
+      --surface: #1e293b;
+      --surface2: #263248;
+      --border: #334155;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 40%, #0f2a3a 100%);
+      padding: 70px 40px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 20% 30%, rgba(79,70,229,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 70%, rgba(6,182,212,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(79,70,229,0.18);
+      border: 1px solid rgba(129,140,248,0.35);
+      color: var(--primary-light);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #e2e8f0 0%, #818cf8 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .meta-chip .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 50px 30px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 36px;
+      align-items: start;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 30px;
+      margin-bottom: 24px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .section:hover { border-color: rgba(79,70,229,0.5); }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .section-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .icon-blue  { background: rgba(79,70,229,0.18); }
+    .icon-cyan  { background: rgba(6,182,212,0.18); }
+    .icon-green { background: rgba(16,185,129,0.18); }
+    .icon-amber { background: rgba(245,158,11,0.18); }
+    .icon-rose  { background: rgba(244,63,94,0.18); }
+    .icon-purple{ background: rgba(168,85,247,0.18); }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 10px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── METRICS GRID ── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .metric-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      text-align: center;
+    }
+    .metric-val {
+      font-size: 1.7rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .metric-lbl {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* ── RESULT TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      margin-top: 6px;
+    }
+    thead tr { background: rgba(79,70,229,0.15); }
+    th {
+      text-align: left;
+      padding: 9px 12px;
+      font-weight: 600;
+      color: var(--primary-light);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 8px 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(51,65,85,0.5);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    td.best {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+    td.model { color: var(--text); font-weight: 500; }
+
+    /* ── PIPELINE ── */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .pipe-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      position: relative;
+    }
+    .pipe-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 44px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+    }
+    .pipe-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .pipe-content { flex: 1; }
+    .pipe-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .pipe-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── TAGS ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .tag {
+      font-size: 0.76rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    .tag-blue   { background: rgba(79,70,229,0.2);  color: #818cf8; border: 1px solid rgba(79,70,229,0.35); }
+    .tag-cyan   { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3); }
+    .tag-green  { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .tag-amber  { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .tag-rose   { background: rgba(244,63,94,0.15);  color: #fb7185; border: 1px solid rgba(244,63,94,0.3); }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .side-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 22px;
+    }
+    .side-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* cold-start grid */
+    .cold-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .cold-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .cold-mode {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .cold-val {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    /* team */
+    .team-list { display: flex; flex-direction: column; gap: 8px; }
+    .team-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .team-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .av1 { background: linear-gradient(135deg, #4f46e5, #818cf8); }
+    .av2 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+    .av3 { background: linear-gradient(135deg, #10b981, #059669); }
+    .av4 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+    .team-name { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+    .team-id   { font-size: 0.72rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+
+    /* progress bar */
+    .progress-wrap { margin-bottom: 10px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      margin-bottom: 5px;
+      color: var(--text-muted);
+    }
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.5s ease;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 28px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-badge">Học máy ứng dụng · Năm 3 Kỳ 1</div>
+  <h1>UFM-Rec · Hệ Khuyến Nghị Sản Phẩm</h1>
+  <p class="hero-sub">Amazon Reviews 2023 – Toys &amp; Games &nbsp;|&nbsp; Hybrid Reciprocal-Rank Fusion</p>
+  <div class="hero-meta">
+    <div class="meta-chip"><span class="dot"></span> Python 3.11+</div>
+    <div class="meta-chip"><span class="dot"></span> scikit-learn · scipy · numpy</div>
+    <div class="meta-chip"><span class="dot"></span> Tháng 9, 2026</div>
+    <div class="meta-chip"><span class="dot"></span> UFM-Rec / anky06-ky</div>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<main class="container">
+
+  <!-- ══ LEFT COLUMN ══ -->
+  <div class="main-col">
+
+    <!-- Tổng quan -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-blue">📋</div>
+        <h2 class="section-title">Tổng Quan Dự Án</h2>
+      </div>
+      <p>
+        <strong style="color:var(--text)">UFM-Rec</strong> xây dựng hệ khuyến nghị sản phẩm trên danh mục <em>Toys and Games</em>
+        của bộ dữ liệu Amazon Reviews 2023. Mục tiêu là so sánh và kết hợp ba hướng mô hình:
+        dựa trên nội dung (TF-IDF), lọc cộng tác (TruncatedSVD), và kết hợp lai (Hybrid RRF),
+        trên bốn chế độ cold-start khác nhau để đánh giá tính ổn định trong thực tế.
+      </p>
+      <p>
+        Pipeline được thiết kế để có thể tái lập hoàn toàn: mỗi bước ghi manifest, checksum dữ liệu,
+        và từ chối ghi đè kết quả đã hoàn thành. Seed cố định là <code style="background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.8em">42</code>.
+      </p>
+
+      <!-- Metrics grid -->
+      <div class="metrics" style="margin-top:20px">
+        <div class="metric-card">
+          <div class="metric-val">16.2M</div>
+          <div class="metric-lbl">Review gốc</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">767K</div>
+          <div class="metric-lbl">Sản phẩm</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">9.25M</div>
+          <div class="metric-lbl">Mẫu Train</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">40K</div>
+          <div class="metric-lbl">Test cases cố định</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dữ liệu -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-cyan">🗄️</div>
+        <h2 class="section-title">Dữ Liệu &amp; Quy Mô</h2>
+      </div>
+      <p>
+        Nguồn dữ liệu: <strong style="color:var(--text)">Amazon Reviews 2023</strong>, danh mục Toys and Games.
+        Sau khi lọc giữ lại 11,57M tương tác mua hàng đã xác minh với rating ≥ 4.
+      </p>
+      <div style="margin: 16px 0 4px">
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Train (80%)</span><span>9.258.647</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Validation (10%)</span><span>1.159.827</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%; background: linear-gradient(90deg,#06b6d4,#0891b2)"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Test (10%)</span><span>1.154.215</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%; background: linear-gradient(90deg,#10b981,#059669)"></div></div>
+        </div>
+      </div>
+      <p style="margin-top:12px">
+        Vector đặc trưng TF-IDF 20.000 chiều cho 767K sản phẩm. Vocabulary chỉ được fit trên
+        sản phẩm xuất hiện trong tập train để tránh data leakage.
+      </p>
+      <div class="tags" style="margin-top:14px">
+        <span class="tag tag-blue">80/10/10 temporal split</span>
+        <span class="tag tag-cyan">TF-IDF 20K chiều</span>
+        <span class="tag tag-green">Rating ≥ 4 · Verified purchase</span>
+        <span class="tag tag-amber">Seed = 42</span>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-green">⚙️</div>
+        <h2 class="section-title">Pipeline Huấn Luyện</h2>
+      </div>
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-num">1</div>
+          <div class="pipe-content">
+            <div class="pipe-name">prepare_full_temporal.py</div>
+            <div class="pipe-desc">Lọc, khử trùng, chia dữ liệu theo thời gian 80/10/10</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">2</div>
+          <div class="pipe-content">
+            <div class="pipe-name">build_full_content_features.py</div>
+            <div class="pipe-desc">Xây văn bản sản phẩm + vector TF-IDF 20K chiều</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">3</div>
+          <div class="pipe-content">
+            <div class="pipe-name">build_recommender_samples.py</div>
+            <div class="pipe-desc">Tạo candidate set (1 positive + 99 negative) dùng chung</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">4</div>
+          <div class="pipe-content">
+            <div class="pipe-name">evaluate_content_baseline.py</div>
+            <div class="pipe-desc">Popularity baseline + Content TF-IDF profile</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">5</div>
+          <div class="pipe-content">
+            <div class="pipe-name">train_evaluate_collaborative_svd.py</div>
+            <div class="pipe-desc">Collaborative filtering bằng TruncatedSVD</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">6</div>
+          <div class="pipe-content">
+            <div class="pipe-name">train_evaluate_hybrid_rrf.py</div>
+            <div class="pipe-desc">Tune trên validation + đánh giá Hybrid RRF trên test</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kết quả -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-amber">📊</div>
+        <h2 class="section-title">Kết Quả Đánh Giá</h2>
+      </div>
+      <p style="margin-bottom:14px">
+        Đánh giá trên 40.000 test cases cân bằng (1 positive + 99 negative cố định mỗi trường hợp):
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Mô hình</th>
+            <th>Recall@10</th>
+            <th>NDCG@10</th>
+            <th>MRR@10</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="model">Popularity</td>
+            <td>0.2669</td>
+            <td>0.1691</td>
+            <td>0.1393</td>
+          </tr>
+          <tr>
+            <td class="model">TF-IDF Content Profile</td>
+            <td>0.4013</td>
+            <td class="best">0.2658 ★</td>
+            <td class="best">0.2243 ★</td>
+          </tr>
+          <tr>
+            <td class="model">Collaborative TruncatedSVD</td>
+            <td>0.2193</td>
+            <td>0.1310</td>
+            <td>0.1043</td>
+          </tr>
+          <tr>
+            <td class="model">Candidate-aware Hybrid RRF</td>
+            <td class="best">0.4231 ★</td>
+            <td>0.2657</td>
+            <td>0.2172</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px; font-size:0.8rem; color: var(--text-dim)">
+        ★ Kết quả tốt nhất theo metric. Hybrid RRF tăng Recall@10 thêm 5,4% tương đối so với content baseline.
+      </p>
+    </div>
+
+    <!-- Cold-start per chế độ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-rose">❄️</div>
+        <h2 class="section-title">Recall@10 Theo Chế Độ Cold-Start</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Mô hình</th>
+            <th>Zero-shot</th>
+            <th>Extreme cold</th>
+            <th>Cold</th>
+            <th>Warm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="model">TF-IDF Content</td>
+            <td>0.2816</td>
+            <td>0.2874</td>
+            <td>0.3296</td>
+            <td>0.7065</td>
+          </tr>
+          <tr>
+            <td class="model">Collaborative SVD</td>
+            <td>0.0000</td>
+            <td>0.0775</td>
+            <td>0.1498</td>
+            <td>0.6497</td>
+          </tr>
+          <tr>
+            <td class="model">Hybrid RRF</td>
+            <td>0.2731</td>
+            <td>0.2575</td>
+            <td>0.3146</td>
+            <td class="best">0.8473 ★</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px; font-size:0.8rem; color:var(--text-dim)">
+        Hybrid RRF vượt trội ở nhóm <strong style="color:var(--accent2)">warm</strong>; ở zero-shot và extreme cold,
+        content baseline vẫn dẫn đầu do SVD không được chọn trọng số (= 0).
+      </p>
+    </div>
+
+    <!-- Cổng phối hợp -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-purple">🔀</div>
+        <h2 class="section-title">Cổng Phối Hợp Hybrid RRF</h2>
+      </div>
+      <p style="margin-bottom:14px">Trọng số được chọn trên validation; test không tham gia tuning:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Candidate Regime</th>
+            <th>Popularity</th>
+            <th>Content</th>
+            <th>Collaborative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="model">Zero-shot</td>
+            <td>0.0</td>
+            <td class="best">1.0</td>
+            <td>0.0</td>
+          </tr>
+          <tr>
+            <td class="model">Extreme cold</td>
+            <td>0.1</td>
+            <td class="best">0.9</td>
+            <td>0.0</td>
+          </tr>
+          <tr>
+            <td class="model">Cold</td>
+            <td>0.1</td>
+            <td class="best">0.9</td>
+            <td>0.0</td>
+          </tr>
+          <tr>
+            <td class="model">Warm</td>
+            <td class="best">0.7</td>
+            <td>0.3</td>
+            <td>0.0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- end main-col -->
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+
+    <!-- Nhóm thực hiện -->
+    <div class="side-card">
+      <div class="side-title">👥 Nhóm Thực Hiện</div>
+      <div class="team-list">
+        <div class="team-row">
+          <div class="team-avatar av1">TP</div>
+          <div>
+            <div class="team-name">Nguyễn Thành Phong</div>
+            <div class="team-id">MSSV: —</div>
+          </div>
+        </div>
+        <div class="team-row">
+          <div class="team-avatar av2">KY</div>
+          <div>
+            <div class="team-name">Kỳ</div>
+            <div class="team-id">MSSV: —</div>
+          </div>
+        </div>
+        <div class="team-row">
+          <div class="team-avatar av3">HA</div>
+          <div>
+            <div class="team-name">Hải</div>
+            <div class="team-id">MSSV: —</div>
+          </div>
+        </div>
+        <div class="team-row">
+          <div class="team-avatar av4">HN</div>
+          <div>
+            <div class="team-name">Hân</div>
+            <div class="team-id">MSSV: —</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px; padding-top:12px; border-top: 1px solid var(--border)">
+        <div class="team-row">
+          <div style="font-size:0.75rem; color:var(--text-dim)">GVHD:</div>
+          <div style="font-size:0.82rem; color:var(--text); font-weight:600; margin-left:8px">ThS. Nguyễn Thái Anh</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="side-card">
+      <div class="side-title">🛠️ Công Nghệ</div>
+      <div class="tags">
+        <span class="tag tag-blue">Python 3.11+</span>
+        <span class="tag tag-cyan">scikit-learn 1.6.1</span>
+        <span class="tag tag-green">numpy 2.2.6</span>
+        <span class="tag tag-amber">pandas 2.2.3</span>
+        <span class="tag tag-rose">scipy 1.17.1</span>
+        <span class="tag tag-blue">joblib 1.6.0</span>
+        <span class="tag tag-cyan">TF-IDF</span>
+        <span class="tag tag-green">TruncatedSVD</span>
+        <span class="tag tag-amber">Hybrid RRF</span>
+        <span class="tag tag-blue">GPU Two-tower (exp.)</span>
+      </div>
+    </div>
+
+    <!-- Cold-start modes -->
+    <div class="side-card">
+      <div class="side-title">❄️ Chế Độ Cold-Start</div>
+      <div class="cold-grid">
+        <div class="cold-item">
+          <div class="cold-mode">Zero-shot</div>
+          <div class="cold-val" style="color:#fb7185">0 lịch sử</div>
+        </div>
+        <div class="cold-item">
+          <div class="cold-mode">Extreme cold</div>
+          <div class="cold-val" style="color:#f97316">rất ít</div>
+        </div>
+        <div class="cold-item">
+          <div class="cold-mode">Cold</div>
+          <div class="cold-val" style="color:#facc15">thưa thớt</div>
+        </div>
+        <div class="cold-item">
+          <div class="cold-mode">Warm</div>
+          <div class="cold-val" style="color:#34d399">đủ dày</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cấu trúc repo -->
+    <div class="side-card">
+      <div class="side-title">📁 Cấu Trúc Repo</div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--text-dim); line-height:1.8">
+        <div style="color:var(--primary-light)">src/</div>
+        <div>&nbsp;&nbsp;prepare_full_temporal.py</div>
+        <div>&nbsp;&nbsp;build_full_content_features.py</div>
+        <div>&nbsp;&nbsp;build_recommender_samples.py</div>
+        <div>&nbsp;&nbsp;evaluate_content_baseline.py</div>
+        <div>&nbsp;&nbsp;train_evaluate_collaborative_svd.py</div>
+        <div>&nbsp;&nbsp;train_evaluate_hybrid_rrf.py</div>
+        <div>&nbsp;&nbsp;train_gpu_recommender.py</div>
+        <div style="color:var(--accent); margin-top:6px">data/</div>
+        <div>&nbsp;&nbsp;README.md</div>
+        <div style="color:var(--accent2); margin-top:6px">docs/</div>
+        <div>&nbsp;&nbsp;Proposal.pdf</div>
+        <div>&nbsp;&nbsp;GPU_TRAINING.md</div>
+        <div style="color:var(--text-muted); margin-top:6px">notebooks/</div>
+        <div>&nbsp;&nbsp;FITLAB_Training_Monitor.ipynb</div>
+      </div>
+    </div>
+
+    <!-- Ghi chú GPU -->
+    <div class="side-card">
+      <div class="side-title">⚡ Thử Nghiệm GPU</div>
+      <p style="font-size:0.8rem; margin:0">
+        <code style="background:rgba(255,255,255,0.07);padding:2px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.78em">train_gpu_recommender.py</code>
+        triển khai Two-Tower content-aware: nhánh sản phẩm dùng TF-IDF + embedding ID, nhánh người dùng
+        dùng Transformer 2 lớp trên lịch sử. Chạy trên FITLAB (Quadro RTX 6000 24GB).
+        Đây là thử nghiệm chưa được xác nhận tốt hơn baseline.
+      </p>
+    </div>
+
+  </aside>
+
+</main>
+
+<footer>
+  Tóm tắt dự án UFM-Rec &nbsp;·&nbsp; Học máy ứng dụng &nbsp;·&nbsp; Tháng 9 năm 2026
+</footer>
+
+</body>
+</html>
