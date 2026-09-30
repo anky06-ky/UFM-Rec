@@ -58,7 +58,7 @@ Giới hạn chờ ban đầu 72 giờ; đã gia hạn queue lên 168 giờ lúc
 28/09/2026, khi queue chỉ đang chờ và chưa tối ưu GPU. Chỉ dừng wrapper/child
 đúng argv/PGID của queue chờ cũ; không dừng extractor CLIP. Wrapper mới PID
 146362; ablation suite 7 ngày wrapper PID 146364. Nếu quá giới hạn, dữ liệu và
-checkpoint được giữ. Xem `LONG_RUNNING_EXPERIMENTS.md` cho trạng thái chiến dịch mới.
+checkpoint được giữ. Xem `ops.md` cho trạng thái chiến dịch mới.
 
 Môi trường isolated hiện ở `/tmp/ufm_venv_20260928_cdcp1xhw/bin/python`.
 Nếu container bị tạo lại, cần khôi phục môi trường trước khi chạy lại queue;
@@ -76,7 +76,7 @@ Riêng transformer GPU và UFM chưa chạy test; baseline cổ điển đã có
 README trước chiến dịch này. Sau khi validation chốt mô hình: chạy ablation, đối chứng chuẩn
 SASRec/BERT4Rec, calibration trên validation riêng, kiểm tra ngân sách VRAM 16GB,
 thử tập dữ liệu thứ hai theo proposal, rồi đánh giá test một lần, demo khuyến nghị,
-biểu đồ, báo cáo cuối kỳ và slide. Xem `UFM_FULL_SCOPE.md` để đối chiếu phạm vi.
+biểu đồ, báo cáo cuối kỳ và slide. Xem `scope.md` để đối chiếu phạm vi.
 
 Bổ sung ngày 28/09/2026: 32 kiểm thử CPU của chiến dịch PASS trên FITLAB trong
 10,468 giây (bao gồm suite/demo), không thay thế GPU smoke UFM. Demo CPU TF-IDF

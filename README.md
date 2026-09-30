@@ -1,11 +1,13 @@
 # UFM-Rec
 
+**Bắt đầu:** [START.md](START.md) · [Việc tiếp theo](docs/next.md) · `python status.py`
+
 ## Bàn giao mới nhất: 30/09/2026
 
 - **Mở demo:** chạy [Start_Demo.cmd](Start_Demo.cmd), hoặc vào
   [localhost:8765](http://127.0.0.1:8765) khi server đang chạy.
   Demo TF-IDF thật có tìm kiếm, lịch sử, Top-K, bộ lọc cold-start và xuất JSON.
-  [Hướng dẫn + kịch bản trình bày](docs/DEMO_GUIDE.md).
+  [Hướng dẫn + kịch bản trình bày](docs/demo.md).
 - **Tiến trình:** [PDF 5 trang](output/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf)
   và [bản Markdown](reports/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
 - BPR-MF đã hoàn thành 3 seed (42, 7, 2026), 5 epoch/seed. Validation overall
@@ -22,7 +24,7 @@
 Các mục bên dưới lưu lại những mốc trước; dùng báo cáo ngày 30/09 làm snapshot mới nhất.
 
 Phạm vi đã chốt: giữ đầy đủ Foundation Model văn bản/ảnh, dual uncertainty và
-UGAF theo proposal. Xem [kế hoạch triển khai đầy đủ](docs/UFM_FULL_SCOPE.md).
+UGAF theo proposal. Xem [kế hoạch triển khai đầy đủ](docs/scope.md).
 Lõi mô hình mới và kiểm thử nằm ở `src/ufm_model.py`, `tests/test_ufm_core.py`;
 pipeline Foundation Model mới chưa phải một lượt UFM đã huấn luyện hoàn chỉnh.
 
@@ -121,8 +123,8 @@ nhánh sản phẩm dùng TF-IDF và embedding ID chỉ dành cho sản phẩm c
 nhánh người dùng dùng Transformer 2 lớp trên lịch sử. Đây là thử nghiệm mới,
 chưa được xác nhận tốt hơn các baseline ở bảng trên.
 
-Xem [hướng dẫn GPU](docs/GPU_TRAINING.md). Notebook
-`notebooks/FITLAB_Training_Monitor.ipynb` chỉ đọc log và checkpoint của job đang chạy.
+Xem [hướng dẫn GPU](docs/gpu.md). Notebook
+`notebooks/02_baseline.ipynb` chỉ đọc log và checkpoint của job đang chạy.
 Lượt train đầy đủ dùng 4.230.848 mẫu train có lịch sử, chọn checkpoint bằng validation,
 lưu định kỳ để resume và không tự động mở test.
 
@@ -154,8 +156,8 @@ xếp hạng toàn catalog. Backend UFM chỉ nhận production checkpoint đã 
 chưa được chạy với mô hình full hiện còn trong queue. Khác với bảng test baseline
 cổ điển phía trên, chiến dịch GPU mới không mở test để tuning.
 
-Xem [vận hành dài ngày và demo](docs/LONG_RUNNING_EXPERIMENTS.md),
-[phạm vi đầy đủ](docs/UFM_FULL_SCOPE.md),
+Xem [vận hành dài ngày và demo](docs/ops.md),
+[phạm vi đầy đủ](docs/scope.md),
 [báo cáo tiến độ mới](reports/Bao_cao_tien_do_UFM_Rec_2026_09_28_cap_nhat.md)
 và [bản PDF mới nhất](output/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf).
 Job tách nền không phụ thuộc máy cá nhân, nhưng container FITLAB phải còn sống;

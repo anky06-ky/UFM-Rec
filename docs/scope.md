@@ -34,7 +34,7 @@ báo hoặc xin duyệt thay người dùng.
   PASS trên Python 3.12.3 / PyTorch 2.12.1+cu130. Catalog local đã nhập lên FITLAB
   sau khi đối chiếu hash mapping, text và split. Job queue được xác nhận đang chờ
   baseline/GPU lúc 12:43 ngày 28/09; chưa chạy smoke GPU hay extraction full.
-  Chi tiết và cách phục hồi: `docs/FITLAB_FOUNDATION_20260928.md`.
+  Chi tiết và cách phục hồi: `docs/foundation.md`.
 
 **Cập nhật sau snapshot 12:43:** đối chứng hoàn tất 8 epoch, best ở epoch 5;
 CLIP GPU smoke 128/128 văn bản và ảnh PASS, extraction toàn catalog đang chạy.
@@ -42,7 +42,7 @@ CLIP GPU smoke 128/128 văn bản và ảnh PASS, extraction toàn catalog đang
 và loss tích lũy khi resume. 25 kiểm thử CPU PASS trên local và FITLAB (9,692 giây
 trên FITLAB). Queue train nền đã khởi động, wrapper PID 117817; lúc xác nhận
 đang chuẩn bị graph CPU, chưa có optimizer step UFM GPU.
-Xem [hướng dẫn train mới](FITLAB_UFM_TRAINING_20260928.md).
+Xem [hướng dẫn train mới](train.md).
 
 **Chưa hoàn thành:** cache Foundation Model cho toàn bộ catalog,
 GPU smoke/resume và các lượt train/validation UFM, baseline SASRec/BERT4Rec

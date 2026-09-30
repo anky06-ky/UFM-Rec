@@ -53,7 +53,7 @@ flock -n runs/ufm_ablation_suite_v1.lock /path/to/ufm-python -u src/run_ufm_abla
 
 Thay `/path/to/ufm-python` bằng Python isolated thật, không sao chép placeholder.
 Mã không tự khởi động sau reboot; xem hướng dẫn dựng lại venv trong
-`FITLAB_FOUNDATION_20260928.md`. Nguồn dữ liệu/checkpoint lớn không đưa lên GitHub.
+`foundation.md`. Nguồn dữ liệu/checkpoint lớn không đưa lên GitHub.
 
 Queue UFM đã gia hạn lên 168 giờ khi vẫn chỉ chờ features. `.gitattributes`
 giữ nguyên byte Python giữa Windows và Linux để Git không tự đổi newline làm

@@ -8,7 +8,7 @@ thành huấn luyện UFM hay kết quả test.
 25 kiểm thử CPU PASS trên FITLAB và queue train nền đã bật để chuẩn bị graph,
 chờ features hoàn chỉnh rồi chạy GPU smoke/resume và full train.
 Các trạng thái 12:43 bên dưới được giữ làm lịch sử, không phải trạng thái mới nhất.
-Xem [hướng dẫn train UFM](FITLAB_UFM_TRAINING_20260928.md) và dùng
+Xem [hướng dẫn train UFM](train.md) và dùng
 `src/monitor_ufm_training.py` để đọc trạng thái hiện tại.
 
 ## Kết quả đã xác nhận
@@ -109,7 +109,7 @@ cd /home/coder/iDragonCloud/DA_AI
 /home/coder/iDragonCloud/.venv/bin/python src/monitor_ufm_features.py
 ```
 
-Mở `notebooks/FITLAB_UFM_Features_Monitor.ipynb` trên FITLAB, chọn kernel venv sẵn
+Mở `notebooks/03_clip.ipynb` trên FITLAB, chọn kernel venv sẵn
 có và **Run All**. Notebook chỉ đọc trạng thái và log, không tạo job GPU mới.
 Trong lần kiểm tra này, kernel được báo đã khởi động nhưng các cell vẫn pending
 qua một lần hủy/thử lại. Toàn bộ mã cell đã chạy PASS trực tiếp bằng Python trong

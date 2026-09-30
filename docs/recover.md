@@ -42,7 +42,7 @@ tail -n 12 runs/content_transformer_v1.log
 pgrep -af '[t]rain_gpu_recommender.py'
 ```
 
-Notebook `notebooks/FITLAB_Training_Monitor.ipynb` chỉ đọc log và các metric, có thể chạy lại để cập nhật. Đóng tab không dừng job nền; dừng container FITLAB vẫn có thể làm mất tiến trình. Checkpoint ở iDragonCloud dùng để khôi phục.
+Notebook `notebooks/02_baseline.ipynb` chỉ đọc log và các metric, có thể chạy lại để cập nhật. Đóng tab không dừng job nền; dừng container FITLAB vẫn có thể làm mất tiến trình. Checkpoint ở iDragonCloud dùng để khôi phục.
 
 Không chạy test trong bước khôi phục. Cấu hình vẫn giới hạn 20 epoch, early stopping sau ba epoch không cải thiện NDCG@10 của nhóm có lịch sử trên validation. Khi epoch 5 được hoàn thành sau resume, `train_loss` do mã hiện tại ghi là trung bình phần batch chạy sau resume, không phải trung bình đầy đủ epoch 5.
 
