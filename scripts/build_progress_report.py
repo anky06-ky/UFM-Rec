@@ -202,7 +202,7 @@ Tìm LEGO → thêm sản phẩm → chọn Top K → tìm gợi ý → lọc ze
 |---|---|---|
 {latencies}
 
-Mỗi kịch bản đo một lần; chưa phải benchmark throughput, p95 hoặc so sánh phần cứng. Backend UFM có đường dẫn features thay thế với kiểm tra hash; cần checkpoint full hoàn tất trước khi phục vụ. Hướng dẫn và kịch bản 3 phút: docs/DEMO_GUIDE.md.
+Mỗi kịch bản đo một lần; chưa phải benchmark throughput, p95 hoặc so sánh phần cứng. Backend UFM có đường dẫn features thay thế với kiểm tra hash; cần checkpoint full hoàn tất trước khi phục vụ. Hướng dẫn và kịch bản 3 phút: docs/demo.md.
 
 <!-- pagebreak -->
 ## Phần còn lại và điều kiện hoàn tất
