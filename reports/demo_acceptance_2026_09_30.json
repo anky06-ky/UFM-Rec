@@ -1,0 +1,292 @@
+{
+  "time_utc": "2026-09-30T04:10:41.925450+00:00",
+  "status": {
+    "app": "ufm-rec-demo",
+    "backend": "TF-IDF content baseline",
+    "warning": "Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.",
+    "items": 767045,
+    "max_history": 20,
+    "profile_items": 10
+  },
+  "checks": [
+    {
+      "case": "new_user",
+      "passed": true,
+      "request": {
+        "history": [],
+        "regime": "all",
+        "k": 5
+      },
+      "response": {
+        "backend": "TF-IDF content baseline",
+        "warning": "Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.",
+        "results": [
+          {
+            "asin": "B004S8F7QM",
+            "title": "Cards Against Humanity",
+            "image": "https://m.media-amazon.com/images/I/3141QHwqrZL._AC_.jpg",
+            "train_count": 17410,
+            "regime": "warm",
+            "score": 9.764857469466438
+          },
+          {
+            "asin": "B0054TRQA4",
+            "title": "Aurora World Flopsie Drake Dolphin 12\"",
+            "image": "https://m.media-amazon.com/images/I/41gI+pZ--5S._AC_.jpg",
+            "train_count": 10836,
+            "regime": "warm",
+            "score": 9.290721484017725
+          },
+          {
+            "asin": "B0BW3QTWJJ",
+            "title": "Baby Einstein Baby's First Music Teacher Developmental Toys Kit and Gift Set, Newborn and up",
+            "image": "https://m.media-amazon.com/images/I/41ffM4G31AL.jpg",
+            "train_count": 8703,
+            "regime": "warm",
+            "score": 9.071537969168538
+          },
+          {
+            "asin": "B07N29HQMN",
+            "title": "Aurora - Mini Flopsie - 8\" Caramel Horse",
+            "image": "https://m.media-amazon.com/images/I/51k3RSftmuS._AC_.jpg",
+            "train_count": 7560,
+            "regime": "warm",
+            "score": 8.930758735638015
+          },
+          {
+            "asin": "B0C3H818H4",
+            "title": "Exploding Kittens Party Pack Card Game by Exploding kittens - A Russian Roulette Fun Family Games for Adults, Teens & Kids, 2-10 Players",
+            "image": "https://m.media-amazon.com/images/I/51mmc9FwDgL._AC_.jpg",
+            "train_count": 7293,
+            "regime": "warm",
+            "score": 8.894807371419196
+          }
+        ],
+        "elapsed_ms": 250.7,
+        "regime": "all",
+        "history_count": 0
+      }
+    },
+    {
+      "case": "personalized",
+      "passed": true,
+      "request": {
+        "history": [
+          "B00EYHD42G"
+        ],
+        "regime": "all",
+        "k": 10
+      },
+      "response": {
+        "backend": "TF-IDF content baseline",
+        "warning": "Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.",
+        "results": [
+          {
+            "asin": "B003M6BHQ0",
+            "title": "LEGO 8683 Minifigures Series 1 - Cheerleader",
+            "image": "https://m.media-amazon.com/images/I/41sMl-AtwSL._AC_.jpg",
+            "train_count": 5,
+            "regime": "extreme_cold",
+            "score": 0.739492851986991
+          },
+          {
+            "asin": "B00JJGGGHW",
+            "title": "LEGO 71005 The Simpson Series Marge Simpson Character Minifigures",
+            "image": "https://m.media-amazon.com/images/I/410a4SyzdjL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 0.7291246056768199
+          },
+          {
+            "asin": "B00404IG3U",
+            "title": "LEGO - Minifigures Series 2 - RINGMASTER",
+            "image": "https://m.media-amazon.com/images/I/51g2U-ubXOL._AC_.jpg",
+            "train_count": 15,
+            "regime": "cold",
+            "score": 0.7054564640889771
+          },
+          {
+            "asin": "B004D07PIS",
+            "title": "LEGO Minifigures Series 3 (One Random Pack)",
+            "image": "https://m.media-amazon.com/images/I/517ZoiuIwtL._AC_.jpg",
+            "train_count": 9,
+            "regime": "cold",
+            "score": 0.6961292265177806
+          },
+          {
+            "asin": "B007SWRQE6",
+            "title": "Lego Minifigures Series 7 - Jungle Boy",
+            "image": "https://m.media-amazon.com/images/I/410pm4nUl2L._AC_.jpg",
+            "train_count": 1,
+            "regime": "extreme_cold",
+            "score": 0.6948042583370042
+          },
+          {
+            "asin": "B00911UDPQ",
+            "title": "Lego Minifigures Series 8 - SEALED - Red Cheerleader - UNOPENED ONLY",
+            "image": "https://m.media-amazon.com/images/I/51x0VDyYdYL._AC_.jpg",
+            "train_count": 3,
+            "regime": "extreme_cold",
+            "score": 0.6872316145086325
+          },
+          {
+            "asin": "B00A7BTIG4",
+            "title": "Lego Minifigures Series 7 - Bride",
+            "image": "https://m.media-amazon.com/images/I/31JxbFIM05L._AC_.jpg",
+            "train_count": 1,
+            "regime": "extreme_cold",
+            "score": 0.6872176599002873
+          },
+          {
+            "asin": "B0042AYKAU",
+            "title": "LEGO Series 2 Collectible Minifigures - Vampire Minifigure with Bat",
+            "image": "https://m.media-amazon.com/images/I/51QEv71+BzL._AC_.jpg",
+            "train_count": 10,
+            "regime": "cold",
+            "score": 0.6819892175943921
+          },
+          {
+            "asin": "B00AZQNM0O",
+            "title": "Lego - Minifigures Series 9 - Roller Derby Girl",
+            "image": "https://m.media-amazon.com/images/I/41e4VxmSB2L._AC_.jpg",
+            "train_count": 3,
+            "regime": "extreme_cold",
+            "score": 0.6782184386109248
+          },
+          {
+            "asin": "B004US4CA2",
+            "title": "LEGO Minifigures Series 4 - Viking",
+            "image": "https://m.media-amazon.com/images/I/41MOQOOy9fL._AC_.jpg",
+            "train_count": 1,
+            "regime": "extreme_cold",
+            "score": 0.673092432006564
+          }
+        ],
+        "elapsed_ms": 696.7,
+        "regime": "all",
+        "history_count": 1
+      }
+    },
+    {
+      "case": "zero_shot",
+      "passed": true,
+      "request": {
+        "history": [
+          "B00EYHD42G"
+        ],
+        "regime": "zero_shot",
+        "k": 5
+      },
+      "response": {
+        "backend": "TF-IDF content baseline",
+        "warning": "Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.",
+        "results": [
+          {
+            "asin": "B00JJGGGHW",
+            "title": "LEGO 71005 The Simpson Series Marge Simpson Character Minifigures",
+            "image": "https://m.media-amazon.com/images/I/410a4SyzdjL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 0.7291246056768199
+          },
+          {
+            "asin": "B0B2WY3ZT8",
+            "title": "LEGO Series 4 Collectible Minifigure Monster (Frankenstein)",
+            "image": "https://m.media-amazon.com/images/I/318GAMrF+yL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 0.6040737629161205
+          },
+          {
+            "asin": "B01L4GC10U",
+            "title": "Lego mini figure series 14 businessmen Zombie Zombie Businessman [71010-13] by LEGO",
+            "image": "https://m.media-amazon.com/images/I/51wqvECBFTL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 0.5652235747076928
+          },
+          {
+            "asin": "B0B2X3G9L5",
+            "title": "LEGO Series 15 Collectible Minifigure 71011 - Faun Minifig",
+            "image": "https://m.media-amazon.com/images/I/41SUX5Us4GL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 0.5614268184585082
+          },
+          {
+            "asin": "B00G036GV8",
+            "title": "Ice Fisherman - Minifigure Series 5 - LEGO #8805",
+            "image": "https://m.media-amazon.com/images/I/31smPqCZfnL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 0.546939969154947
+          }
+        ],
+        "elapsed_ms": 390.2,
+        "regime": "zero_shot",
+        "history_count": 1
+      }
+    },
+    {
+      "case": "warm",
+      "passed": true,
+      "request": {
+        "history": [
+          "B00EYHD42G"
+        ],
+        "regime": "warm",
+        "k": 5
+      },
+      "response": {
+        "backend": "TF-IDF content baseline",
+        "warning": "Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.",
+        "results": [
+          {
+            "asin": "B00AWJ4MJO",
+            "title": "LEGO Series 9 Collectible Minifigure - Cyclops with Club (71000)",
+            "image": "https://m.media-amazon.com/images/I/41ZScAS2Z5L._AC_.jpg",
+            "train_count": 24,
+            "regime": "warm",
+            "score": 0.6579616995784368
+          },
+          {
+            "asin": "B014ERHSQS",
+            "title": "LEGO Series 14 Minifigure Gargoyle",
+            "image": "https://m.media-amazon.com/images/I/415XcSssnEL._AC_.jpg",
+            "train_count": 34,
+            "regime": "warm",
+            "score": 0.6029821402768648
+          },
+          {
+            "asin": "B007YD0FGU",
+            "title": "Lego Series 7 Dare Devil Mini Figure",
+            "image": "https://m.media-amazon.com/images/I/51FhfXcbbRL._AC_.jpg",
+            "train_count": 25,
+            "regime": "warm",
+            "score": 0.5822640991827539
+          },
+          {
+            "asin": "B007YCWTQU",
+            "title": "Lego Series 7 Computer Programmer Mini Figure",
+            "image": "https://m.media-amazon.com/images/I/41fOkJZjh2L._AC_.jpg",
+            "train_count": 34,
+            "regime": "warm",
+            "score": 0.5757535464558449
+          },
+          {
+            "asin": "B004G2FNU0",
+            "title": "Lego: Minifigures Series 3 > Race Car Driver Mini-Figure",
+            "image": "https://m.media-amazon.com/images/I/41S34VQIPPL._AC_.jpg",
+            "train_count": 23,
+            "regime": "warm",
+            "score": 0.5729533164198165
+          }
+        ],
+        "elapsed_ms": 299.9,
+        "regime": "warm",
+        "history_count": 1
+      }
+    }
+  ],
+  "timing_scope": "One request per case, server inference only; not a throughput benchmark."
+}

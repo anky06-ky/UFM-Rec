@@ -1,0 +1,32 @@
+{
+  "snapshot_time": "2026-09-28T22:23:24.770197+07:00",
+  "scope": "Read-only FITLAB progress inspection; no restart, training, test evaluation or code change",
+  "clip": {
+    "committed_rows": 187648,
+    "total_items": 767045,
+    "remaining_items": 579397,
+    "completion_percent": 24.463753756298523,
+    "image_status_counts": {"ok": 186978, "URLError": 653, "no_url": 7, "http_404": 10},
+    "image_success_percent_of_processed": 99.64294849931787,
+    "observed_recent_rows_per_second": 5.225,
+    "observed_window_seconds": 1224.9,
+    "log_elapsed_seconds": 33809.9,
+    "conditional_extraction_eta_hours": 30.8,
+    "eta_caveat": "Only if recent throughput remains unchanged; not a promise and excludes UFM/ablations"
+  },
+  "queues": {
+    "foundation": {"stage": "full_extraction_running", "state_time_utc": "2026-09-28T05:58:14.006673+00:00", "time_kind": "launch state, not periodic heartbeat", "extractor_pid": 115890},
+    "ufm": {"stage": "waiting_for_complete_features_and_idle_gpu", "heartbeat_utc": "2026-09-28T15:23:22.585399+00:00", "wrapper_pid": 146362, "python_pid": 146363, "max_wait_hours": 168, "test_evaluated": false},
+    "ablations": {"stage": "waiting_for_full_ufm_and_idle_gpu", "heartbeat_utc": "2026-09-28T15:23:21.505164+00:00", "wrapper_pid": 146364, "python_pid": 146365, "max_days": 7, "completed_variants": [], "test_evaluated": false}
+  },
+  "ufm_gpu": {"smoke_epochs": 0, "full_epochs": 0, "smoke_latest_exists": false, "full_latest_exists": false, "smoke_completed_exists": false, "full_completed_exists": false},
+  "gpu_instantaneous": {"name": "Quadro RTX 6000", "memory_used_MiB": 3490, "memory_total_MiB": 24576, "utilization_percent": 0, "caveat": "One shared-GPU sample; not peak VRAM or evidence that extraction has stopped"},
+  "train_graph": {"rows": 4230848, "items": 767045, "users": 1626421, "edges": 5835970},
+  "baseline_gpu": {"completed_epochs": 8, "optimizer_steps": 132216, "best_epoch": 5, "best_known_user_ndcg_at_10": 0.380043, "test_evaluated": false, "smoke_run": false},
+  "correctness_checks": {"tests": 32, "errors": 0, "failures": 0, "passed": true, "python": "3.12.3", "torch": "2.12.1+cu130", "numpy": "2.5.1", "note": "Previously executed checks, read back in this inspection; not rerun and not quality metrics"},
+  "remote_code_sha256": {
+    "train_ufm_recommender.py": "5b2b205b9e7e22e85ed26f9a1a002d3b55aca0949e31406d138858c32a9be348",
+    "ufm_model.py": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6"
+  },
+  "published_code_commit": "b2e1f1873e73c9682196436800a03fdcdf8bfef5"
+}

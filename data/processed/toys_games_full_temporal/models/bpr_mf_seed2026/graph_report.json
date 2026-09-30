@@ -1,0 +1,8 @@
+{
+  "source_rows": 9258647,
+  "users": 1622880,
+  "pairs": 5832475,
+  "skipped_singleton_users": 3404800,
+  "duplicate_interactions": 21372,
+  "truncated": false
+}

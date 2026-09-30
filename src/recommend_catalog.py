@@ -72,6 +72,17 @@ class Catalog:
                 if len(found)>=limit: break
         return found
 
+    def regime_mask(self,regime='all'):
+        n = self.counts
+        masks = dict(all=np.ones(len(n),dtype=bool),zero_shot=n==0,
+                     extreme_cold=(n>0)&(n<=5),cold=(n>5)&(n<=20),warm=n>20)
+        if regime not in masks: raise ValueError('Unknown item regime.')
+        return masks[regime]
+
+    def examples(self,limit=8):
+        rows = np.argsort(-self.counts,kind='stable')[:limit]
+        return [self.item(int(row)) for row in rows]
+
 
 class ContentBackend:
     name = 'TF-IDF content baseline'
@@ -82,7 +93,7 @@ class ContentBackend:
         if self.matrix.shape[0]!=len(catalog.asins) or not np.isfinite(self.matrix.data).all():
             raise ValueError('TF-IDF mapping/finite check failed.')
 
-    def recommend(self,asins,k=10):
+    def recommend(self,asins,k=10,regime='all'):
         history = self.catalog.rows(asins)
         if not 1<=k<=50: raise ValueError('Top K must be 1-50.')
         past = history[-10:]
@@ -96,6 +107,7 @@ class ContentBackend:
         else: scores = popularity.astype(np.float64)
         # Full catalog, int64 ranks (do not reuse sampled uint8 rank helper).
         scores += tie_noise(np.arange(len(scores)))*1e-10
+        scores[~self.catalog.regime_mask(regime)] = -np.inf
         scores[np.asarray(history,dtype=np.int64)] = -np.inf
         rows = np.flatnonzero(np.isfinite(scores))
         best = rows[np.argsort(-scores[rows],kind='stable')[:k]]
@@ -105,7 +117,7 @@ class ContentBackend:
 class UFMBackend:
     name = 'UFM Rec'
     warning = 'Điểm và uncertainty là tín hiệu nghiên cứu, không phải xác suất mua hàng hay độ chắc chắn Bayesian.'
-    def __init__(self,catalog,run,chunk=1024,_allow_technical_smoke=False):
+    def __init__(self,catalog,run,chunk=1024,_allow_technical_smoke=False,features=None):
         import torch
         from ufm_model import UFMConfig,UFMRec
         from train_ufm_recommender import feature_audit
@@ -116,7 +128,7 @@ class UFMBackend:
         if marker['smoke_run'] and not _allow_technical_smoke:
             raise ValueError('Technical smoke cannot serve a production UFM demo.')
         config = json.loads((run/'config.json').read_text())
-        self.features = Path(config['features'])
+        self.features = Path(features) if features is not None else Path(config['features'])
         if config['feature_marker_sha256'] != sha256(self.features/'complete.json'):
             raise ValueError('Feature marker changed since training.')
         feature_audit(SimpleNamespace(features=self.features,data=catalog.data),len(catalog.asins))
@@ -134,7 +146,7 @@ class UFMBackend:
         # Deliberate CPU serving: do not compete with the long-running GPU suite.
         torch.set_num_threads(4)
 
-    def recommend(self,asins,k=10):
+    def recommend(self,asins,k=10,regime='all'):
         torch = self.torch
         history = self.catalog.rows(asins)
         if not 1<=k<=50: raise ValueError('Top K must be 1-50.')
@@ -142,9 +154,10 @@ class UFMBackend:
         past = history[-self.cfg.history_size:]
         h[0,:len(past)] = np.asarray(past,dtype=np.int64)+1
         excluded = set(history); best = []
+        allowed = self.catalog.regime_mask(regime)
         with torch.inference_mode():
             for start in range(0,len(self.catalog.asins),self.chunk):
-                rows = np.array([r for r in range(start,min(start+self.chunk,len(self.catalog.asins))) if r not in excluded],dtype=np.int64)
+                rows = np.array([r for r in range(start,min(start+self.chunk,len(self.catalog.asins))) if r not in excluded and allowed[r]],dtype=np.int64)
                 if not len(rows): continue
                 output = self.model(torch.from_numpy(h),torch.from_numpy(rows[None]+1),*self.tables)
                 scores = output['scores'][0].numpy().astype(np.float64)
@@ -164,6 +177,7 @@ def parse_args():
     p.add_argument('--data',type=Path,default=DATA)
     p.add_argument('--backend',choices=['content','ufm'],default='content')
     p.add_argument('--run',type=Path,default=ROOT/'runs/ufm_full_v1')
+    p.add_argument('--features',type=Path,help='Relocated identical CLIP cache; hashes must still match.')
     p.add_argument('--history',nargs='*',default=[])
     p.add_argument('--top-k',type=int,default=10)
     return p.parse_args()
@@ -171,5 +185,5 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args(); catalog = Catalog(args.data)
-    backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(catalog,args.run)
+    backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(catalog,args.run,features=args.features)
     print(json.dumps(dict(backend=backend.name,warning=backend.warning,items=backend.recommend(args.history,args.top_k)),ensure_ascii=False,indent=2))

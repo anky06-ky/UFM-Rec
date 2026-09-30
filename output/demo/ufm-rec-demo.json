@@ -1,0 +1,57 @@
+{
+  "created_at": "2026-09-30T04:05:21.118Z",
+  "request": {
+    "history": [
+      "B00EYHD42G"
+    ],
+    "k": 5,
+    "regime": "zero_shot"
+  },
+  "backend": "TF-IDF content baseline",
+  "warning": "Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.",
+  "results": [
+    {
+      "asin": "B00JJGGGHW",
+      "title": "LEGO 71005 The Simpson Series Marge Simpson Character Minifigures",
+      "image": "https://m.media-amazon.com/images/I/410a4SyzdjL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 0.7291246056768199
+    },
+    {
+      "asin": "B0B2WY3ZT8",
+      "title": "LEGO Series 4 Collectible Minifigure Monster (Frankenstein)",
+      "image": "https://m.media-amazon.com/images/I/318GAMrF+yL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 0.6040737629161205
+    },
+    {
+      "asin": "B01L4GC10U",
+      "title": "Lego mini figure series 14 businessmen Zombie Zombie Businessman [71010-13] by LEGO",
+      "image": "https://m.media-amazon.com/images/I/51wqvECBFTL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 0.5652235747076928
+    },
+    {
+      "asin": "B0B2X3G9L5",
+      "title": "LEGO Series 15 Collectible Minifigure 71011 - Faun Minifig",
+      "image": "https://m.media-amazon.com/images/I/41SUX5Us4GL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 0.5614268184585082
+    },
+    {
+      "asin": "B00G036GV8",
+      "title": "Ice Fisherman - Minifigure Series 5 - LEGO #8805",
+      "image": "https://m.media-amazon.com/images/I/31smPqCZfnL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 0.546939969154947
+    }
+  ],
+  "elapsed_ms": 531.9,
+  "regime": "zero_shot",
+  "history_count": 1
+}

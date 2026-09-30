@@ -1,0 +1,30 @@
+{
+  "observed_at_utc": "2026-09-30T04:07:19Z",
+  "source": "Read-only terminal observation via existing authenticated FITLAB browser tab",
+  "ufm_queue": {
+    "stage": "waiting_for_complete_features_and_idle_gpu",
+    "time_utc": "2026-09-30T04:07:02.309815+00:00",
+    "test_evaluated": false,
+    "features_complete": false,
+    "source_stage": "full_extraction_running",
+    "active_gpu_job_pids": [443209],
+    "gpu": {"free_MiB": 6528, "utilization_pct": 100},
+    "idle_checks": 0,
+    "committed_rows": 522752,
+    "expected_rows": 767045
+  },
+  "ablation_queue": {
+    "stage": "waiting_for_full_ufm_and_idle_gpu",
+    "time_utc": "2026-09-30T04:07:01.211986+00:00",
+    "completed_variants": [],
+    "test_evaluated": false,
+    "parent_complete": false,
+    "active_gpu_job_pids": [443209]
+  },
+  "latest_feature_log": {
+    "rows": 522880,
+    "expected_rows": 767045,
+    "image_ok": 520317,
+    "elapsed_seconds_since_resume": 3840.0
+  }
+}

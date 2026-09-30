@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "sources": {
+    "split_manifest.json": "585f102f14e12bfae332f53d28bb1f853acde1586eb102555c4b118ccee75763",
+    "content/items.csv.gz": "e67e6310a6076f1e66ff14b8ce68e3d28a1aba204498175ae77eb0b04d0050fc",
+    "interactions_train.csv.gz": "2f66eb960861c0477ee2a590f341b8082598ef7a9578da064c796f34a594ba46",
+    "evaluation/samples_validation.npz": "8efa116508fddd6b5227b69d6c65e3b635de634dd542046463fda84e78b47162",
+    "evaluation/samples_validation.csv.gz": "eaceba64786421e274fc800938b1015318d6a806c42e116405a6f23ec5d96eb2"
+  },
+  "code_sha256": "2472b7ad58766994d313f4a08e881f694c8503cf45d1363e13e12d559573b333",
+  "epochs": 5,
+  "factors": 32,
+  "batch_size": 4096,
+  "lr": 0.05,
+  "regularization": 0.0001,
+  "seed": 7,
+  "max_users": 0,
+  "selection": "Validation cold macro NDCG@10; no test."
+}

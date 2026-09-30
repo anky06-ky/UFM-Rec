@@ -1,0 +1,6 @@
+{
+  "epochs": 5,
+  "best_cold_macro_ndcg_at_10": 0.013855666666666667,
+  "smoke_run": false,
+  "test_evaluated": false
+}

@@ -1,5 +1,26 @@
 # UFM-Rec
 
+## Bàn giao mới nhất: 30/09/2026
+
+- **Mở demo:** chạy [Start_Demo.cmd](Start_Demo.cmd), hoặc vào
+  [localhost:8765](http://127.0.0.1:8765) khi server đang chạy.
+  Demo TF-IDF thật có tìm kiếm, lịch sử, Top-K, bộ lọc cold-start và xuất JSON.
+  [Hướng dẫn + kịch bản trình bày](docs/DEMO_GUIDE.md).
+- **Tiến trình:** [PDF 5 trang](output/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf)
+  và [bản Markdown](reports/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
+- BPR-MF đã hoàn thành 3 seed (42, 7, 2026), 5 epoch/seed. Validation overall
+  NDCG@10 trung bình **0,135465 ± 0,000231** (độ lệch chuẩn mẫu).
+  Cold macro **0,013602 ± 0,000233**. Chưa đánh giá test.
+- Calibration TF-IDF: fit 20.000 validation sớm, audit 20.000 validation muộn;
+  ECE top-1 từ **0,168601** xuống **0,116684**. Đây là kiểm chứng thăm dò cho
+  baseline trong sampled candidate set, chưa phải calibration UFM.
+- **36 kiểm thử local PASS**; 4 kịch bản API demo trên catalog thật PASS.
+- Snapshot FITLAB 11:07 UTC+07: CLIP **522.880/767.045 (68,17%)**;
+  UFM và 7 ablation còn chờ. Các phần SASRec/BERT4Rec, concat hybrid,
+  dataset thứ hai, nhiều seed/calibration UFM, test cuối và slide vẫn chưa hoàn tất.
+
+Các mục bên dưới lưu lại những mốc trước; dùng báo cáo ngày 30/09 làm snapshot mới nhất.
+
 Phạm vi đã chốt: giữ đầy đủ Foundation Model văn bản/ảnh, dual uncertainty và
 UGAF theo proposal. Xem [kế hoạch triển khai đầy đủ](docs/UFM_FULL_SCOPE.md).
 Lõi mô hình mới và kiểm thử nằm ở `src/ufm_model.py`, `tests/test_ufm_core.py`;
@@ -136,8 +157,25 @@ cổ điển phía trên, chiến dịch GPU mới không mở test để tuning
 Xem [vận hành dài ngày và demo](docs/LONG_RUNNING_EXPERIMENTS.md),
 [phạm vi đầy đủ](docs/UFM_FULL_SCOPE.md),
 [báo cáo tiến độ mới](reports/Bao_cao_tien_do_UFM_Rec_2026_09_28_cap_nhat.md)
-và [bản PDF](output/pdf/Bao_cao_tien_do_UFM_Rec_2026_09_28_cap_nhat.pdf).
+và [bản PDF mới nhất](output/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf).
 Job tách nền không phụ thuộc máy cá nhân, nhưng container FITLAB phải còn sống;
 không tự khởi động sau reboot. Dữ liệu/model/venv và thông tin đăng nhập không
 đưa lên GitHub. MF/SASRec/BERT4Rec chuẩn, nhiều seed, calibration, dataset thứ hai,
 kiểm tra VRAM 16GB và đánh giá test cuối vẫn còn trong kế hoạch hoàn thành proposal.
+
+## Cập nhật FITLAB (30/09/2026)
+
+CLIP bị dừng bởi `SIGKILL` ở 497.856/767.045 sản phẩm ngày 29/09. Ngày 30/09,
+ba runner đã được phục hồi từ checkpoint; cursor CLIP đã tăng lên 497.984/767.045.
+UFM và ablation đang chờ đầu vào, chưa có kết quả GPU UFM. Xem
+[biên bản phục hồi](reports/FITLAB_recovery_2026_09_30.md) để kiểm tra trạng thái
+và điều kiện tiếp tục.
+
+## Bổ sung baseline BPR-MF (30/09/2026)
+
+Đã train BPR-MF chỉ dùng ID trên train temporal, chọn checkpoint epoch 1 bằng
+validation cold macro NDCG@10. Kết quả validation: overall NDCG@10 0,135551;
+cold macro 0,013553; warm 0,501546. Nhóm zero-shot có Recall@10 bằng 0,
+phù hợp giới hạn của baseline không dùng nội dung. Chưa đánh giá test. Xem
+[báo cáo BPR-MF](reports/BPR_MF_validation_2026_09_30.md) và chạy
+`python src/train_evaluate_bpr_mf.py` để tái lập với dữ liệu đầy đủ.
