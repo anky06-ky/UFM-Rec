@@ -2,6 +2,11 @@
 
 **Bắt đầu:** [START.md](START.md) · [Việc tiếp theo](docs/next.md) · `python status.py`
 
+**Cập nhật 01/10/2026:** CLIP đã commit 594.304/767.045 item (77,48%) ở mốc
+kiểm tra. Job cũ bị SIGKILL; supervisor đã resume extraction từ cursor đó.
+[Bản tiến trình mới](reports/Progress_2026_10_01.md) ghi trạng thái, bằng chứng
+và điều kiện hoàn tất.
+
 ## Bàn giao mới nhất: 30/09/2026
 
 - **Mở demo:** chạy [Start_Demo.cmd](Start_Demo.cmd), hoặc vào

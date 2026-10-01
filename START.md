@@ -10,12 +10,14 @@ python status.py
 
 Lệnh chỉ đọc trạng thái, không khởi động training và không cấp phát GPU.
 Mốc mới nhất lấy từ file thật trên máy đang chạy; xem thời gian heartbeat để nhận biết trạng thái cũ.
+Ngày 01/10 có thêm `RECOVERY`: supervisor khôi phục sẽ nối tiếp CLIP → UFM → ablation.
 
 ## Tìm đúng phần cần dùng
 
 | Nơi | Nội dung |
 |---|---|
 | [docs/next.md](docs/next.md) | Việc cần làm tiếp và điều kiện hoàn tất |
+| [reports/Progress_2026_10_01.md](reports/Progress_2026_10_01.md) | Bản tiến trình mới nhất đã xác minh |
 | [docs/scope.md](docs/scope.md) | Phạm vi đã chốt theo proposal |
 | [docs/ops.md](docs/ops.md) | Queue, log, resume và vận hành |
 | [docs/train.md](docs/train.md) | Huấn luyện UFM |

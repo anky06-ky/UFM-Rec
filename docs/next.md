@@ -1,7 +1,10 @@
 # Phần tiếp theo
 
-Snapshot FITLAB 30/09/2026, 14:33 UTC+07: CLIP đã commit 588.864/767.045 sản phẩm
-(khoảng 76,77%); UFM và ablation đang chờ. Đây là mốc quan sát, không phải số realtime.
+Snapshot FITLAB 01/10/2026, 07:38 UTC+07: CLIP đã commit 594.304/767.045 sản phẩm
+(77,48%). Lượt trước bị SIGKILL ngày 30/09, nên UFM và ablation trước đó đã dừng.
+Supervisor đã resume CLIP từ cursor 594.304 lúc 07:52 UTC+07;
+sau khi CLIP hoàn tất, nó sẽ chạy tiếp UFM rồi bảy ablation. Đây là mốc quan sát,
+không phải số realtime.
 Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng thái mới.
 
 ## 1. Ưu tiên ngay: hoàn tất đặc trưng CLIP
@@ -11,6 +14,10 @@ Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng 
   padding/mask, số ảnh tải thành công và breakdown theo cold-start regime.
 - GPU dùng chung đang bận. Không đổi batch/config giữa cache đang chạy; nếu job
   dừng thì đọc log và xác nhận tiến trình trước khi resume theo docs/ops.md.
+- Theo dõi `RECOVERY` và `FOUNDATION` bằng `python status.py`. Queue yêu cầu hai
+  lượt kiểm tra GPU rảnh, VRAM còn ít nhất 8.192 MiB và utilization ≤20%.
+  Nếu GPU bận trở lại ngay trước extraction, supervisor quay về chờ trong cửa sổ
+  tối đa 168 giờ; không sửa cursor hoặc chạy trùng.
 
 ## 2. Huấn luyện UFM và ablation
 
@@ -23,9 +30,12 @@ Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng 
 
 ## 3. Việc triển khai độc lập trong khi chờ GPU
 
-Ưu tiên tiếp theo về code: bổ sung SASRec, rồi BERT4Rec và concat hybrid theo đúng
-phương pháp gốc, dùng cùng split/candidate set. Trước mỗi lượt full cần kiểm thử
-causal mask hoặc masked objective, negative sampling, cold-ID và resume.
+Đã có mã baseline SASRec thích nghi trong `src/train_sasrec.py`, dùng self-attention
+causal, train positive graph và cùng split/candidate validation; bài kiểm thử CPU
+nhỏ đã chạy. Bước tiếp theo là smoke/full trên dữ liệu FITLAB sau khi các lượt
+GPU ưu tiên hoàn tất, rồi BERT4Rec và concat hybrid theo phương pháp gốc. Trước
+mỗi lượt full cần kiểm tra causal mask hoặc masked objective, negative sampling,
+cold-ID và resume. Chưa có metric SASRec trên dataset thật.
 
 Sau đó chuẩn bị MovieLens-1M theo thời gian cho dataset thứ hai. Nếu thiếu ảnh,
 phải mô tả đây là sanity check tuần tự/nội dung, không suy diễn đã kiểm chứng đa phương thức.

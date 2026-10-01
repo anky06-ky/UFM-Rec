@@ -19,12 +19,17 @@ def snapshot(root):
     progress=progress or {};complete=complete or {}
     total=complete.get('rows') or progress.get('config',{}).get('rows',767045)
     rows=complete.get('rows') or progress.get('next_row',0)
+    recovery=read(root/'runs/campaign_recovery_20261001.json')
+    if recovery and isinstance(recovery.get('pid'),int):
+        recovery['supervisor_alive']=(Path('/proc')/str(recovery['pid'])).exists()
     state=dict(time_utc=datetime.now(timezone.utc).isoformat(),
         clip=dict(rows=rows,total=total,percent=round(100*rows/total,2) if total else 0,
                   complete=bool(complete and 'read_error' not in complete),
                   image_ok=complete.get('has_image',progress.get('image_status_counts',{}).get('ok',0))),
+        foundation=read(root/'runs/foundation_queue_v1.json'),
         ufm=read(root/'runs/ufm_training_queue_v1.json'),
         ablations=read(root/'runs/ufm_ablation_suite_v1.json'),
+        recovery=recovery,
         full_complete=read(root/'runs/ufm_full_v1/completed.json'))
     return state
 
@@ -38,10 +43,21 @@ def main(argv=None):
     clip=state['clip']
     print('UFM REC | '+state['time_utc'])
     print(f"CLIP: {clip['rows']:,}/{clip['total']:,} ({clip['percent']:.2f}%) | images OK: {clip['image_ok']:,}")
-    for key,label in [('ufm','UFM'),('ablations','ABLATION')]:
+    for key,label in [('recovery','RECOVERY'),('foundation','FOUNDATION'),
+                      ('ufm','UFM'),('ablations','ABLATION')]:
         value=state[key] or {}
-        print(label+': '+value.get('stage','Chua co trang thai'))
-        if value.get('time_utc'):print('  Heartbeat: '+value['time_utc'])
+        heartbeat=value.get('time_utc')
+        age=''
+        if heartbeat:
+            try:
+                seconds=(datetime.now(timezone.utc)-datetime.fromisoformat(heartbeat)).total_seconds()
+                if seconds>300 and not value.get('supervisor_alive'):
+                    age=f' | stale {seconds/3600:.1f}h'
+            except ValueError:
+                age=' | invalid timestamp'
+        alive=' | supervisor alive' if value.get('supervisor_alive') else ''
+        print(label+': '+value.get('stage','Chua co trang thai')+alive+age)
+        if heartbeat:print('  Heartbeat: '+heartbeat)
         if value.get('gpu'):print('  GPU: '+json.dumps(value['gpu']))
     print('FULL CHECKPOINT: '+('complete' if state['full_complete'] else 'not complete'))
     print('NEXT: docs/next.md | LOGS: runs/ | GUIDE: START.md')
