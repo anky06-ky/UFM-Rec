@@ -11,7 +11,9 @@ python status.py
 Lệnh chỉ đọc trạng thái, không khởi động training và không cấp phát GPU.
 Mốc mới nhất lấy từ file thật trên máy đang chạy; xem thời gian heartbeat để nhận biết trạng thái cũ.
 Ngày 01/10 có thêm `WATCHDOG` và `RECOVERY`: watchdog giữ supervisor chạy trong
-container hiện tại, nối tiếp CLIP → UFM → ablation. Xem [hướng dẫn khôi phục](docs/recovery.md).
+container hiện tại, nối tiếp CLIP → UFM → ablation. Task code-server đã được cài
+để mở watchdog khi mở lại workspace FITLAB. CLIP đã hoàn tất; UFM đang chạy từ
+checkpoint. Xem [hướng dẫn khôi phục](docs/recovery.md).
 
 ## Tìm đúng phần cần dùng
 

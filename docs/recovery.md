@@ -52,3 +52,14 @@ FITLAB không có cron hoặc user systemd đang hoạt động. Task tự bật
 được mở/kết nối lại; nếu container bị thu hồi và workspace chưa được mở thì chưa
 có process nào chạy. Có thể dùng lệnh khởi động thủ công ở trên. Watchdog mới ghi
 thêm định danh container và bộ đếm memory/oom vào log để chẩn đoán lần ngắt sau.
+
+## UFM dừng do gradient AMP ngày 01/10
+
+CLIP đã hoàn tất 767.045 item. Full UFM dừng sau bước 6.000 vì gradient không
+hữu hạn trong khi AMP scale là 524.288; checkpoint bước 6.000 có trọng số hữu hạn.
+Trainer hiện để GradScaler giảm scale và bỏ qua batch bị tràn. Trên FITLAB đã
+chạy `scripts/migrate_ufm_amp_checkpoint.py` một lần để cập nhật SHA mã trong
+checkpoint/config, giữ bản gốc `latest.pre_amp_fix.pt` và
+`config.pre_amp_fix.json`. Watchdog được mở lại sau khi ghi `repair_applied` vào
+recovery status. UFM queue đã gọi trainer với `--resume`; kiểm tra log và
+`python status.py` để theo dõi bước train tiếp theo.
