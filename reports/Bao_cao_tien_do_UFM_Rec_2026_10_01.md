@@ -1,11 +1,11 @@
 # Báo cáo tiến độ UFM-Rec
 
-**Ngày cập nhật:** 01/10/2026, 22:11 UTC+07  
+**Ngày cập nhật:** 01/10/2026, 22:17 UTC+07
 **Dự án:** Gợi ý sản phẩm cold-start trên Amazon Reviews 2023 · Toys & Games
 
 ## Tóm tắt
 
-Pipeline dữ liệu và đặc trưng CLIP đã hoàn tất trên catalog **767.045 sản phẩm**. UFM đã phục hồi sau lỗi tràn gradient AMP và tiếp tục huấn luyện. Lúc 22:11, epoch 2 đã được đánh giá trên validation; epoch 3 đang chạy ở bước **33.300**. Watchdog và supervisor còn sống. Demo TF-IDF hoạt động trên dữ liệu thật và vừa được làm mới giao diện.
+Pipeline dữ liệu và đặc trưng CLIP đã hoàn tất trên catalog **767.045 sản phẩm**. UFM đã phục hồi sau lỗi tràn gradient AMP và tiếp tục huấn luyện. Epoch 2 đã được đánh giá trên validation; tại lần kiểm tra 22:17, epoch 3 đang chạy ở batch **5.962/16.527**, bước **39.000**. Watchdog và supervisor còn sống. Demo TF-IDF hoạt động trên dữ liệu thật và vừa được làm mới giao diện.
 
 UFM full, bảy thí nghiệm ablation, kiểm tra test cuối và demo dùng checkpoint UFM vẫn đang chờ hoàn tất. Vì vậy chưa thể kết luận UFM tốt hơn các baseline.
 
@@ -18,7 +18,7 @@ UFM full, bảy thí nghiệm ablation, kiểm tra test cuối và demo dùng ch
 | Baseline TF-IDF, SVD, RRF | Có kết quả | Đã có kết quả trên protocol đánh giá lấy mẫu; xem báo cáo 30/09 |
 | BPR-MF | Hoàn tất 3 seed trên validation | Cold macro NDCG@10 trung bình 0,013602 ± 0,000233; chưa đánh giá test |
 | Calibration TF-IDF | Hoàn tất bước thăm dò | ECE top-1 giảm từ 0,168601 xuống 0,116684 trên audit 20.000 mẫu |
-| UFM | Đang train | Epoch 2 đã ghi `best.pt`; epoch 3 ở bước 33.300 lúc 22:11; production checkpoint chưa hoàn tất |
+| UFM | Đang train | Epoch 2 đã ghi `best.pt`; epoch 3 ở bước 39.000 lúc 22:17; production checkpoint chưa hoàn tất |
 | Bảy ablation | Đang xếp hàng | Queue chạy sau UFM full |
 | Demo | Hoạt động với TF-IDF | Giao diện mới; luồng tìm LEGO → chọn lịch sử → zero-shot → Top 5 đã chạy thành công |
 | SASRec, BERT4Rec, hybrid nối đặc trưng | Còn phải làm | Chưa có benchmark đầy đủ trên dữ liệu thật |
@@ -34,7 +34,7 @@ Epoch 2 hoàn tất tại bước **33.040**. Trên tập validation cố địn
 
 Hai dòng dùng cùng candidate protocol 40.000 mẫu. Ở epoch 2, UFM cao hơn ở overall và warm, nhưng thấp hơn TF-IDF ở cold macro. Chưa khóa lựa chọn cuối; tiếp tục chọn checkpoint bằng validation cold macro và chỉ đánh giá test sau khi cấu hình được khóa.
 
-Trước đó trainer dừng vì gradient AMP không hữu hạn. Mã đã được sửa để hạ scale và bỏ qua batch tràn an toàn; checkpoint bước 6.000 được tiếp tục. Trong epoch 2, overflow tại bước 33.002 làm GradScaler hạ scale; epoch vẫn hoàn tất tại bước 33.040 và validation được ghi. Lúc 22:11 epoch 3 đã tới bước 33.300. Peak VRAM quan sát khoảng **3,70 GiB**.
+Trước đó trainer dừng vì gradient AMP không hữu hạn. Mã đã được sửa để hạ scale và bỏ qua batch tràn an toàn; checkpoint bước 6.000 được tiếp tục. Trong epoch 2, overflow tại bước 33.002 làm GradScaler hạ scale; epoch vẫn hoàn tất tại bước 33.040 và validation được ghi. Lúc 22:17 epoch 3 đã tới bước 39.000. Peak VRAM quan sát khoảng **3,70 GiB**.
 
 ## Demo sau khi làm mới
 
