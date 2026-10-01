@@ -17,6 +17,9 @@ def snapshot(root):
     features=root/'data/processed/toys_games_full_temporal/foundation_clip_b32_v1'
     progress,complete=read(features/'progress.json'),read(features/'complete.json')
     progress=progress or {};complete=complete or {}
+    progress_path=features/'progress.json'
+    progress_age=(datetime.now(timezone.utc).timestamp()-progress_path.stat().st_mtime
+                  if progress_path.is_file() else None)
     total=complete.get('rows') or progress.get('config',{}).get('rows',767045)
     rows=complete.get('rows') or progress.get('next_row',0)
     recovery=read(root/'runs/campaign_recovery_20261001.json')
@@ -25,7 +28,8 @@ def snapshot(root):
     state=dict(time_utc=datetime.now(timezone.utc).isoformat(),
         clip=dict(rows=rows,total=total,percent=round(100*rows/total,2) if total else 0,
                   complete=bool(complete and 'read_error' not in complete),
-                  image_ok=complete.get('has_image',progress.get('image_status_counts',{}).get('ok',0))),
+                  image_ok=complete.get('has_image',progress.get('image_status_counts',{}).get('ok',0)),
+                  progress_age_seconds=round(progress_age) if progress_age is not None else None),
         foundation=read(root/'runs/foundation_queue_v1.json'),
         ufm=read(root/'runs/ufm_training_queue_v1.json'),
         ablations=read(root/'runs/ufm_ablation_suite_v1.json'),
@@ -47,15 +51,19 @@ def main(argv=None):
                       ('ufm','UFM'),('ablations','ABLATION')]:
         value=state[key] or {}
         heartbeat=value.get('time_utc')
+        active=(key=='foundation' and value.get('stage')=='full_extraction_running'
+                and clip['progress_age_seconds'] is not None
+                and clip['progress_age_seconds']<=300)
         age=''
         if heartbeat:
             try:
                 seconds=(datetime.now(timezone.utc)-datetime.fromisoformat(heartbeat)).total_seconds()
-                if seconds>300 and not value.get('supervisor_alive'):
+                if seconds>300 and not value.get('supervisor_alive') and not active:
                     age=f' | stale {seconds/3600:.1f}h'
             except ValueError:
                 age=' | invalid timestamp'
         alive=' | supervisor alive' if value.get('supervisor_alive') else ''
+        if active:alive+=' | progress active'
         print(label+': '+value.get('stage','Chua co trang thai')+alive+age)
         if heartbeat:print('  Heartbeat: '+heartbeat)
         if value.get('gpu'):print('  GPU: '+json.dumps(value['gpu']))
