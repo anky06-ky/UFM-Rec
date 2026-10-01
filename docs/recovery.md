@@ -27,7 +27,28 @@ Không chạy thêm queue hay trainer thủ công khi watchdog còn hoạt độ
 và kiểm tra process ngăn hai lượt GPU cùng chạy. Cache, checkpoint, status và log
 được giữ dưới `data/` và `runs/` trên iDragonCloud; không đưa chúng lên GitHub.
 
-FITLAB hiện không có cron hoặc user systemd đang hoạt động. Watchdog tự khôi phục
-process trong container đang sống, nhưng không thể tự chạy khi cả container đã
-bị trường thu hồi. Khi đó cần mở FITLAB và chạy lệnh khởi động ở trên; cursor
-và checkpoint trên iDragonCloud vẫn còn để resume.
+## Tự khởi động khi mở lại workspace
+
+Chạy một lần trên FITLAB:
+
+```bash
+python3 scripts/install_autostart.py
+```
+
+Installer giữ các settings/task hiện có, lưu bản sao trong `runs/autostart_backups/`,
+thêm task `UFM: keep campaign running`. Code-server hiện yêu cầu lựa chọn Allow
+Automatic Tasks cho tất cả workspace đã tin cậy. Người dùng đã đồng ý bật tùy chọn
+này trên FITLAB ngày 01/10/2026. Khi cài mới cần chọn Allow trong hộp thoại.
+Khi code-server mở lại thư mục dự án, task gọi `start_campaign.sh`. Khóa watchdog
+ngăn việc mở lại tab tạo thêm GPU job. Cơ chế `runOn: folderOpen` được mô tả trong
+[tài liệu VS Code](https://code.visualstudio.com/docs/debugtest/tasks#_run-behavior).
+
+Lúc 20:36 ngày 01/10, worker CLIP bị SIGKILL ở cursor 764.032. Supervisor đã lên
+lịch retry sau 120 giây; heartbeat watchdog còn tới 20:37:38. PID 1 của container
+mới bắt đầu lúc 20:38:14, trước khi retry diễn ra. Toàn bộ process cũ mất theo
+container. Cache và venv trên iDragonCloud còn nguyên, đã resume thành công.
+
+FITLAB không có cron hoặc user systemd đang hoạt động. Task tự bật khi workspace
+được mở/kết nối lại; nếu container bị thu hồi và workspace chưa được mở thì chưa
+có process nào chạy. Có thể dùng lệnh khởi động thủ công ở trên. Watchdog mới ghi
+thêm định danh container và bộ đếm memory/oom vào log để chẩn đoán lần ngắt sau.

@@ -358,7 +358,15 @@ def train(args):
             if not all(torch.isfinite(v) for v in loss.values()):
                 raise FloatingPointError('Nonfinite UFM loss.')
             scaler.scale(loss['total']).backward(); scaler.unscale_(optimizer)
-            norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0, error_if_nonfinite=True)
+            norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0, error_if_nonfinite=False)
+            if not torch.isfinite(norm):
+                # AMP overflows are expected occasionally: GradScaler backs off its
+                # scale and the optimizer must not see this batch's gradients.
+                scaler.update()
+                stats['skipped'] += len(idx)
+                print(f'AMP gradient overflow at epoch={epoch+1} batch={batch+1} step={step}; '
+                      f'scale reduced to {scaler.get_scale()}', flush=True)
+                continue
             scaler.step(optimizer); scaler.update()
             stats['examples'] += len(idx); stats['updates'] += 1
             for name, value in loss.items():

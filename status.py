@@ -13,6 +13,14 @@ def read(path):
     except (OSError,ValueError):return {'read_error':str(path)}
 
 
+def process_alive(pid, script, root, proc_root=Path('/proc')):
+    if not isinstance(pid,int):return False
+    try:
+        argv=(proc_root/str(pid)/'cmdline').read_bytes().split(b'\0')
+        return any(arg in {script.encode(),str(root/script).encode()} for arg in argv)
+    except OSError:return False
+
+
 def snapshot(root):
     features=root/'data/processed/toys_games_full_temporal/foundation_clip_b32_v1'
     progress,complete=read(features/'progress.json'),read(features/'complete.json')
@@ -24,10 +32,10 @@ def snapshot(root):
     rows=complete.get('rows') or progress.get('next_row',0)
     recovery=read(root/'runs/campaign_recovery_20261001.json')
     if recovery and isinstance(recovery.get('pid'),int):
-        recovery['supervisor_alive']=(Path('/proc')/str(recovery['pid'])).exists()
+        recovery['supervisor_alive']=process_alive(recovery['pid'],'scripts/resume_campaign.py',root)
     watchdog=read(root/'runs/campaign_watchdog_v1.json')
     if watchdog and isinstance(watchdog.get('pid'),int):
-        watchdog['watchdog_alive']=(Path('/proc')/str(watchdog['pid'])).exists()
+        watchdog['watchdog_alive']=process_alive(watchdog['pid'],'scripts/watch_campaign.py',root)
     state=dict(time_utc=datetime.now(timezone.utc).isoformat(),
         clip=dict(rows=rows,total=total,percent=round(100*rows/total,2) if total else 0,
                   complete=bool(complete and 'read_error' not in complete),
@@ -56,7 +64,7 @@ def main(argv=None):
         value=state[key] or {}
         if (key in ('ufm','ablations') and value.get('stage')=='stopped_with_error'
                 and (state['recovery'] or {}).get('supervisor_alive')
-                and (state['recovery'] or {}).get('stage')=='foundation_running'):
+                and (state['recovery'] or {}).get('stage','').startswith('foundation_')):
             print(label+': queued_after_clip | previous attempt stopped')
             continue
         heartbeat=value.get('time_utc')
@@ -72,10 +80,17 @@ def main(argv=None):
             except ValueError:
                 age=' | invalid timestamp'
         alive=' | supervisor alive' if value.get('supervisor_alive') else ''
+        if key=='recovery' and value.get('supervisor_alive') is False:alive+=' | supervisor STOPPED'
         if value.get('watchdog_alive'):alive+=' | watchdog alive'
+        if key=='watchdog' and value.get('watchdog_alive') is False:alive+=' | watchdog STOPPED'
         if active:alive+=' | progress active'
         print(label+': '+value.get('stage','Chua co trang thai')+alive+age)
         if heartbeat:print('  Heartbeat: '+heartbeat)
+        if key=='recovery' and value.get('supervisor_alive') and value.get('delay_seconds') is not None:
+            try:
+                elapsed=(datetime.now(timezone.utc)-datetime.fromisoformat(heartbeat)).total_seconds()
+                print('  Automatic retry in: '+str(max(0,int(value['delay_seconds']-elapsed)))+'s')
+            except (ValueError,TypeError):pass
         if value.get('gpu'):print('  GPU: '+json.dumps(value['gpu']))
     print('FULL CHECKPOINT: '+('complete' if state['full_complete'] else 'not complete'))
     print('NEXT: docs/next.md | LOGS: runs/ | GUIDE: START.md')

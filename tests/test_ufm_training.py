@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 import torch
@@ -108,6 +109,22 @@ class TrainingTests(unittest.TestCase):
         self.assertTrue(a['partial_epoch'])
         self.assertEqual(len((self.root/'resumed/history.jsonl').read_text().splitlines()),1)
         self.assertFalse(json.loads((self.root/'resumed/completed.json').read_text())['test_evaluated'])
+
+    def test_nonfinite_gradient_skips_batch_without_corrupting_run(self):
+        clip = torch.nn.utils.clip_grad_norm_
+        calls = 0
+
+        def one_overflow(*args, **kwargs):
+            nonlocal calls
+            calls += 1
+            return torch.tensor(float('inf')) if calls == 1 else clip(*args, **kwargs)
+
+        with patch.object(trainer.torch.nn.utils, 'clip_grad_norm_', side_effect=one_overflow):
+            self.run_train(self.args('overflow'))
+        record = json.loads((self.root/'overflow/epoch_001.json').read_text())
+        self.assertEqual(record['step'], 3)
+        self.assertEqual(record['loss_stats']['skipped'], 2)
+        self.assertTrue((self.root/'overflow/completed.json').exists())
 
     def test_resume_at_last_batch_and_max_step(self):
         self.run_train(self.args('boundary','--max-steps','4','--interrupt-after-step','4'))
