@@ -2,6 +2,7 @@
 # between Windows and FITLAB checkouts (even when core.autocrlf is enabled).
 src/*.py -text
 tests/*.py -text
+*.sh text eol=lf
 
 # Generated PDFs may start with long ASCII streams; prevent Git from treating
 # them as text and changing bytes during checkout on Windows.

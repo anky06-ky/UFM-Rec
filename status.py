@@ -25,6 +25,9 @@ def snapshot(root):
     recovery=read(root/'runs/campaign_recovery_20261001.json')
     if recovery and isinstance(recovery.get('pid'),int):
         recovery['supervisor_alive']=(Path('/proc')/str(recovery['pid'])).exists()
+    watchdog=read(root/'runs/campaign_watchdog_v1.json')
+    if watchdog and isinstance(watchdog.get('pid'),int):
+        watchdog['watchdog_alive']=(Path('/proc')/str(watchdog['pid'])).exists()
     state=dict(time_utc=datetime.now(timezone.utc).isoformat(),
         clip=dict(rows=rows,total=total,percent=round(100*rows/total,2) if total else 0,
                   complete=bool(complete and 'read_error' not in complete),
@@ -34,6 +37,7 @@ def snapshot(root):
         ufm=read(root/'runs/ufm_training_queue_v1.json'),
         ablations=read(root/'runs/ufm_ablation_suite_v1.json'),
         recovery=recovery,
+        watchdog=watchdog,
         full_complete=read(root/'runs/ufm_full_v1/completed.json'))
     return state
 
@@ -47,9 +51,14 @@ def main(argv=None):
     clip=state['clip']
     print('UFM REC | '+state['time_utc'])
     print(f"CLIP: {clip['rows']:,}/{clip['total']:,} ({clip['percent']:.2f}%) | images OK: {clip['image_ok']:,}")
-    for key,label in [('recovery','RECOVERY'),('foundation','FOUNDATION'),
+    for key,label in [('watchdog','WATCHDOG'),('recovery','RECOVERY'),('foundation','FOUNDATION'),
                       ('ufm','UFM'),('ablations','ABLATION')]:
         value=state[key] or {}
+        if (key in ('ufm','ablations') and value.get('stage')=='stopped_with_error'
+                and (state['recovery'] or {}).get('supervisor_alive')
+                and (state['recovery'] or {}).get('stage')=='foundation_running'):
+            print(label+': queued_after_clip | previous attempt stopped')
+            continue
         heartbeat=value.get('time_utc')
         active=(key=='foundation' and value.get('stage')=='full_extraction_running'
                 and clip['progress_age_seconds'] is not None
@@ -63,6 +72,7 @@ def main(argv=None):
             except ValueError:
                 age=' | invalid timestamp'
         alive=' | supervisor alive' if value.get('supervisor_alive') else ''
+        if value.get('watchdog_alive'):alive+=' | watchdog alive'
         if active:alive+=' | progress active'
         print(label+': '+value.get('stage','Chua co trang thai')+alive+age)
         if heartbeat:print('  Heartbeat: '+heartbeat)
