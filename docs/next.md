@@ -1,30 +1,24 @@
 # Phần tiếp theo
 
-Snapshot FITLAB 01/10/2026, 07:38 UTC+07: CLIP đã commit 594.304/767.045 sản phẩm
-(77,48%). Lượt trước bị SIGKILL ngày 30/09, nên UFM và ablation trước đó đã dừng.
-Supervisor đã resume CLIP từ cursor 594.304 lúc 07:52 UTC+07;
-sau khi CLIP hoàn tất, nó sẽ chạy tiếp UFM rồi bảy ablation. Đây là mốc quan sát,
-không phải số realtime. Cập nhật 08:13 UTC+07: CLIP đã tới 600.512/767.045
-(78,29%); watchdog đang theo dõi supervisor và worker. Chi tiết trong
+Snapshot FITLAB 01/10/2026, 21:39 UTC+07: CLIP đã hoàn thành 767.045/767.045
+sản phẩm, 758.692 ảnh OK. GPU smoke/resume UFM đã qua. Full UFM đang chạy lại
+từ checkpoint bước 6.000 sau khi sửa lỗi tràn gradient AMP; watchdog và supervisor
+đang sống. Bảy ablation chờ full UFM hoàn tất. Đây là mốc quan sát, không phải số
+realtime. Chi tiết trong
 `reports/Progress_2026_10_01.md`.
 Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng thái mới.
 
-## 1. Ưu tiên ngay: hoàn tất đặc trưng CLIP
+## 1. Đặc trưng CLIP đã hoàn tất
 
-- Giữ job extraction hiện tại chạy; không bật một lượt extraction trùng.
-- Khi có complete.json, kiểm tra đủ 767.045 item, mapping/hash, vector hữu hạn,
-  padding/mask, số ảnh tải thành công và breakdown theo cold-start regime.
-- GPU dùng chung đang bận. Không đổi batch/config giữa cache đang chạy; nếu job
-  dừng thì đọc log và xác nhận tiến trình trước khi resume theo docs/ops.md.
-- Theo dõi `RECOVERY` và `FOUNDATION` bằng `python status.py`. Queue yêu cầu hai
-  lượt kiểm tra GPU rảnh, VRAM còn ít nhất 8.192 MiB và utilization ≤20%.
-  Nếu GPU bận trở lại ngay trước extraction, supervisor quay về chờ và watchdog
-  tiếp tục giám sát trong container; không sửa cursor hoặc chạy trùng.
+- `complete.json` ghi đủ 767.045 item; queue UFM đã kiểm tra mapping/hash, vector
+  hữu hạn, padding/mask và độ phủ trước khi bắt đầu training.
+- Giữ `data/processed/toys_games_full_temporal/foundation_clip_b32_v1` và marker
+  hoàn tất để UFM và ablation dùng lại cùng nguồn.
 
 ## 2. Huấn luyện UFM và ablation
 
-- Queue UFM chờ đủ features và GPU rảnh, sau đó chạy smoke forward/backward/resume
-  rồi train full. Điều kiện nghiệm thu là production completed.json và best checkpoint.
+- Queue UFM đã qua smoke/resume và đang train full từ bước 6.000. Điều kiện
+  nghiệm thu là production `completed.json` và best checkpoint.
 - Đọc validation overall, known-user, cold macro và từng regime. Chọn checkpoint
   bằng cold macro NDCG@10 đã chốt; chưa mở test để chọn cấu hình.
 - Suite chạy 7 ablation từ đầu với cùng protocol/budget. Thu kết quả từng biến thể
