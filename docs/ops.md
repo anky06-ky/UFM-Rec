@@ -38,6 +38,30 @@ baseline. SASRec/BERT4Rec chuẩn, dữ liệu thứ hai và ngân sách VRAM 16
 python src/monitor_ufm_campaign.py
 ```
 
+### Khôi phục ngày 01/10/2026
+
+Lượt CLIP cũ bị `SIGKILL` khi đã commit 594.304/767.045 item. `memory.events`
+của container tại lúc kiểm tra báo `oom_kill=0`; chưa xác định được nguồn gửi
+SIGKILL. Cache/`progress.json` còn đủ và đúng batch 64, dữ liệu nguồn, revision.
+Supervisor `scripts/resume_campaign.py` đang chạy nền trên FITLAB. Nó mở từng
+queue theo thứ tự, dùng `flock` riêng và tối đa ba lượt khi queue dừng do SIGKILL.
+Nếu gặp lỗi cấu hình, checksum, hoặc lỗi khác thì dừng và ghi status; không lặp
+vô hạn. GPU đang bận thì queue đợi, không chiếm GPU của job khác.
+Ngày 01/10, GPU đã bận trở lại sau hai lần kiểm tra rảnh và queue dừng trước khi
+trích CLIP. Supervisor đã được cập nhật để coi đây là tình huống chờ lại, trong
+cửa sổ tối đa 168 giờ; không tính vào ba lượt SIGKILL.
+
+```bash
+python status.py
+cat runs/campaign_recovery_20261001.json
+tail -n 20 runs/campaign_recovery_20261001.log
+```
+
+Chỉ khi đã xác nhận supervisor và mọi queue cũ đều dừng mới khởi động lại bằng
+Python isolated `/tmp/ufm_venv_20260928_cdcp1xhw/bin/python` và `nohup setsid`.
+PID, venv `/tmp` và tiến trình không sống qua việc container bị xóa; các file
+cache/checkpoint trên iDragonCloud vẫn cần được kiểm tra trước khi resume.
+
 Status/log: `runs/foundation_queue_v1.*`, `runs/ufm_training_queue_v1.*`,
 `runs/ufm_ablation_suite_v1.*`; từng ablation có log và `best.pt`, `latest.pt`,
 `config.json`, `epoch_*.json`, `completed.json` riêng. Không chạy queue trùng.
