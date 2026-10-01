@@ -1,8 +1,8 @@
 # Phần tiếp theo
 
-Snapshot FITLAB 01/10/2026, 22:11 UTC+07: CLIP đã hoàn thành 767.045/767.045
+Snapshot FITLAB 01/10/2026, 22:17 UTC+07: CLIP đã hoàn thành 767.045/767.045
 sản phẩm, 758.692 ảnh OK. UFM epoch 2 đã xong, `best.pt` ghi cold macro NDCG@10
-= 0,150295 (validation 40.000 mẫu); epoch 3 đang chạy, bước 33.300. Watchdog
+= 0,150295 (validation 40.000 mẫu); epoch 3 đang chạy, bước 39.000. Watchdog
 và supervisor đang sống. Bảy ablation chờ full UFM hoàn tất.
 Đây là mốc quan sát, không phải số realtime. Chi tiết trong
 `reports/Progress_2026_10_01.md`.
