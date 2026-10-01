@@ -1,5 +1,12 @@
 # Chạy và trình bày demo UFM Rec
 
+## Giao diện hiện tại
+
+`demo/index.html` có hero xanh rừng, thẻ kết quả làm nổi bật ảnh và nhãn
+cold-start, hiệu ứng hover/focus và bố cục thích ứng màn hình nhỏ. Trên mỗi thẻ,
+score được ghi rõ là **Điểm xếp hạng**; cảnh báo backend TF-IDF và giới hạn điểm
+vẫn hiển thị để người xem không nhầm với xác suất mua hàng hoặc UFM đã train.
+
 ## Mở demo
 
 Trên máy hiện tại, mở `Start_Demo.cmd` trong thư mục dự án. Launcher mở lại server
