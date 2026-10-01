@@ -161,6 +161,9 @@ def main(argv=None):
                     reason = None
                 if reason:
                     delay = min(1800, args.retry_delay_seconds * min(attempt, 15))
+                    with (RUNS / (stem + '.log')).open('a', encoding='utf-8') as log:
+                        log.write(f'\n[campaign] {reason}: resuming from checkpoint in {delay}s. '
+                                  'See python status.py for live recovery status.\n')
                     report(name + '_retry_pending', attempt=attempt, reason=reason,
                            interruptions=interruptions, exit_code=result.returncode,
                            delay_seconds=delay, queue_state=state)

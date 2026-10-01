@@ -30,11 +30,25 @@ SCRIPTS = {
 
 def report(stage, **fields):
     value = dict(stage=stage, time_utc=datetime.now(timezone.utc).isoformat(),
-                 pid=os.getpid(), **fields)
+                 pid=os.getpid(), runtime=runtime_health(), **fields)
     temporary = WATCH_STATUS.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
     temporary.replace(WATCH_STATUS)
     print(json.dumps(value, ensure_ascii=False), flush=True)
+
+
+def runtime_health():
+    """Persist the container identity and memory counters before another restart."""
+    result = {}
+    try:
+        result['pid1_start_ticks'] = Path('/proc/1/stat').read_text().rsplit(')', 1)[1].split()[19]
+        for name in ('memory.current', 'memory.max', 'memory.events'):
+            path = Path('/sys/fs/cgroup') / name
+            if path.is_file():
+                result[name] = path.read_text().strip()
+    except OSError as error:
+        result['read_error'] = str(error)
+    return result
 
 
 def live_jobs(proc_root=Path('/proc')):
@@ -84,7 +98,11 @@ def main(argv=None):
         parser.error('poll-seconds must be at least 5')
     RUNS.mkdir(exist_ok=True)
     with (RUNS / 'campaign_watchdog_v1.lock').open('a+b') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            print('Watchdog already running; no duplicate started.', flush=True)
+            return
         while True:
             jobs = live_jobs()
             roles = {job['role'] for job in jobs}
