@@ -1,11 +1,12 @@
 # Phần tiếp theo
 
-Snapshot FITLAB 01/10/2026, 21:56 UTC+07: CLIP đã hoàn thành 767.045/767.045
-sản phẩm, 758.692 ảnh OK. GPU smoke/resume UFM đã qua; epoch 1 ghi `best.pt`,
-validation cold macro NDCG@10 = 0,1496147. Full UFM đã sang epoch 2, bước
-19.700; watchdog và supervisor đang sống. Bảy ablation chờ full UFM hoàn tất.
+Snapshot FITLAB 01/10/2026, 22:11 UTC+07: CLIP đã hoàn thành 767.045/767.045
+sản phẩm, 758.692 ảnh OK. UFM epoch 2 đã xong, `best.pt` ghi cold macro NDCG@10
+= 0,150295 (validation 40.000 mẫu); epoch 3 đang chạy, bước 33.300. Watchdog
+và supervisor đang sống. Bảy ablation chờ full UFM hoàn tất.
 Đây là mốc quan sát, không phải số realtime. Chi tiết trong
 `reports/Progress_2026_10_01.md`.
+Tóm tắt ngắn: `reports/Bao_cao_tien_do_UFM_Rec_2026_10_01.md`.
 Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng thái mới.
 
 ## 1. Đặc trưng CLIP đã hoàn tất
