@@ -1,6 +1,7 @@
 # Local environments and caches
 .venv/
 .venv_ufm/
+.venv_ufm_runtime/
 tmp/
 **/__pycache__/
 *.py[cod]

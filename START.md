@@ -10,7 +10,8 @@ python status.py
 
 Lệnh chỉ đọc trạng thái, không khởi động training và không cấp phát GPU.
 Mốc mới nhất lấy từ file thật trên máy đang chạy; xem thời gian heartbeat để nhận biết trạng thái cũ.
-Ngày 01/10 có thêm `RECOVERY`: supervisor khôi phục sẽ nối tiếp CLIP → UFM → ablation.
+Ngày 01/10 có thêm `WATCHDOG` và `RECOVERY`: watchdog giữ supervisor chạy trong
+container hiện tại, nối tiếp CLIP → UFM → ablation. Xem [hướng dẫn khôi phục](docs/recovery.md).
 
 ## Tìm đúng phần cần dùng
 
@@ -20,6 +21,7 @@ Ngày 01/10 có thêm `RECOVERY`: supervisor khôi phục sẽ nối tiếp CLIP
 | [reports/Progress_2026_10_01.md](reports/Progress_2026_10_01.md) | Bản tiến trình mới nhất đã xác minh |
 | [docs/scope.md](docs/scope.md) | Phạm vi đã chốt theo proposal |
 | [docs/ops.md](docs/ops.md) | Queue, log, resume và vận hành |
+| [docs/recovery.md](docs/recovery.md) | Watchdog, checkpoint và cách khởi động lại sau khi FITLAB tạo container mới |
 | [docs/train.md](docs/train.md) | Huấn luyện UFM |
 | [docs/foundation.md](docs/foundation.md) | Trích CLIP text/image |
 | notebooks/01_setup.ipynb | Cài đặt/preflight; đọc kỹ trước khi chạy |

@@ -1,8 +1,8 @@
-"""Resume the FITLAB campaign in order, using the existing queue programs.
+"""Run the FITLAB queues in order and resume recoverable interruptions.
 
-Run with the isolated UFM Python from the project root. The supervisor keeps
-one flock per queue and retries only a SIGKILL on an unfinished stage. All
-model/config/source validation remains inside the queue and trainer programs.
+The queue programs enforce source, configuration, checkpoint and data checks.
+This supervisor retries worker interruption and GPU contention; a validation
+or invariant error remains visible for investigation.
 """
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ def read(path):
 
 def report(stage, **fields):
     value = dict(time_utc=datetime.now(timezone.utc).isoformat(),
-                 stage=stage, **fields)
+                 stage=stage, pid=os.getpid(), **fields)
     temporary = STATUS.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
     temporary.replace(STATUS)
@@ -51,34 +51,72 @@ def expected_success(name, marker):
         return False
     if name == 'foundation':
         source = read(ROOT / marker)
-        return source.get('rows') == 767045 and source.get('limit') == 0
+        feature_dir = (ROOT / marker).parent
+        return (source.get('rows') == 767045 and source.get('limit') == 0
+                and source.get('device') == 'cuda'
+                and source.get('encoder_frozen') is True
+                and all((feature_dir / filename).is_file() for filename in
+                        ('text.npy', 'image.npy', 'modalities.npy')))
     if name == 'ufm':
         source = read(ROOT / marker)
-        return source.get('smoke_run') is False and source.get('test_evaluated') is False
+        output = (ROOT / marker).parent
+        return (source.get('smoke_run') is False and source.get('test_evaluated') is False
+                and (output / 'best.pt').is_file() and (output / 'latest.pt').is_file())
     return read(RUNS / 'ufm_ablation_suite_v1.json').get('stage') == 'suite_complete'
 
 
-def may_retry(state, marker_complete, attempt, limit):
-    return (attempt < limit and not marker_complete
-            and state.get('stage') == 'stopped_with_error'
-            and 'SIGKILL' in state.get('error', ''))
+def reconcile_foundation():
+    """Repair the handoff if CLIP completed but its queue died before reporting."""
+    name, _, stem, marker, _ = STAGES[0]
+    if not expected_success(name, marker):
+        return False
+    state_path = RUNS / (stem + '.json')
+    if read(state_path).get('stage') == 'extraction_complete':
+        return True
+    source = read(ROOT / marker)
+    feature_dir = (ROOT / marker).parent
+    if not all((feature_dir / filename).is_file() for filename in
+               ('text.npy', 'image.npy', 'modalities.npy')):
+        return False
+    value = dict(stage='extraction_complete',
+                 time_utc=datetime.now(timezone.utc).isoformat(),
+                 output=str(feature_dir), text=source.get('has_text'),
+                 image=source.get('has_image'), recommender_trained=False,
+                 test_evaluated=False, recovered_from_complete_marker=True)
+    temporary = state_path.with_suffix('.json.tmp')
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
+    temporary.replace(state_path)
+    return True
 
 
-def gpu_race(state):
-    error = state.get('error', '') if state.get('stage') == 'stopped_with_error' else ''
-    return ('GPU became busy; smoke kept, full extraction not started.' in error
-            or 'GPU became busy; smoke preserved, full run not started.' in error)
+def retry_reason(state, exit_code):
+    """Return a reason only when rerunning the same queue is checkpoint safe."""
+    error = str(state.get('error', '')).lower()
+    if exit_code in (-9, 137) or any(word in error for word in
+                                         ('sigkill', 'exited -9', 'exited 137',
+                                          'killed by signal 9')):
+        return 'worker_interrupted'
+    if 'gpu became busy' in error or 'cuda out of memory' in error:
+        return 'gpu_contention'
+    if any(word in error for word in ('not ready within wait limit',
+                                     'launch window ended', 'baseline/gpu not ready')):
+        return 'wait_window_expired'
+    if 'nvidia-smi' in error and ('calledprocesserror' in error or 'filenotfounderror' in error):
+        return 'gpu_probe_unavailable'
+    return None
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--max-sigkill-attempts', type=int, default=3)
+    parser.add_argument('--max-sigkill-attempts', type=int, default=0,
+                        help='0 keeps resuming interrupted workers')
     parser.add_argument('--retry-delay-seconds', type=int, default=120)
-    parser.add_argument('--max-transient-hours', type=float, default=168)
+    parser.add_argument('--max-transient-hours', type=float, default=0,
+                        help='0 keeps waiting for a shared GPU')
     args = parser.parse_args(argv)
-    if (args.max_sigkill_attempts < 1 or args.retry_delay_seconds < 0
-            or args.max_transient_hours <= 0):
-        parser.error('Attempts and transient window must be positive; delay nonnegative.')
+    if (args.max_sigkill_attempts < 0 or args.retry_delay_seconds < 0
+            or args.max_transient_hours < 0):
+        parser.error('Limits and delay cannot be negative.')
     if not (ROOT / 'src/run_foundation_when_idle.py').is_file():
         raise FileNotFoundError(ROOT)
     if not Path(sys.executable).resolve().is_file():
@@ -87,39 +125,46 @@ def main(argv=None):
     with (RUNS / 'campaign_recovery_20261001.lock').open('a+b') as master:
         fcntl.flock(master, fcntl.LOCK_EX | fcntl.LOCK_NB)
         for name, program, stem, marker, extra in STAGES:
+            if name == 'foundation':
+                reconcile_foundation()
             if expected_success(name, marker):
                 report(name + '_already_complete')
                 continue
-            deadline = time.monotonic() + args.max_transient_hours * 3600
-            sigkills = attempt = 0
+            deadline = (time.monotonic() + args.max_transient_hours * 3600
+                        if args.max_transient_hours else None)
+            interruptions = attempt = 0
             while True:
                 attempt += 1
                 with (RUNS / (stem + '.lock')).open('a+b') as lock:
                     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
                     command = [sys.executable, '-u', str(ROOT / 'src' / program), *extra]
-                    report(name + '_running', attempt=attempt, pid=os.getpid(), command=command)
+                    report(name + '_running', attempt=attempt, command=command)
                     with (RUNS / (stem + '.log')).open('ab') as log:
                         log.write((f'\n=== Recovery {name}, attempt {attempt}, '
                                    f'{datetime.now(timezone.utc).isoformat()} ===\n').encode())
                         log.flush()
                         result = subprocess.run(command, cwd=ROOT, stdout=log,
-                                                stderr=subprocess.STDOUT, check=False)
-                if result.returncode == 0 and expected_success(name, marker):
+                                                stderr=subprocess.STDOUT, check=False,
+                                                pass_fds=(lock.fileno(),))
+                if name == 'foundation':
+                    reconcile_foundation()
+                if expected_success(name, marker):
                     report(name + '_complete', attempt=attempt)
                     break
                 state = read(RUNS / (stem + '.json'))
-                complete = expected_success(name, marker)
-                if gpu_race(state) and time.monotonic() < deadline:
-                    report(name + '_gpu_busy_retry_pending', attempt=attempt,
-                           exit_code=result.returncode, delay_seconds=args.retry_delay_seconds)
-                    time.sleep(args.retry_delay_seconds)
-                    continue
-                if may_retry(state, complete, sigkills + 1, args.max_sigkill_attempts):
-                    sigkills += 1
-                    report(name + '_sigkill_retry_pending', attempt=attempt,
-                           sigkills=sigkills, exit_code=result.returncode,
-                           delay_seconds=args.retry_delay_seconds)
-                    time.sleep(args.retry_delay_seconds)
+                reason = retry_reason(state, result.returncode)
+                if reason == 'worker_interrupted':
+                    interruptions += 1
+                    if args.max_sigkill_attempts and interruptions >= args.max_sigkill_attempts:
+                        reason = None
+                if deadline is not None and time.monotonic() >= deadline:
+                    reason = None
+                if reason:
+                    delay = min(1800, args.retry_delay_seconds * min(attempt, 15))
+                    report(name + '_retry_pending', attempt=attempt, reason=reason,
+                           interruptions=interruptions, exit_code=result.returncode,
+                           delay_seconds=delay, queue_state=state)
+                    time.sleep(delay)
                     continue
                 report('stopped_with_error', failed_stage=name, attempt=attempt,
                        exit_code=result.returncode, queue_state=state)

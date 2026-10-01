@@ -4,7 +4,9 @@ Snapshot FITLAB 01/10/2026, 07:38 UTC+07: CLIP đã commit 594.304/767.045 sản
 (77,48%). Lượt trước bị SIGKILL ngày 30/09, nên UFM và ablation trước đó đã dừng.
 Supervisor đã resume CLIP từ cursor 594.304 lúc 07:52 UTC+07;
 sau khi CLIP hoàn tất, nó sẽ chạy tiếp UFM rồi bảy ablation. Đây là mốc quan sát,
-không phải số realtime.
+không phải số realtime. Cập nhật 08:13 UTC+07: CLIP đã tới 600.512/767.045
+(78,29%); watchdog đang theo dõi supervisor và worker. Chi tiết trong
+`reports/Progress_2026_10_01.md`.
 Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng thái mới.
 
 ## 1. Ưu tiên ngay: hoàn tất đặc trưng CLIP
@@ -16,8 +18,8 @@ Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng 
   dừng thì đọc log và xác nhận tiến trình trước khi resume theo docs/ops.md.
 - Theo dõi `RECOVERY` và `FOUNDATION` bằng `python status.py`. Queue yêu cầu hai
   lượt kiểm tra GPU rảnh, VRAM còn ít nhất 8.192 MiB và utilization ≤20%.
-  Nếu GPU bận trở lại ngay trước extraction, supervisor quay về chờ trong cửa sổ
-  tối đa 168 giờ; không sửa cursor hoặc chạy trùng.
+  Nếu GPU bận trở lại ngay trước extraction, supervisor quay về chờ và watchdog
+  tiếp tục giám sát trong container; không sửa cursor hoặc chạy trùng.
 
 ## 2. Huấn luyện UFM và ablation
 
