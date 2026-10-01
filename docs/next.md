@@ -1,9 +1,10 @@
 # Phần tiếp theo
 
-Snapshot FITLAB 01/10/2026, 22:17 UTC+07: CLIP đã hoàn thành 767.045/767.045
-sản phẩm, 758.692 ảnh OK. UFM epoch 2 đã xong, `best.pt` ghi cold macro NDCG@10
-= 0,150295 (validation 40.000 mẫu); epoch 3 đang chạy, bước 39.000. Watchdog
-và supervisor đang sống. Bảy ablation chờ full UFM hoàn tất.
+Snapshot FITLAB 01/10/2026, 22:30 UTC+07: CLIP đã hoàn thành 767.045/767.045
+sản phẩm, 758.692 ảnh OK. UFM epoch 4 đang chạy, bước 51.000; `best.pt` hiện
+ghi kết quả epoch 2, cold macro NDCG@10 = 0,150295 (validation 40.000 mẫu).
+Watchdog và supervisor đang sống, VRAM khoảng 3,70 GiB. Bảy ablation sẽ chạy
+sau khi full UFM hoàn tất.
 Đây là mốc quan sát, không phải số realtime. Chi tiết trong
 `reports/Progress_2026_10_01.md`.
 Tóm tắt ngắn: `reports/Bao_cao_tien_do_UFM_Rec_2026_10_01.md`.
@@ -18,8 +19,11 @@ Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng 
 
 ## 2. Huấn luyện UFM và ablation
 
-- Queue UFM đã qua smoke/resume và đang train full từ bước 6.000. Điều kiện
-  nghiệm thu là production `completed.json` và best checkpoint.
+- Queue UFM đã qua smoke/resume và đang train full ở epoch 4, bước 51.000.
+  Điều kiện nghiệm thu là production `completed.json` và best checkpoint.
+- File trạng thái ablation còn ghi lần dừng cũ ngày 30/09 khi CLIP bị SIGKILL.
+  Recovery supervisor hiện đang ở stage UFM và chạy queue theo thứ tự; sau khi
+  full marker xuất hiện, suite sẽ được khởi chạy lại từ đầu, không cần chạy tay.
 - Đọc validation overall, known-user, cold macro và từng regime. Chọn checkpoint
   bằng cold macro NDCG@10 đã chốt; chưa mở test để chọn cấu hình.
 - Suite chạy 7 ablation từ đầu với cùng protocol/budget. Thu kết quả từng biến thể
