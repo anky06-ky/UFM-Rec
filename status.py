@@ -67,6 +67,12 @@ def main(argv=None):
                 and (state['recovery'] or {}).get('stage','').startswith('foundation_')):
             print(label+': queued_after_clip | previous attempt stopped')
             continue
+        if (key=='ablations' and value.get('stage')=='stopped_with_error'
+                and (state['recovery'] or {}).get('supervisor_alive')
+                and (state['recovery'] or {}).get('stage','').startswith('ufm_')
+                and not state['full_complete']):
+            print(label+': queued_after_ufm | previous attempt stopped')
+            continue
         heartbeat=value.get('time_utc')
         active=(key=='foundation' and value.get('stage')=='full_extraction_running'
                 and clip['progress_age_seconds'] is not None
