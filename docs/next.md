@@ -1,11 +1,10 @@
 # Phần tiếp theo
 
-Snapshot FITLAB 01/10/2026, 21:43 UTC+07: CLIP đã hoàn thành 767.045/767.045
-sản phẩm, 758.692 ảnh OK. GPU smoke/resume UFM đã qua. Full UFM đang chạy lại
-từ checkpoint bước 6.000, đã tới bước 7.600 sau khi sửa lỗi tràn gradient AMP;
-watchdog và supervisor đang sống. Bảy ablation chờ full UFM hoàn tất. Đây là mốc
-quan sát, không phải số
-realtime. Chi tiết trong
+Snapshot FITLAB 01/10/2026, 21:56 UTC+07: CLIP đã hoàn thành 767.045/767.045
+sản phẩm, 758.692 ảnh OK. GPU smoke/resume UFM đã qua; epoch 1 ghi `best.pt`,
+validation cold macro NDCG@10 = 0,1496147. Full UFM đã sang epoch 2, bước
+19.700; watchdog và supervisor đang sống. Bảy ablation chờ full UFM hoàn tất.
+Đây là mốc quan sát, không phải số realtime. Chi tiết trong
 `reports/Progress_2026_10_01.md`.
 Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng thái mới.
 
