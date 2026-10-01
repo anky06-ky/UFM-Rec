@@ -61,5 +61,6 @@ Trainer hiện để GradScaler giảm scale và bỏ qua batch bị tràn. Trê
 chạy `scripts/migrate_ufm_amp_checkpoint.py` một lần để cập nhật SHA mã trong
 checkpoint/config, giữ bản gốc `latest.pre_amp_fix.pt` và
 `config.pre_amp_fix.json`. Watchdog được mở lại sau khi ghi `repair_applied` vào
-recovery status. UFM queue đã gọi trainer với `--resume`; kiểm tra log và
-`python status.py` để theo dõi bước train tiếp theo.
+recovery status. UFM queue đã gọi trainer với `--resume` và log xác nhận bước
+6.000. Lần tràn tiếp theo ở batch 6.072 được xử lý: scale giảm, training vẫn
+tiến tới bước 7.600. Kiểm tra log và `python status.py` để theo dõi tiếp.
