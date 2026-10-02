@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="495.27559055118115" height="264" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 264" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495.27559055118115" height="264"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-264)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="210" width="220" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="71.256103515625" y="237.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,475) scale(1,-1)">Text / ảnh sản phẩm</text>
+			<text x="57.89392089843749" y="225.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,451) scale(1,-1)">CLIP đóng băng: 512 + 512</text>
+			<rect x="275" y="210" width="220" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="352.75146484375" y="237.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,475) scale(1,-1)">Lịch sử ID + vị trí</text>
+			<text x="320.631591796875" y="225.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,451) scale(1,-1)">Embedding -&gt; Transformer causal</text>
+			<rect x="0" y="146" width="220" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="58.86096191406249" y="173.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,347) scale(1,-1)">Adapter -&gt; semantic pair m</text>
+			<text x="45.2725830078125" y="161.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,323) scale(1,-1)">Mean history + candidate + masks</text>
+			<rect x="275" y="146" width="220" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="348.621826171875" y="173.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,347) scale(1,-1)">Collaborative pair c</text>
+			<text x="322.6279296875" y="161.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,323) scale(1,-1)">Last history + candidate + counts</text>
+			<path d="M 110,210 L 110,189 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="110 189, 107 195, 113 195" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<path d="M 385,210 L 385,189 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="385 189, 382 195, 388 195" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<rect x="55" y="83" width="385" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="150.061279296875" y="110.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,221) scale(1,-1)">Softplus heads: u_sem, u_cf -&gt; masked softmax(-u)</text>
+			<text x="153.00390625" y="98.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,197) scale(1,-1)">Cross-alignment A chỉ khi cả hai nhánh có tín hiệu</text>
+			<path d="M 110,146 L 110,126 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="110 126, 107 132, 113 132" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<path d="M 385,146 L 385,126 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="385 126, 382 132, 388 132" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<rect x="55" y="22" width="385" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="157.864013671875" y="49.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,98) scale(1,-1)">f = w_cf*c + w_sem*m + A -&gt; MLP_rec -&gt; score</text>
+			<text x="158.1939697265625" y="37.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,74) scale(1,-1)">Fallback train-popularity nếu cả hai nhánh thiếu</text>
+			<path d="M 247,83 L 247,64 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="247 64, 244 70, 250 70" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<text x="0" y="3" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,6) scale(1,-1)">Học: adapter, ID/Transformer, pair MLP, heads/gates. CLIP luôn đóng băng.</text>
+		</g>
+	</g>
+</svg>

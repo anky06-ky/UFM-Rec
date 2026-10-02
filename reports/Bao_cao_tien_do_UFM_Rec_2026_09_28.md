@@ -177,7 +177,7 @@ GPU hiện mới có validation và một seed. Train loss giảm hoặc train l
 
 Minh chứng dữ liệu nằm trong data/processed/toys_games_full_temporal. Minh chứng GPU nằm trong dự án /home/coder/iDragonCloud/DA_AI trên FITLAB.
 
-- docs/Proposal.pdf: kiến trúc, giả thuyết và tiêu chí nghiên cứu gốc.
+- docs/history/proposal-v1.pdf: kiến trúc, giả thuyết và tiêu chí nghiên cứu gốc.
 - split_manifest.json, content/content_report.json, evaluation/sampling_report.json: dữ liệu, đặc trưng và giao thức đánh giá.
 - models/content_baseline/metrics.json, models/collaborative_svd/report.json, models/hybrid_rrf/report.json: kết quả các baseline.
 - FITLAB runs/content_transformer_v1/config.json và history.jsonl: cấu hình cùng bốn epoch đã hoàn thành.

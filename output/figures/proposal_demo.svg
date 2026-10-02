@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="495.27559055118115" height="160" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 160" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495.27559055118115" height="160"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-160)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="105" width="150" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="53.5030517578125" y="132.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,265) scale(1,-1)">Trình duyệt</text>
+			<text x="30.3583984375" y="120.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,241) scale(1,-1)">Search / history / Top-K</text>
+			<rect x="170" y="105" width="150" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="210.738525390625" y="132.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,265) scale(1,-1)">Proxy đã xác thực</text>
+			<text x="196.569091796875" y="120.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,241) scale(1,-1)">Host + Origin + base path</text>
+			<rect x="340" y="105" width="150" height="43" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="380.2674560546875" y="132.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,265) scale(1,-1)">Backend loopback</text>
+			<text x="380.763427734375" y="120.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,241) scale(1,-1)">TF-IDF hoặc UFM</text>
+			<path d="M 150,127 L 170,127 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="170 127, 164 124, 164 130" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<path d="M 320,127 L 340,127 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="340 127, 334 124, 334 130" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<rect x="240" y="32" width="250" height="45" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="304.989501953125" y="60.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,121) scale(1,-1)">Catalog + features + checkpoint</text>
+			<text x="294.140380859375" y="48.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,97) scale(1,-1)">Đọc storage; kiểm tra marker và hash</text>
+			<path d="M 415,105 L 415,77 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="415 77, 412 83, 418 83" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<rect x="0" y="32" width="205" height="45" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="43.20959472656249" y="60.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,121) scale(1,-1)">Kết quả Top-K / latency / JSON</text>
+			<text x="57.381103515625" y="48.5" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,97) scale(1,-1)">Loại đã xem; lọc regime</text>
+			<path d="M 240,54 L 205,54 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="0" y="8" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,16) scale(1,-1)">UFM chỉ nghiệm thu sau inference thật qua proxy; status thành công chưa đủ.</text>
+		</g>
+	</g>
+</svg>

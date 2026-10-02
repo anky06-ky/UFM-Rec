@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="495.27559055118115" height="155" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 155" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495.27559055118115" height="155"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-155)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="104" width="150" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="38.50146484375" y="131.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,262) scale(1,-1)">Review + metadata</text>
+			<text x="45.7044677734375" y="119.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,238) scale(1,-1)">Nguồn Amazon</text>
+			<rect x="170" y="104" width="150" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="215.1026611328125" y="131.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,262) scale(1,-1)">Lọc + khử trùng</text>
+			<text x="204.1580810546875" y="119.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,238) scale(1,-1)">11.572.689 tương tác</text>
+			<rect x="340" y="104" width="150" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="379.6075439453125" y="131.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,262) scale(1,-1)">Split theo thời gian</text>
+			<text x="393.7333984375" y="119.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,238) scale(1,-1)">80 / 10 / 10</text>
+			<path d="M 150,125 L 170,125 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="170 125, 164 122, 164 128" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<path d="M 320,125 L 340,125 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="340 125, 334 122, 334 128" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<rect x="0" y="28" width="150" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="62.25" y="55.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,110) scale(1,-1)">TRAIN</text>
+			<text x="43.585693359375" y="43.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,86) scale(1,-1)">Fit / học tham số</text>
+			<rect x="170" y="28" width="150" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="219.7303466796875" y="55.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,110) scale(1,-1)">VALIDATION</text>
+			<text x="198.45751953125" y="43.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,86) scale(1,-1)">Chọn config / checkpoint</text>
+			<rect x="340" y="28" width="150" height="42" rx="6" ry="6" style="stroke: rgb(74%,81%,79%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="404.138427734375" y="55.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,110) scale(1,-1)">TEST</text>
+			<text x="364.1971435546875" y="43.0" style="font-family: Body; font-size: 8.5px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,86) scale(1,-1)">Đánh giá cấu hình đã khóa</text>
+			<path d="M 415,104 L 415,70 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="415 70, 412 76, 418 76" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<path d="M 75,85 L 415,85 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 75,85 L 75,70 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="75 70, 72 76, 78 76" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<path d="M 245,85 L 245,70 Z" style="stroke: rgb(34%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="245 70, 242 76, 248 76" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,41%,45%); fill-rule: evenodd;"/>
+			<text x="0" y="8" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,16) scale(1,-1)">Counts, vocabulary và gradient chỉ từ train; history phải trước thời điểm dự đoán.</text>
+		</g>
+	</g>
+</svg>

@@ -1,0 +1,169 @@
+﻿{
+    "date":  "2026-10-02",
+    "scope":  "Local workspace only",
+    "preserved":  [
+                      "data",
+                      "runs",
+                      "Python environments",
+                      "CLIP model cache",
+                      "experiment logs",
+                      "historical reports"
+                  ],
+    "reason":  "Archive work files; permanent cache deletion blocked by automatic policy review",
+    "records":  [
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/autostart_patch.tar.gz",
+                        "destination":  "archive/work-20261002/autostart_patch.tar.gz",
+                        "bytes":  8646,
+                        "sha256":  "BE4C1F5FC819D09A10305AA9F807307542F4AE29007FD6DE3AAE18E1D3E719CA"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/campaign_patch.tar.gz",
+                        "destination":  "archive/work-20261002/campaign_patch.tar.gz",
+                        "bytes":  9384,
+                        "sha256":  "F00B4146CE27733964B262E37F3ECF4A84BA0B897D61466649D2AD6D8683F9C6"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/campaign_patch_final.tar.gz",
+                        "destination":  "archive/work-20261002/campaign_patch_final.tar.gz",
+                        "bytes":  6659,
+                        "sha256":  "5A617F6568FF952BBDDC098138D67CC9FD4F438D9F4DDDEEEE0268F085B3086F"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/layout_payload.txt",
+                        "destination":  "archive/work-20261002/layout_payload.txt",
+                        "bytes":  7796,
+                        "sha256":  "1C5F720FB0C64ABC3FBA79DD473B9CC89654D801A777AD95347F1F60C7B5EB07"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/progress_docs_payload.txt",
+                        "destination":  "archive/work-20261002/progress_docs_payload.txt",
+                        "bytes":  7124,
+                        "sha256":  "4B78437263714722A7D87A212C0DC8BDCC7EEEBB863D599118D8022EC989FF0F"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/progress_payload.txt",
+                        "destination":  "archive/work-20261002/progress_payload.txt",
+                        "bytes":  16440,
+                        "sha256":  "A49CDFAC7F61871CDB6B9CFD7F4B3C30A7B311C73B7D06C90A02F1A536873A37"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/progress_report_payload.txt",
+                        "destination":  "archive/work-20261002/progress_report_payload.txt",
+                        "bytes":  2340,
+                        "sha256":  "5A48BF444BF5182C34F3A4C1B1A667248DAB4EFF51237AF189191A7CF7B90BC1"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/resume_campaign_payload.txt",
+                        "destination":  "archive/work-20261002/resume_campaign_payload.txt",
+                        "bytes":  2724,
+                        "sha256":  "9E947CB34A562CE0596FF7090C4251147A1A72AF31140674A6B03BE8E441281A"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/sasrec_payload.txt",
+                        "destination":  "archive/work-20261002/sasrec_payload.txt",
+                        "bytes":  7152,
+                        "sha256":  "70BA57532CF22EBFDB3B7FF7D72819528FE85B0A918528053C6E55FFF9C4DB11"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/status_payload.txt",
+                        "destination":  "archive/work-20261002/status_payload.txt",
+                        "bytes":  2028,
+                        "sha256":  "999D56B157B13BA51C31F2332B50E319FF87D67BF0EFE5CCF63873BFC50EFF1A"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/audit_staged.py",
+                        "destination":  "archive/work-20261002/audit_staged.py",
+                        "bytes":  1486,
+                        "sha256":  "E3C3B3C5C2739C869536B2192CBAC6090F32B6775AF4F7ABA181575F36EFB9E8"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/audit_transfer_archives.py",
+                        "destination":  "archive/work-20261002/audit_transfer_archives.py",
+                        "bytes":  1954,
+                        "sha256":  "6C7F87689EC979CA6E666B99363D74A1FAB3B8CA4A709102EF2A5ACE8A9602C1"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/package_layout.py",
+                        "destination":  "archive/work-20261002/package_layout.py",
+                        "bytes":  456,
+                        "sha256":  "657B19D33941208B546AEDE236B39892A6D1ECB2C9937C1DAB6A18129B838817"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/retain_transfer_notes.py",
+                        "destination":  "archive/work-20261002/retain_transfer_notes.py",
+                        "bytes":  2226,
+                        "sha256":  "1A002DE3BC8BC5F7540ECDB96C86280FCE0B99DD051FD9AF6EC0A35F74C32691"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/archive_cleanup_audit.json",
+                        "destination":  "archive/work-20261002/archive_cleanup_audit.json",
+                        "bytes":  2310,
+                        "sha256":  "61B8727AC98F0589A391A8F6DA2C3E05C5B381674DC075B913556FF9E64FB773"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/validated_cleanup_paths.json",
+                        "destination":  "archive/work-20261002/validated_cleanup_paths.json",
+                        "bytes":  3902,
+                        "sha256":  "26CF1F49EDE6FFFA24F38756550720B038D3268ECE826FAA098966935839806B"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/verified_cleanup_plan.json",
+                        "destination":  "archive/work-20261002/verified_cleanup_plan.json",
+                        "bytes":  2612,
+                        "sha256":  "0B2C8B49F061CF9AAB2DA389088E17E3E22326D58EAE48A50F8DDE8F2019E736"
+                    },
+                    {
+                        "action":  "archive",
+                        "path":  "tmp/cleanup-audit.json",
+                        "destination":  "archive/work-20261002/cleanup-audit.json",
+                        "bytes":  611,
+                        "sha256":  "AFEA00797A058E9FF33A8D6745A5ABC3A4AC6DF7E9522DFC97C1E0032C61195E"
+                    },
+                    {
+                        "action":  "archive_cache",
+                        "path":  "__pycache__",
+                        "destination":  "archive/work-20261002/cache-__pycache__",
+                        "bytes":  8939,
+                        "files":  1
+                    },
+                    {
+                        "action":  "archive_cache",
+                        "path":  "src/__pycache__",
+                        "destination":  "archive/work-20261002/cache-src-__pycache__",
+                        "bytes":  276930,
+                        "files":  14
+                    },
+                    {
+                        "action":  "archive_cache",
+                        "path":  "scripts/__pycache__",
+                        "destination":  "archive/work-20261002/cache-scripts-__pycache__",
+                        "bytes":  38766,
+                        "files":  5
+                    },
+                    {
+                        "action":  "archive_cache",
+                        "path":  "tests/__pycache__",
+                        "destination":  "archive/work-20261002/cache-tests-__pycache__",
+                        "bytes":  120847,
+                        "files":  12
+                    }
+                ]
+}

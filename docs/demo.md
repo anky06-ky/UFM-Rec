@@ -1,3 +1,13 @@
+# Cập nhật bản sửa proxy ngày 02/10/2026
+
+Handler nhận cả đường dẫn giữ prefix và đường dẫn đã loại prefix theo hành vi
+[code-server](https://coder.com/docs/code-server/guide). Năm kiểm thử demo local
+PASS, bao gồm GET/POST qua hai dạng path và từ chối origin sai. Bản sửa mới chưa
+được triển khai/nghiệm thu lại UFM inference trên FITLAB.
+Trạng thái mới: [reports/progress.md](../reports/progress.md).
+
+---
+
 # Chạy và trình bày demo UFM Rec
 
 ## Demo UFM trên FITLAB

@@ -1,3 +1,10 @@
+# Phiên bản hiện hành
+
+Xem [proposal 2.0](proposal.md) và [tiến độ mới](../reports/progress.md).
+Phần dưới giữ phạm vi cùng diễn biến triển khai ngày 28/09, không là trạng thái hiện tại.
+
+---
+
 # UFM-Rec: phạm vi đầy đủ và mốc triển khai
 
 Snapshot tiến trình mới nhất: [báo cáo ngày 30/09/2026](../reports/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
@@ -213,7 +220,7 @@ không lấy thời gian 4/128 sản phẩm nhân thẳng để hứa thời gia
 
 ## 7. Nguồn phương pháp
 
-- Kiến trúc nghiên cứu: `docs/Proposal.pdf`, phương trình 4-15; các ngưỡng kỳ vọng
+- Kiến trúc nghiên cứu: `docs/history/proposal-v1.pdf`, phương trình 4-15; các ngưỡng kỳ vọng
   3%-8% chưa phải kết quả đạt được.
 - [CLIP paper, Radford et al.](https://arxiv.org/abs/2103.00020)
 - [CLIP official model card](https://huggingface.co/openai/clip-vit-base-patch32)
