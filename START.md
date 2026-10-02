@@ -20,7 +20,7 @@ checkpoint. Xem [hướng dẫn khôi phục](docs/recovery.md).
 | Nơi | Nội dung |
 |---|---|
 | [docs/next.md](docs/next.md) | Việc cần làm tiếp và điều kiện hoàn tất |
-| [reports/Progress_2026_10_01.md](reports/Progress_2026_10_01.md) | Bản tiến trình mới nhất đã xác minh |
+| [reports/Progress_UFM_2026-10-02.md](reports/Progress_UFM_2026-10-02.md) | Bản tiến trình mới nhất đã xác minh |
 | [docs/scope.md](docs/scope.md) | Phạm vi đã chốt theo proposal |
 | [docs/ops.md](docs/ops.md) | Queue, log, resume và vận hành |
 | [docs/recovery.md](docs/recovery.md) | Watchdog, checkpoint và cách khởi động lại sau khi FITLAB tạo container mới |

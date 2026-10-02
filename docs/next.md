@@ -1,56 +1,46 @@
-# Phần tiếp theo
+# Tiến độ và bước tiếp theo
 
-Snapshot FITLAB 01/10/2026, 22:30 UTC+07: CLIP đã hoàn thành 767.045/767.045
-sản phẩm, 758.692 ảnh OK. UFM epoch 4 đang chạy, bước 51.000; `best.pt` hiện
-ghi kết quả epoch 2, cold macro NDCG@10 = 0,150295 (validation 40.000 mẫu).
-Watchdog và supervisor đang sống, VRAM khoảng 3,70 GiB. Bảy ablation sẽ chạy
-sau khi full UFM hoàn tất.
-Đây là mốc quan sát, không phải số realtime. Chi tiết trong
-`reports/Progress_2026_10_01.md`.
-Tóm tắt ngắn: `reports/Bao_cao_tien_do_UFM_Rec_2026_10_01.md`.
-Chạy `python status.py` hoặc notebooks/00_status.ipynb để đọc trạng thái mới.
+**Cập nhật:** 02/10/2026, 07:59 UTC+07 · FITLAB `status.py`
 
-## 1. Đặc trưng CLIP đã hoàn tất
+## Trạng thái hiện tại
 
-- `complete.json` ghi đủ 767.045 item; queue UFM đã kiểm tra mapping/hash, vector
-  hữu hạn, padding/mask và độ phủ trước khi bắt đầu training.
-- Giữ `data/processed/toys_games_full_temporal/foundation_clip_b32_v1` và marker
-  hoàn tất để UFM và ablation dùng lại cùng nguồn.
+- Đặc trưng CLIP hoàn tất: **767.045/767.045 sản phẩm**, **758.692 ảnh OK**.
+- UFM full hoàn tất **12 epoch, 198.232 bước**. Checkpoint tốt nhất là epoch 9,
+  bước 148.674; dừng sớm sau ba epoch không cải thiện.
+- Validation tốt nhất: overall NDCG@10 **0,285611**, cold macro **0,163738**,
+  zero-shot **0,188403**, extreme-cold **0,113300**, cold **0,189511**,
+  warm **0,651231**. Đây là protocol 40.000 mẫu, mỗi mẫu 1 positive + 99 negative;
+  chưa phải xếp hạng toàn catalog và chưa dùng test.
+- So với TF-IDF cùng protocol, UFM cao hơn overall (**0,285611 / 0,260367**) và
+  warm (**0,651231 / 0,467661**), nhưng thấp hơn cold macro
+  (**0,163738 / 0,191270**). Chưa thể kết luận UFM tốt hơn toàn diện.
+- Bảy ablation đang được recovery supervisor giữ hàng đợi. Lúc kiểm tra GPU dùng
+  **100%**, còn **8.352 MiB**; campaign chưa có tiến trình GPU riêng đang chạy,
+  nên suite chờ GPU chia sẻ rảnh. Watchdog và supervisor còn sống.
+- Demo UFM đã nạp trên FITLAB bằng CPU với **767.045 sản phẩm**. Đang sửa tương
+  thích reverse proxy `/proxy/8766/` để trang và API truy cập được qua code-server.
 
-## 2. Huấn luyện UFM và ablation
+## Việc làm tiếp theo
 
-- Queue UFM đã qua smoke/resume và đang train full ở epoch 4, bước 51.000.
-  Điều kiện nghiệm thu là production `completed.json` và best checkpoint.
-- File trạng thái ablation còn ghi lần dừng cũ ngày 30/09 khi CLIP bị SIGKILL.
-  Recovery supervisor hiện đang ở stage UFM và chạy queue theo thứ tự; sau khi
-  full marker xuất hiện, suite sẽ được khởi chạy lại từ đầu, không cần chạy tay.
-- Đọc validation overall, known-user, cold macro và từng regime. Chọn checkpoint
-  bằng cold macro NDCG@10 đã chốt; chưa mở test để chọn cấu hình.
-- Suite chạy 7 ablation từ đầu với cùng protocol/budget. Thu kết quả từng biến thể
-  rồi so sánh contribution của uncertainty, fusion, alignment và từng modality.
+1. Để supervisor tự chạy đủ bảy ablation khi GPU chia sẻ rảnh; theo dõi
+   `python3 status.py`, `runs/ufm_ablation_suite_v1.json` và log trong `runs/`.
+   Không khởi chạy suite thứ hai song song.
+2. Kiểm tra và nghiệm thu demo UFM qua proxy: tải trang, trạng thái backend, tìm
+   sản phẩm, zero-shot, Top 5 và JSON xuất kết quả.
+3. Sau ablation, chạy benchmark SASRec, BERT4Rec và hybrid nối đặc trưng với cùng
+   split/candidate protocol; đo latency, throughput và VRAM.
+4. Chốt mô hình bằng validation, sau đó mới chạy một lượt test có kiểm soát.
+   Báo cáo rõ hạn chế nếu cold-start vẫn kém TF-IDF.
+5. Hoàn thiện báo cáo tổng hợp và slide sau khi có kết quả ablation/benchmark.
 
-## 3. Việc triển khai độc lập trong khi chờ GPU
+## Khởi động lại FITLAB
 
-Đã có mã baseline SASRec thích nghi trong `src/train_sasrec.py`, dùng self-attention
-causal, train positive graph và cùng split/candidate validation; bài kiểm thử CPU
-nhỏ đã chạy. Bước tiếp theo là smoke/full trên dữ liệu FITLAB sau khi các lượt
-GPU ưu tiên hoàn tất, rồi BERT4Rec và concat hybrid theo phương pháp gốc. Trước
-mỗi lượt full cần kiểm tra causal mask hoặc masked objective, negative sampling,
-cold-ID và resume. Chưa có metric SASRec trên dataset thật.
+Mở lại workspace `DA_AI`; watchdog sẽ hồi phục campaign. Kiểm tra bằng:
 
-Sau đó chuẩn bị MovieLens-1M theo thời gian cho dataset thứ hai. Nếu thiếu ảnh,
-phải mô tả đây là sanity check tuần tự/nội dung, không suy diễn đã kiểm chứng đa phương thức.
-BPR-MF đã có 3 seed; điều này chưa thay thế nhiều seed UFM.
+```bash
+python3 status.py
+```
 
-## 4. Sau khi có kết quả UFM
+Nếu trạng thái không tiến triển, xem `docs/recovery.md` trước khi khởi chạy lại.
 
-1. Thêm nhiều seed UFM, uncertainty/gate theo regime và calibration UFM trên validation.
-2. Đo số tham số, peak VRAM, throughput/latency và khả năng chạy với giới hạn 16 GiB.
-3. Khóa cấu hình/temperature bằng validation; đánh giá test một đợt có kiểm soát.
-4. Chuyển checkpoint full và cache hợp lệ vào demo UFM; hoàn thiện báo cáo, biểu đồ và slide.
-
-## Đã có để sử dụng ngay
-
-Pipeline temporal, các baseline cổ điển, BPR-MF ba seed, calibration TF-IDF thăm dò,
-demo TF-IDF trên toàn catalog và báo cáo tiến trình ngày 30/09 đã có trong GitHub.
-Chưa có bằng chứng UFM vượt baseline; mục tiêu cuối cùng cần kết quả thực nghiệm thật.
+Chi tiết snapshot: [Báo cáo tiến độ UFM](../reports/Tien_do_UFM_2026-10-02.md).
