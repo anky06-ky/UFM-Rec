@@ -111,5 +111,39 @@ class DemoTests(unittest.TestCase):
         finally:
             server.shutdown(); server.server_close(); thread.join()
 
+    def test_reverse_proxy_prefix_and_exact_origin(self):
+        origin = 'https://fitlab.example'
+        prefix = '/proxy/8766'
+        server = ThreadingHTTPServer(('127.0.0.1',0),handler_for(
+            ContentBackend(self.catalog),allowed_origin=origin,base_path=prefix))
+        thread = threading.Thread(target=server.serve_forever,daemon=True); thread.start()
+        url = 'http://127.0.0.1:'+str(server.server_port)
+        headers = {'Host':'fitlab.example','Origin':origin}
+        try:
+            request = urllib.request.Request(url+prefix+'/',headers=headers)
+            with urllib.request.urlopen(request) as response:
+                page = response.read().decode()
+            self.assertIn('<meta name="demo-base-path" content="/proxy/8766">',page)
+            request = urllib.request.Request(url+prefix+'/api/status',headers={'Host':'fitlab.example'})
+            with urllib.request.urlopen(request) as response: status = json.load(response)
+            self.assertIn('TF-IDF',status['backend'])
+            request = urllib.request.Request(url+prefix+'/api/status',headers=headers)
+            with urllib.request.urlopen(request) as response: status = json.load(response)
+            self.assertIn('TF-IDF',status['backend'])
+            request = urllib.request.Request(url+prefix+'/api/recommend',data=json.dumps(
+                {'history':['ASIN1'],'k':2}).encode(),headers={**headers,'Content-Type':'application/json'})
+            with urllib.request.urlopen(request) as response: result = json.load(response)
+            self.assertEqual(len(result['results']),2)
+            request = urllib.request.Request(url+prefix+'/api/recommend',data=json.dumps(
+                {'history':['ASIN1'],'k':2}).encode(),headers={'Host':'fitlab.example','Content-Type':'application/json'})
+            with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(request)
+            self.assertEqual(caught.exception.code,403)
+            bad = urllib.request.Request(url+prefix+'/api/status',headers={
+                'Host':'fitlab.example','Origin':'https://untrusted.example'})
+            with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(bad)
+            self.assertEqual(caught.exception.code,403)
+        finally:
+            server.shutdown(); server.server_close(); thread.join()
+
 
 if __name__=='__main__': unittest.main()

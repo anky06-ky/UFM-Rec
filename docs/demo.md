@@ -1,11 +1,25 @@
 # Chạy và trình bày demo UFM Rec
 
+## Demo UFM trên FITLAB
+
+Full UFM đã hoàn tất. Trên FITLAB, backend UFM được chạy bằng CPU trên checkpoint
+`runs/ufm_full_v1`, với catalog 767.045 sản phẩm. Mở cổng **8766** trong tab Ports
+của code-server; đường dẫn proxy hiện tại là:
+
+`https://coder-2474802010460.fitlab-02.is-tech.vn/proxy/8766/`
+
+App cần được khởi động với origin FITLAB được cho phép và base path `/proxy/8766`.
+Sau khi mở trang, xác nhận nhãn backend là **UFM Rec**, tìm từ khóa `LEGO`, thêm
+một món vào lịch sử, chọn `Zero-shot`, chạy Top 5 rồi thử xuất JSON. Nếu trang báo
+`Loopback origin required` hoặc API không tải, kiểm tra log `runs/demo_ufm_v1.log`
+và tham số proxy trước khi trình bày.
+
 ## Giao diện hiện tại
 
 `demo/index.html` có hero xanh rừng, thẻ kết quả làm nổi bật ảnh và nhãn
 cold-start, hiệu ứng hover/focus và bố cục thích ứng màn hình nhỏ. Trên mỗi thẻ,
-score được ghi rõ là **Điểm xếp hạng**; cảnh báo backend TF-IDF và giới hạn điểm
-vẫn hiển thị để người xem không nhầm với xác suất mua hàng hoặc UFM đã train.
+score được ghi rõ là **Điểm xếp hạng**; backend và giới hạn điểm được hiển thị để
+người xem không nhầm score với xác suất mua hàng.
 
 ## Mở demo
 
@@ -28,7 +42,7 @@ Các file lớn không nằm trên GitHub. Không thể clone repo trống dữ 
 ## Kịch bản trình bày 3 phút
 
 1. Giới thiệu catalog Amazon Toys and Games gồm 767.045 sản phẩm. Chỉ rõ tên
-   backend đang hiển thị: TF-IDF content baseline.
+   backend đang hiển thị và nói rõ đây là checkpoint UFM hoặc TF-IDF baseline.
 2. Bấm LEGO, thêm một sản phẩm. Lịch sử được đánh số từ cũ đến mới; không thêm
    trùng một sản phẩm, tối đa 20. TF-IDF dùng 10 sản phẩm gần nhất.
 3. Chọn Top K = 5, bấm “Tìm gợi ý cho tôi”. Trình bày ảnh, tên, mã ASIN,
@@ -50,18 +64,23 @@ Các file lớn không nằm trên GitHub. Không thể clone repo trống dữ 
   1 positive + 99 negative cố định, nên không phải chất lượng demo toàn catalog.
 - Ảnh lỗi có placeholder; tên sản phẩm vẫn hiển thị. Lịch sử không lưu lâu dài.
 
-## Chuyển sang UFM sau khi train xong
+## Khởi động backend UFM trên FITLAB
 
-```powershell
-python src/demo_recommender.py --backend ufm --run runs/ufm_full_v1 --features data/processed/toys_games_full_temporal/foundation_clip_b32_v1 --port 8766 --open-browser
+```bash
+python3 src/demo_recommender.py --backend ufm --run runs/ufm_full_v1 --port 8766 \
+  --allowed-origin https://coder-2474802010460.fitlab-02.is-tech.vn \
+  --base-path /proxy/8766
 ```
 
-Cần mang về checkpoint production `completed.json`, `config.json`, `best.pt` và
-toàn bộ CLIP feature tables kèm manifest. Tham số `--features` cho phép đổi vị trí
-cache từ FITLAB sang local, nhưng vẫn kiểm tra hash manifest và các bảng gốc.
-Giữ nguyên config và checkpoint; không sửa fingerprint. Không dùng technical
-smoke làm checkpoint demo UFM. Alpha CF/semantic và uncertainty chỉ xuất hiện khi
-backend UFM thật đã được tải thành công.
+Lệnh này chỉ bind loopback; truy cập từ ngoài đi qua proxy code-server. Origin phải
+khớp chính xác host HTTPS của workspace và path prefix phải khớp cổng đã forward.
+Khi chạy local, dùng `--backend content` hoặc bỏ hai tùy chọn proxy.
+
+Checkpoint production phải có `completed.json`, `config.json`, `best.pt` và CLIP
+feature tables kèm manifest. Tham số `--features` cho phép đổi vị trí cache nếu
+chuyển môi trường; hash manifest và bảng gốc vẫn được kiểm tra. Giữ nguyên config
+và checkpoint; không dùng technical smoke làm checkpoint demo UFM. Alpha CF,
+semantic và uncertainty chỉ được trình bày khi backend UFM thật tải thành công.
 
 ## Xử lý lỗi thường gặp
 

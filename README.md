@@ -2,16 +2,17 @@
 
 **Bắt đầu:** [START.md](START.md) · [Việc tiếp theo](docs/next.md) · `python status.py`
 
-**Cập nhật 01/10/2026:** CLIP đã commit 594.304/767.045 item (77,48%) ở mốc
-kiểm tra. Job cũ bị SIGKILL; supervisor đã resume extraction từ cursor đó.
-[Bản tiến trình mới](reports/Progress_2026_10_01.md) ghi trạng thái, bằng chứng
-và điều kiện hoàn tất.
+**Cập nhật 02/10/2026:** CLIP hoàn tất 767.045 sản phẩm; UFM full hoàn tất 12
+epoch. Best validation checkpoint là epoch 9: overall NDCG@10 **0,285611**,
+cold macro **0,163738**. UFM cao hơn TF-IDF ở overall/warm nhưng thấp hơn ở cold
+macro; test chưa chạy. Bảy ablation đang chờ GPU chia sẻ rảnh, supervisor còn sống.
+[Báo cáo mới nhất](reports/Tien_do_UFM_2026-10-02.md) và [việc tiếp theo](docs/next.md).
 
-## Bàn giao mới nhất: 30/09/2026
+## Bàn giao baseline: 30/09/2026
 
 - **Mở demo:** chạy [Start_Demo.cmd](Start_Demo.cmd), hoặc vào
   [localhost:8765](http://127.0.0.1:8765) khi server đang chạy.
-  Demo TF-IDF thật có tìm kiếm, lịch sử, Top-K, bộ lọc cold-start và xuất JSON.
+  Demo local dùng TF-IDF; demo UFM đang được nghiệm thu qua FITLAB.
   [Hướng dẫn + kịch bản trình bày](docs/demo.md).
 - **Tiến trình:** [PDF 5 trang](output/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf)
   và [bản Markdown](reports/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
@@ -26,7 +27,8 @@ và điều kiện hoàn tất.
   UFM và 7 ablation còn chờ. Các phần SASRec/BERT4Rec, concat hybrid,
   dataset thứ hai, nhiều seed/calibration UFM, test cuối và slide vẫn chưa hoàn tất.
 
-Các mục bên dưới lưu lại những mốc trước; dùng báo cáo ngày 30/09 làm snapshot mới nhất.
+Các kết quả benchmark bên dưới là mốc baseline trước UFM; dùng báo cáo mới nhất ở
+trên cho trạng thái dự án hiện tại.
 
 Phạm vi đã chốt: giữ đầy đủ Foundation Model văn bản/ảnh, dual uncertainty và
 UGAF theo proposal. Xem [kế hoạch triển khai đầy đủ](docs/scope.md).

@@ -1,10 +1,9 @@
-# Tiến trình UFM-Rec — 01/10/2026
+# Tiến trình UFM-Rec — 01–02/10/2026
 
-**Mốc mới nhất 22:17 UTC+07:** CLIP đã hoàn tất; UFM đã hoàn tất epoch 2,
-ghi `epoch_002.json` và cập nhật `best.pt`. Validation epoch 2 có overall NDCG@10
-**0,274583**, cold macro **0,150295**, warm **0,647448**. Trainer đã sang epoch 3,
-đạt bước **39.000**; watchdog và supervisor
-đều sống. Full UFM đang chạy; bảy ablation đang chờ trong queue.
+**Mốc mới nhất 02/10/2026, 07:59 UTC+07:** CLIP và UFM full đã hoàn tất.
+Best checkpoint là epoch 9, bước 148.674; validation NDCG@10 overall **0,285611**,
+cold macro **0,163738**, warm **0,651231**. Bảy ablation đang đợi GPU chia sẻ rảnh;
+watchdog và supervisor còn sống. [Báo cáo tóm tắt mới nhất](Tien_do_UFM_2026-10-02.md).
 
 Các mốc dưới đây ghi lại diễn biến trong ngày; số tiến độ cũ là ảnh chụp tại
 thời điểm tương ứng.
@@ -120,7 +119,7 @@ Giao diện `demo/index.html` được làm mới với hero xanh rừng, thẻ 
 hover, bố cục thích ứng cho màn nhỏ và nhãn hiển thị rõ điểm xếp hạng. Đã mở
 demo backend TF-IDF trên catalog thật; luồng LEGO → một sản phẩm lịch sử → lọc
 zero-shot → Top 5 trả đủ kết quả. Đây vẫn là demo baseline, chưa dùng UFM.
-Tóm tắt dành cho người đọc: `reports/Bao_cao_tien_do_UFM_Rec_2026_10_01.md`.
+Tóm tắt dành cho người đọc: `reports/Tien_do_UFM_2026-10-02.md`.
 
 ## Cập nhật 22:11 UTC+07
 
@@ -150,3 +149,30 @@ vì parent đã hoàn tất. Không khởi chạy suite thứ hai song song.
 **Việc ngay tiếp theo:** để full UFM tiếp tục; theo dõi `python3 status.py` và
 `runs/ufm_training_queue_v1.log`. Sau đó xác nhận production checkpoint,
 validation full rồi kiểm tra ablation tự vào trạng thái `ablation_training`.
+
+## Cập nhật 02/10/2026, 07:59 UTC+07
+
+FITLAB `status.py` xác nhận CLIP hoàn tất **767.045/767.045** (758.692 ảnh OK) và
+UFM full đã hoàn tất **12 epoch, 198.232 bước**. Best checkpoint là epoch 9 tại
+bước **148.674**; ba epoch sau không cải thiện. Trên validation sampled ranking
+40.000 trường hợp (1 positive + 99 negative), best NDCG@10 là overall **0,285611**,
+cold macro **0,163738**, zero-shot **0,188403**, extreme-cold **0,113300**, cold
+**0,189511**, warm **0,651231**.
+
+Cùng protocol, TF-IDF có overall **0,260367**, cold macro **0,191270** và warm
+**0,467661**. UFM cao hơn overall/warm nhưng thấp hơn cold macro; chưa đánh giá test
+và chưa thể tuyên bố UFM vượt baseline cho mục tiêu cold-start.
+
+Recovery supervisor và watchdog còn sống. Bảy ablation ở trạng thái
+`waiting_for_full_ufm_and_idle_gpu`; GPU chia sẻ được ghi nhận **100% utilization**,
+còn **8.352 MiB**. Chưa có tiến trình GPU riêng của campaign tại thời điểm snapshot;
+suite đang chờ tài nguyên, không cần chạy tay.
+
+Demo UFM đã nạp trên FITLAB CPU với 767.045 sản phẩm. Code-server forward cổng 8766
+dưới `/proxy/8766/`; bản cũ trả `Loopback origin required` do chưa hiểu origin/path
+reverse proxy. Đang cập nhật route để hỗ trợ origin HTTPS khớp chính xác và prefix
+này, sau đó kiểm thử tìm kiếm, zero-shot, Top 5 và xuất JSON.
+
+**Bước kế tiếp:** để supervisor tự chạy bảy ablation khi GPU chia sẻ rảnh; nghiệm
+thu demo UFM qua proxy; rồi benchmark SASRec, BERT4Rec và hybrid trên cùng protocol.
+Chỉ khóa cấu hình trên validation trước khi chạy một lượt test có kiểm soát.
