@@ -1,6 +1,6 @@
 # Tiến độ và bước tiếp theo
 
-**Cập nhật:** 02/10/2026, 07:59 UTC+07 · FITLAB `status.py`
+**Cập nhật:** 02/10/2026, 18:04 UTC+07 · kiểm tra FITLAB và demo
 
 ## Trạng thái hiện tại
 
@@ -14,28 +14,35 @@
 - So với TF-IDF cùng protocol, UFM cao hơn overall (**0,285611 / 0,260367**) và
   warm (**0,651231 / 0,467661**), nhưng thấp hơn cold macro
   (**0,163738 / 0,191270**). Chưa thể kết luận UFM tốt hơn toàn diện.
-- Bảy ablation đang được recovery supervisor giữ hàng đợi. Lúc kiểm tra GPU dùng
-  **100%**, còn **8.352 MiB**; campaign chưa có tiến trình GPU riêng đang chạy,
-  nên suite chờ GPU chia sẻ rảnh. Watchdog và supervisor còn sống.
-- Demo UFM đã nạp trên FITLAB bằng CPU với **767.045 sản phẩm**. Đang sửa tương
-  thích reverse proxy `/proxy/8766/` để trang và API truy cập được qua code-server.
+- Snapshot `status.py` lúc 07:59 ghi bảy ablation chờ GPU chia sẻ rảnh (GPU 100%,
+  còn 8.352 MiB); watchdog và supervisor còn sống khi đó. Trạng thái hiện tại chưa
+  xác minh được vì workspace FITLAB trả `EIO`.
+- Lúc 17:56 UTC+07, API demo trả backend `UFM Rec`, catalog **767.045 sản phẩm**.
+  Request suy luận tiếp theo làm tiến trình thoát với `Bus error`. Code-server sau
+  đó báo workspace mất kết nối; `/home/coder/iDragonCloud` và thư mục dự án đều
+  không đọc được (`EIO`). Chưa xác nhận nguyên nhân và chưa nghiệm thu proxy.
+- Giao diện demo đang mở ở `127.0.0.1:8766` là **TF-IDF content baseline**; đã thử
+  zero-shot, nhận 10 sản phẩm trong 5,31 giây. Đây không phải inference UFM.
 
 ## Việc làm tiếp theo
 
-1. Để supervisor tự chạy đủ bảy ablation khi GPU chia sẻ rảnh; theo dõi
-   `python3 status.py`, `runs/ufm_ablation_suite_v1.json` và log trong `runs/`.
-   Không khởi chạy suite thứ hai song song.
-2. Kiểm tra và nghiệm thu demo UFM qua proxy: tải trang, trạng thái backend, tìm
-   sản phẩm, zero-shot, Top 5 và JSON xuất kết quả.
-3. Sau ablation, chạy benchmark SASRec, BERT4Rec và hybrid nối đặc trưng với cùng
-   split/candidate protocol; đo latency, throughput và VRAM.
-4. Chốt mô hình bằng validation, sau đó mới chạy một lượt test có kiểm soát.
-   Báo cáo rõ hạn chế nếu cold-start vẫn kém TF-IDF.
-5. Hoàn thiện báo cáo tổng hợp và slide sau khi có kết quả ablation/benchmark.
+1. Khôi phục kết nối/mount FITLAB trước. Xác nhận `ls -ld /home/coder/iDragonCloud/DA_AI`,
+   dung lượng và khả năng đọc `runs/ufm_full_v1/best.pt`; chạy `python3 status.py`
+   để xác nhận watchdog, queue và GPU. Chưa khởi chạy lại job khi mount còn `EIO`.
+2. Đọc log demo và kiểm tra checkpoint sau khi mount hoạt động. Khởi động lại UFM
+   với origin/base path proxy đã cấu hình; kiểm tra `/api/status`, rồi thử một
+   request suy luận có kiểm soát trước khi nghiệm thu giao diện.
+3. Khi workspace ổn định, để supervisor tiếp tục bảy ablation theo queue; không
+   khởi chạy suite thứ hai song song.
+4. Sau ablation, chạy benchmark SASRec, BERT4Rec và hybrid trên cùng split/candidate
+   protocol; đo latency, throughput và VRAM.
+5. Chốt mô hình bằng validation rồi chạy một lượt test có kiểm soát. Báo cáo rõ
+   hạn chế nếu cold-start vẫn kém TF-IDF; hoàn thiện báo cáo/slide sau benchmark.
 
 ## Khởi động lại FITLAB
 
-Mở lại workspace `DA_AI`; watchdog sẽ hồi phục campaign. Kiểm tra bằng:
+Mở lại workspace `DA_AI` sau khi iDragonCloud mount hoạt động; watchdog có thể hồi
+phục campaign nếu checkpoint và queue còn truy cập được. Kiểm tra bằng:
 
 ```bash
 python3 status.py
