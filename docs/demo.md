@@ -14,6 +14,14 @@ một món vào lịch sử, chọn `Zero-shot`, chạy Top 5 rồi thử xuất
 `Loopback origin required` hoặc API không tải, kiểm tra log `runs/demo_ufm_v1.log`
 và tham số proxy trước khi trình bày.
 
+**Trạng thái 02/10/2026, 18:04 UTC+07:** lần kiểm tra gần nhất, PID 72211 còn chạy
+server UFM bằng tham số cũ nên proxy trả `Loopback origin required`. Một request
+inference sau đó làm server thoát với `Bus error`; đồng thời workspace
+`/home/coder/iDragonCloud/DA_AI` trả `EIO` và code-server báo mất kết nối. Cổng
+8766 hiện không được xem là demo UFM sẵn sàng. Khôi phục mount và kiểm tra log/
+checkpoint trước khi khởi động lại. Trang `127.0.0.1:8766` có thể mở được nhưng
+đang dùng TF-IDF baseline, không phải UFM.
+
 ## Giao diện hiện tại
 
 `demo/index.html` có hero xanh rừng, thẻ kết quả làm nổi bật ảnh và nhãn

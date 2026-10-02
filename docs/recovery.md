@@ -64,3 +64,18 @@ checkpoint/config, giữ bản gốc `latest.pre_amp_fix.pt` và
 recovery status. UFM queue đã gọi trainer với `--resume` và log xác nhận bước
 6.000. Lần tràn tiếp theo ở batch 6.072 được xử lý: scale giảm, training vẫn
 tiến tới bước 7.600. Kiểm tra log và `python status.py` để theo dõi tiếp.
+
+## FITLAB mất mount và UFM demo thoát bằng Bus error ngày 02/10
+
+Lúc 17:56 UTC+07, `/api/status` của demo trả `UFM Rec` và catalog 767.045 sản phẩm.
+Sau request inference tiếp theo, shell ghi `[1]+ Lỗi bus` cho PID 72211. Cùng thời
+điểm, `stat /home/coder/iDragonCloud` và thư mục dự án trả `EIO`; code-server báo
+workspace không tồn tại/mất kết nối. Sau khi tải lại code-server, danh sách cổng
+không còn tiến trình 8766. Chưa đọc được log demo để xác định nguyên nhân.
+
+Khi FITLAB kết nối lại, kiểm tra mount, dung lượng và khả năng đọc checkpoint
+trước khi khởi động bất kỳ trainer hoặc demo nào. Chạy `python3 status.py` để xem
+queue/watchdog; chỉ tiếp tục campaign nếu status, log và checkpoint đọc được.
+Không xóa hoặc tạo lại thư mục mount để xử lý `EIO`, vì dữ liệu lớn và checkpoint
+đang nằm ở đó. Khởi động demo bằng origin/base path như trong `docs/demo.md`, rồi
+chạy một request inference có kiểm soát và theo dõi log trước khi nghiệm thu proxy.
