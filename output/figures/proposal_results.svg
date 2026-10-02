@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="495.27559055118115" height="215" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 215" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495.27559055118115" height="215"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-215)" style="clip-path: url(#clip)">
+		<g transform="">
+			<path d="M 104,38 L 104,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="98.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.0</text>
+			<path d="M 149,38 L 149,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="143.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.1</text>
+			<path d="M 194,38 L 194,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="188.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.2</text>
+			<path d="M 239,38 L 239,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="233.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.3</text>
+			<path d="M 284,38 L 284,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="278.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.4</text>
+			<path d="M 329,38 L 329,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="323.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.5</text>
+			<path d="M 374,38 L 374,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="368.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.6</text>
+			<path d="M 419,38 L 419,193 Z" style="stroke: rgb(87%,90%,89%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="413.439453125" y="24" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,48) scale(1,-1)">0.7</text>
+			<text x="64.49267578125" y="168" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">Overall</text>
+			<rect x="104" y="178" width="117.16515000000001" height="13" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(27%,49%,65%); fill-rule: evenodd;"/>
+			<text x="225.16515" y="181" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,362) scale(1,-1)">0.260367</text>
+			<rect x="104" y="159" width="128.52495000000002" height="13" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="236.52495000000002" y="162" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,324) scale(1,-1)">0.285611</text>
+			<text x="46.98486328124999" y="115" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,230) scale(1,-1)">Cold macro</text>
+			<rect x="104" y="125" width="86.07150000000001" height="13" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(27%,49%,65%); fill-rule: evenodd;"/>
+			<text x="194.07150000000001" y="128" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,256) scale(1,-1)">0.191270</text>
+			<rect x="104" y="106" width="73.68209999999999" height="13" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="181.6821" y="109" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,218) scale(1,-1)">0.163738</text>
+			<text x="69.005859375" y="62" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,124) scale(1,-1)">Warm</text>
+			<rect x="104" y="72" width="210.44745" height="13" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(27%,49%,65%); fill-rule: evenodd;"/>
+			<text x="318.44745" y="75" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,150) scale(1,-1)">0.467661</text>
+			<rect x="104" y="53" width="293.05395000000004" height="13" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="401.05395000000004" y="56" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,112) scale(1,-1)">0.651231</text>
+			<text x="110" y="5" style="font-family: Bold; font-size: 9px;fill: rgb(27%,49%,65%); stroke:none;" transform="translate(0,10) scale(1,-1)">TF-IDF</text>
+			<text x="190" y="5" style="font-family: Bold; font-size: 9px;fill: rgb(9%,45%,40%); stroke:none;" transform="translate(0,10) scale(1,-1)">UFM (1 seed)</text>
+			<text x="320" y="5" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,10) scale(1,-1)">NDCG@10; trục bắt đầu từ 0</text>
+		</g>
+	</g>
+</svg>

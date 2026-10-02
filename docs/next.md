@@ -1,3 +1,14 @@
+# Cập nhật phục hồi 02/10/2026, 18:23 UTC+07
+
+Mount đã đọc lại được. Watchdog PID 178930, supervisor 178932 và ablation queue
+178948 có heartbeat mới; queue chờ GPU 100% utilization, trống 1.018 MiB.
+Bản sửa proxy demo đã qua 5 kiểm thử local, chưa triển khai/nghiệm thu inference
+UFM trên FITLAB. Xem [tiến độ hiện tại](../reports/progress.md) và
+[proposal 2.0](proposal.md). Bước thực thi kế tiếp là để queue chạy ablation khi GPU
+rảnh; không tạo queue thứ hai. Phần dưới là snapshot trước khi phục hồi mount.
+
+---
+
 # Tiến độ và bước tiếp theo
 
 **Cập nhật:** 02/10/2026, 18:04 UTC+07 · kiểm tra FITLAB và demo

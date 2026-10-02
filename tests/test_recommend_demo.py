@@ -134,6 +134,18 @@ class DemoTests(unittest.TestCase):
                 {'history':['ASIN1'],'k':2}).encode(),headers={**headers,'Content-Type':'application/json'})
             with urllib.request.urlopen(request) as response: result = json.load(response)
             self.assertEqual(len(result['results']),2)
+            # code-server forwards the root/API paths without /proxy/<port>.
+            for path in ('/', '/api/status', '/api/search?q=ASIN'):
+                with urllib.request.urlopen(urllib.request.Request(url+path,headers=headers)) as response:
+                    self.assertEqual(response.status,200)
+            request = urllib.request.Request(url+'/api/recommend',data=json.dumps(
+                {'history':['ASIN1'],'k':2}).encode(),headers={**headers,'Content-Type':'application/json'})
+            with urllib.request.urlopen(request) as response: result = json.load(response)
+            self.assertEqual(len(result['results']),2)
+            for path in ('/unrelated/api/status', '/api/status'):
+                request = urllib.request.Request(url+path,headers={**headers,'Origin':'https://untrusted.example'})
+                with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(request)
+                self.assertEqual(caught.exception.code,403)
             request = urllib.request.Request(url+prefix+'/api/recommend',data=json.dumps(
                 {'history':['ASIN1'],'k':2}).encode(),headers={'Host':'fitlab.example','Content-Type':'application/json'})
             with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(request)

@@ -49,7 +49,9 @@ def handler_for(backend, allowed_origin=None, base_path=''):
                 return '/'
             if path.startswith(base_path + '/'):
                 return path[len(base_path):]
-            return ''
+            # code-server /proxy/<port> strips the prefix before forwarding.
+            # Also support proxies that preserve it; Host/Origin checks still apply.
+            return path
         def do_GET(self):
             if not self.allowed(): self.send(403,{'error':'Loopback origin required'}); return
             path = self.route_path()

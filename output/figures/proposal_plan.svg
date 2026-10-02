@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="495.27559055118115" height="180" preserveAspectRatio="xMinYMin meet" viewBox="0 0 495 180" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="495.27559055118115" height="180"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-180)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="0" y="147" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,294) scale(1,-1)">G0 Phục hồi</text>
+			<rect x="135" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="135" y="143" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="0" y="124" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,248) scale(1,-1)">G1 Ablation</text>
+			<rect x="135" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="120" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="0" y="101" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,202) scale(1,-1)">G2 Baseline</text>
+			<rect x="135" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="97" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="0" y="78" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,156) scale(1,-1)">G3 Seeds / audit</text>
+			<rect x="135" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="74" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="0" y="55" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,110) scale(1,-1)">G4 Test khóa</text>
+			<rect x="135" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="51" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="0" y="32" style="font-family: Body; font-size: 9px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,64) scale(1,-1)">G5 Bàn giao</text>
+			<rect x="135" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="192" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="249" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="306" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="363" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<rect x="420" y="28" width="51" height="16" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,45%,40%); fill-rule: evenodd;"/>
+			<text x="154.6640625" y="168" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">G0</text>
+			<text x="211.6640625" y="168" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">G1</text>
+			<text x="268.6640625" y="168" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">G2</text>
+			<text x="325.6640625" y="168" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">G3</text>
+			<text x="382.6640625" y="168" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">G4</text>
+			<text x="439.6640625" y="168" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,336) scale(1,-1)">G5</text>
+			<text x="0" y="4" style="font-family: Body; font-size: 8px;fill: rgb(9%,18%,20%); stroke:none;" transform="translate(0,8) scale(1,-1)">Thứ tự phụ thuộc đề xuất; không biểu diễn ngày hoặc thời lượng thực tế.</text>
+		</g>
+	</g>
+</svg>
