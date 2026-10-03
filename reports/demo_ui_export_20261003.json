@@ -1,0 +1,117 @@
+{
+  "created_at": "2026-10-03T13:43:35.159Z",
+  "request": {
+    "history": [
+      "B00EYHD42G"
+    ],
+    "k": 5,
+    "regime": "zero_shot"
+  },
+  "backend": "UFM Rec",
+  "warning": "Điểm và uncertainty là tín hiệu nghiên cứu, không phải xác suất mua hàng hay độ chắc chắn Bayesian.",
+  "results": [
+    {
+      "asin": "B0B2X3G9L5",
+      "title": "LEGO Series 15 Collectible Minifigure 71011 - Faun Minifig",
+      "image": "https://m.media-amazon.com/images/I/41SUX5Us4GL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 7.184529781341553,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.2828010618686676,
+        0.02351044863462448
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B01J8QDLZW",
+      "title": "LEGO Hot Dog Man #14 of 16, Minifigures Series 13 Set 71008SEALED Retail Packaging",
+      "image": "https://m.media-amazon.com/images/I/2181veCFaVL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 5.86672830581665,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.2828010618686676,
+        0.023690899834036827
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B0B2WY3ZT8",
+      "title": "LEGO Series 4 Collectible Minifigure Monster (Frankenstein)",
+      "image": "https://m.media-amazon.com/images/I/318GAMrF+yL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 5.285702228546143,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.2828010618686676,
+        0.03460405394434929
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B09HSKQ9V8",
+      "title": "LEGO Minifig: Ghost with White Hood from Haunted House",
+      "image": "https://m.media-amazon.com/images/I/31TX2y0T-LL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 5.229422569274902,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.2828010618686676,
+        0.029782647266983986
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B08FM1NBZ3",
+      "title": "Lego Frankenstein Minifigure - Halloween Spooky Scary Haunted Ghost Minifig",
+      "image": "https://m.media-amazon.com/images/I/41+1vTqMApL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 4.88109016418457,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.2828010618686676,
+        0.03745381534099579
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    }
+  ],
+  "elapsed_ms": 4468.4,
+  "regime": "zero_shot",
+  "history_count": 1
+}

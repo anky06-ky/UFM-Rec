@@ -1,0 +1,18 @@
+CPU verification, 2026-10-03
+Python: 3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]
+PYTHONPATH=tests
+Command: python -m unittest test_comparison_models test_followup_plan test_sasrec test_recommend_demo test_campaign_startup
+
+.....sasrec epoch=1 batch=1/2 step=1 loss=1.44211
+{"epoch": 1, "steps": 2, "train_loss": 1.4294678568840027, "validation": {"overall": {"samples": 4, "recall@10": 1.0, "ndcg@10": 0.907732, "mrr@10": 0.875, "mean_rank": 1.25}, "known_user": {"samples": 4, "recall@10": 1.0, "ndcg@10": 0.907732, "mrr@10": 0.875, "mean_rank": 1.25}, "empty_history": {"samples": 0}, "by_regime": {"zero_shot": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "extreme_cold": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "cold": {"samples": 1, "recall@10": 1.0, "ndcg@10": 0.63093, "mrr@10": 0.5, "mean_rank": 2.0}, "warm": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}}, "cold_macro_ndcg@10": 0.8769766666666667}, "best_cold_macro_ndcg_at_10": 0.8769766666666667, "elapsed_seconds": 0.03200000000651926}
+bert4rec epoch=1 batch=1/2 step=1 loss=0.64327
+{"epoch": 1, "steps": 2, "train_loss": 0.6612504124641418, "validation": {"overall": {"samples": 4, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "known_user": {"samples": 4, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "empty_history": {"samples": 0}, "by_regime": {"zero_shot": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "extreme_cold": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "cold": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}, "warm": {"samples": 1, "recall@10": 1.0, "ndcg@10": 1.0, "mrr@10": 1.0, "mean_rank": 1.0}}, "cold_macro_ndcg@10": 1.0}, "best_cold_macro_ndcg_at_10": 1.0, "elapsed_seconds": 0.031000000017229468}
+.........
+----------------------------------------------------------------------
+Ran 14 tests in 3.799s
+
+OK
+AUTOSTART task installed; settings backup: C:\Users\trana\AppData\Local\Temp\tmpnpywlnn7\runs\autostart_backups\20261003T135047949046Z
+Reopen this workspace and approve automatic tasks in code-server when prompted.
+AUTOSTART task installed; settings backup: C:\Users\trana\AppData\Local\Temp\tmpnpywlnn7\runs\autostart_backups\20261003T135047953057Z
+Reopen this workspace and approve automatic tasks in code-server when prompted.

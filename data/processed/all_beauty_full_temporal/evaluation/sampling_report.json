@@ -1,0 +1,48 @@
+{
+  "seed": 42,
+  "regimes": [
+    "zero_shot",
+    "extreme_cold",
+    "cold",
+    "warm"
+  ],
+  "samples_per_regime_cap": 10000,
+  "splits": {
+    "validation": {
+      "population_by_regime": {
+        "zero_shot": 16218,
+        "extreme_cold": 10743,
+        "cold": 7381,
+        "warm": 10054
+      },
+      "samples_by_regime": {
+        "zero_shot": 10000,
+        "extreme_cold": 10000,
+        "cold": 7381,
+        "warm": 10000
+      },
+      "empty_history_samples": 34754,
+      "eligible_candidate_items": 78795,
+      "candidates_per_sample": 100,
+      "negative_sampling": "Uniform without replacement from items observed by the end of the split; exclude target and history items."
+    },
+    "test": {
+      "population_by_regime": {
+        "zero_shot": 22530,
+        "extreme_cold": 6454,
+        "cold": 5280,
+        "warm": 10177
+      },
+      "samples_by_regime": {
+        "zero_shot": 10000,
+        "extreme_cold": 6454,
+        "cold": 5280,
+        "warm": 10000
+      },
+      "empty_history_samples": 29752,
+      "eligible_candidate_items": 86014,
+      "candidates_per_sample": 100,
+      "negative_sampling": "Uniform without replacement from items observed by the end of the split; exclude target and history items."
+    }
+  }
+}

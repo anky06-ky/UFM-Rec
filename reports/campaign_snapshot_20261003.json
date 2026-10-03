@@ -1,0 +1,97 @@
+{
+  "time_utc": "2026-10-03T13:43:31.104701+00:00",
+  "clip": {
+    "rows": 767045,
+    "total": 767045,
+    "percent": 100.0,
+    "complete": true,
+    "image_ok": 758692,
+    "progress_age_seconds": 172237
+  },
+  "foundation": {
+    "stage": "extraction_complete",
+    "time_utc": "2026-10-01T13:53:24.123296+00:00",
+    "output": "/home/coder/iDragonCloud/DA_AI/data/processed/toys_games_full_temporal/foundation_clip_b32_v1",
+    "text": 767044,
+    "image": 758692,
+    "recommender_trained": false,
+    "test_evaluated": false
+  },
+  "ufm": {
+    "stage": "full_ufm_training_complete",
+    "time_utc": "2026-10-01T23:07:55.296764+00:00",
+    "test_evaluated": false,
+    "steps": 198232,
+    "output": "/home/coder/iDragonCloud/DA_AI/runs/ufm_full_v1",
+    "best_cold_macro_ndcg_at_10": 0.16373800000000002
+  },
+  "ablations": {
+    "stage": "waiting_for_full_ufm_and_idle_gpu",
+    "time_utc": "2026-10-03T13:43:25.989271+00:00",
+    "completed_variants": [],
+    "test_evaluated": false,
+    "parent_complete": true,
+    "active_gpu_job_pids": [],
+    "gpu": {
+      "free_MiB": 18678,
+      "utilization_pct": 96
+    },
+    "idle_checks": 0
+  },
+  "followup": {
+    "stage": "waiting_for_ablations",
+    "time_utc": "2026-10-03T13:43:04.744684+00:00",
+    "completed": [],
+    "test_evaluated": false,
+    "ablation_stage": "waiting_for_full_ufm_and_idle_gpu"
+  },
+  "second_dataset": {
+    "stage": "waiting_for_toys_followup",
+    "time_utc": "2026-10-03T13:43:29.900963+00:00",
+    "completed": [],
+    "test_evaluated": false
+  },
+  "recovery": {
+    "time_utc": "2026-10-03T13:25:36.359556+00:00",
+    "stage": "ablations_running",
+    "pid": 192498,
+    "attempt": 1,
+    "command": [
+      "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+      "-u",
+      "/home/coder/iDragonCloud/DA_AI/src/run_ufm_ablation_suite.py",
+      "--max-days",
+      "7"
+    ],
+    "supervisor_alive": true
+  },
+  "watchdog": {
+    "stage": "supervisor_active",
+    "time_utc": "2026-10-03T13:43:24.178624+00:00",
+    "pid": 178930,
+    "runtime": {
+      "pid1_start_ticks": "73290205",
+      "memory.current": "10059272192",
+      "memory.max": "max",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+    },
+    "jobs": [
+      {
+        "pid": 192498,
+        "role": "supervisor"
+      },
+      {
+        "pid": 192499,
+        "role": "ablation_queue"
+      }
+    ],
+    "watchdog_alive": true
+  },
+  "full_complete": {
+    "best_cold_macro_ndcg@10": 0.16373800000000002,
+    "steps": 198232,
+    "smoke_run": false,
+    "test_evaluated": false,
+    "elapsed_seconds_this_process": 14866.27823533304
+  }
+}

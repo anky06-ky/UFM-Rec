@@ -6,8 +6,10 @@
 4. Nếu campaign dừng, dùng [recovery](docs/recovery.md); không chạy thêm queue
    khi watchdog/supervisor còn sống.
 
-CLIP và UFM full đã hoàn tất. Watchdog/supervisor đã phục hồi ngày 02/10;
-bảy ablation còn đợi GPU. Trạng thái realtime phải đọc trên FITLAB.
+CLIP và UFM full đã hoàn tất. Ngày 03/10 đã phục hồi ablation, triển khai queue
+benchmark ba seed và All Beauty; demo UFM vượt qua bốn ca API thật.
+Các lượt GPU còn chờ. Trạng thái realtime phải đọc trên FITLAB; hai queue bổ sung
+chưa tự khởi động sau reboot. Lệnh phục hồi: [docs/followup.md](docs/followup.md).
 
 | Cần tìm | Đường dẫn |
 | --- | --- |

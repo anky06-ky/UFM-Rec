@@ -1,9 +1,9 @@
-"""ID-only causal SASRec baseline on the fixed temporal validation protocol.
+"""SASRec, adapted BERT4Rec and CLIP concat on fixed temporal validation.
 
 Each train row is a prefix and its next item. Negatives exclude all of that
 user's train positives. This is an adapted baseline, not the paper's code.
 Test labels are never loaded by this command. Unknown item IDs have no trained
-embedding; their candidate score falls back to train popularity.
+embedding; ID-only candidate scores fall back to train popularity.
 """
 from __future__ import annotations
 
@@ -89,8 +89,10 @@ class SASRec(nn.Module):
 
     def encode(self, history):
         hidden, length = self.encode_tokens(history)
+        # Unknown historical IDs can become interior zeros during validation.
+        last_index = torch.where(history.ne(0), torch.arange(self.history, device=history.device), -1).max(-1).values
         last = hidden[torch.arange(len(history), device=history.device),
-                      length.clamp_min(1) - 1]
+                      last_index.clamp_min(0)]
         return self.norm(last) * length.gt(0).unsqueeze(-1)
 
     def logits(self, history, candidates):
@@ -160,7 +162,7 @@ def load_sources(data, legacy, graph, history):
 
 
 @torch.no_grad()
-def evaluate(model, samples, counts, history, batch_size, cap=0):
+def evaluate(model, samples, counts, history, batch_size, cap=0, return_predictions=False):
     model.eval()
     device = next(model.parameters()).device
     selected = np.arange(len(samples['candidates']))
@@ -169,7 +171,7 @@ def evaluate(model, samples, counts, history, batch_size, cap=0):
         groups = [selected[samples['regime_codes'] == i][:max(1, cap // 4)]
                   for i in range(4)]
         selected = np.sort(np.concatenate(groups))
-    ranks, lengths = [], []
+    ranks, lengths, predictions = [], [], []
     for start in range(0, len(selected), batch_size):
         indices = selected[start:start + batch_size]
         candidates = samples['candidates'][indices]
@@ -181,12 +183,18 @@ def evaluate(model, samples, counts, history, batch_size, cap=0):
             prior = samples['history_indices'][max(a, b - history):b] + 1
             h[j, :len(prior)] = prior
             batch_lengths.append(int(b - a))
+        if not getattr(model, 'can_score_unseen', False):
+            h[np.asarray(counts[h]) == 0] = 0
         histories = torch.as_tensor(h, device=device)
         scores = model.logits(histories, ids).float()
         count = torch.as_tensor(np.asarray(counts[candidates + 1]), device=device)
-        scores = torch.where(count > 0, scores, 0)
-        empty = histories.ne(0).sum(-1).eq(0)
-        scores[empty] = count[empty].float().log1p()
+        if not getattr(model, 'can_score_unseen', False):
+            scores = torch.where(count > 0, scores, 0)
+            empty = histories.ne(0).sum(-1).eq(0)
+            scores[empty] = count[empty].float().log1p()
+        if not torch.isfinite(scores).all():
+            raise FloatingPointError('Non-finite baseline predictions.')
+        predictions.append(scores.cpu().numpy())
         values = scores.cpu().numpy().astype(np.float64)
         values += tie_noise(candidates) * 1e-10
         ranks.extend((1 + (values[:, 1:] > values[:, :1]).sum(-1)).tolist())
@@ -195,17 +203,27 @@ def evaluate(model, samples, counts, history, batch_size, cap=0):
                        np.asarray(lengths))
     report['cold_macro_ndcg@10'] = float(np.mean(
         [report['by_regime'][name]['ndcg@10'] for name in REGIMES[:3]]))
-    return report
+    return (report, np.concatenate(predictions), selected) if return_predictions else report
 
 
 def train(args):
+    from comparison_models import BERT4Rec, ConcatHybrid, cloze_batch
     torch.set_num_threads(args.threads)
     torch.manual_seed(args.seed)
     if args.device == 'cuda' and not torch.cuda.is_available():
         raise RuntimeError('CUDA requested but unavailable.')
     arrays, sources, legacy = load_sources(args.data, args.legacy_cache,
                                            args.graph, args.history)
-    config = dict(version=1, sources=sources, code_sha256=sha256(Path(__file__)),
+    kind = getattr(args, 'model', 'sasrec')
+    feature_tables = None
+    if kind == 'concat':
+        from train_ufm_recommender import feature_audit
+        feature_audit(args, legacy['items'])
+        feature_tables = [np.load(args.features / name, mmap_mode='r')
+                          for name in ('text.npy', 'image.npy', 'modalities.npy')]
+        sources['features'] = sha256(args.features / 'complete.json')
+    config = dict(version=2, model=kind, sources=sources, code_sha256=sha256(Path(__file__)),
+                  comparison_code_sha256=sha256(Path(__file__).with_name('comparison_models.py')),
                   epochs=args.epochs, batch_size=args.batch_size, dim=args.dim,
                   heads=args.heads, layers=args.layers, history=args.history,
                   negatives=args.negatives, lr=args.lr, patience=args.patience,
@@ -215,6 +233,8 @@ def train(args):
                   legacy_cache=str(args.legacy_cache), graph=str(args.graph),
                   torch_version=torch.__version__, numpy_version=np.__version__,
                   selection='Validation cold macro NDCG@10; fixed candidate set; no test')
+    config['objective'] = ('bidirectional Cloze; 15% mask, 80/10/10 replacement; 10% force-last; sampled softmax'
+                           if kind == 'bert4rec' else 'sampled positive/negative BCE')
     output = args.output
     if args.resume:
         if read(output / 'config.json') != config or (output / 'completed.json').exists():
@@ -224,8 +244,13 @@ def train(args):
     output.mkdir(parents=True, exist_ok=True)
     if not args.resume:
         write_json(output / 'config.json', config)
-    model = SASRec(legacy['items'], args.history, args.dim, args.heads,
-                   args.layers).to(args.device)
+    if kind == 'bert4rec':
+        model = BERT4Rec(legacy['items'], args.history, args.dim, args.heads, args.layers)
+    else:
+        model = SASRec(legacy['items'], args.history, args.dim, args.heads, args.layers)
+        if kind == 'concat':
+            model = ConcatHybrid(model, feature_tables, arrays['train_counts'], args.dim)
+    model = model.to(args.device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
     epoch0 = batch0 = steps = stale = 0
     best = -1.0
@@ -274,32 +299,45 @@ def train(args):
             t = np.asarray(arrays['targets'][ids], dtype=np.int64)
             u = np.asarray(arrays['users'][ids], dtype=np.int64)
             rng = np.random.default_rng(args.seed + epoch * 1_000_003 + batch)
+            if kind == 'bert4rec':
+                tokens, masked_rows, columns, labels = cloze_batch(h, t, model.mask_id, eligible, rng)
+                neg_users, neg_targets = u[masked_rows], labels
+            else:
+                neg_users, neg_targets = u, t
             neg = sample_negatives(eligible, arrays['user_keys'],
                                    arrays['positive_indptr'], arrays['positive_items'],
-                                   u, t, rng, args.negatives)
+                                   neg_users, neg_targets, rng, args.negatives)
             history = torch.as_tensor(h, device=args.device)
-            candidates = torch.as_tensor(np.column_stack((t, neg)), device=args.device)
-            logits = model.logits(history, candidates)
-            loss = F.softplus(-logits[:, 0]).mean() + F.softplus(logits[:, 1:]).mean()
+            candidates = torch.as_tensor(np.column_stack((neg_targets, neg)), device=args.device)
+            if kind == 'bert4rec':
+                hidden = model.encode_tokens(torch.as_tensor(tokens, device=args.device))[masked_rows, columns]
+                logits = (hidden[:, None] * model.items(candidates)).sum(-1)
+                loss = F.cross_entropy(logits, torch.zeros(len(logits), dtype=torch.long, device=args.device))
+            else:
+                logits = model.logits(history, candidates)
+                loss = F.softplus(-logits[:, 0]).mean() + F.softplus(logits[:, 1:]).mean()
             if not torch.isfinite(loss):
                 raise FloatingPointError('Non-finite SASRec loss.')
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
-            nn.utils.clip_grad_norm_(model.parameters(), 1)
+            nn.utils.clip_grad_norm_(model.parameters(), 1, error_if_nonfinite=True)
             optimizer.step()
             steps += 1
             losses.append(float(loss.detach()))
+            if steps == 1 or steps % 100 == 0:
+                print(f'{kind} epoch={epoch+1} batch={batch+1}/{batches} step={steps} loss={loss.item():.5f}', flush=True)
             if steps % args.checkpoint_every == 0:
                 save_torch(output / 'latest.pt', checkpoint(epoch, batch + 1))
             if args.max_steps and steps >= args.max_steps:
                 break
-        report = evaluate(model, validation, counts, args.history,
-                          args.eval_batch, args.validation_cap)
+        report, scores, selected = evaluate(model, validation, counts, args.history,
+                          args.eval_batch, args.validation_cap, return_predictions=True)
         score = report['cold_macro_ndcg@10']
         improved = score > best + 1e-6
         best = max(best, score)
         stale = 0 if improved else stale + 1
         if improved:
+            np.savez_compressed(output / 'best_validation_predictions.npz', scores=scores, sample_indices=selected)
             save_torch(output / 'best.pt', dict(model=model.state_dict(),
                        epoch=epoch + 1, validation=report, sources=sources))
         record = dict(epoch=epoch + 1, steps=steps,
@@ -313,13 +351,18 @@ def train(args):
             break
     done = dict(epochs=epoch + 1, steps=steps, best_cold_macro_ndcg_at_10=best,
                 smoke_run=bool(args.max_steps), test_evaluated=False,
-                time_utc=datetime.now(timezone.utc).isoformat())
+                time_utc=datetime.now(timezone.utc).isoformat(),
+                elapsed_seconds=time.monotonic()-started,
+                trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),
+                peak_vram_bytes=torch.cuda.max_memory_allocated() if args.device == 'cuda' else 0)
     write_json(output / 'completed.json', done)
     return done
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--model', choices=('sasrec','bert4rec','concat'), default='sasrec')
+    parser.add_argument('--features', type=Path, default=DATA / 'foundation_clip_b32_v1')
     parser.add_argument('--data', type=Path, default=DATA)
     parser.add_argument('--legacy-cache', type=Path, default=LEGACY)
     parser.add_argument('--graph', type=Path, default=GRAPH)

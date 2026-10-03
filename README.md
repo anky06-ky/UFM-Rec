@@ -13,15 +13,18 @@ và độ tin cậy học được. Amazon Reviews 2023 - Toys & Games.
 | [Bắt đầu](START.md) · [Demo](docs/demo.md) | Cách chạy và proxy |
 | [Khôi phục](docs/recovery.md) · [Báo cáo](reports/README.md) | Vận hành và bằng chứng lịch sử |
 
-## Trạng thái 02/10/2026
+## Trạng thái 03/10/2026
 
 - CLIP hoàn tất **767.045/767.045** item; **758.692** ảnh OK.
 - UFM full hoàn tất **12 epoch**, best epoch **9**, tổng 198.232 bước.
 - Validation NDCG@10 overall **0,285611**, cold macro **0,163738**.
   TF-IDF tương ứng **0,260367 / 0,191270**: UFM chưa vượt mục tiêu cold-start.
-- FITLAB đọc lại được mount sau EIO; watchdog/supervisor đã phục hồi.
-  Ablation còn chờ GPU chia sẻ (18:23 UTC+07: 100% utilization, trống 1.018 MiB).
-- Demo TF-IDF đã chạy; inference UFM qua proxy chưa nghiệm thu.
+- Đã phục hồi ablation sau SIGTERM; lúc 20:43 UTC+07 còn chờ GPU bận 96%.
+- Đã triển khai queue benchmark SASRec/BERT4Rec thích nghi/concat và UFM ba seed.
+  All Beauty đã chuẩn bị CPU; queue CLIP/benchmark đợi sau Toys.
+- Demo **UFM** vượt qua 4/4 ca API thật và giao diện zero-shot qua proxy.
+- Audit validation: cold macro thấp hơn TF-IDF 0,027532; calibration thăm dò giảm
+  ECE 0,164477 → 0,041497. [Số liệu](reports/ufm_validation_audit_v2/report.md).
 - UFM chưa đánh giá test. Baseline cổ điển đã có test trong lịch sử.
 
 Metric trên dùng **40.000 validation cases, 1 positive + 99 negative**;
@@ -46,6 +49,7 @@ cần ReportLab và Arial (Windows) hoặc DejaVu Sans (Linux).
 | data / runs | Dataset, checkpoint, log; không đẩy file lớn lên GitHub |
 | archive / tmp | File làm việc cũ và cache local; không theo dõi trong Git |
 
-**Còn thiếu:** 7 ablation; SASRec/BERT4Rec/concat benchmark; nhiều seed; calibration UFM;
-dataset thứ hai; tài nguyên; test cuối; demo UFM và slide. Xem [bước tiếp theo](docs/next.md).
+**Còn thiếu:** kết quả GPU của 7 ablation, benchmark/nhiều seed và All Beauty;
+đo tài nguyên/16 GiB; khóa manifest, test cuối, báo cáo cuối và slide.
+Xem [bước tiếp theo](docs/next.md) và [protocol đã triển khai](docs/followup.md).
 [Lịch sử README](docs/history/readme-20261002.md) · [Proposal ban đầu](docs/history/proposal-v1.pdf).
