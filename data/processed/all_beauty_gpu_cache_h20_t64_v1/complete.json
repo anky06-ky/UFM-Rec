@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "fingerprint": "9c337ceab4847bd3c89c5c715a22035a377e4be24f4857a71272ce339f4a5dc7",
+  "history_size": 20,
+  "tokens": 64,
+  "rows": 19638,
+  "items": 86014,
+  "vocabulary": 20001,
+  "policy": "Train-only parameters; histories supplied by temporal pipeline; top TF-IDF terms."
+}

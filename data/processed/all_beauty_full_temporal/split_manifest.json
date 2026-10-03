@@ -1,0 +1,85 @@
+{
+  "source": "data\\raw\\all_beauty_2023\\All_Beauty.jsonl.gz",
+  "metadata": "data\\raw\\all_beauty_2023\\meta_All_Beauty.jsonl.gz",
+  "policy": {
+    "positive_interaction": "verified_purchase is true and rating >= 4",
+    "duplicates": "Remove exact duplicates of user, parent item, rating and timestamp.",
+    "split": "Global chronological 80/10/10 split at UTC day boundaries.",
+    "history": "Prior positive interactions only; same-timestamp events cannot see each other; keep latest 50.",
+    "test_history": "Online-style history includes earlier train/validation events.",
+    "cold_start_regimes": {
+      "zero_shot": "0 train interactions",
+      "extreme_cold": "1-5 train interactions",
+      "cold": "6-20 train interactions",
+      "warm": ">20 train interactions"
+    }
+  },
+  "raw": {
+    "raw_records": 701528,
+    "positive_verified_records": 449726,
+    "unverified_records": 66559,
+    "below_positive_rating_records": 185243,
+    "invalid_records": 0,
+    "rating_counts": {
+      "1.0": 102080,
+      "2.0": 43034,
+      "3.0": 56307,
+      "4.0": 79381,
+      "5.0": 420726
+    }
+  },
+  "exact_duplicate_records": 4487,
+  "retained_unique_records": 445239,
+  "retained_unique_users": 419423,
+  "validation_start_utc": "2021-04-18T00:00:00+00:00",
+  "test_start_utc": "2021-12-27T00:00:00+00:00",
+  "interactions": {
+    "train": 356402,
+    "validation": 44396,
+    "test": 44441
+  },
+  "interaction_ratios": {
+    "train": 0.8004734535833563,
+    "validation": 0.09971273855165429,
+    "test": 0.09981380786498936
+  },
+  "unique_items": {
+    "train": 69685,
+    "validation": 18071,
+    "test": 14959
+  },
+  "history_rows": {
+    "train": 19638,
+    "validation": 44396,
+    "test": 44441
+  },
+  "empty_histories": {
+    "train": 0,
+    "validation": 41133,
+    "test": 41526
+  },
+  "users_by_split": {
+    "train": 336764,
+    "validation": 43372,
+    "test": 43606
+  },
+  "regime_rows": {
+    "train": {
+      "extreme_cold": 7461,
+      "warm": 7020,
+      "cold": 5157
+    },
+    "validation": {
+      "zero_shot": 16218,
+      "cold": 7381,
+      "extreme_cold": 10743,
+      "warm": 10054
+    },
+    "test": {
+      "zero_shot": 22530,
+      "extreme_cold": 6454,
+      "warm": 10177,
+      "cold": 5280
+    }
+  }
+}

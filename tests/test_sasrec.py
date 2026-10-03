@@ -97,6 +97,11 @@ class SASRecTests(unittest.TestCase):
             self.assertEqual(resumed['steps'], done['steps'])
             self.assertEqual(resumed['best_cold_macro_ndcg_at_10'],
                              done['best_cold_macro_ndcg_at_10'])
+            bert = sasrec.train(Namespace(**{**vars(args), 'model': 'bert4rec',
+                                            'output': root / 'bert'}))
+            self.assertEqual(bert['steps'], 2)
+            self.assertFalse(bert['test_evaluated'])
+            self.assertTrue((root / 'bert/best_validation_predictions.npz').is_file())
 
 
 if __name__ == '__main__':

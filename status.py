@@ -44,6 +44,8 @@ def snapshot(root):
         foundation=read(root/'runs/foundation_queue_v1.json'),
         ufm=read(root/'runs/ufm_training_queue_v1.json'),
         ablations=read(root/'runs/ufm_ablation_suite_v1.json'),
+        followup=read(root/'runs/followup_suite_v1.json'),
+        second_dataset=read(root/'runs/second_dataset_suite_v1.json'),
         recovery=recovery,
         watchdog=watchdog,
         full_complete=read(root/'runs/ufm_full_v1/completed.json'))
@@ -60,7 +62,8 @@ def main(argv=None):
     print('UFM REC | '+state['time_utc'])
     print(f"CLIP: {clip['rows']:,}/{clip['total']:,} ({clip['percent']:.2f}%) | images OK: {clip['image_ok']:,}")
     for key,label in [('watchdog','WATCHDOG'),('recovery','RECOVERY'),('foundation','FOUNDATION'),
-                      ('ufm','UFM'),('ablations','ABLATION')]:
+                      ('ufm','UFM'),('ablations','ABLATION'),('followup','FOLLOWUP'),
+                      ('second_dataset','DATASET2')]:
         value=state[key] or {}
         if (key in ('ufm','ablations') and value.get('stage')=='stopped_with_error'
                 and (state['recovery'] or {}).get('supervisor_alive')

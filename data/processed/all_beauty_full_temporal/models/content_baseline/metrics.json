@@ -1,0 +1,115 @@
+{
+  "candidate_protocol": "One positive plus 99 fixed sampled negatives shared across models.",
+  "content_model": "Sum TF-IDF vectors of the latest 10 history items; cosine dot-product against L2-normalized item vectors; popularity fallback/tie-break.",
+  "k": 10,
+  "splits": {
+    "validation": {
+      "popularity": {
+        "overall": {
+          "samples": 37381,
+          "recall@10": 0.401514,
+          "ndcg@10": 0.254963,
+          "mrr@10": 0.209904,
+          "mean_rank": 39.329
+        },
+        "known_user": {
+          "samples": 2627,
+          "recall@10": 0.329654,
+          "ndcg@10": 0.202934,
+          "mrr@10": 0.164177,
+          "mean_rank": 45.582
+        },
+        "empty_history": {
+          "samples": 34754,
+          "recall@10": 0.406946,
+          "ndcg@10": 0.258895,
+          "mrr@10": 0.213361,
+          "mean_rank": 38.856
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.0,
+            "ndcg@10": 0.0,
+            "mrr@10": 0.0,
+            "mean_rank": 94.344
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.0037,
+            "ndcg@10": 0.001102,
+            "mrr@10": 0.000401,
+            "mean_rank": 44.021
+          },
+          "cold": {
+            "samples": 7381,
+            "recall@10": 0.673621,
+            "ndcg@10": 0.246404,
+            "mrr@10": 0.122101,
+            "mean_rank": 8.968
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 1.0,
+            "ndcg@10": 0.770103,
+            "mrr@10": 0.694119,
+            "mean_rank": 2.03
+          }
+        }
+      },
+      "tfidf_profile": {
+        "overall": {
+          "samples": 37381,
+          "recall@10": 0.406329,
+          "ndcg@10": 0.260239,
+          "mrr@10": 0.215305,
+          "mean_rank": 38.19
+        },
+        "known_user": {
+          "samples": 2627,
+          "recall@10": 0.398173,
+          "ndcg@10": 0.278014,
+          "mrr@10": 0.241024,
+          "mean_rank": 29.383
+        },
+        "empty_history": {
+          "samples": 34754,
+          "recall@10": 0.406946,
+          "ndcg@10": 0.258895,
+          "mrr@10": 0.213361,
+          "mean_rank": 38.856
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.0395,
+            "ndcg@10": 0.027645,
+            "mrr@10": 0.023949,
+            "mean_rank": 88.939
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.0303,
+            "ndcg@10": 0.020921,
+            "mrr@10": 0.018107,
+            "mean_rank": 43.042
+          },
+          "cold": {
+            "samples": 7381,
+            "recall@10": 0.652486,
+            "ndcg@10": 0.246271,
+            "mrr@10": 0.128032,
+            "mean_rank": 10.228
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.9675,
+            "ndcg@10": 0.74246,
+            "mrr@10": 0.668275,
+            "mean_rank": 3.228
+          }
+        }
+      }
+    }
+  }
+}

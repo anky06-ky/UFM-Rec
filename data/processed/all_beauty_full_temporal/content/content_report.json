@@ -1,0 +1,55 @@
+{
+  "source_fields": [
+    "title",
+    "features",
+    "description",
+    "store",
+    "categories"
+  ],
+  "text_cleaning": "Remove HTML/script/style, decode entities, normalize NFC, remove selected invisible characters and collapse whitespace.",
+  "fit_policy": "Fit TF-IDF only on products with train_count > 0; transform every item with frozen vocabulary and IDF.",
+  "parameters": {
+    "max_features": 20000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "lowercase": true,
+    "sublinear_tf": true,
+    "norm": "l2",
+    "dtype": "float32"
+  },
+  "versions": {
+    "scikit_learn": "1.6.1",
+    "numpy": "2.2.6",
+    "scipy": "1.17.0"
+  },
+  "product_text": {
+    "products": 86014,
+    "empty_text": 2,
+    "train_products_with_text": 69683,
+    "total_characters": 25709222,
+    "max_characters": 13632,
+    "missing_metadata": 0,
+    "mean_characters": 298.9
+  },
+  "tfidf": {
+    "fit_products_with_text": 69683,
+    "vocabulary_size": 20000,
+    "shape": [
+      86014,
+      20000
+    ],
+    "nonzero_values": 3722660,
+    "sparse_memory_mib": 28.73,
+    "zero_vectors_by_regime": {
+      "extreme_cold": 47,
+      "zero_shot": 21,
+      "cold": 11,
+      "warm": 2
+    },
+    "matrix_file_bytes": 19991444
+  },
+  "products_sha256": "23073424652c19757dd3788f20c0c420210c9998e1b7657dde68c239c0fd2ba8"
+}
