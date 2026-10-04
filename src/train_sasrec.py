@@ -19,6 +19,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
+from common import sha256, write_json
 from evaluate_content_baseline import REGIMES, summarize, tie_noise
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,23 +27,8 @@ DATA = ROOT / 'data/processed/toys_games_full_temporal'
 LEGACY = ROOT / 'data/processed/gpu_cache_h20_t64_v1'
 GRAPH = ROOT / 'data/processed/ufm_positive_graph_h20_v1'
 
-
-def sha256(path):
-    digest = hashlib.sha256()
-    with path.open('rb') as source:
-        for chunk in iter(lambda: source.read(8 * 1024 * 1024), b''):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def read(path):
     return json.loads(path.read_text(encoding='utf-8'))
-
-
-def write_json(path, value):
-    temporary = path.with_suffix(path.suffix + '.tmp')
-    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding='utf-8')
-    temporary.replace(path)
 
 
 def save_torch(path, value):
@@ -189,7 +175,13 @@ def evaluate(model, samples, counts, history, batch_size, cap=0, return_predicti
         scores = model.logits(histories, ids).float()
         count = torch.as_tensor(np.asarray(counts[candidates + 1]), device=device)
         if not getattr(model, 'can_score_unseen', False):
-            scores = torch.where(count > 0, scores, 0)
+            seen = count > 0
+            # Unseen items: push below worst seen score in each row.
+            for row_idx in range(len(scores)):
+                if (~seen[row_idx]).any() and seen[row_idx].any():
+                    scores[row_idx][~seen[row_idx]] = scores[row_idx][seen[row_idx]].min() - 1.0
+                elif (~seen[row_idx]).all():
+                    scores[row_idx] = count[row_idx].float().log1p()
             empty = histories.ne(0).sum(-1).eq(0)
             scores[empty] = count[empty].float().log1p()
         if not torch.isfinite(scores).all():
@@ -222,7 +214,7 @@ def train(args):
         feature_tables = [np.load(args.features / name, mmap_mode='r')
                           for name in ('text.npy', 'image.npy', 'modalities.npy')]
         sources['features'] = sha256(args.features / 'complete.json')
-    config = dict(version=2, model=kind, sources=sources, code_sha256=sha256(Path(__file__)),
+    config = dict(version=3, model=kind, sources=sources, code_sha256=sha256(Path(__file__)),
                   comparison_code_sha256=sha256(Path(__file__).with_name('comparison_models.py')),
                   epochs=args.epochs, batch_size=args.batch_size, dim=args.dim,
                   heads=args.heads, layers=args.layers, history=args.history,
@@ -230,9 +222,10 @@ def train(args):
                   checkpoint_every=args.checkpoint_every, validation_cap=args.validation_cap,
                   eval_batch=args.eval_batch, max_steps=args.max_steps,
                   seed=args.seed, device=args.device, data=str(args.data),
+                  selection_metric=args.selection_metric,
                   legacy_cache=str(args.legacy_cache), graph=str(args.graph),
                   torch_version=torch.__version__, numpy_version=np.__version__,
-                  selection='Validation cold macro NDCG@10; fixed candidate set; no test')
+                  selection=f'Validation {args.selection_metric} NDCG@10; fixed candidate set; no test')
     config['objective'] = ('bidirectional Cloze; 15% mask, 80/10/10 replacement; 10% force-last; sampled softmax'
                            if kind == 'bert4rec' else 'sampled positive/negative BCE')
     output = args.output
@@ -332,7 +325,10 @@ def train(args):
                 break
         report, scores, selected = evaluate(model, validation, counts, args.history,
                           args.eval_batch, args.validation_cap, return_predictions=True)
-        score = report['cold_macro_ndcg@10']
+        if args.selection_metric == 'overall':
+            score = report['overall']['ndcg@10']
+        else:
+            score = report['cold_macro_ndcg@10']
         improved = score > best + 1e-6
         best = max(best, score)
         stale = 0 if improved else stale + 1
@@ -362,6 +358,8 @@ def train(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', choices=('sasrec','bert4rec','concat'), default='sasrec')
+    parser.add_argument('--selection-metric', choices=('overall', 'cold_macro'), default='overall',
+                        help='overall for ID-only (sasrec/bert4rec); cold_macro for concat')
     parser.add_argument('--features', type=Path, default=DATA / 'foundation_clip_b32_v1')
     parser.add_argument('--data', type=Path, default=DATA)
     parser.add_argument('--legacy-cache', type=Path, default=LEGACY)

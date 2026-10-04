@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
-import fcntl
 import json
 import os
 from pathlib import Path
@@ -107,6 +106,7 @@ def retry_reason(state, exit_code):
 
 
 def main(argv=None):
+    import fcntl
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--max-sigkill-attempts', type=int, default=0,
                         help='0 keeps resuming interrupted workers')

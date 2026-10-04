@@ -18,7 +18,8 @@ from scipy.special import logsumexp
 import torch
 
 from evaluate_content_baseline import PROFILE_ITEMS, REGIMES, rank_of_target
-from train_evaluate_bpr_mf import DATA, sha256, write_json
+from train_evaluate_bpr_mf import DATA
+from common import sha256, write_json
 from ufm_model import candidate_calibration
 
 

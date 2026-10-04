@@ -49,7 +49,7 @@ def main():
     if args.dry_run:
         print(json.dumps(jobs, indent=2)); return
     import fcntl
-    from train_sasrec import sha256
+    from common import sha256
     status = ROOT/'runs/second_dataset_suite_v1.json'
     deadline = time.monotonic()+args.max_days*86400
     completed = []

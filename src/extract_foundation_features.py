@@ -22,7 +22,8 @@ import numpy as np
 from PIL import Image, UnidentifiedImageError
 import torch
 
-from prepare_ufm_catalog import DATA, ROOT, allowed_image_url, sha256
+from prepare_ufm_catalog import DATA, ROOT, allowed_image_url
+from common import sha256
 from ufm_model import FrozenCLIPEncoder
 
 CLIP_REVISION = "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268"

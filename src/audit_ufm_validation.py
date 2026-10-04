@@ -14,7 +14,8 @@ import torch
 
 from calibrate_validation import temporal_folds, fit_temperature, calibration_report
 from evaluate_content_baseline import REGIMES, tie_noise
-from train_sasrec import DATA, ROOT, sha256, write_json
+from train_sasrec import DATA, ROOT
+from common import sha256, write_json
 
 
 def ndcg(ranks):
@@ -80,6 +81,7 @@ def audit(data, run, output, repeats=2000):
     lengths = np.diff(samples['history_indptr'])
     with np.load(data / 'models/content_baseline/ranks_validation.npz') as source:
         baseline = source['content_ranks']
+        popularity = source['popularity_ranks']
     if baseline.shape != ranks.shape:
         raise ValueError('TF-IDF ranks differ in shape.')
     groups = {}
@@ -92,6 +94,7 @@ def audit(data, run, output, repeats=2000):
             if selected.any():
                 groups[name][label].update(ufm_ndcg10=float(ndcg(ranks[selected]).mean()),
                     tfidf_ndcg10=float(ndcg(baseline[selected]).mean()),
+                    popularity_ndcg10=float(ndcg(popularity[selected]).mean()),
                     delta=float((ndcg(ranks[selected])-ndcg(baseline[selected])).mean()))
     fit, holdout, boundary = temporal_folds(timestamps)
     temperature = fit_temperature(scores[fit])
@@ -114,12 +117,12 @@ def audit(data, run, output, repeats=2000):
     output.mkdir(parents=True, exist_ok=True)
     write_json(output / 'report.json', report)
     lines = ['# UFM validation audit', '', f'Run: `{run.name}`. Validation only; test untouched.', '',
-             '| Regime | History | Cases | UFM NDCG@10 | TF-IDF NDCG@10 | Difference |',
-             '|---|---|---:|---:|---:|---:|']
+             '| Regime | History | Cases | UFM NDCG@10 | Popularity NDCG@10 | TF-IDF NDCG@10 | Difference |',
+             '|---|---|---:|---:|---:|---:|---:|']
     for regime, sections in groups.items():
         for history, row in sections.items():
             if row['samples']:
-                lines.append(f"| {regime} | {history} | {row['samples']} | {row['ufm_ndcg10']:.6f} | {row['tfidf_ndcg10']:.6f} | {row['delta']:+.6f} |")
+                lines.append(f"| {regime} | {history} | {row['samples']} | {row['ufm_ndcg10']:.6f} | {row['popularity_ndcg10']:.6f} | {row['tfidf_ndcg10']:.6f} | {row['delta']:+.6f} |")
     ci = report['paired_comparison']
     lines += ['', f"Cold macro difference: {ci['delta']:+.6f}; exploratory user-bootstrap 95% CI {ci['ci95']}.",
               '', f'Temperature: {temperature:.6f}; fit={len(fit)}, audit={len(holdout)}.', '',

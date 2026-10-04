@@ -360,8 +360,8 @@ def main() -> None:
         raise AssertionError("Test history row count mismatch")
 
     manifest = {
-        "source": str(RAW.relative_to(ROOT)),
-        "metadata": str(METADATA.relative_to(ROOT)),
+        "source": RAW.relative_to(ROOT).as_posix(),
+        "metadata": METADATA.relative_to(ROOT).as_posix(),
         "policy": {
             "positive_interaction": "verified_purchase is true and rating >= 4",
             "duplicates": "Remove exact duplicates of user, parent item, rating and timestamp.",

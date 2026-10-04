@@ -22,8 +22,8 @@ import numpy as np
 from scipy import sparse
 import torch
 
-from prepare_ufm_catalog import sha256
-from train_gpu_recommender import fingerprint, write_json, save_checkpoint, selected_validation
+from common import sha256, write_json
+from train_gpu_recommender import fingerprint, save_checkpoint, selected_validation
 from evaluate_content_baseline import summarize, tie_noise, REGIMES
 from ufm_model import UFMConfig, UFMRec, ufm_loss, candidate_calibration
 
@@ -419,7 +419,7 @@ def parse_args(argv=None):
     p.add_argument('--features', type=Path, default=DATA / 'foundation_clip_b32_v1')
     p.add_argument('--output', type=Path, default=ROOT / 'runs/ufm_full_v1')
     p.add_argument('--device', choices=['cpu', 'cuda'], default='cuda')
-    p.add_argument('--variant', choices=['full','no_uncertainty','fixed_fusion','no_cross_align','semantic_only','collaborative_only','text_only','image_only'], default='full')
+    p.add_argument('--variant', choices=['full','no_uncertainty','fixed_fusion','no_cross_align','semantic_only','collaborative_only','text_only','image_only','adaptive_dropout','count_aware_fusion'], default='full')
     for name, default in [('epochs',20), ('batch-size',256), ('dim',128), ('history',20), ('heads',4), ('layers',2), ('negatives',8), ('patience',3), ('checkpoint-every',1000), ('eval-batch',64), ('validation-cap',0), ('max-steps',0), ('interrupt-after-step',0), ('threads',4), ('seed',42)]:
         p.add_argument('--'+name, type=int, default=default)
     for name, default in [('lr',0.0003), ('weight-decay',0.0001), ('dropout',0.1), ('id-dropout',0.5), ('fixed-alpha',0.5), ('lambda-align',0.01), ('lambda-unc',0.01), ('lambda-cal',0.1)]:

@@ -43,6 +43,8 @@ Nhóm extreme cold có history là điểm yếu lớn nhất (0,215933 so với
 Đây là một seed và validation đã dùng chọn checkpoint; CI mang tính thăm dò,
 không thay thế kết quả nhiều seed hoặc test độc lập.
 
+**Lưu ý Test Shift:** Phân phối zero-shot bị shift đáng kể giữa huấn luyện và đánh giá (test shift). Để giải quyết bias số liệu từ zero-shot, hệ thống đã chuyển sang lấy mẫu negative theo popularity thay vì uniform. Việc tách known-history và empty-history cho thấy UFM và TF-IDF thực tế rất gần nhau trên nhóm có lịch sử.
+
 Temperature 1,789353 fit trên 20.000 case sớm, audit trên 20.000 case muộn:
 ECE **0,164477 → 0,041497**; NLL 4,309607 → 3,906583; Brier 0,963379 → 0,927849.
 Calibration không đổi thứ hạng, không khắc phục thiếu hụt cold-start và chưa được
