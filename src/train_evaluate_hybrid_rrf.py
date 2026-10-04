@@ -32,13 +32,6 @@ WEIGHT_STEP = 0.1
 COORDINATE_PASSES = 2
 
 
-def candidate_regimes(train_counts: np.ndarray) -> np.ndarray:
-    """Map per-candidate train frequency to the four documented regimes."""
-    regimes = np.full(train_counts.shape, 3, dtype=np.uint8)
-    regimes[train_counts == 0] = 0
-    regimes[(train_counts >= 1) & (train_counts <= 5)] = 1
-    regimes[(train_counts >= 6) & (train_counts <= 20)] = 2
-    return regimes
 
 
 def rank_all(scores: np.ndarray, candidates: np.ndarray) -> np.ndarray:
@@ -102,7 +95,6 @@ def build_component_ranks(
 
     return {
         "candidates": candidates,
-        "candidate_regimes": candidate_regimes(train_counts[candidates]),
         "regime_codes": regime_codes,
         "history_lengths": history_lengths,
         "popularity": popularity_ranks,
@@ -157,94 +149,36 @@ def objective(ranks: np.ndarray) -> tuple[float, float, float, float]:
     return float(ndcg), float(recall), float(mrr), -float(ranks.mean())
 
 
-def scores_for_gates(
-    components: np.ndarray,
-    regimes: np.ndarray,
-    gates: np.ndarray,
-) -> np.ndarray:
-    scores = np.zeros(regimes.shape, dtype=np.float64)
-    for regime in range(len(REGIMES)):
-        mask = regimes == regime
-        for component in range(len(COMPONENTS)):
-            scores[mask] += gates[regime, component] * components[component][mask]
-    return scores
-
-
-def tune_gates(data: dict[str, np.ndarray]) -> tuple[np.ndarray, np.ndarray, dict]:
-    """Tune legal per-candidate gates on validation with coordinate search."""
+def tune_global_weights(data: dict[str, np.ndarray]) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Tune a single global weight vector on validation overall NDCG@10."""
     components = reciprocal_components(data)
     candidates = data["candidates"]
-    regimes = data["candidate_regimes"]
     grid = weight_grid()
 
-    best_global = None
+    best = None
     for weights in grid:
         scores = np.tensordot(weights, components, axes=(0, 0))
         ranks = target_ranks(scores, candidates)
         candidate = (objective(ranks), weights.copy(), ranks)
-        if best_global is None or candidate[0] > best_global[0]:
-            best_global = candidate
-    assert best_global is not None
-
-    gates = np.tile(best_global[1], (len(REGIMES), 1))
-    scores = scores_for_gates(components, regimes, gates)
-    current_ranks = target_ranks(scores, candidates)
-
-    for pass_index in range(COORDINATE_PASSES):
-        changed = False
-        for regime in range(len(REGIMES)):
-            mask = regimes == regime
-            current_component = sum(
-                gates[regime, component] * components[component][mask]
-                for component in range(len(COMPONENTS))
-            )
-            base_scores = scores.copy()
-            base_scores[mask] -= current_component
-            best = (objective(current_ranks), gates[regime].copy(), current_ranks)
-
-            for weights in grid:
-                trial_scores = base_scores.copy()
-                trial_scores[mask] += sum(
-                    weights[component] * components[component][mask]
-                    for component in range(len(COMPONENTS))
-                )
-                ranks = target_ranks(trial_scores, candidates)
-                candidate = (objective(ranks), weights.copy(), ranks)
-                if candidate[0] > best[0]:
-                    best = candidate
-
-            if not np.array_equal(best[1], gates[regime]):
-                changed = True
-            gates[regime] = best[1]
-            scores = base_scores
-            scores[mask] += sum(
-                gates[regime, component] * components[component][mask]
-                for component in range(len(COMPONENTS))
-            )
-            current_ranks = best[2]
-            print(
-                f"  pass {pass_index + 1}, {REGIMES[regime]}: "
-                f"weights={gates[regime].tolist()}, ndcg@{K}={best[0][0]:.6f}",
-                flush=True,
-            )
-        if not changed:
-            break
+        if best is None or candidate[0] > best[0]:
+            best = candidate
+    assert best is not None
 
     tuning = {
-        "global_weights": dict(zip(COMPONENTS, best_global[1].tolist())),
+        "global_weights": dict(zip(COMPONENTS, best[1].tolist())),
         "global_validation": summarize(
-            best_global[2], data["regime_codes"], data["history_lengths"]
+            best[2], data["regime_codes"], data["history_lengths"]
         ),
-        "coordinate_passes_completed": pass_index + 1,
+        "method": "Single global weight vector; no per-candidate regime gating.",
     }
-    return gates, current_ranks, tuning
+    return best[1], best[2], tuning
 
 
-def evaluate_gates(
-    data: dict[str, np.ndarray], gates: np.ndarray
+def evaluate_weights(
+    data: dict[str, np.ndarray], weights: np.ndarray
 ) -> tuple[np.ndarray, dict]:
     components = reciprocal_components(data)
-    scores = scores_for_gates(components, data["candidate_regimes"], gates)
+    scores = np.tensordot(weights, components, axes=(0, 0))
     ranks = target_ranks(scores, data["candidates"])
     return ranks, summarize(ranks, data["regime_codes"], data["history_lengths"])
 
@@ -284,8 +218,8 @@ def main() -> None:
     print("Building validation component ranks...", flush=True)
     validation = build_component_ranks("validation", matrix, factors, train_counts)
     verify_component_targets("validation", validation)
-    print("Tuning candidate-aware gates on validation only...", flush=True)
-    gates, validation_ranks, tuning = tune_gates(validation)
+    print("Tuning global weights on validation only...", flush=True)
+    weights, validation_ranks, tuning = tune_global_weights(validation)
     validation_metrics = summarize(
         validation_ranks,
         validation["regime_codes"],
@@ -296,12 +230,12 @@ def main() -> None:
     print("Building test component ranks...", flush=True)
     test = build_component_ranks("test", matrix, factors, train_counts)
     verify_component_targets("test", test)
-    test_ranks, test_metrics = evaluate_gates(test, gates)
+    test_ranks, test_metrics = evaluate_weights(test, weights)
     save_ranks("test", test_ranks, test)
 
     report = {
-        "model": "Candidate-aware reciprocal-rank fusion of popularity, TF-IDF content and collaborative SVD.",
-        "leakage_policy": "Weights are selected on validation only. At ranking time each candidate uses the gate for its own train-frequency regime; the positive target identity and test labels are never used for gating.",
+        "model": "Global reciprocal-rank fusion of popularity, TF-IDF content and collaborative SVD.",
+        "leakage_policy": "Weights selected on validation only. A single weight vector scores all candidates uniformly. No per-candidate regime gating.",
         "components": list(COMPONENTS),
         "candidate_protocol": "Same fixed one-positive plus 99-negative samples as all baselines.",
         "parameters": {
@@ -311,10 +245,7 @@ def main() -> None:
             "optimization_metric": f"ndcg@{K}",
             "tie_breakers": [f"recall@{K}", f"mrr@{K}", "mean_rank"],
         },
-        "gates": {
-            regime: dict(zip(COMPONENTS, gates[index].tolist()))
-            for index, regime in enumerate(REGIMES)
-        },
+        "weights": dict(zip(COMPONENTS, weights.tolist())),
         "tuning": tuning,
         "metrics": {
             "validation": validation_metrics,

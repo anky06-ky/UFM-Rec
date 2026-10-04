@@ -19,28 +19,15 @@ import numpy as np
 from scipy import sparse
 from scipy.special import expit
 
+from common import sha256, write_json
 from evaluate_content_baseline import REGIMES, rank_of_target, summarize
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/processed/toys_games_full_temporal"
 
 
-def sha256(path):
-    digest = hashlib.sha256()
-    with path.open("rb") as source:
-        for block in iter(lambda: source.read(8 * 1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
-
-
 def user_key(value):
     return int.from_bytes(hashlib.blake2b(value.encode(), digest_size=8).digest(), "little", signed=True)
-
-
-def write_json(path, value):
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8")
-    temporary.replace(path)
 
 
 def save_factors(path, users, items, epoch, metric):
@@ -155,7 +142,14 @@ def evaluate(samples, user_rows, known, user_factors, item_factors, counts):
             ids = np.flatnonzero(active)
             values = np.einsum("bd,bkd->bk", user_factors[user_rows[start:end][ids]],
                                item_factors[candidate[ids]])
-            values[counts[candidate[ids]] == 0] = 0  # Untrained IDs have no learned factor.
+            # Unseen items: push below worst seen score so they never rank above trained items.
+            unseen = counts[candidate[ids]] == 0
+            seen_mask = ~unseen
+            for row_idx in range(len(ids)):
+                if unseen[row_idx].any() and seen_mask[row_idx].any():
+                    values[row_idx][unseen[row_idx]] = float(values[row_idx][seen_mask[row_idx]].min()) - 1.0
+                elif unseen[row_idx].all():
+                    values[row_idx] = 0.0  # no seen items at all, fall through to popularity
             scale = np.maximum(popularity[ids].max(axis=1), 1)
             scores[ids] = values + popularity[ids] / scale[:, None] * 1e-7
         for offset, row in enumerate(candidate):
@@ -171,10 +165,11 @@ def train(args):
     sources = {name: sha256(data / name) for name in (
         "split_manifest.json", "content/items.csv.gz", "interactions_train.csv.gz",
         "evaluation/samples_validation.npz", "evaluation/samples_validation.csv.gz")}
-    config = dict(version=1, sources=sources, code_sha256=sha256(Path(__file__)),
+    config = dict(version=2, sources=sources, code_sha256=sha256(Path(__file__)),
                   epochs=args.epochs, factors=args.factors, batch_size=args.batch_size, lr=args.lr,
                   regularization=args.regularization, seed=args.seed,
-                  max_users=args.max_users, selection="Validation cold macro NDCG@10; no test.")
+                  max_users=args.max_users, selection_metric=args.selection_metric,
+                  selection=f"Validation {args.selection_metric} NDCG@10; no test.")
     if args.resume:
         if json.loads((output / "config.json").read_text()) != config:
             raise ValueError("Resume code/source/hyperparameter mismatch.")
@@ -228,16 +223,21 @@ def train(args):
         if not np.isfinite(user_factors).all() or not np.isfinite(item_factors).all():
             raise FloatingPointError("Non-finite BPR factors.")
         report = evaluate(samples, user_rows, known, user_factors, item_factors, counts)
-        metric = report["cold_macro_ndcg@10"]
+        if args.selection_metric == "overall":
+            metric = report["overall"]["ndcg@10"]
+        else:
+            metric = report["cold_macro_ndcg@10"]
         if metric > best + 1e-6:
             best = metric
             save_factors(output / "best.npz", user_factors, item_factors, epoch + 1, best)
         save_factors(output / "latest.npz", user_factors, item_factors, epoch + 1, best)
         record = dict(epoch=epoch + 1, bpr_loss=float(np.mean(losses)), validation=report,
-                      best_cold_macro_ndcg_at_10=best, elapsed_seconds=time.monotonic() - started)
+                      selection_metric=args.selection_metric,
+                      best_selection_value=best, elapsed_seconds=time.monotonic() - started)
         write_json(output / f"epoch_{epoch+1:03d}.json", record)
         print(json.dumps(record), flush=True)
-    write_json(output / "completed.json", dict(epochs=args.epochs, best_cold_macro_ndcg_at_10=best,
+    write_json(output / "completed.json", dict(epochs=args.epochs,
+               selection_metric=args.selection_metric, best_selection_value=best,
                smoke_run=bool(args.max_users), test_evaluated=False))
 
 
@@ -245,13 +245,15 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=DATA)
     parser.add_argument("--output", type=Path, default=DATA / "models/bpr_mf")
-    parser.add_argument("--epochs", type=int, default=5)
-    parser.add_argument("--factors", type=int, default=32)
+    parser.add_argument("--epochs", type=int, default=20)
+    parser.add_argument("--factors", type=int, default=64)
     parser.add_argument("--batch-size", type=int, default=4096)
     parser.add_argument("--lr", type=float, default=0.05)
     parser.add_argument("--regularization", type=float, default=1e-4)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-users", type=int, default=0, help="Bounded smoke only; results not comparable.")
+    parser.add_argument("--selection-metric", choices=("overall", "cold_macro"), default="overall",
+                        help="ID-only models should select on overall; content-aware on cold_macro.")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args(argv)
     if min(args.epochs, args.factors, args.batch_size) < 1 or args.max_users < 0 or args.lr <= 0 or args.regularization < 0:

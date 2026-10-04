@@ -27,7 +27,8 @@ def plan(base):
             for key in ('data','legacy_cache','features','history','dim','heads','layers','batch_size',
                         'negatives','epochs','lr','patience','checkpoint_every','eval_batch','validation_cap','threads'):
                 cmd += ['--'+key.replace('_','-'), str(base[key])]
-            cmd += ['--seed', str(seed)]
+            metric = 'cold_macro' if model == 'concat' else 'overall'
+            cmd += ['--seed', str(seed), '--selection-metric', metric]
             jobs.append(dict(model=model, seed=seed, output=str(output), command=cmd))
         if seed != 42:
             output = ROOT/f'runs/ufm_full_s{seed}_v1'
@@ -70,7 +71,7 @@ def main():
     if args.dry_run:
         print(json.dumps(jobs, indent=2)); return
     import fcntl
-    from train_sasrec import sha256
+    from common import sha256
     deadline = time.monotonic()+args.max_days*86400
     status = ROOT/'runs/followup_suite_v1.json'
     completed = []

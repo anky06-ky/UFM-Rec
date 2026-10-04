@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
-import fcntl
 import json
 import os
 from pathlib import Path
@@ -90,6 +89,7 @@ def fatal_stop():
 
 
 def main(argv=None):
+    import fcntl
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--poll-seconds', type=int, default=30)
     parser.add_argument('--python', type=Path)

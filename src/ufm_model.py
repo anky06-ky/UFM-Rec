@@ -83,6 +83,7 @@ class UFMConfig:
         if self.variant not in {
             "full", "no_uncertainty", "fixed_fusion", "no_cross_align",
             "semantic_only", "collaborative_only", "text_only", "image_only",
+            "adaptive_dropout", "count_aware_fusion",
         }:
             raise ValueError("Unknown ablation variant.")
 
@@ -161,7 +162,17 @@ class UFMRec(nn.Module):
     def collaborative_items(self, ids, counts):
         known = ids.ne(0) & counts[ids].gt(0)
         if self.training and self.config.id_dropout:
-            known &= torch.rand_like(known.float()).ge(self.config.id_dropout)
+            if self.config.variant in ("adaptive_dropout", "count_aware_fusion"):
+                # Frequency-adaptive dropout: items with fewer train interactions
+                # are dropped more aggressively, forcing the model to rely on the
+                # semantic branch for cold items — matching TF-IDF behaviour.
+                item_counts = counts[ids].float()
+                # Scale dropout rate: high dropout for low-count, low for high-count.
+                # At count=0 → rate=id_dropout; at count→∞ → rate→0.
+                adaptive_rate = self.config.id_dropout * torch.exp(-item_counts / 10.0)
+                known &= torch.rand_like(known.float()).ge(adaptive_rate)
+            else:
+                known &= torch.rand_like(known.float()).ge(self.config.id_dropout)
         # Unknown IDs map to the padding row BEFORE lookup, so their weights and
         # gradients cannot leak into a prediction even when they contain NaN.
         safe_ids = ids.masked_fill(~known, 0)
@@ -182,7 +193,11 @@ class UFMRec(nn.Module):
         last = lengths.clamp_min(1) - 1
         user = x[torch.arange(len(ids), device=ids.device), last]
         available = valid.any(-1)
-        return F.normalize(user.float(), dim=-1) * available.unsqueeze(-1), available
+        # Guard: F.normalize on a zero vector (no valid collaborative items)
+        # returns NaN; replace with zeros so the availability mask handles it.
+        normed = F.normalize(user.float(), dim=-1)
+        normed = torch.nan_to_num(normed, nan=0.0)
+        return normed * available.unsqueeze(-1), available
 
     def forward(self, histories, candidates, text, image, modalities, train_counts):
         if histories.ndim != 2 or candidates.ndim != 2 or len(histories) != len(candidates):
@@ -200,7 +215,12 @@ class UFMRec(nn.Module):
         hs, hs_present = self.semantic_items(histories, text, image, modalities)
         cs, cs_present = self.semantic_items(candidates, text, image, modalities)
         sem_user = hs.sum(1) / hs_present.sum(1, keepdim=True).clamp_min(1)
-        sem_user = F.normalize(sem_user, dim=-1)[:, None].expand_as(cs)
+        # Guard: if no history item has any modality, sem_user is a zero vector
+        # and F.normalize would produce NaN. Replace NaN with zeros; the
+        # sem_ok mask downstream ensures this user gets a fallback score.
+        sem_user = F.normalize(sem_user, dim=-1)
+        sem_user = torch.nan_to_num(sem_user, nan=0.0)
+        sem_user = sem_user[:, None].expand_as(cs)
         hc, hc_present = self.collaborative_items(histories, train_counts)
         cc, cc_present = self.collaborative_items(candidates, train_counts)
         cf_user, cf_available = self.encode_cf_history(hc, histories, hc_present)
@@ -225,6 +245,11 @@ class UFMRec(nn.Module):
         sem = sem * sem_ok.unsqueeze(-1)
         u_cf = F.softplus(self.cf_uncertainty(cf).float()).squeeze(-1)
         u_sem = F.softplus(self.sem_uncertainty(sem).float()).squeeze(-1)
+        if self.config.variant == "count_aware_fusion":
+            # Penalise CF uncertainty for low-count candidates so the gate
+            # naturally favours the semantic branch on extreme-cold items.
+            count_penalty = torch.exp(-train_counts[candidates].float() / 5.0)
+            u_cf = u_cf + count_penalty
         uncertainty = torch.stack([u_cf, u_sem], -1)
         pair = torch.cat([cf, sem], -1)
         variant = self.config.variant
@@ -245,7 +270,12 @@ class UFMRec(nn.Module):
         fused = weights[..., :1] * cf + weights[..., 1:] * sem + align
         score = self.recommendation_head(fused).squeeze(-1).float()
         # Common train-popularity fallback, never future counts, for no-signal pairs.
-        score = torch.where(available.any(-1), score, train_counts[candidates].float().log1p())
+        has_signal = available.any(-1)
+        score = torch.where(
+            has_signal.any(dim=-1, keepdim=True),
+            score.masked_fill(~has_signal, -1e9),
+            train_counts[candidates].float().log1p()
+        )
         return {
             "scores": score, "weights": weights, "uncertainty": uncertainty,
             "available": available, "cf": cf, "semantic": sem,

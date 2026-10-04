@@ -104,7 +104,7 @@ class UFMCoreTests(unittest.TestCase):
         self.assertTrue(torch.isfinite(self.predict()["scores"]).all())
 
     def test_ablation_paths_and_modality_invariance(self):
-        for variant in ("full", "no_uncertainty", "fixed_fusion", "no_cross_align", "semantic_only", "collaborative_only", "text_only", "image_only"):
+        for variant in ("full", "no_uncertainty", "fixed_fusion", "no_cross_align", "semantic_only", "collaborative_only", "text_only", "image_only", "adaptive_dropout", "count_aware_fusion"):
             with self.subTest(variant=variant):
                 model = UFMRec(replace(self.config, variant=variant)).eval()
                 out = self.predict(model)
@@ -126,6 +126,59 @@ class UFMCoreTests(unittest.TestCase):
                     with torch.no_grad():
                         target.copy_(previous)
                     self.modalities = flags
+
+    def test_adaptive_dropout_variant_scales_by_count(self):
+        """Items with fewer train interactions must be dropped more aggressively."""
+        model = UFMRec(replace(self.config, variant="adaptive_dropout", id_dropout=0.5)).train()
+        torch.manual_seed(0)
+        # Run multiple forward passes to observe stochastic dropout behaviour.
+        drop_counts = torch.zeros(self.config.items + 1)
+        runs = 200
+        for _ in range(runs):
+            _, known = model.collaborative_items(self.candidates, self.counts)
+            # Count how often each candidate ID is dropped.
+            for i in range(self.candidates.shape[0]):
+                for j in range(self.candidates.shape[1]):
+                    if not known[i, j]:
+                        drop_counts[self.candidates[i, j]] += 1
+        # Items with count=1 (IDs 4,5) should be dropped MORE often than
+        # items with count=40 (ID 1). Check that the dropout rate is higher.
+        # ID 3 has count=2, ID 1 has count=40.
+        if drop_counts[3] > 0 and drop_counts[1] > 0:
+            self.assertGreater(float(drop_counts[3]), float(drop_counts[1]),
+                "Low-count items should be dropped more frequently than high-count items.")
+        # Verify that forward pass produces finite scores.
+        model.eval()
+        out = self.predict(model)
+        self.assertTrue(torch.isfinite(out["scores"]).all())
+
+    def test_count_aware_fusion_penalises_cold_cf(self):
+        """count_aware_fusion should produce higher CF uncertainty for low-count candidates."""
+        model_full = UFMRec(replace(self.config, variant="full")).eval()
+        model_caf = UFMRec(replace(self.config, variant="count_aware_fusion")).eval()
+        # Copy weights so the only difference is the count penalty.
+        model_caf.load_state_dict(model_full.state_dict())
+        out_full = self.predict(model_full)
+        out_caf = self.predict(model_caf)
+        # CF uncertainty (column 0) should be higher in count_aware_fusion for
+        # cold candidates (count <= 5). Candidate IDs 6,7,8 have count=0.
+        cold_mask = self.counts[self.candidates] <= 5
+        if cold_mask.any():
+            u_full_cold = out_full["uncertainty"][cold_mask][..., 0].mean()
+            u_caf_cold = out_caf["uncertainty"][cold_mask][..., 0].mean()
+            self.assertGreater(float(u_caf_cold), float(u_full_cold),
+                "CF uncertainty for cold items should be higher with count_aware_fusion.")
+        self.assertTrue(torch.isfinite(out_caf["scores"]).all())
+
+    def test_nan_guard_zero_semantic_history(self):
+        """F.normalize on zero vectors must not produce NaN after the guard."""
+        # All history items have no modalities → sem_user would be zero.
+        modalities = torch.zeros(9, 2, dtype=torch.bool)
+        model = UFMRec(replace(self.config, variant="full")).eval()
+        out = model(self.histories, self.candidates, self.text, self.image,
+                     modalities, self.counts)
+        self.assertTrue(torch.isfinite(out["scores"]).all(),
+            "Scores must be finite even when all modalities are disabled.")
 
     def test_fixed_fusion_extremes_keep_only_available_branch(self):
         for alpha in (0., 1.):

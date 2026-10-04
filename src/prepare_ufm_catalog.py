@@ -15,6 +15,8 @@ import json
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from common import sha256
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/processed/toys_games_full_temporal"
 METADATA = ROOT / "data/raw/toys_games_5core/meta_Toys_and_Games.jsonl.gz"
@@ -46,14 +48,6 @@ def primary_image(record):
             if allowed_image_url(url):
                 return url
     return ""
-
-
-def sha256(path):
-    result = hashlib.sha256()
-    with Path(path).open("rb") as source:
-        for block in iter(lambda: source.read(8 * 1024 * 1024), b""):
-            result.update(block)
-    return result.hexdigest()
 
 
 def build_catalog(data: Path, metadata: Path, output: Path):

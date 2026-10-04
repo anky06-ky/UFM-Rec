@@ -21,19 +21,12 @@ from scipy import sparse
 from torch import nn
 from torch.nn import functional as F
 
+from common import write_json
 from evaluate_content_baseline import summarize, tie_noise
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA = ROOT / 'data/processed/toys_games_full_temporal'
 VERSION = 1
-
-
-def write_json(path, value):
-    path = Path(path)
-    tmp = path.with_suffix(path.suffix + '.tmp')
-    tmp.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding='utf-8')
-    tmp.replace(path)
-
 
 def save_checkpoint(path, value):
     tmp = path.with_suffix('.pt.tmp')

@@ -30,7 +30,7 @@ EVALUATION = DATA / "evaluation"
 OUTPUT = DATA / "models/collaborative_svd"
 SPLITS = ("validation", "test")
 FACTORS = 64
-ITERATIONS = 3
+ITERATIONS = 20
 PROFILE_ITEMS = 10
 SEED = 42
 

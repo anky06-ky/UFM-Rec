@@ -121,7 +121,7 @@ class UFMBackend:
         import torch
         from ufm_model import UFMConfig,UFMRec
         from train_ufm_recommender import feature_audit
-        from prepare_ufm_catalog import sha256
+        from common import sha256
         self.catalog,self.chunk,self.torch = catalog,chunk,torch
         run = Path(run)
         marker = json.loads((run/'completed.json').read_text())
