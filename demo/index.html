@@ -71,6 +71,7 @@ header {
   letter-spacing: -0.5px;
   background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .brandmark {
@@ -120,14 +121,14 @@ header {
   font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -1.5px; 
   margin: 16px 0 20px; line-height: 1.1; 
   background: linear-gradient(to right, #fff, #9CA3AF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .hero p { color: var(--text-secondary); max-width: 600px; font-size: 18px; margin: 0; }
 .count { text-align: right; background: rgba(0,0,0,0.3); padding: 24px 32px; border-radius: var(--radius-lg); border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .count strong { 
   font-size: 48px; font-weight: 800; letter-spacing: -1px; display: block; 
   background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .count span { font-size: 15px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
@@ -227,7 +228,7 @@ select option { background: #111827; color: white; }
 .error { color: var(--danger); text-shadow: 0 0 10px rgba(239,68,68,0.4); }
 
 .result-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
-.result-head h2 { font-size: 36px; font-weight: 800; margin: 0 0 8px; letter-spacing: -1px; background: linear-gradient(to right, #fff, #9CA3AF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.result-head h2 { font-size: 36px; font-weight: 800; margin: 0 0 8px; letter-spacing: -1px; background: linear-gradient(to right, #fff, #9CA3AF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .result-meta { font-size: 15px; color: var(--text-secondary); }
 .secondary {
   padding: 12px 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-strong);
@@ -320,6 +321,9 @@ details p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
   .guide { grid-template-columns: 1fr; }
   .hero h1 { font-size: 36px; }
   .foot { flex-direction: column; gap: 20px; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
 </style></head><body><div class="shell">

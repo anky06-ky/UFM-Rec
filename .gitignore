@@ -8,6 +8,9 @@ tmp/
 *.egg-info/
 .ipynb_checkpoints/
 archive/
+.vscode/
+.playwright-cli/
+strix_runs/
 
 # Download fragments and temporary outputs
 *.tmp

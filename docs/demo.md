@@ -34,10 +34,10 @@ checkpoint trước khi khởi động lại. Trang `127.0.0.1:8766` có thể m
 
 ## Giao diện hiện tại
 
-`demo/index.html` có hero xanh rừng, thẻ kết quả làm nổi bật ảnh và nhãn
-cold-start, hiệu ứng hover/focus và bố cục thích ứng màn hình nhỏ. Trên mỗi thẻ,
-score được ghi rõ là **Điểm xếp hạng**; backend và giới hạn điểm được hiển thị để
-người xem không nhầm score với xác suất mua hàng.
+`demo/index.html` dùng giao diện tối kiểu glass: nền than, accent cyan/tím, thẻ
+kết quả nổi ảnh và nhãn cold-start, hover/focus rõ và bố cục thích ứng màn hình
+nhỏ. Trên mỗi thẻ, score được ghi rõ là **Điểm xếp hạng**; backend và giới hạn
+điểm được hiển thị để người xem không nhầm score với xác suất mua hàng.
 
 ## Mở demo
 
@@ -49,7 +49,7 @@ Ctrl+C trong cửa sổ đó để dừng. Server chỉ nghe trên máy local.
 Nếu cần chạy thủ công:
 
 ```powershell
-tmp/ufm_checks_env/Scripts/python.exe src/demo_recommender.py --backend content --port 8765 --open-browser
+py src/demo_recommender.py --backend content --port 8765 --open-browser
 ```
 
 Máy khác cần Python 3.11+, `pip install -r requirements.txt` và các file dữ liệu
