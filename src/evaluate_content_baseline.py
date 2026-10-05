@@ -60,7 +60,7 @@ def metrics(ranks: np.ndarray, mask: np.ndarray) -> dict:
     }
 
 
-def summarize(ranks, regime_codes, history_lengths):
+def summarize(ranks, regime_codes, history_lengths, repeat_purchases=None):
     groups = {
         "overall": metrics(ranks, np.ones(len(ranks), dtype=bool)),
         "known_user": metrics(ranks, history_lengths > 0),
@@ -69,6 +69,9 @@ def summarize(ranks, regime_codes, history_lengths):
     }
     for code, name in enumerate(REGIMES):
         groups["by_regime"][name] = metrics(ranks, regime_codes == code)
+    if repeat_purchases is not None:
+        groups["repeat_purchases"] = metrics(ranks, repeat_purchases == 1)
+        groups["new_purchases"] = metrics(ranks, repeat_purchases == 0)
     return groups
 
 
@@ -113,8 +116,8 @@ def evaluate_split(split, matrix, train_counts, has_vector):
         )
     ranks_path.replace(OUTPUT / f"ranks_{split}.npz")
     return {
-        "popularity": summarize(popularity_ranks, regime_codes, history_lengths),
-        "tfidf_profile": summarize(content_ranks, regime_codes, history_lengths),
+        "popularity": summarize(popularity_ranks, regime_codes, history_lengths, samples.get("repeat_purchases")),
+        "tfidf_profile": summarize(content_ranks, regime_codes, history_lengths, samples.get("repeat_purchases")),
     }
 
 

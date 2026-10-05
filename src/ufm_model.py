@@ -193,10 +193,8 @@ class UFMRec(nn.Module):
         last = lengths.clamp_min(1) - 1
         user = x[torch.arange(len(ids), device=ids.device), last]
         available = valid.any(-1)
-        # Guard: F.normalize on a zero vector (no valid collaborative items)
-        # returns NaN; replace with zeros so the availability mask handles it.
         normed = F.normalize(user.float(), dim=-1)
-        normed = torch.nan_to_num(normed, nan=0.0)
+        assert torch.isfinite(normed).all(), "NaN in CF normalization"
         return normed * available.unsqueeze(-1), available
 
     def forward(self, histories, candidates, text, image, modalities, train_counts):
@@ -215,11 +213,8 @@ class UFMRec(nn.Module):
         hs, hs_present = self.semantic_items(histories, text, image, modalities)
         cs, cs_present = self.semantic_items(candidates, text, image, modalities)
         sem_user = hs.sum(1) / hs_present.sum(1, keepdim=True).clamp_min(1)
-        # Guard: if no history item has any modality, sem_user is a zero vector
-        # and F.normalize would produce NaN. Replace NaN with zeros; the
-        # sem_ok mask downstream ensures this user gets a fallback score.
         sem_user = F.normalize(sem_user, dim=-1)
-        sem_user = torch.nan_to_num(sem_user, nan=0.0)
+        assert torch.isfinite(sem_user).all(), "NaN in semantic normalization"
         sem_user = sem_user[:, None].expand_as(cs)
         hc, hc_present = self.collaborative_items(histories, train_counts)
         cc, cc_present = self.collaborative_items(candidates, train_counts)
@@ -271,9 +266,12 @@ class UFMRec(nn.Module):
         score = self.recommendation_head(fused).squeeze(-1).float()
         # Common train-popularity fallback, never future counts, for no-signal pairs.
         has_signal = available.any(-1)
+        floor = torch.where(has_signal, score, torch.tensor(float('inf'), device=score.device)).min(dim=1, keepdim=True).values - 1.0
+        floor = torch.where(has_signal.any(dim=1, keepdim=True), floor, torch.tensor(0.0, device=score.device))
+        score = torch.where(has_signal, score, floor)
         score = torch.where(
             has_signal.any(dim=-1, keepdim=True),
-            score.masked_fill(~has_signal, -1e9),
+            score,
             train_counts[candidates].float().log1p()
         )
         return {

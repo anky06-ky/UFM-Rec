@@ -175,11 +175,14 @@ def extract(args):
             batch = []
     if next_row != count:
         raise ValueError("Input ended before expected rows.")
-    from importlib.metadata import version
+    from importlib.metadata import version, PackageNotFoundError
+    def safe_version(name):
+        try: return version(name)
+        except PackageNotFoundError: return "unknown"
     completed = {**config, "has_text": int(flags[1:, 0].sum()), "has_image": int(flags[1:, 1].sum()),
                  "image_status_counts": failures, "elapsed_seconds": time.monotonic() - started,
                  "torch_version": str(torch.__version__), "numpy_version": np.__version__,
-                 "transformers_version": version("transformers"), "pillow_version": version("pillow"),
+                 "transformers_version": safe_version("transformers"), "pillow_version": safe_version("pillow"),
                  "encoder_frozen": True,
                  "features_sha256": {name: sha256(args.output / name) for name in ("text.npy", "image.npy", "modalities.npy")},
                  "limitations": ["CLIP 77-token text truncation; metadata snapshot may include later edits.",

@@ -1,6 +1,6 @@
 # Chạy liên tục và khôi phục chiến dịch FITLAB
 
-Ngày 01/10/2026, CLIP đang chạy từ checkpoint. `scripts/watch_campaign.py` theo dõi
+Ngày 01/10/2026, CLIP đang chạy từ checkpoint. `ops/watch_campaign.py` theo dõi
 supervisor, queue và worker trong container hiện tại. Nếu supervisor hoặc worker
 bị SIGKILL, watchdog chờ mọi process cũ kết thúc rồi chạy lại supervisor. Queue
 chỉ dùng `--resume` khi có progress/checkpoint chưa hoàn tất. Các stage chạy tuần tự:
@@ -32,7 +32,7 @@ và kiểm tra process ngăn hai lượt GPU cùng chạy. Cache, checkpoint, st
 Chạy một lần trên FITLAB:
 
 ```bash
-python3 scripts/install_autostart.py
+python3 ops/install_autostart.py
 ```
 
 Installer giữ các settings/task hiện có, lưu bản sao trong `runs/autostart_backups/`,

@@ -14,3 +14,11 @@ def write_json(path, value):
     tmp = path.with_suffix('.json.tmp')
     tmp.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
     tmp.replace(path)
+
+import numpy as np
+
+def push_unseen_last(scores, seen):
+    floor = np.where(seen, scores, np.inf).min(1, keepdims=True) - 1.0
+    floor[~seen.any(1)] = 0.0
+    return np.where(seen, scores, floor)
+

@@ -17,6 +17,7 @@ import numpy as np
 from PIL import Image
 import torch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ops"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from ufm_model import UFMConfig, UFMRec, FrozenCLIPEncoder, reliability_weights, ufm_loss, candidate_calibration
 from prepare_ufm_catalog import allowed_image_url, primary_image, build_catalog
@@ -315,6 +316,7 @@ class ExtractionTests(unittest.TestCase):
             second = json.loads((args.output / "complete.json").read_text())
             self.assertEqual(first["image_status_counts"], second["image_status_counts"])
             self.assertEqual(first["features_sha256"], second["features_sha256"])
+            import gc; gc.collect()
 
 
 if __name__ == "__main__":

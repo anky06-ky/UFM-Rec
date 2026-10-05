@@ -1,6 +1,7 @@
 from pathlib import Path
 import sys
 import unittest
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'ops'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'src'))
 from run_followup_suite import plan
 from run_ufm_ablation_suite import PARAMETERS

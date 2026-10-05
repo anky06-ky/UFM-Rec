@@ -1,6 +1,12 @@
 joblib==1.6.0
+
 numpy==2.2.6
+
 pandas==2.2.3
+
 scikit-learn==1.6.1
+
 scipy==1.17.1
-torch>=2.2.0  # CPU/CUDA tùy môi trý?ng
+
+torch>=2.2.0  # chon ban CPU hoac CUDA tuy may
+

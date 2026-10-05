@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'scripts'))
+sys.path.insert(0, str(ROOT / 'ops'))
 sys.path.insert(0, str(ROOT))
 import install_autostart
 import status
@@ -44,9 +44,9 @@ class StartupTests(unittest.TestCase):
             child = proc / '123'
             child.mkdir()
             (child / 'cmdline').write_bytes(b'python\0unrelated.py\0')
-            self.assertFalse(status.process_alive(123, 'scripts/resume_campaign.py', ROOT, proc))
-            (child / 'cmdline').write_bytes(b'python\0-u\0scripts/resume_campaign.py\0')
-            self.assertTrue(status.process_alive(123, 'scripts/resume_campaign.py', ROOT, proc))
+            self.assertFalse(status.process_alive(123, 'ops/resume_campaign.py', ROOT, proc))
+            (child / 'cmdline').write_bytes(b'python\0-u\0ops/resume_campaign.py\0')
+            self.assertTrue(status.process_alive(123, 'ops/resume_campaign.py', ROOT, proc))
 
 
 if __name__ == '__main__':

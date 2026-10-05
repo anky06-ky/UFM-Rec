@@ -32,10 +32,10 @@ def snapshot(root):
     rows=complete.get('rows') or progress.get('next_row',0)
     recovery=read(root/'runs/campaign_recovery_20261001.json')
     if recovery and isinstance(recovery.get('pid'),int):
-        recovery['supervisor_alive']=process_alive(recovery['pid'],'scripts/resume_campaign.py',root)
+        recovery['supervisor_alive']=process_alive(recovery['pid'],'ops/resume_campaign.py',root)
     watchdog=read(root/'runs/campaign_watchdog_v1.json')
     if watchdog and isinstance(watchdog.get('pid'),int):
-        watchdog['watchdog_alive']=process_alive(watchdog['pid'],'scripts/watch_campaign.py',root)
+        watchdog['watchdog_alive']=process_alive(watchdog['pid'],'ops/watch_campaign.py',root)
     state=dict(time_utc=datetime.now(timezone.utc).isoformat(),
         clip=dict(rows=rows,total=total,percent=round(100*rows/total,2) if total else 0,
                   complete=bool(complete and 'read_error' not in complete),

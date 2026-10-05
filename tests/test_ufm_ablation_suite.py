@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ops'))
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 import run_ufm_ablation_suite as suite
 

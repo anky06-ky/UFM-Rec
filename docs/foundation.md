@@ -9,7 +9,7 @@ thành huấn luyện UFM hay kết quả test.
 chờ features hoàn chỉnh rồi chạy GPU smoke/resume và full train.
 Các trạng thái 12:43 bên dưới được giữ làm lịch sử, không phải trạng thái mới nhất.
 Xem [hướng dẫn train UFM](train.md) và dùng
-`src/monitor_ufm_training.py` để đọc trạng thái hiện tại.
+`ops/monitor_ufm_training.py` để đọc trạng thái hiện tại.
 
 ## Kết quả đã xác nhận
 
@@ -106,7 +106,7 @@ Lệnh độc lập Jupyter (chỉ đọc) trong terminal Linux:
 
 ```bash
 cd /home/coder/iDragonCloud/DA_AI
-/home/coder/iDragonCloud/.venv/bin/python src/monitor_ufm_features.py
+/home/coder/iDragonCloud/.venv/bin/python ops/monitor_ufm_features.py
 ```
 
 Mở `notebooks/03_clip.ipynb` trên FITLAB, chọn kernel venv sẵn

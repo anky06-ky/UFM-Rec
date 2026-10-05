@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 import torch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'ops'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from train_sasrec import SASRec
 from comparison_models import BERT4Rec, ConcatHybrid, cloze_batch

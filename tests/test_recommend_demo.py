@@ -14,6 +14,7 @@ import urllib.error
 import numpy as np
 from scipy import sparse
 
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ops'))
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 import test_ufm_training as training_fixture
 import train_ufm_recommender as trainer
