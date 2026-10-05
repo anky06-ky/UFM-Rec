@@ -175,13 +175,9 @@ def evaluate(model, samples, counts, history, batch_size, cap=0, return_predicti
         scores = model.logits(histories, ids).float()
         count = torch.as_tensor(np.asarray(counts[candidates + 1]), device=device)
         if not getattr(model, 'can_score_unseen', False):
-            seen = count > 0
-            # Unseen items: push below worst seen score in each row.
-            for row_idx in range(len(scores)):
-                if (~seen[row_idx]).any() and seen[row_idx].any():
-                    scores[row_idx][~seen[row_idx]] = scores[row_idx][seen[row_idx]].min() - 1.0
-                elif (~seen[row_idx]).all():
-                    scores[row_idx] = count[row_idx].float().log1p()
+            from common import push_unseen_last
+            seen = count.cpu().numpy() > 0
+            scores = torch.as_tensor(push_unseen_last(scores.cpu().numpy(), seen), device=device)
             empty = histories.ne(0).sum(-1).eq(0)
             scores[empty] = count[empty].float().log1p()
         if not torch.isfinite(scores).all():
@@ -192,7 +188,7 @@ def evaluate(model, samples, counts, history, batch_size, cap=0, return_predicti
         ranks.extend((1 + (values[:, 1:] > values[:, :1]).sum(-1)).tolist())
         lengths.extend(batch_lengths)
     report = summarize(np.asarray(ranks), samples['regime_codes'][selected],
-                       np.asarray(lengths))
+                       np.asarray(lengths), samples.get('repeat_purchases')[selected] if 'repeat_purchases' in samples else None)
     report['cold_macro_ndcg@10'] = float(np.mean(
         [report['by_regime'][name]['ndcg@10'] for name in REGIMES[:3]]))
     return (report, np.concatenate(predictions), selected) if return_predictions else report
@@ -222,10 +218,10 @@ def train(args):
                   checkpoint_every=args.checkpoint_every, validation_cap=args.validation_cap,
                   eval_batch=args.eval_batch, max_steps=args.max_steps,
                   seed=args.seed, device=args.device, data=str(args.data),
-                  selection_metric=args.selection_metric,
+                  selection_metric=getattr(args, 'selection_metric', 'overall'),
                   legacy_cache=str(args.legacy_cache), graph=str(args.graph),
                   torch_version=torch.__version__, numpy_version=np.__version__,
-                  selection=f'Validation {args.selection_metric} NDCG@10; fixed candidate set; no test')
+                  selection=f'Validation {getattr(args, "selection_metric", "overall")} NDCG@10; fixed candidate set; no test')
     config['objective'] = ('bidirectional Cloze; 15% mask, 80/10/10 replacement; 10% force-last; sampled softmax'
                            if kind == 'bert4rec' else 'sampled positive/negative BCE')
     output = args.output
@@ -325,7 +321,7 @@ def train(args):
                 break
         report, scores, selected = evaluate(model, validation, counts, args.history,
                           args.eval_batch, args.validation_cap, return_predictions=True)
-        if args.selection_metric == 'overall':
+        if getattr(args, 'selection_metric', 'cold_macro') == 'overall':
             score = report['overall']['ndcg@10']
         else:
             score = report['cold_macro_ndcg@10']

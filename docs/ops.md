@@ -35,7 +35,7 @@ baseline. SASRec/BERT4Rec chuẩn, dữ liệu thứ hai và ngân sách VRAM 16
 ## Theo dõi và phục hồi
 
 ```bash
-python src/monitor_ufm_campaign.py
+python ops/monitor_ufm_campaign.py
 ```
 
 ### Khôi phục ngày 01/10/2026
@@ -43,7 +43,7 @@ python src/monitor_ufm_campaign.py
 Lượt CLIP cũ bị `SIGKILL` khi đã commit 594.304/767.045 item. `memory.events`
 của container tại lúc kiểm tra báo `oom_kill=0`; chưa xác định được nguồn gửi
 SIGKILL. Cache/`progress.json` còn đủ và đúng batch 64, dữ liệu nguồn, revision.
-Supervisor `scripts/resume_campaign.py` đang chạy nền trên FITLAB. Nó mở từng
+Supervisor `ops/resume_campaign.py` đang chạy nền trên FITLAB. Nó mở từng
 queue theo thứ tự, dùng `flock` riêng và tối đa ba lượt khi queue dừng do SIGKILL.
 Nếu gặp lỗi cấu hình, checksum, hoặc lỗi khác thì dừng và ghi status; không lặp
 vô hạn. GPU đang bận thì queue đợi, không chiếm GPU của job khác.

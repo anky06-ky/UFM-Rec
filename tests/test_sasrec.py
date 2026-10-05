@@ -12,6 +12,8 @@ import torch
 
 SOURCE = Path(__file__).resolve().parents[1] / 'src'
 sys.path.insert(0, str(SOURCE))
+sys.path.insert(0, str(SOURCE))
+sys.path.insert(0, str(SOURCE))
 spec = importlib.util.spec_from_file_location('sasrec', SOURCE / 'train_sasrec.py')
 sasrec = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(sasrec)

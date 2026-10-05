@@ -16,7 +16,7 @@ from run_foundation_when_idle import ROOT, active_baseline_pids, gpu_idle, atomi
 from run_ufm_training_when_ready import active_ufm_gpu_pids, verify_run
 
 VARIANTS = ('no_uncertainty','fixed_fusion','no_cross_align','semantic_only',
-            'collaborative_only','text_only','image_only')
+            'collaborative_only','text_only','image_only','adaptive_dropout','count_aware_fusion')
 PARAMETERS = ('data','legacy_cache','features','epochs','batch_size','dim','history','heads','layers',
               'negatives','patience','checkpoint_every','eval_batch','validation_cap','threads','seed',
               'lr','weight_decay','dropout','id_dropout','fixed_alpha','lambda_align','lambda_unc','lambda_cal')

@@ -47,7 +47,7 @@ checkpoint, validation, loss và tính toàn vẹn. Smoke không được dùng 
 Trong terminal FITLAB, tại `/home/coder/iDragonCloud/DA_AI`:
 
 ```bash
-/home/coder/iDragonCloud/.venv/bin/python src/monitor_ufm_training.py
+/home/coder/iDragonCloud/.venv/bin/python ops/monitor_ufm_training.py
 ```
 
 Status `runs/ufm_training_queue_v1.json`, log `runs/ufm_training_queue_v1.log`.

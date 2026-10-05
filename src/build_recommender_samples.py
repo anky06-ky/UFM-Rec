@@ -58,10 +58,7 @@ def reservoir_sample(split: str, min_interactions: int = 0):
     with gzip.open(path, "rt", encoding="utf-8", newline="") as source:
         for row in csv.DictReader(source):
             if min_interactions > 0:
-                history_len = len(row["history"].split()) if row["history"] else 0
-                train_count = int(row.get("train_item_count", 0))
-                # total interactions = train_count + history items in validation/test + the current target item (1)
-                if train_count + history_len + 1 < min_interactions:
+                if int(row["history_length"]) + 1 < min_interactions:
                     continue
             regime = row["cold_start_regime"]
             seen[regime] += 1
@@ -86,11 +83,11 @@ def reservoir_sample(split: str, min_interactions: int = 0):
     return samples, seen
 
 
-def choose_negatives(rng, eligible, probabilities, excluded, count):
+def choose_negatives(rng, pool, cdf, excluded, count):
     selected = []
     selected_set = set()
     while len(selected) < count:
-        draws = rng.choice(eligible, size=max(128, count * 2), p=probabilities)
+        draws = pool[np.searchsorted(cdf, rng.random(max(128, count * 2)) * cdf[-1])]
         for candidate in draws:
             value = int(candidate)
             if value not in excluded and value not in selected_set:
@@ -116,15 +113,20 @@ def build_split(
         counts = train_counts + validation_counts
     else:
         counts = train_counts + validation_counts + test_counts
-    eligible = np.flatnonzero(counts > 0)
-    probabilities = counts[eligible].astype(np.float64)
-    probabilities /= probabilities.sum()
+    item_regime = np.zeros_like(train_counts, dtype=np.uint8)
+    item_regime[(train_counts >= 1) & (train_counts <= 5)] = 1
+    item_regime[(train_counts >= 6) & (train_counts <= 20)] = 2
+    item_regime[train_counts > 20] = 3
+
+    pools = {k: np.flatnonzero((item_regime == k) & (counts > 0)) for k in range(4)}
+    cdfs = {k: np.cumsum(counts[pools[k]]) for k in range(4)}
 
     sample_count = len(samples)
     candidates = np.empty((sample_count, NEGATIVES + 1), dtype=np.int32)
     history_indptr = np.zeros(sample_count + 1, dtype=np.int64)
     history_values = []
     regime_codes = np.empty(sample_count, dtype=np.uint8)
+    repeat_purchases = np.empty(sample_count, dtype=np.uint8)
     rng = np.random.default_rng(SEED + 100 + SPLITS.index(split))
     trace_path = OUTPUT / f"samples_{split}.csv.gz.tmp"
     with gzip.open(trace_path, "wt", encoding="utf-8", newline="") as output:
@@ -150,13 +152,15 @@ def build_split(
             excluded = set(history)
             excluded.add(target)
             candidates[sample_index, 0] = target
+            regime_code = REGIME_CODE[row["cold_start_regime"]]
+            regime_codes[sample_index] = regime_code
             candidates[sample_index, 1:] = choose_negatives(
-                rng, eligible, probabilities, excluded, NEGATIVES
+                rng, pools[regime_code], cdfs[regime_code], excluded, NEGATIVES
             )
             history_values.extend(history)
             history_indptr[sample_index + 1] = len(history_values)
-            regime_codes[sample_index] = REGIME_CODE[row["cold_start_regime"]]
             is_repeat = 1 if target in set(history) else 0
+            repeat_purchases[sample_index] = is_repeat
             writer.writerow({"sample_index": sample_index, "is_repeat_purchase": is_repeat, **row})
             if (sample_index + 1) % 10_000 == 0:
                 print(f"  built {sample_index + 1:,}/{sample_count:,}", flush=True)
@@ -169,6 +173,7 @@ def build_split(
             history_indices=np.asarray(history_values, dtype=np.int32),
             history_indptr=history_indptr,
             regime_codes=regime_codes,
+            repeat_purchases=repeat_purchases,
         )
     trace_path.replace(OUTPUT / f"samples_{split}.csv.gz")
     arrays_path.replace(OUTPUT / f"samples_{split}.npz")

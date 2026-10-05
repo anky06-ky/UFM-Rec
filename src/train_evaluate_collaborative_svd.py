@@ -158,8 +158,11 @@ def evaluate_split(split, factors, train_counts):
         if len(history):
             history = history[has_factor[history]]
         if len(history):
+            from common import push_unseen_last
             profile = factors[history].sum(axis=0)
             scores = factors[candidate_rows] @ profile
+            seen = has_factor[candidate_rows]
+            scores = push_unseen_last(scores.reshape(1, -1), seen.reshape(1, -1)).flatten()
             scale = float(popularity.max()) or 1.0
             scores = scores + popularity / scale * 1e-7
         else:
@@ -177,7 +180,7 @@ def evaluate_split(split, factors, train_counts):
             history_lengths=history_lengths,
         )
     ranks_path.replace(OUTPUT / f"ranks_{split}.npz")
-    return summarize(ranks, regime_codes, history_lengths)
+    return summarize(ranks, regime_codes, history_lengths, samples.get("repeat_purchases"))
 
 
 def main() -> None:

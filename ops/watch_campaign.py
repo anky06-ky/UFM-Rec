@@ -18,7 +18,7 @@ from resume_campaign import ROOT, RUNS, STATUS, read, reconcile_foundation, retr
 
 WATCH_STATUS = RUNS / 'campaign_watchdog_v1.json'
 SCRIPTS = {
-    ROOT / 'scripts/resume_campaign.py': 'supervisor',
+    ROOT / 'ops/resume_campaign.py': 'supervisor',
     ROOT / 'src/run_foundation_when_idle.py': 'foundation_queue',
     ROOT / 'src/extract_foundation_features.py': 'feature_worker',
     ROOT / 'src/run_ufm_training_when_ready.py': 'ufm_queue',
@@ -123,7 +123,7 @@ def main(argv=None):
                     report('python_missing', searched=['.venv_ufm_runtime/bin/python',
                                                        '/tmp/ufm_venv_20260928_cdcp1xhw/bin/python'])
                 else:
-                    command = [python, '-u', str(ROOT / 'scripts/resume_campaign.py')]
+                    command = [python, '-u', str(ROOT / 'ops/resume_campaign.py')]
                     with (RUNS / 'campaign_recovery_20261001.log').open('ab') as log:
                         child = subprocess.Popen(command, cwd=ROOT, stdin=subprocess.DEVNULL,
                                                  stdout=log, stderr=subprocess.STDOUT,

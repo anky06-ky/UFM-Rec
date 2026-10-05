@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'ops'))
 
 
 @unittest.skipUnless(os.name == 'posix', 'FITLAB recovery uses Linux flock and procfs')

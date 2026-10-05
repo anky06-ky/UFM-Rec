@@ -13,6 +13,7 @@ from unittest.mock import patch
 import numpy as np
 import torch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'ops'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 import train_ufm_recommender as trainer
 from prepare_ufm_catalog import sha256

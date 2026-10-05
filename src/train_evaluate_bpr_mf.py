@@ -142,19 +142,14 @@ def evaluate(samples, user_rows, known, user_factors, item_factors, counts):
             ids = np.flatnonzero(active)
             values = np.einsum("bd,bkd->bk", user_factors[user_rows[start:end][ids]],
                                item_factors[candidate[ids]])
-            # Unseen items: push below worst seen score so they never rank above trained items.
-            unseen = counts[candidate[ids]] == 0
-            seen_mask = ~unseen
-            for row_idx in range(len(ids)):
-                if unseen[row_idx].any() and seen_mask[row_idx].any():
-                    values[row_idx][unseen[row_idx]] = float(values[row_idx][seen_mask[row_idx]].min()) - 1.0
-                elif unseen[row_idx].all():
-                    values[row_idx] = 0.0  # no seen items at all, fall through to popularity
+            from common import push_unseen_last
+            seen = counts[candidate[ids]] > 0
+            values = push_unseen_last(values, seen)
             scale = np.maximum(popularity[ids].max(axis=1), 1)
             scores[ids] = values + popularity[ids] / scale[:, None] * 1e-7
         for offset, row in enumerate(candidate):
             ranks[start + offset] = rank_of_target(scores[offset], row)
-    report = summarize(ranks, samples["regime_codes"], lengths)
+    report = summarize(ranks, samples["regime_codes"], lengths, samples.get("repeat_purchases"))
     report["cold_macro_ndcg@10"] = float(np.mean(
         [report["by_regime"][name]["ndcg@10"] for name in REGIMES[:3]]))
     return report

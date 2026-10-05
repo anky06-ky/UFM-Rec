@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 from scipy.special import logsumexp
 
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ops'))
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 from calibrate_validation import temporal_folds,fit_temperature,calibration_report
 

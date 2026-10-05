@@ -9,6 +9,7 @@ import unittest
 
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ops"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import train_evaluate_bpr_mf as bpr
 

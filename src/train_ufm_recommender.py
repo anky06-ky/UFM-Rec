@@ -234,7 +234,7 @@ def evaluate(model, arrays, table, args):
         ranks.extend((1 + (adjusted[:, 1:] > adjusted[:, :1]).sum(-1)).tolist())
         scores_all.append(scores)
         gates.append(output['weights'][:, 0].float().cpu().numpy())
-    report = summarize(np.asarray(ranks), arrays['regime_codes'][select], np.asarray(lengths))
+    report = summarize(np.asarray(ranks), arrays['regime_codes'][select], np.asarray(lengths), arrays.get('repeat_purchases')[select] if 'repeat_purchases' in arrays else None)
     cold = [report['by_regime'][name] for name in REGIMES[:3]]
     if not all(group['samples'] for group in cold):
         raise ValueError('Need all three cold regimes to select a checkpoint.')
