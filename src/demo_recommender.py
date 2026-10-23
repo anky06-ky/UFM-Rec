@@ -102,6 +102,11 @@ if __name__=='__main__':
     if not 1<=args.port<=65535: p.error('Port must be 1-65535')
     try: handler = handler_for(None,args.allowed_origin,args.base_path)
     except ValueError as error: p.error(str(error))
+    if args.backend=='content' and args.data==DATA and not (args.data/'content/items.csv.gz').is_file():
+        import sys; sys.path.insert(0,str(ROOT/'scripts'))
+        from build_mock_demo_data import build_mock_catalog
+        args.data = build_mock_catalog()
+        print(f'Full dataset not found locally; generated offline mock catalog at {args.data}',flush=True)
     print('Loading catalog and model; please wait...',flush=True)
     catalog = Catalog(args.data)
     backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(catalog,args.run,features=args.features)

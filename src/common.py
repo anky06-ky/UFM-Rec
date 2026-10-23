@@ -11,9 +11,14 @@ def sha256(path):
 
 def write_json(path, value):
     path = Path(path)
-    tmp = path.with_suffix('.json.tmp')
+    tmp = path.with_suffix((path.suffix or '.json') + '.tmp')
     tmp.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
-    tmp.replace(path)
+    for attempt in range(5):
+        try:
+            tmp.replace(path); return
+        except PermissionError:
+            if attempt == 4: raise
+            import time; time.sleep(0.05)
 
 import numpy as np
 
