@@ -1,0 +1,117 @@
+{
+  "backend": "content",
+  "device": "cpu",
+  "catalog_items": 30,
+  "load_time_seconds": 0.0,
+  "memory": {
+    "ram_baseline_MiB": 32.96,
+    "ram_after_catalog_MiB": 53.46,
+    "ram_after_backend_MiB": 53.6,
+    "ram_final_MiB": 217.63,
+    "ram_backend_delta_MiB": 20.64,
+    "vram_at_load": {},
+    "vram_final": {}
+  },
+  "feature_tables": {},
+  "model": {},
+  "training_memory_estimate": {},
+  "latency": [
+    {
+      "query": "new_user_no_history",
+      "history_length": 0,
+      "top_k": 10,
+      "repeats": 30,
+      "warmup": 3,
+      "result_count": 10,
+      "latency_ms": {
+        "min": 0.22,
+        "p50": 0.27,
+        "p95": 0.38,
+        "p99": 0.45,
+        "max": 0.45,
+        "mean": 0.28,
+        "std": 0.05
+      }
+    },
+    {
+      "query": "warm_user_1_items",
+      "history_length": 1,
+      "top_k": 10,
+      "repeats": 30,
+      "warmup": 3,
+      "result_count": 10,
+      "latency_ms": {
+        "min": 0.65,
+        "p50": 0.74,
+        "p95": 1.06,
+        "p99": 1.11,
+        "max": 1.11,
+        "mean": 0.76,
+        "std": 0.13
+      }
+    },
+    {
+      "query": "warm_user_5_items",
+      "history_length": 5,
+      "top_k": 10,
+      "repeats": 30,
+      "warmup": 3,
+      "result_count": 10,
+      "latency_ms": {
+        "min": 0.66,
+        "p50": 0.8,
+        "p95": 1.13,
+        "p99": 1.25,
+        "max": 1.25,
+        "mean": 0.83,
+        "std": 0.14
+      }
+    },
+    {
+      "query": "warm_user_10_items",
+      "history_length": 10,
+      "top_k": 10,
+      "repeats": 30,
+      "warmup": 3,
+      "result_count": 10,
+      "latency_ms": {
+        "min": 0.66,
+        "p50": 0.76,
+        "p95": 1.17,
+        "p99": 1.2,
+        "max": 1.2,
+        "mean": 0.79,
+        "std": 0.14
+      }
+    },
+    {
+      "query": "warm_user_20_items",
+      "history_length": 20,
+      "top_k": 10,
+      "repeats": 30,
+      "warmup": 3,
+      "result_count": 10,
+      "latency_ms": {
+        "min": 0.67,
+        "p50": 0.75,
+        "p95": 0.99,
+        "p99": 0.99,
+        "max": 0.99,
+        "mean": 0.78,
+        "std": 0.1
+      }
+    }
+  ],
+  "throughput": {
+    "queries": 4336,
+    "elapsed_seconds": 2.0,
+    "qps": 2167.962,
+    "history_length": 5,
+    "top_k": 10
+  },
+  "budget_16GiB": {
+    "limit_MiB": 16384,
+    "ram_used_MiB": 53.6,
+    "within_budget": true
+  }
+}

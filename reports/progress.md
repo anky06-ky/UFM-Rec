@@ -85,6 +85,7 @@ SIGTERM/lỗi invariant dừng để kiểm tra. Cách chạy lại và protocol
 **14/14 kiểm thử CPU PASS**: model/masking/gradient, cold-ID/thiếu modality, bootstrap/dtype, kế hoạch và
 đường dẫn dataset2, smoke train SASRec/BERT4Rec, route/Host/Origin demo và startup.
 Chi tiết: [verification_20261003.txt](verification_20261003.txt).
+- **Cập nhật 23/10/2026**: Đã hoàn thiện [báo cáo tổng kết](../docs/final_report.md) (kèm mục giới hạn thực nghiệm single-seed/validation-only) và [slide thuyết trình](../docs/presentation_slides.md), bổ sung [mock catalog offline](../scripts/build_mock_demo_data.py) cho demo local, xuất bằng chứng đo tài nguyên mẫu [benchmark_resources_content.json](benchmark_resources_content.json), và xác nhận lại **14/14 test suites PASS** (`53 passed, 3 skipped` trên Windows / Python 3.14.8 + PyTorch 2.14.1+cpu).
 GPU smoke và benchmark dài còn chờ; không coi CPU PASS là nghiệm thu GPU.
 
 Biểu đồ đã render và kiểm tra trực quan:

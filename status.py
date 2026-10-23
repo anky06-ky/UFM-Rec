@@ -18,7 +18,12 @@ def process_alive(pid, script, root, proc_root=Path('/proc')):
     try:
         argv=(proc_root/str(pid)/'cmdline').read_bytes().split(b'\0')
         return any(arg in {script.encode(),str(root/script).encode()} for arg in argv)
-    except OSError:return False
+    except OSError:
+        if proc_root!=Path('/proc'):return False
+        try:
+            import psutil
+            return any(arg in {script,str(root/script)} for arg in psutil.Process(pid).cmdline())
+        except Exception:return False
 
 
 def snapshot(root):

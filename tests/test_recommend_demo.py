@@ -14,7 +14,7 @@ import urllib.error
 import numpy as np
 from scipy import sparse
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ops'))
+sys.path.insert(0,str(Path(__file__).resolve().parent)); sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ops'))
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 import test_ufm_training as training_fixture
 import train_ufm_recommender as trainer
@@ -157,6 +157,22 @@ class DemoTests(unittest.TestCase):
             self.assertEqual(caught.exception.code,403)
         finally:
             server.shutdown(); server.server_close(); thread.join()
+
+
+    def test_mock_demo_catalog_builder_and_regimes(self):
+        sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
+        from build_mock_demo_data import build_mock_catalog
+        mock_dir = self.data/'mock_catalog'
+        build_mock_catalog(mock_dir)
+        mock_cat = Catalog(mock_dir)
+        mock_backend = ContentBackend(mock_cat)
+        for query in ('LEGO','puzzle','plush','Montessori'):
+            self.assertTrue(mock_cat.search(query),f'Expected search hits for {query}')
+        for regime in ('all','zero_shot','extreme_cold','cold','warm'):
+            recs = mock_backend.recommend(['B006GBITXC'],3,regime)
+            self.assertTrue(recs)
+            self.assertNotIn('B006GBITXC',[r['asin'] for r in recs])
+            if regime!='all': self.assertTrue(all(r['regime']==regime for r in recs))
 
 
 if __name__=='__main__': unittest.main()

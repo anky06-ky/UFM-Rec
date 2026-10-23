@@ -184,6 +184,13 @@ def parse_args():
 
 
 if __name__ == '__main__':
-    args = parse_args(); catalog = Catalog(args.data)
+    import sys
+    if hasattr(sys.stdout,'reconfigure'): sys.stdout.reconfigure(encoding='utf-8')
+    args = parse_args()
+    if args.backend=='content' and args.data==DATA and not (args.data/'content/items.csv.gz').is_file():
+        sys.path.insert(0,str(ROOT/'scripts'))
+        from build_mock_demo_data import build_mock_catalog
+        args.data = build_mock_catalog()
+    catalog = Catalog(args.data)
     backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(catalog,args.run,features=args.features)
     print(json.dumps(dict(backend=backend.name,warning=backend.warning,items=backend.recommend(args.history,args.top_k)),ensure_ascii=False,indent=2))
