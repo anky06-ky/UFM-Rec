@@ -147,11 +147,11 @@ $$h_{fused} = w_{cf} h_{cf} + w_{sem} h_{sem} + g_{align}$$
 1. **Minh bạch trạng thái thực nghiệm hiện tại**:
    - Số liệu UFM-Rec trong báo cáo hiện lấy từ **1 seed (`seed=42`) trên tập Validation**; tập **Test độc lập vẫn chưa mở (`test_evaluated = false`)** để tránh rò rỉ lựa chọn mô hình.
    - Đại lượng Uncertainty là *learned reliability proxy*, không phải hậu nghiệm Bayes.
-2. **Các hàng đợi thực nghiệm đang chạy trên FITLAB**:
-   - **7 biến thể Ablation** (`no_uncertainty`, `fixed_fusion`, `no_cross_align`, `semantic_only`, `collaborative_only`, `text_only`, `image_only`).
-   - **11 lượt chạy bổ sung trên Toys & Games**: SASRec, BERT4Rec thích nghi, CLIP Concat (3 seeds `42, 7, 2026`) và 2 seeds UFM (`7, 2026`).
-   - **13 công việc trên tập All Beauty** (CLIP + 4 mô hình × 3 seeds, đã khóa SHA-256 tại `reports/second_dataset_plan_v1.json`).
-3. **Bước chốt cuối**: Thu hoạch kết quả GPU $\rightarrow$ Khóa manifest SHA-256 $\rightarrow$ Mở đánh giá Test Set đúng 1 lần duy nhất.
+2. **Kết quả cần thu hoạch trước khi chốt**:
+   - Snapshot FITLAB gần nhất trong repo là **03/10/2026**; khi đó đã gửi 7 ablation và 11 lượt bổ sung Toys vào queue. Không có snapshot mới hơn trong bộ bàn giao, nên không trình bày các queue này như trạng thái đang chạy hiện tại.
+   - Kế hoạch 13 công việc All Beauty (CLIP + 4 mô hình × 3 seeds) được khóa tại `reports/second_dataset_plan_v1.json`. Repo hiện có TF-IDF baseline validation (NDCG@10 0,260239 trên 37.381 ca), chưa có kết quả UFM/baseline GPU để kết luận chuyển miền.
+   - Còn thiếu benchmark tài nguyên 30 lượt trên catalog đầy đủ và kết quả multi-seed/ablation để báo mean ± std.
+3. **Bước chốt cuối**: Xác nhận marker/checkpoint trên FITLAB $\rightarrow$ Khóa manifest SHA-256 $\rightarrow$ Mở đánh giá Test Set đúng 1 lần duy nhất.
 
 ---
 

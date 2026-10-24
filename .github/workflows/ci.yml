@@ -28,3 +28,4 @@ jobs:
       - name: Run 14 CPU test suites
         run: |
           python -m pytest tests/ -v
+

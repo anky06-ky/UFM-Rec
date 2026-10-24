@@ -12,7 +12,14 @@ Trạng thái mới: [reports/progress.md](../reports/progress.md).
 
 ## Demo UFM trên FITLAB
 
-Full UFM đã hoàn tất. Trên FITLAB, backend UFM được chạy bằng CPU trên checkpoint
+**Trạng thái 24/10/2026:** endpoint UFM trên FITLAB-02 hiện chưa sẵn sàng. Workspace
+được dựng lại từ archive ngày 24/09; không có `runs/ufm_full_v1`, checkpoint hay
+CLIP cache, nên lệnh khởi động bên dưới chưa thể chạy thành công. Kết quả API ghi
+ở phần lịch sử là từ lần triển khai trước, không phải dịch vụ đang chạy hiện nay.
+Hãy dùng demo local với backend `content` cho đến khi hoàn tất các bước trong
+[báo cáo tiến độ](../reports/progress.md).
+
+Trong lần triển khai trước, backend UFM được chạy bằng CPU trên checkpoint
 `runs/ufm_full_v1`, với catalog 767.045 sản phẩm. Mở cổng **8766** trong tab Ports
 của code-server; đường dẫn proxy hiện tại là:
 
