@@ -36,6 +36,14 @@ def allowed_image_url(url):
 
 def primary_image(record):
     images = record.get("images") or []
+    # Hugging Face's Parquet conversion represents list-of-struct images as a
+    # struct of parallel lists; the original JSONL source uses list-of-dicts.
+    if isinstance(images, dict):
+        columns = {key: value for key, value in images.items()
+                   if isinstance(value, (list, tuple))}
+        count = max((len(values) for values in columns.values()), default=0)
+        images = [{key: values[index] for key, values in columns.items()
+                   if index < len(values)} for index in range(count)]
     if not isinstance(images, list):
         return ""
     images = [x for x in images if isinstance(x, dict)]
@@ -50,11 +58,40 @@ def primary_image(record):
     return ""
 
 
-def build_catalog(data: Path, metadata: Path, output: Path):
+def metadata_records(metadata_paths):
+    """Yield product records from original gzip JSONL or ordered Parquet shards."""
+    for metadata in metadata_paths:
+        if metadata.suffix.lower() == ".parquet":
+            try:
+                import pyarrow.parquet as parquet
+            except ImportError as error:
+                raise RuntimeError(
+                    "Reading Parquet metadata requires pyarrow; install "
+                    "requirements-catalog-parquet.txt.") from error
+            source = parquet.ParquetFile(metadata)
+            required = {"parent_asin", "images"}
+            if not required.issubset(source.schema_arrow.names):
+                raise ValueError(f"Missing Parquet columns in {metadata}: {required}")
+            for batch in source.iter_batches(
+                    columns=["parent_asin", "images"], batch_size=8192):
+                yield from batch.to_pylist()
+        else:
+            with gzip.open(metadata, "rt", encoding="utf-8") as source:
+                for line in source:
+                    yield json.loads(line)
+
+
+def build_catalog(data: Path, metadata: Path | list[Path], output: Path):
+    metadata_paths = [metadata] if isinstance(metadata, Path) else list(metadata)
+    if not metadata_paths:
+        raise ValueError("At least one metadata source file is required.")
     paths = {"items": data / "content/items.csv.gz",
              "text": data / "content/products_text.csv.gz",
-             "split": data / "split_manifest.json", "metadata": metadata}
+             "split": data / "split_manifest.json"}
     for path in paths.values():
+        if not path.is_file():
+            raise FileNotFoundError(path)
+    for path in metadata_paths:
         if not path.is_file():
             raise FileNotFoundError(path)
     if output.exists() and any(output.iterdir()):
@@ -69,19 +106,17 @@ def build_catalog(data: Path, metadata: Path, output: Path):
         raise ValueError("Empty item mapping.")
     stats = Counter()
     print(f"Reading metadata for {len(wanted):,} mapped products...", flush=True)
-    with gzip.open(metadata, "rt", encoding="utf-8") as source:
-        for line in source:
-            record = json.loads(line)
-            asin = record.get("parent_asin")
-            stats["metadata_rows_scanned"] += 1
-            if asin in wanted:
-                if wanted[asin] is None:
-                    wanted[asin] = primary_image(record)
-                    stats["matched_metadata"] += 1
-                else:
-                    stats["duplicate_metadata_ignored"] += 1
-            if stats["metadata_rows_scanned"] % 200_000 == 0:
-                print(f"metadata={stats['metadata_rows_scanned']:,} matched={stats['matched_metadata']:,}", flush=True)
+    for record in metadata_records(metadata_paths):
+        asin = record.get("parent_asin")
+        stats["metadata_rows_scanned"] += 1
+        if asin in wanted:
+            if wanted[asin] is None:
+                wanted[asin] = primary_image(record)
+                stats["matched_metadata"] += 1
+            else:
+                stats["duplicate_metadata_ignored"] += 1
+        if stats["metadata_rows_scanned"] % 200_000 == 0:
+            print(f"metadata={stats['metadata_rows_scanned']:,} matched={stats['matched_metadata']:,}", flush=True)
     output.mkdir(parents=True, exist_ok=True)
     temporary = output / "catalog.csv.gz.tmp"
     regimes = {}
@@ -109,8 +144,14 @@ def build_catalog(data: Path, metadata: Path, output: Path):
                              "has_text": int(has_text), "image_url": image_url})
     if stats["items"] != len(wanted):
         raise ValueError("Output item count mismatch.")
+    metadata_files = [{"file": path.name, "sha256": sha256(path)} for path in metadata_paths]
+    metadata_digest = (metadata_files[0]["sha256"] if len(metadata_files) == 1 else
+                       hashlib.sha256(json.dumps(metadata_files, sort_keys=True,
+                                                 separators=(",", ":")).encode("utf-8")).hexdigest())
+    source_hashes = {k: sha256(v) for k, v in paths.items()}
+    source_hashes["metadata"] = metadata_digest
     report = {"version": 1, "counts": dict(stats), "regimes": {k: dict(v) for k, v in regimes.items()},
-              "sources_sha256": {k: sha256(v) for k, v in paths.items()},
+              "sources_sha256": source_hashes, "metadata_files": metadata_files,
               "catalog_sha256": sha256(temporary),
               "policy": "Existing row_index; one MAIN-preferred product image URL; no review images; train_count only; no learning or test evaluation.",
               "limitations": ["Image URL availability is NOT successful download/decode coverage.",
@@ -126,7 +167,8 @@ def build_catalog(data: Path, metadata: Path, output: Path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=DATA)
-    parser.add_argument("--metadata", type=Path, default=METADATA)
+    parser.add_argument("--metadata", type=Path, nargs="+", default=[METADATA],
+                        help="gzip JSONL file or ordered Parquet shard files")
     parser.add_argument("--output", type=Path, default=DATA / "foundation_catalog_v1")
     args = parser.parse_args()
     build_catalog(args.data, args.metadata, args.output)

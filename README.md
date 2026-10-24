@@ -14,20 +14,31 @@ và độ tin cậy học được. Amazon Reviews 2023 - Toys & Games.
 | [Bắt đầu](START.md) · [Demo](docs/demo.md) | Cách chạy và proxy (hỗ trợ tự sinh mock catalog offline) |
 | [Khôi phục](docs/recovery.md) · [Báo cáo](reports/README.md) | Vận hành và bằng chứng lịch sử |
 
-## Trạng thái hiện tại
+## Kết quả đã đo
 
 - CLIP hoàn tất **767.045/767.045** item; **758.692** ảnh OK.
 - UFM full (`seed=42`) hoàn tất **12 epoch**, best epoch **9**, tổng 198.232 bước.
 - Validation NDCG@10 overall **0,285611**, cold macro **0,163738**.
   TF-IDF tương ứng **0,260367 / 0,191270**: UFM chưa vượt mục tiêu cold-start.
-- Đã phục hồi ablation sau SIGTERM; hàng đợi GPU trên FITLAB đang chạy theo thứ tự.
-- Đã triển khai queue benchmark SASRec/BERT4Rec thích nghi/concat và UFM ba seed.
-  All Beauty đã chuẩn bị CPU; queue CLIP/benchmark đợi sau Toys.
+- Đây là kết quả của các lượt chạy lịch sử; chúng không chứng minh rằng các queue
+  hoặc checkpoint còn nằm trên FITLAB hiện tại.
 - Demo **UFM** vượt qua 4/4 ca API thật và giao diện zero-shot qua proxy.
 - Audit validation: cold macro thấp hơn TF-IDF 0,027532; calibration thăm dò giảm
   ECE 0,164477 → 0,041497. [Số liệu](reports/ufm_validation_audit_v2/report.md).
 - UFM chưa đánh giá test (`test_evaluated = false`). Baseline cổ điển đã có test trong lịch sử.
 - Đã hoàn thiện bản báo cáo tổng kết ([docs/final_report.md](docs/final_report.md)), slide bảo vệ ([docs/presentation_slides.md](docs/presentation_slides.md)), script tạo mock catalog cho demo local ([scripts/build_mock_demo_data.py](scripts/build_mock_demo_data.py)) và kiểm thử **14/14 test suites PASS** (53 passed, 3 skipped trên Windows).
+
+## Trạng thái workspace FITLAB-02 — cập nhật 24/10/2026
+
+`DA_AI` được mở lại từ archive ngày 24/09; source hiện tại đã được đồng bộ từ
+commit `faad9ed`. Dữ liệu Toys/TF-IDF còn nguyên. Môi trường riêng
+`/home/coder/.venv-ufm/bin/python` đã xác nhận PyTorch `2.14.1+cu132` và CUDA
+trên Quadro RTX 6000. Snapshot 12:28 báo CLIP **0/767.045**, không có queue,
+checkpoint hay cache CLIP. `items.csv.gz` và `products_text.csv.gz` còn trên FITLAB,
+nhưng catalog URL ảnh và metadata nguồn vẫn thiếu ở đó. Năm shard Parquet chính
+thức đã được tải về local và xác minh SHA-256; chưa chuyển chúng lên FITLAB nên
+chưa thể dựng catalog hoặc chạy CLIP/training. Chi tiết và các bước tiếp theo ở
+[báo cáo tiến độ](reports/progress.md).
 
 Metric trên dùng **40.000 validation cases, 1 positive + 99 negative**;
 không phải benchmark full-catalog. Uncertainty là proxy độ tin cậy học được.
@@ -50,7 +61,9 @@ cần ReportLab và Arial (Windows) hoặc DejaVu Sans (Linux).
 | data / runs | Dataset, checkpoint, log; không đẩy file lớn lên GitHub |
 | archive / tmp | File làm việc cũ và cache local; không theo dõi trong Git |
 
-**Còn chờ thu hoạch từ FITLAB:** kết quả GPU của 7 ablation, benchmark/nhiều seed và All Beauty;
-đo tài nguyên lặp 30 chu kỳ trên full catalog; khóa manifest và mở đánh giá test cuối một đợt duy nhất.
-Xem [bước tiếp theo](docs/next.md) và [protocol đã triển khai](docs/followup.md).
+**Còn chờ:** chuyển metadata đã xác minh lên FITLAB, dựng catalog có hash,
+kiểm tra/tạo cache CLIP,
+rồi mới chạy training, ablation, benchmark nhiều seed, All Beauty, đo tài nguyên và
+khóa manifest trước lượt test UFM duy nhất. Xem
+[bước tiếp theo](docs/next.md) và [protocol đã triển khai](docs/followup.md).
 [Lịch sử README](docs/history/readme-20261002.md) · [Proposal ban đầu](docs/history/proposal-v1.pdf).

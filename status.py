@@ -17,12 +17,16 @@ def process_alive(pid, script, root, proc_root=Path('/proc')):
     if not isinstance(pid,int):return False
     try:
         argv=(proc_root/str(pid)/'cmdline').read_bytes().split(b'\0')
-        return any(arg in {script.encode(),str(root/script).encode()} for arg in argv)
+        basename=Path(script).name
+        return any(arg.decode('utf-8','replace')==script or arg.decode('utf-8','replace')==str(root/script)
+                   or Path(arg.decode('utf-8','replace')).name==basename for arg in argv if arg)
     except OSError:
         if proc_root!=Path('/proc'):return False
         try:
             import psutil
-            return any(arg in {script,str(root/script)} for arg in psutil.Process(pid).cmdline())
+            basename=Path(script).name
+            return any(arg==script or arg==str(root/script) or Path(arg).name==basename
+                       for arg in psutil.Process(pid).cmdline())
         except Exception:return False
 
 

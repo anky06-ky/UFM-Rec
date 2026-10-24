@@ -1,15 +1,37 @@
 # FITLAB: triển khai bước Foundation Model
 
+## Trạng thái mới nhất — 24/10/2026
+
+Workspace FITLAB-02 được dựng lại từ archive 24/09 và source `faad9ed` đã đồng bộ.
+Môi trường `/home/coder/.venv-ufm` xác nhận CUDA hoạt động trên Quadro RTX 6000.
+Tuy nhiên snapshot hiện tại không có `runs/`, checkpoint, queue, CLIP cache,
+`foundation_catalog_v1/catalog.csv.gz`, `catalog_report.json` hay metadata gốc
+`meta_Toys_and_Games.jsonl.gz`. Bảng text hiện có cũng không chứa URL ảnh. Do đó
+**CLIP/training chưa chạy trong workspace này**; kết quả và queue mô tả bên dưới là
+lịch sử từ 28/09, không phải trạng thái hiện tại.
+
+Catalog phải được khôi phục từ metadata có nguồn, đối chiếu hash và mapping của đúng
+767.045 item trước khi chạy [hướng dẫn train UFM](train.md). Tiến độ/bằng chứng mới:
+[reports/progress.md](../reports/progress.md), các bước tiếp theo:
+[docs/next.md](next.md).
+
+Nguồn metadata thay thế được tìm thấy trong
+[kho McAuley-Lab trên Hugging Face](https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023)
+(5 shard Parquet, khoảng 973 MB). FITLAB hiện lỗi DNS tới `huggingface.co`; cần
+chuyển file từ máy có mạng hoặc phục hồi archive catalog đã kiểm hash. Đọc và kiểm
+schema Parquet trước khi chuyển metadata vào builder JSONL hiện tại.
+
+---
+
+## Bản ghi lịch sử — 28/09/2026
+
 Snapshot kiểm tra: 28/09/2026 12:43, Asia/Bangkok. Không phải báo cáo đã hoàn
 thành huấn luyện UFM hay kết quả test.
 
-**Cập nhật sau snapshot:** baseline đã hoàn tất 8 epoch, CLIP GPU smoke đạt
-128/128 văn bản và ảnh, full extraction đang chạy. Trainer UFM đã triển khai;
-25 kiểm thử CPU PASS trên FITLAB và queue train nền đã bật để chuẩn bị graph,
-chờ features hoàn chỉnh rồi chạy GPU smoke/resume và full train.
-Các trạng thái 12:43 bên dưới được giữ làm lịch sử, không phải trạng thái mới nhất.
-Xem [hướng dẫn train UFM](train.md) và dùng
-`ops/monitor_ufm_training.py` để đọc trạng thái hiện tại.
+**Ghi chú lịch sử:** baseline đã hoàn tất 8 epoch, CLIP GPU smoke đạt 128/128
+văn bản và ảnh, full extraction được ghi nhận đang chạy. Các trạng thái bên dưới
+được giữ để lưu vết; chúng không chứng minh artifact/queue còn tồn tại trong
+workspace FITLAB hiện tại.
 
 ## Kết quả đã xác nhận
 

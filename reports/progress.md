@@ -1,6 +1,74 @@
 # Tiến độ UFM-Rec
 
-Cập nhật 03/10/2026. Snapshot FITLAB lúc **20:43 UTC+07**;
+## Mốc 24/10/2026 — khôi phục và kiểm tra workspace FITLAB-02
+
+Bản cập nhật dựa trên `status.py` lúc **12:28:37 UTC+07**. `DA_AI` được dựng lại từ
+archive 24/09, sau đó đồng bộ source từ commit `faad9ed4ec0b27a837a6736f30bbaab61659e387`.
+Archive gốc khoảng **1,3 GiB** vẫn ở thư mục cha; dữ liệu và `runs/` hiện có không bị ghi đè.
+
+### 6 chặng chuẩn bị workspace đã hoàn tất
+
+1. **Khôi phục dữ liệu FITLAB:** bộ temporal Toys có 11.572.689 tương tác
+   (9.258.647 train, 1.159.827 validation, 1.154.215 test), mapping/content **767.045 item**
+   và TF-IDF. `items.csv.gz` 7,2 MiB và `products_text.csv.gz` 283 MiB còn trên FITLAB.
+2. **Đồng bộ source hiện tại:** checkout FITLAB khớp commit GitHub/local
+   `faad9ed`. Mã nguồn đã đồng bộ vào `DA_AI`, loại trừ `data/`, `runs/`, `.git/`,
+   `.venv/`, `tmp/`, `archive/`, `reports/` và `output/`.
+3. **Kiểm kê job mới:** `status.py` lúc 12:28:37 báo CLIP **0/767.045, images OK 0**,
+   mọi heartbeat/queue “chưa có trạng thái”, `FULL CHECKPOINT: not complete`.
+   Không có trainer/queue UFM, cache CLIP hay checkpoint; không có gì để resume.
+4. **Cài môi trường riêng:** `/home/coder/.venv-ufm` (khoảng **5,5 GiB**) có PyTorch
+   **2.14.1+cu132**, Transformers **4.57.6**, Pillow và tqdm; `torch.cuda.is_available()`
+   là `True`, thiết bị **Quadro RTX 6000**. Filesystem FITLAB còn khoảng **13 GiB**;
+   venv mặc định không bị sửa.
+5. **Sửa đường dựng catalog:** `src/prepare_ufm_catalog.py` hiện đọc JSONL gzip hoặc
+   các Parquet shard có thứ tự, xử lý schema ảnh struct/list và ghi hash từng shard.
+   Đã thêm `requirements-catalog-parquet.txt` và downloader có resume/checksum.
+6. **Khôi phục metadata nguồn:** tải đủ 5 shard Toys từ
+   [McAuley-Lab trên Hugging Face](https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023)
+   tại revision `2b6d039ed471f2ba5fd2acb718bf33b0a7e5598e`; tổng **972.667.016 byte**.
+   Mỗi file đã khớp kích thước và SHA-256; manifest local ở
+   `data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/download_manifest.json`.
+
+### Bước chuyển dữ liệu và trạng thái mô hình
+
+- **Chưa chuyển shard lên FITLAB, chưa tạo catalog và chưa chạy CLIP/training.** FITLAB
+  không phân giải được Hugging Face; local đã có metadata nhưng cần chuyển 5 shard cùng
+  builder/requirements cập nhật vào `DA_AI`. Người dùng đã cho phép chuyển dữ liệu;
+  thư mục nhận `/home/coder/iDragonCloud/DA_AI/data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games`
+  đã được tạo và kiểm tra.
+- Trình tải trong explorer chưa mở được hộp chọn file qua CUA; automatic review từ chối
+  điều khiển Chrome bằng Windows Computer Use với thông báo “Computer Use was not
+  approved to use Google Chrome”. Vì vậy chưa có file nào được truyền lên FITLAB.
+- Sau khi file có mặt trên FITLAB, chạy builder với `items.csv.gz`, `products_text.csv.gz`
+  và 5 shard theo thứ tự; xác minh đúng **767.045 `parent_asin`** cùng report/hash, rồi mới
+  chạy CLIP smoke/full extraction. Thiếu catalog/ảnh hợp lệ thì dừng, không tạo cache giả.
+- Snapshot này tách biệt với các kết quả CLIP/UFM và demo lịch sử bên dưới; metric cũ
+  không chứng minh job/checkpoint còn tồn tại hiện nay. Ảnh quota gửi trước hiển thị
+  **80% quota tháng Codex còn lại**; quota này độc lập với disk/compute FITLAB.
+
+SHA256 tham chiếu từ checkout local ngày 24/10; trên FITLAB, các tệp được chuẩn hóa
+LF khi truyền nên đối chiếu nội dung sau chuẩn hóa dòng:
+
+| Tệp | SHA256 |
+|---|---|
+| `src/ufm_model.py` | `65d2510ce5fae6f4be197634342a8aa7577e86ce6c7015a65ca95c00478ab532` |
+| `src/train_ufm_recommender.py` | `a391936dcae4b13808a9bed30518d18a779244d4740bf0466f2db8e121200d1d` |
+| `src/extract_foundation_features.py` | `9526ddb7a9cd17bb1e0ea9110c9120e6b1da244ff3cba56ff4fba78ac2deb0df` |
+| `src/run_ufm_training_when_ready.py` | `38cf5ed1f21259ecf90f627b18585b442f1cf5e669e9f7d4413fa076d2912ef9` |
+| `src/run_ufm_ablation_suite.py` | `683d4638718b5b7d4a8a696616aebd316a9097ba3b8b7f379567011dbbe20735` |
+| `ops/resume_campaign.py` | `18a9bcaac0bb2cefe2d6cadd53a82d97639d2a3b26bd9469d235180c5440cccd` |
+| `ops/monitor_ufm_campaign.py` | `8fd96c442ec995b7ddda2562ea754ef25387b7dd9aa00c938761cdf9e86494c3` |
+| `requirements-ufm.txt` | `a1826686aeaba4a34ecdf1ed1646f3e4982fc0a8817823403909cc52f7de2d11` |
+
+Đến mốc này đã khôi phục workspace, kiểm kê, thêm hỗ trợ Parquet và xác minh metadata
+nguồn local; **chưa chuyển shard lên FITLAB, chưa dựng catalog, chưa chạy training hoặc
+có metric GPU mới**. Snapshot FITLAB ngày 03/10 bên dưới là lịch sử, không phải trạng
+thái hiện tại.
+
+---
+
+Snapshot FITLAB ngày 03/10 lúc **20:43 UTC+07**;
 đây là bằng chứng tại thời điểm kiểm tra, không phải trạng thái realtime.
 
 ## Đã hoàn tất trong đợt này

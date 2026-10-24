@@ -1,20 +1,57 @@
-# Bước tiếp theo — 03/10/2026
+# Bước tiếp theo — 24/10/2026 (cập nhật 12:28 UTC+07)
 
-Code, dữ liệu CPU thứ hai, audit/calibration và demo UFM đã được triển khai.
-Xem [tiến độ có bằng chứng](../reports/progress.md) và [protocol hàng đợi](followup.md).
+Source commit `faad9ed` và môi trường CUDA đã sẵn sàng trên FITLAB-02. Snapshot
+12:28 báo `status.py` CLIP 0/767.045, không có queue/checkpoint. `items.csv.gz` và
+`products_text.csv.gz` còn trên FITLAB, nhưng metadata nguồn và catalog URL ảnh chưa
+có. Năm shard Parquet đã được tải về local và kiểm tra SHA-256; chi tiết trong
+`data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/download_manifest.json`. Xem
+[tiến độ có bằng chứng](../reports/progress.md) và [protocol hàng đợi](followup.md).
 
-1. **Chờ GPU FITLAB rảnh:** ablation → benchmark Toys/ba seed → CLIP/benchmark All Beauty.
-   Các queue đã khởi động, không cần mở thêm trainer. Kiểm tra `python3 status.py`.
-2. Sau khi có kết quả, tổng hợp mean/std và ablation. Ưu tiên giải thích thiếu hụt
-   extreme cold; UFM cold macro hiện thấp hơn TF-IDF khoảng 0,027532.
-3. Khóa cấu hình, checkpoint SHA256 và calibration bằng validation, tạo manifest
-   trước test. Không chọn lại mô hình hoặc temperature theo kết quả test.
-4. Chạy một đợt test cho các cấu hình đã khóa. Ghi rõ test baseline cổ điển đã xem
-   trước đây; test UFM vẫn chưa chạy.
-5. Đo VRAM/RAM, latency p50/p95, throughput và giới hạn 16 GiB. Hoàn thiện báo cáo
-   cuối cùng và slide từ kết quả thật. Demo đã nghiệm thu cả xuất JSON.
+1. Chuyển 5 shard đã xác minh từ local vào
+   `data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/` trên FITLAB, đồng thời
+   đồng bộ `src/prepare_ufm_catalog.py` và `requirements-catalog-parquet.txt` đã cập
+   nhật. Tệp nguồn tổng cộng **972.667.016 byte**; manifest ghi revision và SHA-256.
+   Các file Parquet lớn không đưa vào Git.
+2. Trong venv `/home/coder/.venv-ufm`, cài `pyarrow` theo
+   `requirements-catalog-parquet.txt`. Trên FITLAB, `items.csv.gz` 7,2 MiB và
+   `products_text.csv.gz` 283 MiB đã tồn tại. Gọi builder với 5 shard theo thứ tự
+   (`full-00000` đến `full-00004`) và output mới
+   `data/processed/toys_games_full_temporal/foundation_catalog_restore_20261024`.
+   Không dùng report cũ thay catalog.
 
-Hai queue mới có heartbeat trong `status.py` nhưng chưa có autostart qua reboot.
-Nếu container dừng hoặc queue báo lỗi, xem log/checkpoint và
-[hướng dẫn phục hồi](recovery.md), rồi chạy lại đúng lệnh trong [followup.md](followup.md).
-Không kết luận đã hoàn tất từ việc chỉ nhìn thấy queue đang sống.
+   ```bash
+   /home/coder/.venv-ufm/bin/pip install -r requirements-catalog-parquet.txt
+   /home/coder/.venv-ufm/bin/python src/prepare_ufm_catalog.py \
+     --data data/processed/toys_games_full_temporal \
+     --metadata data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00000-of-00005.parquet \
+                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00001-of-00005.parquet \
+                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00002-of-00005.parquet \
+                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00003-of-00005.parquet \
+                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00004-of-00005.parquet \
+     --output data/processed/toys_games_full_temporal/foundation_catalog_restore_20261024
+   ```
+
+3. Đối chiếu catalog với đúng **767.045 `parent_asin`** và mapping theo thứ tự hiện
+   tại; dừng nếu thiếu/trùng ID hoặc checksum nguồn không khớp. Checkout local còn
+   report cũ với catalog SHA256 dự kiến
+   `65d63e7b58babb133db78f3369b3224db6a451d80c4f616a4b8c0023f73b9003`; dùng nó
+   để đối chiếu sau khi tái tạo, không dùng report thay file catalog.
+4. Môi trường đã kiểm tra: `/home/coder/.venv-ufm/bin/python`; PyTorch
+   `2.14.1+cu132`, CUDA khả dụng. Chạy CLIP smoke nhỏ sau khi có catalog, kiểm tra
+   hash/shape/norm/mask, rồi mới trích xuất đủ item và xác nhận marker hoàn tất.
+5. Không resume: không có checkpoint. Sau khi cache hợp lệ, chạy UFM/ablation từ
+   đầu qua queue hiện có; trước mỗi đợt xác nhận không có trainer khác và GPU đủ
+   ngưỡng protocol. Không chạy đồng thời nhiều queue.
+6. Chọn checkpoint/calibration bằng validation, khóa config/hash/candidates trong
+   manifest, rồi chạy một đợt test. Ghi rõ kết quả benchmark lịch sử không phải kết quả
+   của workspace hiện tại.
+7. Đo VRAM/RAM, latency p50/p95 và throughput; cập nhật báo cáo/slide từ số đo mới.
+   UFM chưa có test metric mới; cold macro lịch sử thấp hơn TF-IDF khoảng 0,027532.
+
+Hiện các shard đã sẵn sàng ở local nhưng chưa được chuyển lên FITLAB; không coi
+catalog hay CLIP là đã chạy. Xem trạng thái từng bước trong
+[báo cáo tiến độ](../reports/progress.md).
+
+Các queue/snapshot ngày 03/10 và ghi chép CLIP/UFM ngày 28/09 chỉ là lịch sử. Dùng
+[hướng dẫn phục hồi](recovery.md) và [protocol queue](followup.md) khi đã có đủ
+source/checkpoint; không kết luận hoàn tất chỉ từ heartbeat.
