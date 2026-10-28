@@ -1,0 +1,85 @@
+{
+  "commands": {
+    "cpu_tests": [
+      "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--tb=short",
+      "-rs"
+    ],
+    "build_v3": [
+      "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+      "-u",
+      "src/build_recommender_samples.py",
+      "--data",
+      "data/processed/toys_games_full_temporal",
+      "--output",
+      "reports/fix_1_15_20261027/fitlab01_finish1/evaluation_v3",
+      "--splits",
+      "validation"
+    ],
+    "audit_v3": [
+      "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+      "-u",
+      "src/test_candidate_validity.py",
+      "--data",
+      "data/processed/toys_games_full_temporal",
+      "--evaluation",
+      "reports/fix_1_15_20261027/fitlab01_finish1/evaluation_v3",
+      "--splits",
+      "validation",
+      "--output",
+      "reports/fix_1_15_20261027/fitlab01_finish1/candidate_audit_v3.json"
+    ],
+    "coverage": [
+      "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+      "-u",
+      "scripts/audit_modality_coverage.py",
+      "--data",
+      "data/processed/toys_games_full_temporal",
+      "--output",
+      "reports/fix_1_15_20261027/fitlab01_finish1/modality_coverage.json"
+    ],
+    "manifest": [
+      "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+      "scripts/lock_evaluation_manifest.py",
+      "--data",
+      "data/processed/toys_games_full_temporal",
+      "--evaluation",
+      "data/processed/toys_games_full_temporal/evaluation_v2",
+      "--inventory",
+      "reports/fix_1_15_20261027/fitlab01_run1/inventory.json",
+      "--baseline",
+      "reports/fix_1_15_20261027/fitlab01_run1/baseline_v2/metrics.json",
+      "--output",
+      "reports/fix_1_15_20261027/fitlab01_finish1/comparison_manifest.json"
+    ]
+  },
+  "phases": {
+    "cpu_tests": {
+      "returncode": 1,
+      "status": "failed"
+    },
+    "build_v3": {
+      "returncode": 0,
+      "status": "passed"
+    },
+    "audit_v3": {
+      "returncode": 0,
+      "status": "passed"
+    },
+    "coverage": {
+      "returncode": 0,
+      "status": "passed"
+    },
+    "manifest": {
+      "returncode": 0,
+      "status": "passed"
+    }
+  },
+  "started_at_utc": "2026-10-27T14:39:27.525264+00:00",
+  "finished_at_utc": "2026-10-27T14:43:28.314225+00:00"
+}

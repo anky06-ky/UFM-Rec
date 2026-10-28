@@ -64,6 +64,49 @@ class DemoTests(unittest.TestCase):
         for u in ['http://m.media-amazon.com/images/I/test.jpg','https://other.test/images/I/x','https://user:pw@m.media-amazon.com/images/I/x']:
             self.assertEqual(safe_image(u),'')
 
+    def test_bundled_product_photo_proxy_download_and_persistence(self):
+        from PIL import Image
+        from demo_product_images import save_image
+        origin = 'https://fitlab.example'
+        prefix = '/proxy/8766'
+        server = ThreadingHTTPServer(('127.0.0.1',0),handler_for(
+            ContentBackend(self.catalog),allowed_origin=origin,base_path=prefix))
+        thread = threading.Thread(target=server.serve_forever,daemon=True); thread.start()
+        url = 'http://127.0.0.1:'+str(server.server_port)
+        payload = io.BytesIO()
+        Image.new('RGBA',(4,3),(255,0,0,128)).save(payload,format='PNG')
+        headers = {'Host':'fitlab.example','Origin':origin,'Content-Type':'image/png'}
+        counts = self.catalog.counts.copy()
+        try:
+            save_image(self.catalog,'ASIN1',payload.getvalue())
+            saved = self.catalog.item(0)
+            self.assertEqual(saved['image'],'/api/product-image?asin=ASIN1')
+            self.assertEqual(Catalog(self.data).item(0)['image'],saved['image'])
+            np.testing.assert_array_equal(self.catalog.counts,counts)
+            request = urllib.request.Request(url+prefix+saved['image'],headers={'Host':'fitlab.example'})
+            with urllib.request.urlopen(request) as response:
+                self.assertEqual(response.headers['Content-Type'],'image/jpeg')
+                with Image.open(io.BytesIO(response.read())) as photo:
+                    self.assertEqual(photo.size,(4,3))
+                    self.assertEqual(photo.format,'JPEG')
+            # The existing Host/Origin guard also protects image endpoints.
+            request = urllib.request.Request(url+prefix+'/api/product-image?asin=ASIN1',
+                data=payload.getvalue(),headers={**headers,'Origin':'https://untrusted.example'})
+            with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(request)
+            self.assertEqual(caught.exception.code,403)
+        finally:
+            server.shutdown(); server.server_close(); thread.join()
+
+    def test_product_photo_validation_and_unknown_asins(self):
+        from demo_product_images import save_image
+        for asin, payload in [
+            ('ASIN1', b'<svg>not a supported image</svg>'),
+            ('../outside', b'not an image'),
+            ('ASIN1', b'x' * (5 * 1024 * 1024 + 1)),
+        ]:
+            with self.assertRaises(ValueError): save_image(self.catalog, asin, payload)
+        self.assertFalse((self.data/'demo_images').exists())
+
     def test_ufm_best_checkpoint_chunking_and_unknown_cf_mask(self):
         args = self.fixture.args('inference')
         with contextlib.redirect_stdout(io.StringIO()): trainer.train(args)
@@ -168,10 +211,13 @@ class DemoTests(unittest.TestCase):
         mock_backend = ContentBackend(mock_cat)
         for query in ('LEGO','puzzle','plush','Montessori'):
             self.assertTrue(mock_cat.search(query),f'Expected search hits for {query}')
+        seed_item = mock_cat.asins[0]
+        self.assertEqual(len(list((mock_dir/'demo_images').glob('*.jpg'))), 30)
+        self.assertTrue(all(mock_cat.item(i)['image'].startswith('/api/product-image?') for i in range(30)))
         for regime in ('all','zero_shot','extreme_cold','cold','warm'):
-            recs = mock_backend.recommend(['B006GBITXC'],3,regime)
+            recs = mock_backend.recommend([seed_item],3,regime)
             self.assertTrue(recs)
-            self.assertNotIn('B006GBITXC',[r['asin'] for r in recs])
+            self.assertNotIn(seed_item,[r['asin'] for r in recs])
             if regime!='all': self.assertTrue(all(r['regime']==regime for r in recs))
 
 

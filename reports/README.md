@@ -1,6 +1,6 @@
 # Mục lục báo cáo
 
-**Hiện tại:** [progress.md](progress.md) · [proposal PDF](../output/pdf/proposal.pdf).
+**Hiện tại:** [đối chiếu evaluation_v2 ngày 27/10](ufm_evaluation_v2_20261027/README.md) · [progress.md](progress.md) · [proposal PDF](../output/pdf/proposal.pdf). Artifact v2 đã có test UFM; không trộn với audit validation lịch sử hoặc coi snapshot FITLAB cũ là trạng thái realtime.
 
 | Hồ sơ | Mục đích |
 | --- | --- |
@@ -13,7 +13,6 @@
 | [BPR-MF nhiều seed](BPR_MF_multiseed_2026_09_30.json) | 3 seed, mean và sample std validation |
 | [Baseline 30/09](../docs/history/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md) | Baseline, calibration và demo tại thời điểm đó |
 | [Demo baseline](demo_acceptance_2026_09_30.json) | 4 kịch bản catalog thật |
-| [Cleanup](cleanup.json) | Danh sách dọn cache/file tạm đã chuyển khỏi workspace |
 
 Các file có ngày trong tên giữ nguyên như bằng chứng lịch sử và nguồn dựng báo cáo
 cũ. Không đọc snapshot ngày trước để kết luận job hiện tại còn sống.

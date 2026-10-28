@@ -1,0 +1,101 @@
+{
+  "observed_at_utc": "2026-10-27T14:11:45.866309+00:00",
+  "root": "/home/coder/iDragonCloud/DA_AI",
+  "python": "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+  "disk_free_bytes": 16271159263232,
+  "files": {
+    "runs/ufm_full_v1/best.pt": {
+      "exists": true,
+      "bytes": 396724716
+    },
+    "runs/ufm_full_v1/config.json": {
+      "exists": true,
+      "bytes": 2604
+    },
+    "runs/ufm_full_v1/completed.json": {
+      "exists": true,
+      "bytes": 173
+    },
+    "runs/ufm_full_v1/best_validation_predictions.npz": {
+      "exists": true,
+      "bytes": 6779799
+    },
+    "data/processed/toys_games_full_temporal/content/items.csv.gz": {
+      "exists": true,
+      "bytes": 7515509
+    },
+    "data/processed/toys_games_full_temporal/content/products_text.csv.gz": {
+      "exists": true,
+      "bytes": 296595579
+    },
+    "data/processed/toys_games_full_temporal/content/tfidf_all.npz": {
+      "exists": true,
+      "bytes": 532281300
+    },
+    "data/processed/toys_games_full_temporal/item_statistics.csv.gz": {
+      "exists": true,
+      "bytes": 4672968
+    },
+    "data/processed/toys_games_full_temporal/interactions_train.csv.gz": {
+      "exists": true,
+      "bytes": 224904933
+    },
+    "data/processed/toys_games_full_temporal/validation_with_history.csv.gz": {
+      "exists": true,
+      "bytes": 43828507
+    },
+    "data/processed/toys_games_full_temporal/evaluation_v2/samples_validation.npz": {
+      "exists": true,
+      "bytes": 12355653
+    },
+    "data/processed/toys_games_full_temporal/foundation_clip_b32_v1/complete.json": {
+      "exists": true,
+      "bytes": 1677
+    }
+  },
+  "gpu_scope": "Read-only nvidia-smi; no GPU tensor or training allocation.",
+  "checks": {
+    "training_code_matches": true,
+    "feature_marker_matches": true,
+    "feature_hashes_shapes_masks_norms": true,
+    "train_counts_match_mapping": true,
+    "checkpoint_config_matches": true,
+    "cpu_validation_forward_finite": true,
+    "saved_validation_metric_matches": true
+  },
+  "gpu": "Quadro RTX 6000, 9734 MiB, 24576 MiB, 100 %",
+  "memory.current": "2241912832",
+  "memory.max": "max",
+  "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+  "active_project_jobs": [],
+  "versions": {
+    "numpy": "2.5.1",
+    "torch": "2.12.1+cu130"
+  },
+  "source_hashes": {
+    "train_ufm_recommender.py": {
+      "expected": "d92d32a1c6c6b3c230976ccb3f8a1773b935df1b8dfed8c691c315ddaae05543",
+      "actual": "d92d32a1c6c6b3c230976ccb3f8a1773b935df1b8dfed8c691c315ddaae05543"
+    },
+    "ufm_model.py": {
+      "expected": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+      "actual": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6"
+    },
+    "train_gpu_recommender.py": {
+      "expected": "e6ca4b9b1e2e620e689272cb2d8c29094153d0ffbbb6465eb56324bd637b3546",
+      "actual": "e6ca4b9b1e2e620e689272cb2d8c29094153d0ffbbb6465eb56324bd637b3546"
+    }
+  },
+  "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+  "modality_coverage": {
+    "items": 767045,
+    "text": 767044,
+    "image": 758692
+  },
+  "matching_counts": [
+    "data/processed/gpu_cache_h20_t64_v1/train_counts.npy"
+  ],
+  "checkpoint_epoch": 9,
+  "validation_metric_reproduced": 0.16373781575289972,
+  "passed": true
+}

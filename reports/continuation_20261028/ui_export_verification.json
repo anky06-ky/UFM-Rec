@@ -1,0 +1,10 @@
+{
+  "file": "reports\\continuation_20261028\\ui_export_ufm_zero_shot.json",
+  "sha256": "e2930ffe52009869a6da56f63861b528e698b8d2eaf8b7a672e38baa347a090c",
+  "backend": "UFM Rec",
+  "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+  "items": 767045,
+  "results": 5,
+  "regime": "zero_shot",
+  "verified": true
+}

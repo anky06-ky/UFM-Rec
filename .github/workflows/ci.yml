@@ -2,13 +2,16 @@ name: CI Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 'followup/**' ]
   pull_request:
     branches: [ main ]
 
 jobs:
   cpu-tests:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,9 +26,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install torch --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements.txt -r requirements-dev.txt pillow
+          pip install -r requirements.txt -r requirements-dev.txt
 
-      - name: Run 14 CPU test suites
+      - name: Run CPU test suites
         run: |
-          python -m pytest tests/ -v
+          python -m pip check
+          python -m pytest -q -p no:cacheprovider
 

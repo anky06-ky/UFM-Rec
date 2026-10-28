@@ -389,6 +389,13 @@
 
 <!-- ══ MAIN ══ -->
 <main class="container">
+  <section class="section" aria-label="Kết quả đã xác minh ngày 28 tháng 10">
+    <h2>Cập nhật đã xác minh · 28/10/2026</h2>
+    <p>Validation v3 dùng cùng 40.000 ca, 100 ứng viên/ca, seed 42. Cold macro NDCG@10: <strong>TF-IDF 0,195682 · semantic-only CLIP 0,190036 · UFM full 0,182056 · popularity 0,042527</strong>. Tám checkpoint UFM đã đánh giá lại; full chưa vượt hai đối chứng chính.</p>
+    <p>Checkpoint chọn từ validation v1; v3 chưa phải holdout độc lập. Test v2 đã được xem; vòng đánh giá mới chỉ dùng validation. Calibration full trên hai phần validation v3 có ECE 0,082061 → 0,037478, mang tính thăm dò và có điều kiện trên ứng viên lấy mẫu.</p>
+    <p>Demo UFM thật đã qua 6/6 ca API trên catalog 767.045 sản phẩm. Kiểm thử cuối: Windows 93 pass/3 skip, Linux 96 pass. Phần pipeline và metric baseline/RRF bên dưới là lịch sử triển khai, cần đọc theo giao thức ghi kèm.</p>
+    <p><a href="../reports/continuation_20261028/README.md">Bằng chứng, hash và giới hạn</a> · <a href="trao_doi_gvhd_2026_10_28.md">Nội dung trao đổi với giảng viên</a></p>
+  </section>
 
   <!-- ══ LEFT COLUMN ══ -->
   <div class="main-col">

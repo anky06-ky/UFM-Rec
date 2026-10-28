@@ -1,0 +1,37 @@
+{
+  "started_at_utc": "2026-10-27T14:11:44.823423+00:00",
+  "root": "/home/coder/iDragonCloud/DA_AI",
+  "python": "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",
+  "validation_candidates_sha256": "c71906e65ce4067b405a94c13e22e8a25a17f46cbee5b1315f07d01d4d1e59df",
+  "new_test_inference": false,
+  "training_started": false,
+  "phases": {
+    "inventory": {
+      "status": "completed",
+      "started_at_utc": "2026-10-27T14:11:44.823658+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-27T14:13:52.607411+00:00",
+      "passed": true
+    },
+    "audit_v2": {
+      "status": "completed",
+      "started_at_utc": "2026-10-27T14:13:52.620904+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-27T14:15:10.944766+00:00"
+    },
+    "baseline_v2": {
+      "status": "completed",
+      "started_at_utc": "2026-10-27T14:15:10.951009+00:00",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-27T14:15:56.215383+00:00"
+    },
+    "cpu_tests": {
+      "status": "failed",
+      "started_at_utc": "2026-10-27T14:15:56.225697+00:00",
+      "returncode": 1,
+      "finished_at_utc": "2026-10-27T14:15:56.469884+00:00"
+    }
+  },
+  "finished_at_utc": "2026-10-27T14:15:56.475489+00:00",
+  "status": "completed_with_failures"
+}

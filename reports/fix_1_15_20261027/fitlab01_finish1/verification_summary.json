@@ -1,0 +1,25 @@
+{
+  "observed_at_utc": "2026-10-27T14:54:21.586018+00:00",
+  "host": "FITLAB-01",
+  "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+  "packages": {
+    "numpy": "2.5.1",
+    "torch": "2.12.1",
+    "scipy": "1.18.0",
+    "pytest": "9.1.1",
+    "scikit-learn": "1.9.0"
+  },
+  "current_source_workspace": "/home/coder/iDragonCloud/DA_AI/audit_v2/fix_1_15_workspace_20261027",
+  "current_source_manifest_sha256": "338208222fb5d859d3ba1237dadb4c3a06d6f93653dbc845c96f98f85ac7e33f",
+  "tests": {
+    "passed": 87,
+    "skipped": 0,
+    "subtests_passed": 10
+  },
+  "v3_prior_positive_negatives": 0,
+  "new_test_inference": false,
+  "benchmark_training_started": false,
+  "legacy_mixed_source_test_failures_preserved": 3,
+  "snapshot_copy_typo_corrected": true
+}

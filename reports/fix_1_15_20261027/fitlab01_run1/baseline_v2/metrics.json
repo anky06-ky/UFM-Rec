@@ -1,0 +1,153 @@
+{
+  "candidate_protocol": "One positive plus 99 fixed sampled negatives shared across models.",
+  "content_model": "Sum TF-IDF vectors of the latest 10 history items; cosine dot-product against L2-normalized item vectors; popularity fallback/tie-break.",
+  "k": 10,
+  "data": "/home/coder/iDragonCloud/DA_AI/data/processed/toys_games_full_temporal",
+  "evaluation": "/home/coder/iDragonCloud/DA_AI/data/processed/toys_games_full_temporal/evaluation_v2",
+  "test_evaluated": false,
+  "sources": {
+    "items.csv.gz": "e67e6310a6076f1e66ff14b8ce68e3d28a1aba204498175ae77eb0b04d0050fc",
+    "tfidf_all.npz": "410981218522b8532963e82fadee6d434bc6235b0a7af5a7d0ae14028d0ba4d3",
+    "samples_validation": "c71906e65ce4067b405a94c13e22e8a25a17f46cbee5b1315f07d01d4d1e59df"
+  },
+  "splits": {
+    "validation": {
+      "popularity": {
+        "overall": {
+          "samples": 40000,
+          "recall@10": 0.0909,
+          "ndcg@10": 0.040904,
+          "mrr@10": 0.026106,
+          "mean_rank": 52.453
+        },
+        "known_user": {
+          "samples": 20601,
+          "recall@10": 0.08917,
+          "ndcg@10": 0.039958,
+          "mrr@10": 0.025403,
+          "mean_rank": 52.818
+        },
+        "empty_history": {
+          "samples": 19399,
+          "recall@10": 0.092737,
+          "ndcg@10": 0.041908,
+          "mrr@10": 0.026853,
+          "mean_rank": 52.066
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.0981,
+            "ndcg@10": 0.044967,
+            "mrr@10": 0.029256,
+            "mean_rank": 50.792
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.0851,
+            "ndcg@10": 0.038665,
+            "mrr@10": 0.024937,
+            "mean_rank": 53.421
+          },
+          "cold": {
+            "samples": 10000,
+            "recall@10": 0.099,
+            "ndcg@10": 0.043948,
+            "mrr@10": 0.027626,
+            "mean_rank": 51.374
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.0814,
+            "ndcg@10": 0.036034,
+            "mrr@10": 0.022604,
+            "mean_rank": 54.226
+          }
+        },
+        "repeat_purchases": {
+          "samples": 58,
+          "recall@10": 0.172414,
+          "ndcg@10": 0.072457,
+          "mrr@10": 0.043678,
+          "mean_rank": 38.931
+        },
+        "new_purchases": {
+          "samples": 39942,
+          "recall@10": 0.090782,
+          "ndcg@10": 0.040858,
+          "mrr@10": 0.02608,
+          "mean_rank": 52.473
+        },
+        "cold_macro_ndcg@10": 0.042527
+      },
+      "tfidf_profile": {
+        "overall": {
+          "samples": 40000,
+          "recall@10": 0.28125,
+          "ndcg@10": 0.181498,
+          "mrr@10": 0.151047,
+          "mean_rank": 37.998
+        },
+        "known_user": {
+          "samples": 20601,
+          "recall@10": 0.458764,
+          "ndcg@10": 0.312944,
+          "mrr@10": 0.267995,
+          "mean_rank": 24.751
+        },
+        "empty_history": {
+          "samples": 19399,
+          "recall@10": 0.092737,
+          "ndcg@10": 0.041908,
+          "mrr@10": 0.026853,
+          "mean_rank": 52.066
+        },
+        "by_regime": {
+          "zero_shot": {
+            "samples": 10000,
+            "recall@10": 0.2663,
+            "ndcg@10": 0.175997,
+            "mrr@10": 0.148332,
+            "mean_rank": 39.339
+          },
+          "extreme_cold": {
+            "samples": 10000,
+            "recall@10": 0.3222,
+            "ndcg@10": 0.213208,
+            "mrr@10": 0.179881,
+            "mean_rank": 35.701
+          },
+          "cold": {
+            "samples": 10000,
+            "recall@10": 0.3072,
+            "ndcg@10": 0.197812,
+            "mrr@10": 0.164408,
+            "mean_rank": 35.585
+          },
+          "warm": {
+            "samples": 10000,
+            "recall@10": 0.2293,
+            "ndcg@10": 0.138976,
+            "mrr@10": 0.111569,
+            "mean_rank": 41.367
+          }
+        },
+        "repeat_purchases": {
+          "samples": 58,
+          "recall@10": 0.982759,
+          "ndcg@10": 0.946734,
+          "mrr@10": 0.934483,
+          "mean_rank": 1.397
+        },
+        "new_purchases": {
+          "samples": 39942,
+          "recall@10": 0.280231,
+          "ndcg@10": 0.180387,
+          "mrr@10": 0.14991,
+          "mean_rank": 38.051
+        },
+        "cold_macro_ndcg@10": 0.195672
+      }
+    }
+  }
+}

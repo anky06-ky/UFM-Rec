@@ -1,0 +1,69 @@
+{
+  "observed_at_utc": "2026-10-27T14:43:18.297530+00:00",
+  "passed": true,
+  "items": 767045,
+  "by_regime": {
+    "zero_shot": {
+      "items": 182199,
+      "text": 182199,
+      "image": 179878,
+      "missing_text": 0,
+      "missing_image": 2321,
+      "missing_both": 0,
+      "empty_image_url": 8
+    },
+    "extreme_cold": {
+      "items": 388352,
+      "text": 388352,
+      "image": 383919,
+      "missing_text": 0,
+      "missing_image": 4433,
+      "missing_both": 0,
+      "empty_image_url": 19
+    },
+    "cold": {
+      "items": 120002,
+      "text": 120001,
+      "image": 119008,
+      "missing_text": 1,
+      "missing_image": 994,
+      "missing_both": 0,
+      "empty_image_url": 7
+    },
+    "warm": {
+      "items": 76492,
+      "text": 76492,
+      "image": 75887,
+      "missing_text": 0,
+      "missing_image": 605,
+      "missing_both": 0,
+      "empty_image_url": 4
+    }
+  },
+  "image_status_counts": {
+    "ok": 758692,
+    "URLError": 8123,
+    "no_url": 38,
+    "http_404": 43,
+    "TimeoutError": 149
+  },
+  "sources": {
+    "content/items.csv.gz": "e67e6310a6076f1e66ff14b8ce68e3d28a1aba204498175ae77eb0b04d0050fc",
+    "content/products_text.csv.gz": "5e134cfd3ac4e94e78b3bdac9bbd40927fb57fbfa45874e57fceae7abe5aca13",
+    "foundation_catalog_v1/catalog.csv.gz": "65d63e7b58babb133db78f3369b3224db6a451d80c4f616a4b8c0023f73b9003",
+    "foundation_clip_b32_v1/complete.json": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+    "foundation_clip_b32_v1/modalities.npy": "03f495e9429751c05ebf96618cf70546e1d91b4a335a77017adee62eb87f07c2"
+  },
+  "feature_hashes": {
+    "text.npy": "d8f507d65712fefdd98c5463d55836512ea281d8ecf199508e595c0ba86f1e3d",
+    "image.npy": "eece460c4860751f9463bbeaac64fe09cc939f44e6f96d7435d5239faf155efa",
+    "modalities.npy": "03f495e9429751c05ebf96618cf70546e1d91b4a335a77017adee62eb87f07c2"
+  },
+  "text_max_tokens": 77,
+  "limitations": [
+    "Metadata is a snapshot and can include edits after interaction time.",
+    "CLIP text is truncated to 77 tokens.",
+    "Failure reasons are retained globally by the extractor; no per-item failure log is available here to assign each reason by regime.",
+    "URL availability is not re-downloaded; image coverage describes the existing trained cache."
+  ]
+}

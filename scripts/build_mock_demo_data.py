@@ -6,7 +6,10 @@ Run: python scripts/build_mock_demo_data.py
 import argparse
 import csv
 import gzip
+import hashlib
+import json
 from pathlib import Path
+import shutil
 
 import numpy as np
 from scipy import sparse
@@ -57,6 +60,14 @@ MOCK_ITEMS = [
 
 def build_mock_catalog(output: Path = DEFAULT_OUTPUT) -> Path:
     output = Path(output)
+    items = MOCK_ITEMS
+    photo_records = []
+    bundled_manifest = ROOT / 'demo/catalog_products.json'
+    if bundled_manifest.is_file():
+        photo_records = json.loads(bundled_manifest.read_text(encoding='utf-8'))['items']
+        if len(photo_records) != 30 or len({row['asin'] for row in photo_records}) != 30:
+            raise ValueError('Bundled demo catalog must contain 30 distinct products.')
+        items = [(r['asin'], r['train_count'], r['title'], r['text']) for r in photo_records]
     content_dir = output / 'content'
     catalog_dir = output / 'foundation_catalog_v1'
     content_dir.mkdir(parents=True, exist_ok=True)
@@ -65,32 +76,42 @@ def build_mock_catalog(output: Path = DEFAULT_OUTPUT) -> Path:
     with gzip.open(content_dir / 'items.csv.gz', 'wt', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['row_index', 'parent_asin', 'train_count'])
-        for idx, (asin, count, _, _) in enumerate(MOCK_ITEMS):
+        for idx, (asin, count, _, _) in enumerate(items):
             writer.writerow([idx, asin, count])
 
     with gzip.open(content_dir / 'products_text.csv.gz', 'wt', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['parent_asin', 'title', 'text'])
-        for asin, _, title, text in MOCK_ITEMS:
+        for asin, _, title, text in items:
             writer.writerow([asin, title, f'{title}. {text}'])
 
     with gzip.open(catalog_dir / 'catalog.csv.gz', 'wt', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['row_index', 'parent_asin', 'image_url'])
-        for idx, (asin, _, _, _) in enumerate(MOCK_ITEMS):
-            writer.writerow([idx, asin, ''])
+        for idx, (asin, _, _, _) in enumerate(items):
+            writer.writerow([idx, asin, photo_records[idx]['image_url'] if photo_records else ''])
+
+    if photo_records:
+        local_photos = output / 'demo_images'
+        local_photos.mkdir(parents=True, exist_ok=True)
+        for row in photo_records:
+            filename = hashlib.sha256(row['asin'].encode('utf-8')).hexdigest() + '.jpg'
+            source = ROOT / 'demo/demo_images' / filename
+            if hashlib.sha256(source.read_bytes()).hexdigest() != row['image_sha256']:
+                raise ValueError(f'Bundled product photo checksum mismatch: {row["asin"]}')
+            shutil.copyfile(source, local_photos / filename)
 
     # Build L2-normalized TF-IDF matrix over product text tokens
     vocab = {}
     docs = []
-    for _, _, title, text in MOCK_ITEMS:
+    for _, _, title, text in items:
         tokens = [w.strip('.,-&()').lower() for w in f'{title} {text}'.split() if len(w.strip('.,-&()')) >= 2]
         docs.append(tokens)
         for token in set(tokens):
             if token not in vocab:
                 vocab[token] = len(vocab)
 
-    n_docs = len(MOCK_ITEMS)
+    n_docs = len(items)
     n_vocab = len(vocab)
     df = np.zeros(n_vocab, dtype=np.float32)
     tf = np.zeros((n_docs, n_vocab), dtype=np.float32)
@@ -106,6 +127,11 @@ def build_mock_catalog(output: Path = DEFAULT_OUTPUT) -> Path:
     norms[norms == 0] = 1.0
     tfidf = (tfidf / norms).astype(np.float32)
     sparse.save_npz(content_dir / 'tfidf_all.npz', sparse.csr_matrix(tfidf))
+    (output / 'demo_manifest.json').write_text(json.dumps({
+        'products': len(items), 'local_photos': len(photo_records),
+        'interaction_counts': 'synthetic demo values, not Amazon train statistics',
+        'source': 'demo/catalog_products.json' if photo_records else 'built-in synthetic fallback',
+    }, indent=2), encoding='utf-8')
     return output
 
 

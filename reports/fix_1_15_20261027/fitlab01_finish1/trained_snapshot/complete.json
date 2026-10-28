@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "rows": 767045,
+  "feature_dim": 512,
+  "padding_row": 0,
+  "index_policy": "feature[item row_index + 1]; row zero reserved for padding",
+  "model": "openai/clip-vit-base-patch32",
+  "revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "catalog_sha256": "65d63e7b58babb133db78f3369b3224db6a451d80c4f616a4b8c0023f73b9003",
+  "text_sha256": "5e134cfd3ac4e94e78b3bdac9bbd40927fb57fbfa45874e57fceae7abe5aca13",
+  "limit": 0,
+  "batch_size": 64,
+  "device": "cuda",
+  "text_max_tokens": 77,
+  "dtype": "float16",
+  "image_timeout": 10,
+  "image_policy": "one product image; allowed HTTPS host only; no redirects; max 8MiB/16MP; one attempt",
+  "learning": "Frozen pretrained encoder; no recommender gradient; no test evaluation",
+  "has_text": 767044,
+  "has_image": 758692,
+  "image_status_counts": {
+    "ok": 758692,
+    "URLError": 8123,
+    "no_url": 38,
+    "http_404": 43,
+    "TimeoutError": 149
+  },
+  "elapsed_seconds": 611.9436133269919,
+  "torch_version": "2.12.1+cu130",
+  "numpy_version": "2.5.1",
+  "transformers_version": "4.57.6",
+  "pillow_version": "12.3.0",
+  "encoder_frozen": true,
+  "features_sha256": {
+    "text.npy": "d8f507d65712fefdd98c5463d55836512ea281d8ecf199508e595c0ba86f1e3d",
+    "image.npy": "eece460c4860751f9463bbeaac64fe09cc939f44e6f96d7435d5239faf155efa",
+    "modalities.npy": "03f495e9429751c05ebf96618cf70546e1d91b4a335a77017adee62eb87f07c2"
+  },
+  "limitations": [
+    "CLIP 77-token text truncation; metadata snapshot may include later edits.",
+    "Smoke limit cache cannot be used for full-catalog training.",
+    "Interrupted chunk can duplicate diagnostic error lines; cursor/counts are authoritative."
+  ]
+}

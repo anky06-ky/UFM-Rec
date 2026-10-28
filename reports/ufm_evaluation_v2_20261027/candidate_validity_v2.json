@@ -1,0 +1,167 @@
+{
+  "data": "/home/coder/iDragonCloud/DA_AI/data/processed/toys_games_full_temporal",
+  "n_items": 767045,
+  "sources": {
+    "items": "e67e6310a6076f1e66ff14b8ce68e3d28a1aba204498175ae77eb0b04d0050fc",
+    "item_statistics": "1133a38e307717cdea9fdad1918e0a18afc794448af5743efdd80c67bb64f6da",
+    "manifest": "585f102f14e12bfae332f53d28bb1f853acde1586eb102555c4b118ccee75763",
+    "samples_validation": "c71906e65ce4067b405a94c13e22e8a25a17f46cbee5b1315f07d01d4d1e59df",
+    "metadata_validation": "d529b0aeb68e4b026556756601efc4380b179dc43f96e05a76eccef0843a051c",
+    "samples_test": "a4422c2cfe420e7ffc072915b16ff88a218d640054fb107c937d867dca20b109",
+    "metadata_test": "273501122f37028c607fbe3c4a699d5c66e073f1f66d1210c4244de831178521",
+    "prior_interactions_train.csv.gz": "2f66eb960861c0477ee2a590f341b8082598ef7a9578da064c796f34a594ba46",
+    "prior_interactions_validation.csv.gz": "8ab1cf34b4d0097c52fbbf2d267772edc1b84ce1fd9d34526db016ab05850aac"
+  },
+  "checks": {
+    "validation_structure": {
+      "passed": true,
+      "problems": [],
+      "samples": 40000
+    },
+    "validation_exclusions": {
+      "passed": true,
+      "violations": 0,
+      "samples": 40000
+    },
+    "validation_regimes": {
+      "passed": true,
+      "target_regime_matches": true,
+      "negatives_same_regime_pool": true,
+      "negatives_have_split_count": true,
+      "positive_train_counts": {
+        "zero_shot": 0,
+        "extreme_cold": 25986,
+        "cold": 120398,
+        "warm": 4266983
+      }
+    },
+    "validation_replay": {
+      "passed": true,
+      "equal": {
+        "candidates": true,
+        "history_indices": true,
+        "history_indptr": true,
+        "regime_codes": true
+      }
+    },
+    "validation_future_positives": {
+      "passed": true,
+      "samples": 40000,
+      "negatives_total": 3960000,
+      "future_positive_negatives": 46,
+      "future_positive_fraction": 1.162e-05,
+      "samples_with_future_positive": 46,
+      "samples_with_future_positive_fraction": 0.00115,
+      "same_timestamp_negatives": 0,
+      "by_regime": {
+        "zero_shot": {
+          "future": 22,
+          "fraction": 2.222e-05
+        },
+        "extreme_cold": {
+          "future": 1,
+          "fraction": 1.01e-06
+        },
+        "cold": {
+          "future": 3,
+          "fraction": 3.03e-06
+        },
+        "warm": {
+          "future": 20,
+          "fraction": 2.02e-05
+        }
+      }
+    },
+    "test_structure": {
+      "passed": true,
+      "problems": [],
+      "samples": 40000
+    },
+    "test_exclusions": {
+      "passed": true,
+      "violations": 0,
+      "samples": 40000
+    },
+    "test_regimes": {
+      "passed": true,
+      "target_regime_matches": true,
+      "negatives_same_regime_pool": true,
+      "negatives_have_split_count": true,
+      "positive_train_counts": {
+        "zero_shot": 0,
+        "extreme_cold": 25958,
+        "cold": 120485,
+        "warm": 4424268
+      }
+    },
+    "test_replay": {
+      "passed": true,
+      "equal": {
+        "candidates": true,
+        "history_indices": true,
+        "history_indptr": true,
+        "regime_codes": true
+      }
+    },
+    "test_future_positives": {
+      "passed": true,
+      "samples": 40000,
+      "negatives_total": 3960000,
+      "future_positive_negatives": 45,
+      "future_positive_fraction": 1.136e-05,
+      "samples_with_future_positive": 44,
+      "samples_with_future_positive_fraction": 0.0011,
+      "same_timestamp_negatives": 0,
+      "by_regime": {
+        "zero_shot": {
+          "future": 20,
+          "fraction": 2.02e-05
+        },
+        "extreme_cold": {
+          "future": 2,
+          "fraction": 2.02e-06
+        },
+        "cold": {
+          "future": 2,
+          "fraction": 2.02e-06
+        },
+        "warm": {
+          "future": 21,
+          "fraction": 2.121e-05
+        }
+      }
+    },
+    "validation_past_positives": {
+      "passed": true,
+      "samples": 40000,
+      "negatives_total": 3960000,
+      "accidental_past_positive_negatives": 3,
+      "fraction": 7.6e-07,
+      "samples_with_accidental": 3,
+      "samples_with_accidental_fraction": 7.5e-05,
+      "by_regime": {
+        "zero_shot": 0,
+        "extreme_cold": 0,
+        "cold": 0,
+        "warm": 3
+      }
+    },
+    "test_past_positives": {
+      "passed": true,
+      "samples": 40000,
+      "negatives_total": 3960000,
+      "accidental_past_positive_negatives": 7,
+      "fraction": 1.77e-06,
+      "samples_with_accidental": 5,
+      "samples_with_accidental_fraction": 0.000125,
+      "by_regime": {
+        "zero_shot": 6,
+        "extreme_cold": 0,
+        "cold": 0,
+        "warm": 1
+      }
+    }
+  },
+  "passed": true,
+  "failed_checks": []
+}

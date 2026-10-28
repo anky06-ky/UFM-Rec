@@ -9,6 +9,9 @@ from pathlib import Path
 
 import numpy as np
 from scipy import sparse
+from common import sha256
+from contextlib import nullcontext
+from evaluation_ledger import TestEvaluationLedger, import_known_evidence
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,9 +25,10 @@ PROFILE_ITEMS = 10
 K = 10
 
 
-def load_train_counts() -> np.ndarray:
+def load_train_counts(data=None) -> np.ndarray:
+    content = CONTENT if data is None else Path(data) / 'content'
     counts = []
-    with gzip.open(CONTENT / "items.csv.gz", "rt", encoding="utf-8", newline="") as source:
+    with gzip.open(content / "items.csv.gz", "rt", encoding="utf-8", newline="") as source:
         for row in csv.DictReader(source):
             if int(row["row_index"]) != len(counts):
                 raise AssertionError("Item mapping is not contiguous")
@@ -75,15 +79,20 @@ def summarize(ranks, regime_codes, history_lengths, repeat_purchases=None):
     return groups
 
 
-def evaluate_split(split, matrix, train_counts, has_vector):
-    samples = np.load(EVALUATION / f"samples_{split}.npz")
+def evaluate_split(split, matrix, train_counts, has_vector, evaluation=None, output=None):
+    evaluation = EVALUATION if evaluation is None else Path(evaluation)
+    output = OUTPUT if output is None else Path(output)
+    output.mkdir(parents=True, exist_ok=True)
+    if (output / f'ranks_{split}.npz').exists():
+        raise FileExistsError('Refusing to overwrite prior baseline ranks.')
+    samples = np.load(evaluation / f"samples_{split}.npz")
     candidates = samples["candidates"]
     history_indices = samples["history_indices"]
     history_indptr = samples["history_indptr"]
     regime_codes = samples["regime_codes"]
     history_lengths = np.diff(history_indptr)
-    popularity_ranks = np.empty(len(candidates), dtype=np.uint8)
-    content_ranks = np.empty(len(candidates), dtype=np.uint8)
+    popularity_ranks = np.empty(len(candidates), dtype=np.int32)
+    content_ranks = np.empty(len(candidates), dtype=np.int32)
 
     for index, candidate_rows in enumerate(candidates):
         popularity = np.log1p(train_counts[candidate_rows])
@@ -105,29 +114,50 @@ def evaluate_split(split, matrix, train_counts, has_vector):
         if (index + 1) % 5_000 == 0:
             print(f"  {split}: {index + 1:,}/{len(candidates):,}", flush=True)
 
-    ranks_path = OUTPUT / f"ranks_{split}.npz.tmp"
-    with ranks_path.open("wb") as output:
+    ranks_path = output / f"ranks_{split}.npz.tmp"
+    with ranks_path.open("wb") as output_file:
         np.savez_compressed(
-            output,
+            output_file,
             popularity_ranks=popularity_ranks,
             content_ranks=content_ranks,
             regime_codes=regime_codes,
             history_lengths=history_lengths,
         )
-    ranks_path.replace(OUTPUT / f"ranks_{split}.npz")
-    return {
+    ranks_path.replace(output / f"ranks_{split}.npz")
+    result = {
         "popularity": summarize(popularity_ranks, regime_codes, history_lengths, samples.get("repeat_purchases")),
         "tfidf_profile": summarize(content_ranks, regime_codes, history_lengths, samples.get("repeat_purchases")),
     }
+    for model in result.values():
+        cold = [model['by_regime'][name] for name in REGIMES[:3]]
+        model['cold_macro_ndcg@10'] = (round(float(np.mean([g['ndcg@10'] for g in cold])), 6)
+                                        if all(g['samples'] for g in cold) else None)
+    return result
 
 
 def main() -> None:
-    if OUTPUT.exists() and any(OUTPUT.iterdir()):
-        raise FileExistsError(f"Refusing to overwrite non-empty output: {OUTPUT}")
-    OUTPUT.mkdir(parents=True, exist_ok=True)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--evaluation', type=Path, default=None,
+                        help='Directory holding samples_{split}.npz.')
+    parser.add_argument('--output', type=Path, default=OUTPUT,
+                        help='Directory for ranks and metrics (must be empty or new).')
+    parser.add_argument('--data', type=Path, default=DATA)
+    parser.add_argument('--splits', nargs='+', choices=SPLITS, default=['validation'])
+    parser.add_argument('--evaluation-ledger', type=Path, default=ROOT/'reports/test_evaluation_ledger.json')
+    parser.add_argument('--allow-seen-test', action='store_true')
+    parser.add_argument('--test-purpose')
+    args = parser.parse_args()
+    if (args.data / 'demo_manifest.json').exists():
+        raise ValueError('Synthetic demo data cannot be reported as benchmark results.')
+    evaluation = args.evaluation or args.data / 'evaluation'
+    content = args.data / 'content'
+    if args.output.exists() and any(args.output.iterdir()):
+        raise FileExistsError(f"Refusing to overwrite non-empty output: {args.output}")
+    args.output.mkdir(parents=True, exist_ok=True)
     print("Loading TF-IDF catalog matrix...", flush=True)
-    matrix = sparse.load_npz(CONTENT / "tfidf_all.npz").tocsr()
-    train_counts = load_train_counts()
+    matrix = sparse.load_npz(content / "tfidf_all.npz").tocsr()
+    train_counts = load_train_counts(args.data)
     has_vector = np.diff(matrix.indptr) > 0
     if matrix.shape[0] != len(train_counts):
         raise AssertionError("TF-IDF and item mapping sizes differ")
@@ -136,18 +166,31 @@ def main() -> None:
         "candidate_protocol": "One positive plus 99 fixed sampled negatives shared across models.",
         "content_model": f"Sum TF-IDF vectors of the latest {PROFILE_ITEMS} history items; cosine dot-product against L2-normalized item vectors; popularity fallback/tie-break.",
         "k": K,
+        "data": str(args.data),
+        "evaluation": str(evaluation),
+        "test_evaluated": 'test' in args.splits,
+        "sources": {name: sha256(content / name) for name in ('items.csv.gz', 'tfidf_all.npz')},
         "splits": {},
     }
-    for split in SPLITS:
+    for split in args.splits:
+        report['sources'][f'samples_{split}'] = sha256(evaluation / f'samples_{split}.npz')
         print(f"Evaluating {split}...", flush=True)
-        report["splits"][split] = evaluate_split(
-            split, matrix, train_counts, has_vector
-        )
-    temporary = OUTPUT / "metrics.json.tmp"
+        ledger = TestEvaluationLedger(args.evaluation_ledger)
+        if split == 'test':
+            import_known_evidence(ROOT, ledger)
+        identity = dict(model='popularity_and_tfidf', samples_test_sha256=report['sources'][f'samples_{split}'],
+                        dataset_sha256=sha256(args.data/'split_manifest.json'),
+                        scorer_sha256=sha256(Path(__file__)), model_sources=report['sources'], output=str(args.output))
+        context = ledger.evaluation(identity, allow_seen=args.allow_seen_test, purpose=args.test_purpose) if split == 'test' else nullcontext(None)
+        with context as entry:
+            report['splits'][split] = evaluate_split(split, matrix, train_counts, has_vector, evaluation, args.output)
+            if entry is not None:
+                entry['test_metrics'] = report['splits'][split]
+    temporary = args.output / "metrics.json.tmp"
     temporary.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    temporary.replace(OUTPUT / "metrics.json")
+    temporary.replace(args.output / "metrics.json")
     print(json.dumps(report, indent=2), flush=True)
-    print(f"PASS: content baseline evaluated at {OUTPUT}", flush=True)
+    print(f"PASS: content baseline evaluated at {args.output}", flush=True)
 
 
 if __name__ == "__main__":

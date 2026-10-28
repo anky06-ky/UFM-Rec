@@ -8,6 +8,7 @@ import time
 from urllib.parse import parse_qs,urlsplit
 
 from recommend_catalog import Catalog,ContentBackend,UFMBackend,DATA,ROOT
+from demo_product_images import image_path
 
 
 def handler_for(backend, allowed_origin=None, base_path=''):
@@ -57,9 +58,16 @@ def handler_for(backend, allowed_origin=None, base_path=''):
             path = self.route_path()
             if path=='/': self.send(200,page,'text/html; charset=utf-8')
             elif path=='/api/status': self.send(200,dict(app='ufm-rec-demo',backend=backend.name,warning=backend.warning,
-                items=len(backend.catalog.asins),max_history=20,profile_items=10 if isinstance(backend,ContentBackend) else backend.cfg.history_size))
+                items=len(backend.catalog.asins),data=backend.catalog.provenance(),
+                model=getattr(backend,'provenance',None),max_history=20,profile_items=10 if isinstance(backend,ContentBackend) else backend.cfg.history_size))
             elif path=='/api/examples': self.send(200,backend.catalog.examples())
             elif path=='/api/search': self.send(200,backend.catalog.search(parse_qs(urlsplit(self.path).query).get('q',[''])[0]))
+            elif path=='/api/product-image':
+                asin = parse_qs(urlsplit(self.path).query).get('asin',[''])[0]
+                photo = image_path(backend.catalog.data,asin)
+                if asin not in backend.catalog.lookup or not photo.is_file():
+                    self.send(404,{'error':'Chưa có ảnh cho sản phẩm này.'}); return
+                self.send(200,photo.read_bytes(),'image/jpeg')
             else: self.send(404,{'error':'Not found'})
         def do_POST(self):
             if not self.allowed(): self.send(403,{'error':'Loopback origin required'}); return
@@ -80,7 +88,8 @@ def handler_for(backend, allowed_origin=None, base_path=''):
                 started = time.perf_counter()
                 try: results = backend.recommend(history,k,regime)
                 finally: lock.release()
-                self.send(200,dict(backend=backend.name,warning=backend.warning,results=results,
+                self.send(200,dict(backend=backend.name,warning=backend.warning,data=backend.catalog.provenance(),
+                    model=getattr(backend,'provenance',None),results=results,
                     elapsed_ms=round((time.perf_counter()-started)*1000,1),regime=regime,history_count=len(history)))
             except (ValueError,KeyError,TypeError) as e: self.send(400,{'error':str(e)})
             except Exception: self.send(500,{'error':'Inference failed; inspect local server log'})
@@ -94,6 +103,7 @@ if __name__=='__main__':
     p.add_argument('--backend',choices=['content','ufm'],default='content')
     p.add_argument('--run',type=Path,default=ROOT/'runs/ufm_full_v1')
     p.add_argument('--features',type=Path,help='Relocated identical CLIP cache; original hashes are verified.')
+    p.add_argument('--training-source',type=Path,help='Archived training source; every recorded source hash must match.')
     p.add_argument('--port',type=int,default=8765)
     p.add_argument('--allowed-origin',default='',help='Exact trusted HTTPS origin for authenticated reverse proxies.')
     p.add_argument('--base-path',default='',help='URL path prefix used by a reverse proxy, e.g. /proxy/8766.')
@@ -109,7 +119,8 @@ if __name__=='__main__':
         print(f'Full dataset not found locally; generated offline mock catalog at {args.data}',flush=True)
     print('Loading catalog and model; please wait...',flush=True)
     catalog = Catalog(args.data)
-    backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(catalog,args.run,features=args.features)
+    backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(
+        catalog,args.run,features=args.features,training_source=args.training_source)
     server = ThreadingHTTPServer(('127.0.0.1',args.port),handler_for(backend,args.allowed_origin,args.base_path))
     print(f'DEMO READY http://127.0.0.1:{args.port} | {backend.name} | CPU | {len(catalog.asins):,} items',flush=True)
     if args.open_browser:

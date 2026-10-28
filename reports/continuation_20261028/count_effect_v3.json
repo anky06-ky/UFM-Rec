@@ -1,0 +1,199 @@
+{
+  "protocol": "validation_v3_saved_predictions_only",
+  "sources_sha256": {
+    "samples": "9387e66e9f1905c44d02b65c3809f5fa8b6c022f6abf0c1a37d52cb57767a60e",
+    "train_counts": "b8c37d48e55654eb091d3d8e9a3a61efa76c2e2c988747fbecd1b16f536f9564",
+    "full": "7a06981e3d1d15a3a179dfdf0cda1bb45ed7227157de43f9fff401f410927c85",
+    "semantic_only": "7cc0a0ff27ef0963a620fb0c9fc9b8b9ab08fd96b19783a067a7fb2fe68d87ba",
+    "fixed_fusion": "5ab8e5aa08646dfb065711eb230b04982cce0aed58f6d32ffe1d55f8f7ea464a"
+  },
+  "training_seeds": [
+    42
+  ],
+  "cases": 40000,
+  "cold_macro_ndcg10": {
+    "full": 0.1820562197778781,
+    "semantic_only": 0.19003593676276861,
+    "fixed_fusion": 0.18130505391587706
+  },
+  "by_regime": {
+    "zero_shot": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.15665536750607484,
+        "semantic_only": 0.1590797136820229,
+        "fixed_fusion": 0.1560435472555068
+      },
+      "paired_full_minus_semantic": -0.0024243461759480534,
+      "paired_full_minus_fixed": 0.0006118202505680718
+    },
+    "extreme_cold": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.19156734401902073,
+        "semantic_only": 0.21566817635679814,
+        "fixed_fusion": 0.1903977286844607
+      },
+      "paired_full_minus_semantic": -0.024100832337777375,
+      "paired_full_minus_fixed": 0.0011696153345600317
+    },
+    "cold": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.19794594780853866,
+        "semantic_only": 0.19535992024948476,
+        "fixed_fusion": 0.1974738858076637
+      },
+      "paired_full_minus_semantic": 0.002586027559053929,
+      "paired_full_minus_fixed": 0.00047206200087499147
+    },
+    "warm": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.11037472459586198,
+        "semantic_only": 0.09550944188394224,
+        "fixed_fusion": 0.10922629372807294
+      },
+      "paired_full_minus_semantic": 0.014865282711919716,
+      "paired_full_minus_fixed": 0.0011484308677890168
+    }
+  },
+  "by_positive_train_count": {
+    "0": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.15665536750607484,
+        "semantic_only": 0.1590797136820229,
+        "fixed_fusion": 0.1560435472555068
+      },
+      "paired_full_minus_semantic": -0.0024243461759480534,
+      "paired_full_minus_fixed": 0.0006118202505680718
+    },
+    "1-5": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.19156734401902073,
+        "semantic_only": 0.21566817635679814,
+        "fixed_fusion": 0.1903977286844607
+      },
+      "paired_full_minus_semantic": -0.024100832337777375,
+      "paired_full_minus_fixed": 0.0011696153345600317
+    },
+    "6-20": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.19794594780853866,
+        "semantic_only": 0.19535992024948476,
+        "fixed_fusion": 0.1974738858076637
+      },
+      "paired_full_minus_semantic": 0.002586027559053929,
+      "paired_full_minus_fixed": 0.00047206200087499147
+    },
+    "21+": {
+      "cases": 10000,
+      "mean_ndcg10": {
+        "full": 0.11037472459586198,
+        "semantic_only": 0.09550944188394224,
+        "fixed_fusion": 0.10922629372807294
+      },
+      "paired_full_minus_semantic": 0.014865282711919716,
+      "paired_full_minus_fixed": 0.0011484308677890168
+    }
+  },
+  "by_positive_train_count_and_history": {
+    "0": {
+      "empty_history": {
+        "cases": 4871,
+        "mean_ndcg10": {
+          "full": 0.04507432552913901,
+          "semantic_only": 0.04507432552913901,
+          "fixed_fusion": 0.04507432552913901
+        },
+        "paired_full_minus_semantic": 0.0,
+        "paired_full_minus_fixed": 0.0
+      },
+      "has_history": {
+        "cases": 5129,
+        "mean_ndcg10": {
+          "full": 0.2626236372408486,
+          "semantic_only": 0.2673503796388756,
+          "fixed_fusion": 0.261430772646253
+        },
+        "paired_full_minus_semantic": -0.00472674239802701,
+        "paired_full_minus_fixed": 0.0011928645945955775
+      }
+    },
+    "1-5": {
+      "empty_history": {
+        "cases": 4753,
+        "mean_ndcg10": {
+          "full": 0.03937101345504124,
+          "semantic_only": 0.03937101345504124,
+          "fixed_fusion": 0.03937101345504124
+        },
+        "paired_full_minus_semantic": 0.0,
+        "paired_full_minus_fixed": 0.0
+      },
+      "has_history": {
+        "cases": 5247,
+        "mean_ndcg10": {
+          "full": 0.3294345365424808,
+          "semantic_only": 0.375367131049394,
+          "fixed_fusion": 0.3272054240314077
+        },
+        "paired_full_minus_semantic": -0.04593259450691323,
+        "paired_full_minus_fixed": 0.0022291125110730546
+      }
+    },
+    "6-20": {
+      "empty_history": {
+        "cases": 4700,
+        "mean_ndcg10": {
+          "full": 0.04487400219072829,
+          "semantic_only": 0.04487400219072829,
+          "fixed_fusion": 0.04487400219072829
+        },
+        "paired_full_minus_semantic": 0.0,
+        "paired_full_minus_fixed": 0.0
+      },
+      "has_history": {
+        "cases": 5300,
+        "mean_ndcg10": {
+          "full": 0.333688993922446,
+          "semantic_only": 0.3288096966412121,
+          "fixed_fusion": 0.33279831090192713
+        },
+        "paired_full_minus_semantic": 0.004879297281233828,
+        "paired_full_minus_fixed": 0.0008906830205188522
+      }
+    },
+    "21+": {
+      "empty_history": {
+        "cases": 5075,
+        "mean_ndcg10": {
+          "full": 0.038496651625488605,
+          "semantic_only": 0.038496651625488605,
+          "fixed_fusion": 0.038496651625488605
+        },
+        "paired_full_minus_semantic": 0.0,
+        "paired_full_minus_fixed": 0.0
+      },
+      "has_history": {
+        "cases": 4925,
+        "mean_ndcg10": {
+          "full": 0.18444197745365784,
+          "semantic_only": 0.15425866230255184,
+          "fixed_fusion": 0.18211013812819793
+        },
+        "paired_full_minus_semantic": 0.030183315151106015,
+        "paired_full_minus_fixed": 0.0023318393254599334
+      }
+    }
+  },
+  "notes": [
+    "Positive-item train counts are train-only; no test labels were opened.",
+    "These are paired descriptive differences on validation candidates, not new model runs.",
+    "Validation population was used for historical checkpoint selection; not an independent holdout.",
+    "One training seed; inference here does not isolate a causal architecture component."
+  ]
+}

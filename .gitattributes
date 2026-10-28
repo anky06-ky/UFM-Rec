@@ -5,6 +5,10 @@ tests/*.py -text
 ops/*.py -text
 scripts/*.py -text
 status.py -text
+reports/fix_1_15_20261027/** -text
+reports/continuation_20261028/** -text
+reports/ufm_evaluation_v2_20261027/** -text
+configs/*.json -text
 *.sh text eol=lf
 
 # Generated PDFs may start with long ASCII streams; prevent Git from treating

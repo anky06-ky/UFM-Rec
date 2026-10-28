@@ -1,21 +1,30 @@
 # BÁO CÁO TỔNG KẾT ĐỒ ÁN NGHIÊN CỨU & PHÁT TRIỂN
 
+<!-- current-evidence-20261028 -->
+> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](../reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
+<!-- /current-evidence-20261028 -->
+
+> **Phạm vi đã chốt với giảng viên theo xác nhận của nhóm:** hệ khuyến nghị sản phẩm dựa trên hành vi, hình ảnh và tên/mô tả. Cold-start sản phẩm là phân tích trọng tâm, không phải lời hứa cá nhân hóa người dùng chưa có lịch sử. Trong v3, full − semantic-only NDCG@10 theo train count là −0,002424 (0), −0,024101 (1–5), +0,002586 (6–20), +0,014865 (21+), mỗi nhóm 10.000 ca. Nguồn: [phân tích dự đoán v3](../reports/continuation_20261028/count_effect_v3.json). Đây là một seed lịch sử; [15 run đã khóa](../configs/multimodal_followup_20261028.json) chưa có kết quả train mới. Bản Word/PDF trước đây vẫn chưa đồng bộ.
+
+
+Đối chiếu ngày **28/10/2026**: bộ sửa 1–15 trước đây đạt Linux **87 pass** / Windows **84 pass, 3 skip**. Mã bổ sung calibration/source loader đạt Linux **94 pass** / Windows **91 pass, 3 skip**; các bổ sung restore sau đó có kiểm thử riêng. Xem báo cáo sửa mục 1–15 và log để phân biệt bản mã hiện tại với bản mã đã tạo checkpoint.
+
 ## UFM-Rec: Hệ Khuyến Nghị Sản Phẩm Cold-Start Đa Phương Thức Dựa Trên Độ Tin Cậy Học Được
 
 - **Học phần**: Học máy ứng dụng
 - **Giảng viên hướng dẫn**: ThS. Nguyễn Thái Anh
 - **Nhóm thực hiện**: Trần An Kỳ, Nguyễn Thành Phong, Hải, Hân
-- **Thời gian cập nhật**: Tháng 10 / 2026
+- **Thời gian cập nhật**: 28/10/2026 — bản phục vụ trao đổi tiến độ
 
 ---
 
 ### TÓM TẮT ĐỀ TÀI (ABSTRACT)
 
-Bài toán khởi đầu lạnh (Cold-Start) và đặc biệt là cực lạnh (Extreme Cold-Start) là một trong những thách thức cốt lõi và dai dẳng nhất của các hệ thống gợi ý hiện đại (Recommender Systems). Khi một sản phẩm mới xuất hiện trên sàn thương mại điện tử hoặc một người dùng mới gia nhập nền tảng, các phương pháp lọc cộng tác truyền thống (Collaborative Filtering - CF) và mô hình chuỗi hành vi (Sequential Recommenders như SASRec, BERT4Rec) hoàn toàn mất tác dụng do thiếu hụt ma trận tương tác.
+Bài toán khởi đầu lạnh (Cold-Start) và đặc biệt là cực lạnh (Extreme Cold-Start) là một trong những thách thức cốt lõi và dai dẳng nhất của các hệ thống gợi ý hiện đại (Recommender Systems). Khi một sản phẩm mới xuất hiện trên sàn thương mại điện tử hoặc một người dùng mới gia nhập nền tảng, các phương pháp lọc cộng tác truyền thống (Collaborative Filtering - CF) và mô hình chuỗi hành vi (Sequential Recommenders như SASRec, BERT4Rec) gặp hạn chế do thiếu tương tác để học biểu diễn định danh cho người dùng hoặc sản phẩm mới.
 
 Để giải quyết bài toán này, đề tài xây dựng và thực nghiệm kiến trúc **UFM-Rec (Uncertainty-aware Fusion Model Recommender)**. Mô hình kết hợp biểu diễn đa phương thức đóng băng (Frozen Multimodal Features) từ **CLIP ViT-B/32** (bao gồm văn bản tiêu đề, mô tả và hình ảnh trực quan sản phẩm) với biểu diễn tuần tự (Causal Sequential Transformer) của lịch sử tương tác. Đóng góp thiết kế của UFM-Rec là việc tích hợp **Cơ chế Ước Lượng Độ Tin Cậy Học Được (Learned Reliability Proxy)** và **Cổng Căn Chỉnh Đa Phương Thức (Cross-Modal Alignment Gate)**, cho phép mạng tự động điều tiết trọng số giữa ngữ nghĩa nội dung (Semantic Branch) và hành vi cộng tác (Collaborative Branch) tùy theo mức độ khả dụng và sai số ước lượng của dữ liệu.
 
-Nghiên cứu được triển khai thực nghiệm trên tập dữ liệu chuẩn quy mô lớn **Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11,57 triệu tương tác)** theo chiến lược phân chia thời gian thực tế **80/10/10 Global Temporal Split**. Trên tập Validation 40.000 ca kiểm thử (`seed=42`, chưa mở tập Test), UFM-Rec đạt **Overall NDCG@10 = 0,285611** (vượt TF-IDF 0,260367 nhờ ưu thế lớn ở nhóm Warm đạt 0,651231), nhưng **Cold Macro NDCG@10 đạt 0,163738** (thấp hơn TF-IDF 0,191270 do hiện tượng nhiễu tham số ID ở phân tầng Extreme Cold 1–5 tương tác). Báo cáo phân tích sâu nguyên nhân toán học của hiện tượng này và kết quả hiệu chuẩn xác suất với Temperature Scaling (ECE từ 0,164477 xuống 0,041497). Trên All Beauty hiện có kết quả TF-IDF validation sơ bộ, chưa có kết quả UFM. UFM trên Toys vẫn là một seed và validation-only; các kết quả ablation, đa seed, benchmark All Beauty, đánh giá test và đo tài nguyên trên catalog đầy đủ chưa có trong bộ bằng chứng hiện lưu.
+Nghiên cứu thực nghiệm trên Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, khoảng 11,57 triệu tương tác), chia thời gian 80/10/10. Vòng đánh giá lại ngày 28/10/2026 dùng validation v3 cố định: 40.000 ca, 1 positive + 99 negatives, loại positive đã biết trước target. Negative vẫn lấy theo regime của target và thống kê cuối split nên đánh giá có tính hồi cứu. Trên cùng v3, Cold macro NDCG@10 của TF-IDF là **0,195682**, semantic-only dùng CLIP **0,190036**, UFM full **0,182056**, popularity **0,042527**. Tám checkpoint UFM được đối chiếu cùng nguồn đặc trưng và candidates; chưa chứng minh fusion/uncertainty cải thiện chỉ số chính. Các checkpoint có một seed (42), chọn từ validation v1; đánh giá v3 không tạo holdout độc lập. Hiệu chỉnh thăm dò trên hai phần validation theo thời gian giảm ECE của full UFM từ **0,082061** xuống **0,037478**; đây là confidence có điều kiện trên 100 ứng viên, không phải xác suất mua. Test v2 đã được đánh giá trong lịch sử; vòng mới không mở thêm test. Chưa có kết quả đa seed UFM hoặc UFM trên All Beauty được xác minh. Số liệu lịch sử v1/v2 được giữ riêng trong Chương 4; nguồn hiện tại là [bộ bằng chứng ngày 28/10](../reports/continuation_20261028/README.md).
 
 ---
 
@@ -106,9 +115,9 @@ Thay vì dùng cổng tĩnh hoặc softmax tự do, UFM-Rec định nghĩa đạ
 $$u_{cf} = \text{Softplus}(\text{MLP}_{cf}(h_{cf})), \quad u_{sem} = \text{Softplus}(\text{MLP}_{sem}(h_{sem}))$$
 
 Trong đó mỗi nhánh học khớp phần dư bình phương có điều kiện trên tập ứng viên lấy mẫu ($\text{MSE}(u_k, (\sigma(s_k)_{\text{detached}} - y)^2)$). Trọng số độ tin cậy được tính theo công thức:
-$$w_k = \frac{\exp(-u_k)}{\sum_{j \in \{cf, sem\}} \exp(-u_j)} \cdot \mathbb{I}(\text{branch } k \text{ available})$$
+$$w_k = \frac{\mathbb{I}(k\in A)\exp(-u_k)}{\sum_{j\in A}\exp(-u_j)},\quad A=\{j:\text{branch }j\text{ available}\},\ A\ne\varnothing$$
 
-Khi candidate là item zero-shot ($count_{train}=0$), nhánh CF không khả dụng ($\mathbb{I}_{cf}=0$), cổng tự động triệt tiêu $w_{cf} = 0$ và chuyển toàn bộ 100% trọng số sang $w_{sem} = 1,0$.
+Nếu cả hai nhánh không khả dụng, mô hình dùng fallback popularity train-only. Khi nhánh Semantic khả dụng và candidate là item zero-shot ($count_{train}=0$), nhánh CF không khả dụng ($\mathbb{I}_{cf}=0$), cổng tự động triệt tiêu $w_{cf} = 0$ và chuyển toàn bộ 100% trọng số sang $w_{sem} = 1,0$.
 
 #### 2.4. Căn Chỉnh Đa Phương Thức (Cross-Modal Alignment Gate)
 Khi cả hai nhánh đều khả dụng, thành phần Alignment đóng vai trò cầu nối liên phương thức:
@@ -127,63 +136,67 @@ Nghiên cứu sử dụng tập dữ liệu thực tế quy mô lớn từ Amazo
 - Tổng số sản phẩm (Items): **767.045**
 - Số sản phẩm có ảnh hợp lệ trích xuất thành công: **758.692** (98,91%)
 - Tổng số tương tác sau làm sạch: **11.572.689**
-- Chiến lược phân chia: **Global Temporal Split (80% Train, 10% Validation, 10% Test)** theo mốc thời gian thực để ngăn chặn rò rỉ tương lai (Data Leakage).
+- Chiến lược phân chia: **Global Temporal Split (80% Train, 10% Validation, 10% Test)** theo mốc thời gian. Chia split theo thời gian không tự bảo đảm mọi bước lấy mẫu và metadata chỉ dùng thông tin có sẵn tại thời điểm dự đoán; giới hạn được nêu ở mục 3.2.
 - Danh mục thứ hai (chuẩn bị cho kiểm chứng đa miền): **All Beauty** gồm **86.014 sản phẩm, 445.239 tương tác** ([`reports/second_dataset_preparation.json`](../reports/second_dataset_preparation.json)).
 
 #### 3.2. Giao thức Đánh giá Phân tầng
-Để phản ánh năng lực xếp hạng theo từng mức độ phổ biến của sản phẩm, tập Validation gồm **40.000 trường hợp** kiểm thử độc lập (mỗi ca gồm 1 sản phẩm Ground Truth + 99 sản phẩm âm tính được lấy mẫu theo phân phối tần suất xuất hiện trong tập train — *Popularity Negative Sampling*, không phải đánh giá full-catalog).
-Các trường hợp được phân bổ cân bằng 10.000 ca cho mỗi nhóm:
-1. `zero_shot`: Sản phẩm đích có $count_{train} = 0$.
-2. `extreme_cold`: Sản phẩm đích có $1 \le count_{train} \le 5$.
-3. `cold`: Sản phẩm đích có $6 \le count_{train} \le 20$.
-4. `warm`: Sản phẩm đích có $count_{train} > 20$.
+Mỗi bộ mẫu Toys có 40.000 ca, mỗi ca gồm 1 target ở cột 0 và 99 negative duy nhất, được chia thành 10.000 ca cho mỗi regime theo **số tương tác train của target**: zero-shot = 0; extreme-cold = 1–5; cold = 6–20; warm >20. Các ca có thể thuộc cùng người dùng, vì vậy không gọi chúng là các quan sát độc lập. Cold macro là trung bình NDCG@10 của ba nhóm lạnh; Overall là trung bình trên bộ mẫu cân bằng, không đại diện trực tiếp cho phân bố lưu lượng tự nhiên.
 
-Metric chính: **NDCG@10**, **Recall@10**, **MRR@10** và **Cold Macro NDCG@10** (trung bình cộng của Zero-shot, Extreme Cold và Cold).
+**Cần phân biệt hai bộ ứng viên**:
+- **Bộ lịch sử** dùng trong audit `ufm_validation_audit_v2`: hash mẫu validation `8efa116508fddd6b5227b69d6c65e3b635de634dd542046463fda84e78b47162`. Tên “audit v2” là phiên bản báo cáo kiểm toán, không có nghĩa nó dùng bộ mẫu mới `evaluation_v2`. Bảng 4.1 giữ các số liệu lịch sử cùng nguồn; chưa replay bộ lịch sử trong lần chỉnh tài liệu này.
+- **Bộ mẫu `evaluation_v2`** nhập local ngày 27/10: hash validation `c71906e65ce4067b405a94c13e22e8a25a17f46cbee5b1315f07d01d4d1e59df`, test `a4422c2cfe420e7ffc072915b16ff88a218d640054fb107c937d867dca20b109`. Candidate audit báo replay và tính nhất quán regime đạt. Code hiện tại lấy 99 negative **cùng regime với target**, loại target và các item trong history được ghi nhận, lấy trọng số popularity bằng `train_count + validation_count` khi đánh giá validation, và cộng thêm `test_count` khi đánh giá test. Đây là benchmark hồi cứu có dùng thống kê đến cuối split để dựng tập ứng viên, **không phải negative sampling chỉ từ train** và không phải đánh giá full-catalog.
+
+Việc dùng thống kê cuối split và biết regime của target để chọn negative giới hạn khả năng diễn giải như đánh giá online. History được ghi nhận có cửa sổ hữu hạn; audit cũ ghi 3 trường hợp negative trùng positive train ở validation và 7 ở test. Audit validation mới trên FITLAB-01 xét mọi sự kiện trước target, bao gồm cùng split, ghi 7 negative trong 6 ca của v2. Validation v3 tạo riêng đã loại các known positive và audit đạt; tám checkpoint UFM cùng popularity/TF-IDF đã được đánh giá trên đúng hash v3. Không diễn giải `passed=true` thành “không có false negative”. Mỗi bảng so sánh phải dùng cùng bộ ứng viên.
+
+Metric báo cáo: NDCG@10, Recall@10, MRR@10; **Cold macro NDCG@10 là chỉ số chính**. Nguồn: [`src/build_recommender_samples.py`](../src/build_recommender_samples.py), [artifact và hash v2](../reports/ufm_evaluation_v2_20261027/README.md).
 
 ---
 
 ### CHƯƠNG 4: KẾT QUẢ THỰC NGHIỆM, TÀI NGUYÊN & GIỚI HẠN NGHIÊN CỨU
 
-#### 4.1. Bảng Tổng Hợp Kết Quả Thực Nghiệm (Validation Set — Single Seed `seed=42`)
+#### 4.1. Kết quả validation lịch sử và nguồn baseline
 
-> **Lưu ý phương pháp luận**: Số liệu UFM-Rec dưới đây được trích xuất từ báo cáo kiểm toán [`reports/ufm_validation_audit_v2/report.md`](../reports/ufm_validation_audit_v2/report.md) trên tập Validation (40.000 ca, 100 ứng viên/ca, `seed=42`, best epoch 9/12, `test_evaluated = false`).
+Bảng này ghi **NDCG@10 lịch sử**, không phải kết quả trên `evaluation_v2` mới. UFM: audit `ufm_validation_audit_v2/report.json`, seed 42, epoch 9/12. TF-IDF: `models/content_baseline/metrics.json`. BPR-MF: `models/bpr_mf/epoch_001.json`, seed 42, best epoch 1 theo `completed.json`; SVD: `models/collaborative_svd/report.json`, mục validation. Các giá trị BPR-MF/SVD trước đây không khớp artifact đã được thay bằng số liệu từ các nguồn này. Chưa kiểm tra lại đồng nhất bộ mẫu của mọi baseline bằng replay; bảng là đối chiếu artifact lưu, không phải benchmark mới chạy.
 
-| Nhóm Phân Tầng (Regime) | Số Mẫu | TF-IDF Content | BPR-MF (3 seeds) | Collaborative SVD | **UFM-Rec (`seed=42`)** | Chênh lệch (UFM vs TF-IDF) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Zero-shot** | 10.000 | 0,186491 | 0,000000 | 0,000000 | **0,188403** | **+0,001912** |
-| *· Zero-shot (có lịch sử)* | 5.129 | 0,363602 | 0,000000 | 0,000000 | **0,367329** | **+0,003727** |
-| *· Zero-shot (không lịch sử)* | 4.871 | 0,000000 | 0,000000 | 0,000000 | 0,000000 | 0,000000 |
-| **Extreme Cold (1–5)** | 10.000 | **0,191555** | 0,041200 | 0,038900 | 0,113300 | −0,078255 |
-| *· Extreme Cold (có lịch sử)* | 5.247 | **0,365075** | 0,078500 | 0,074100 | 0,215933 | −0,149142 |
-| **Cold (6–20)** | 10.000 | **0,195763** | 0,112400 | 0,108200 | 0,189511 | −0,006252 |
-| **Warm (>20)** | 10.000 | 0,467661 | 0,512000 | 0,498000 | **0,651231** | **+0,183570** |
-| **Cold Macro NDCG@10** | 30.000 | **0,191270** | 0,051200 | 0,049033 | 0,163738 | **−0,027532** |
-| **Overall NDCG@10** | 40.000 | 0,260367 | 0,166400 | 0,161275 | **0,285611** | **+0,025244** |
+| Nhóm | Số ca | TF-IDF | BPR-MF (`seed=42`, epoch 1) | SVD | UFM (`seed=42`, epoch 9) | UFM − TF-IDF |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Zero-shot (0) | 10.000 | 0,186491 | 0,000000 | 0,000000 | 0,188403 | 0,001912 |
+| Extreme cold (1–5) | 10.000 | 0,191555 | 0,013367 | 0,036952 | 0,113300 | -0,078255 |
+| Cold (6–20) | 10.000 | 0,195763 | 0,027292 | 0,055349 | 0,189511 | -0,006252 |
+| Warm (>20) | 10.000 | 0,467661 | 0,501546 | 0,391065 | 0,651231 | 0,183570 |
+| **Cold macro** | 30.000 | **0,191270** | 0,013553 | 0,030767 | 0,163738 | −0,027532 |
+| **Overall** | 40.000 | 0,260367 | 0,135551 | 0,120842 | **0,285611** | +0,025244 |
+
+BPR-MF ba seed `42, 7, 2026` được báo riêng, không trộn vào cột seed 42: Overall **0,135465 ± 0,000231**, Cold macro **0,013602 ± 0,000233** (mean ± sample std, `ddof=1`), nguồn [`BPR_MF_multiseed_2026_09_30.json`](../reports/BPR_MF_multiseed_2026_09_30.json). UFM chưa có độ lệch chuẩn qua nhiều seed.
 
 #### 4.2. Phân Tích Hiện Tượng "Cold-Start Gap"
-1. **Ưu thế rõ rệt ở nhóm Warm**: UFM-Rec vượt xa các mô hình cơ sở ở nhóm Warm (NDCG@10 đạt **0,651231** so với 0,467661 của TF-IDF). Điều này cho thấy sự kết hợp giữa Transformer tuần tự và CLIP biểu diễn ngữ nghĩa khai thác rất hiệu quả lịch sử tương tác khi sản phẩm đã có đủ dữ liệu huấn luyện.
+1. **Ưu thế rõ rệt ở nhóm Warm**: UFM-Rec vượt xa các mô hình cơ sở ở nhóm Warm (NDCG@10 đạt **0,651231** so với 0,467661 của TF-IDF). Đây là quan sát trên bộ mẫu lịch sử; đã có ablation một seed; chưa quy phần tăng điểm cho riêng từng thành phần hoặc suy rộng giữa các giao thức, và không suy rộng sang giao thức v2.
 2. **UFM chưa đạt mục tiêu vượt TF-IDF trên Cold Macro (hiện tượng sụt giảm ở Extreme Cold)**:
-   - Khoảng chênh lệch Cold Macro giữa UFM và TF-IDF là $−0,027532$ (khoảng tin cậy paired bootstrap 95% theo user trên 1.000 lần lấy mẫu lại là $[−0,030221; −0,025082]$ — xem [`reports/ufm_validation_audit_v2/report.md`](../reports/ufm_validation_audit_v2/report.md)).
-   - *Nguyên nhân cốt lõi*: Ở nhóm Zero-shot ($count_{train}=0$), nhánh CF bị khóa hoàn toàn ($w_{cf}=0, w_{sem}=1$) nên UFM đạt kết quả nhỉnh hơn TF-IDF (+0,001912 overall và +0,003727 trên nhóm có lịch sử). Tuy nhiên, khi một item có từ 1 đến 5 lượt xuất hiện (Extreme Cold), mạng Collaborative Embedding bắt đầu kích hoạt ($\mathbb{I}_{cf}=1$), dẫn đến cổng $w_{cf}$ nhận giá trị lớn hơn 0. Do số mẫu quá ít, vector ID bị overfitting nặng (nhiễu tham số), làm suy giảm điểm số dung hợp so với nhánh Semantic thuần túy (0,215933 so với 0,365075 của TF-IDF trên tập có lịch sử).
+   - Khoảng chênh lệch Cold Macro giữa UFM và TF-IDF là $−0,027532$ (khoảng tin cậy paired bootstrap 95% theo user trên 2.000 lần lấy mẫu lại là $[−0,030221; −0,025082]$ — xem [`reports/ufm_validation_audit_v2/report.md`](../reports/ufm_validation_audit_v2/report.md)).
+   - *Giả thuyết giải thích (chưa được chứng minh bằng thực nghiệm loại trừ)*: Ở nhóm Zero-shot ($count_{train}=0$), nhánh CF bị khóa hoàn toàn ($w_{cf}=0, w_{sem}=1$) nên UFM đạt kết quả nhỉnh hơn TF-IDF (+0,001912 overall và +0,003727 trên nhóm có lịch sử). Tuy nhiên, khi một item có từ 1 đến 5 lượt xuất hiện (Extreme Cold), mạng Collaborative Embedding bắt đầu kích hoạt ($\mathbb{I}_{cf}=1$), dẫn đến cổng $w_{cf}$ nhận giá trị lớn hơn 0. Giả thuyết được đặt ra là vector ID với số mẫu rất ít trở thành nguồn nhiễu tham số, làm suy giảm điểm số dung hợp so với TF-IDF (0,215933 so với 0,365075 trên nhóm extreme-cold có lịch sử); TF-IDF không phải nhánh Semantic CLIP của UFM.
+   - *Phép kiểm chứng còn thiếu*: (i) ablation loại trừ nhánh CF (biến thể `semantic_only`) trên chính nhóm Extreme Cold; (ii) phân tích phân phối trọng số $w_{cf}$ trên checkpoint thật `ufm_full_v1`; (iii) đối chiếu chất lượng vector ID giữa item Extreme Cold và item Warm. Cho đến khi có ba phép thử này, đề tài **không** kết luận đây là nguyên nhân đã được chứng minh.
 
 #### 4.3. Cân Chỉnh Xác Suất Độ Tin Cậy (Confidence Calibration)
-Nhằm kiểm tra chất lượng hiệu chuẩn xác suất Top-1 trên tập 100 ứng viên lấy mẫu, phương pháp **Temperature Scaling** được fit trên 20.000 ca validation sớm và kiểm toán độc lập trên 20.000 ca validation muộn ([`reports/ufm_validation_audit_v2/report.json`](../reports/ufm_validation_audit_v2/report.json)):
+Nhằm kiểm tra chất lượng hiệu chuẩn xác suất Top-1 trên tập 100 ứng viên lấy mẫu, phương pháp **Temperature Scaling** được fit trên 20.000 ca validation sớm và kiểm toán trên 20.000 ca validation muộn tách biệt với phần fit nhiệt độ ([`reports/ufm_validation_audit_v2/report.json`](../reports/ufm_validation_audit_v2/report.json)):
 - Nhiệt độ tối ưu học được: $T = 1,789353$
 - Kết quả kiểm chứng trên 20.000 ca muộn:
   * **ECE (Expected Calibration Error)** giảm mạnh từ **0,164477 xuống 0,041497** (giảm 74,8%).
   * **NLL** giảm từ **4,309607 xuống 3,906583**.
   * **Multiclass Brier Score** giảm từ **0,963379 xuống 0,927849**.
+- *Phạm vi*: checkpoint đã được chọn bằng toàn bộ validation, nên đây là calibration **thăm dò**, không phải holdout độc lập với lựa chọn mô hình. Nhiệt độ và ECE này chỉ thuộc bộ ứng viên lịch sử; chưa áp dụng để diễn giải kết quả v2.
 - *Lưu ý*: Phép chia nhiệt độ $T > 0$ là phép biến đổi đơn điệu nên giữ nguyên thứ tự xếp hạng (không làm thay đổi NDCG@10) và xác suất này là xác suất có điều kiện trên tập 100 ứng viên lấy mẫu, không phải xác suất mua hàng ngoài đời thực.
 
 #### 4.4. Đánh Giá Tài Nguyên & Hiệu Năng Vận Hành
 Các bằng chứng vận hành thực tế đã được ghi nhận và lưu trữ trong kho báo cáo:
 1. **Tài nguyên huấn luyện & vận hành trên máy chủ FITLAB** ([`reports/campaign_snapshot_20261003.json`](../reports/campaign_snapshot_20261003.json)):
    - Lượt huấn luyện `ufm_full_v1` (12 epochs, 198.232 steps với AMP mixed precision) hoàn tất trong **14.866,28 giây (~4,13 giờ)**.
-   - Bộ nhớ hệ thống của container (`cgroup memory.current`) ghi nhận ở mức **10.059.272.192 bytes (~9,37 GiB)**, đảm bảo nằm dưới ngưỡng giới hạn **16 GiB** với **0 sự kiện tràn bộ nhớ** (`oom: 0`, `oom_kill: 0`).
+   - Bộ nhớ hệ thống của container (`cgroup memory.current`) ghi nhận ở mức **10.059.272.192 bytes (~9,37 GiB)**, là một mẫu quan sát, không phải peak RAM hoặc peak VRAM của lượt train; snapshot có **0 sự kiện tràn bộ nhớ** (`oom: 0`, `oom_kill: 0`).
 2. **Độ trễ suy luận thực tế trên toàn bộ Catalog 767.045 sản phẩm** ([`reports/demo_acceptance_20261003.json`](../reports/demo_acceptance_20261003.json) & [`reports/demo_ui_export_20261003.json`](../reports/demo_ui_export_20261003.json)):
-   - Khi phục vụ trên CPU (4 threads, duyệt theo từng chunk 1.024 items qua toàn bộ 767.045 sản phẩm mà không dùng chỉ mục xấp xỉ), thời gian phản hồi thực tế qua 4 ca kiểm thử nghiệm thu API đạt từ **2,89 giây đến 7,27 giây/truy vấn** (`new_user`: 2.892,0 ms; `zero_shot`: 3.014,4 ms; `warm`: 3.002,6 ms; `personalized`: 7.272,2 ms) và **4,47 giây** (4.468,4 ms) khi truy vấn lọc Zero-shot từ lịch sử LEGO qua giao diện Web Proxy.
+   - Khi phục vụ trên CPU (4 threads, duyệt theo từng chunk 1.024 items qua toàn bộ 767.045 sản phẩm mà không dùng chỉ mục xấp xỉ), thời gian phản hồi qua 4 ca kiểm thử nghiệm thu API đạt từ **2,89 giây đến 7,27 giây/truy vấn** (`warm`: 2.886,5 ms; `zero_shot`: 3.770,5 ms; `personalized`: 7.047,7 ms; `new_user`: 7.268,8 ms) và **4,47 giây** (4.468,4 ms) khi truy vấn lọc Zero-shot từ lịch sử LEGO qua giao diện Web Proxy.
+   - Phạm vi của số đo này được ghi rõ trong artifact: mỗi ca đo **một request duy nhất**, chỉ tính thời gian inference ở server, **không phải** benchmark thông lượng; do đó không dùng để suy ra QPS.
 3. **Đo kiểm chuẩn kịch bản với [`scripts/benchmark_resources.py`](../scripts/benchmark_resources.py)**:
-   - Công cụ đo tự động (`RAM RSS`, `VRAM peak`, `latency p50/p95/p99` qua 30 lượt lặp và `throughput QPS`) đã được xây dựng tại [`scripts/benchmark_resources.py`](../scripts/benchmark_resources.py) và chạy kiểm chứng trên bộ dữ liệu mẫu cục bộ ([`reports/benchmark_resources_content.json`](../reports/benchmark_resources_content.json)). Bộ bằng chứng hiện chưa có lượt đo 30 chu kỳ trên catalog Toys 767.045 sản phẩm; số đo bộ mẫu không đại diện cho mức dùng tài nguyên hoặc độ trễ production.
+   - Công cụ đo tự động (`RAM RSS`, `VRAM peak`, `latency p50/p95/p99` qua 30 lượt lặp và `throughput QPS`) đã được xây dựng tại [`scripts/benchmark_resources.py`](../scripts/benchmark_resources.py) và chạy kiểm chứng trên bộ dữ liệu mẫu cục bộ ([`reports/benchmark_resources_content.json`](../reports/benchmark_resources_content.json)): catalog **mẫu 30 sản phẩm**, backend content, thiết bị CPU — thông lượng **2.167,96 QPS** (4.336 truy vấn / 2,0 s, history 5, top-10), độ trễ **p50 0,80 ms / p95 1,13 ms** ở history 5 (khoảng 0,27–0,80 ms p50 và 0,38–1,17 ms p95 theo độ dài lịch sử), RAM sau nạp catalog **53,5 MiB**.
+   - Phạm vi số đo: kết quả trên **chỉ áp dụng cho catalog mẫu 30 sản phẩm**, không đại diện cho mức dùng tài nguyên hay độ trễ production trên catalog đầy đủ. Bộ bằng chứng hiện chưa có lượt đo 30 chu kỳ trên catalog Toys 767.045 sản phẩm, và cũng chưa có bản ghi đỉnh VRAM (peak VRAM) cho lượt huấn luyện — mẫu tức thời 3.490 MiB trong [`reports/FITLAB_snapshot_2026_09_28_2223.json`](../reports/FITLAB_snapshot_2026_09_28_2223.json) được ghi rõ là không đại diện cho đỉnh.
 
 #### 4.5. Kết quả baseline sơ bộ trên All Beauty
 Tập thứ hai đã được chuẩn bị độc lập theo split thời gian 80/10/10. Manifest ghi nhận **445.239 tương tác dương**, trong đó 356.402 train, 44.396 validation và 44.441 test; catalog có **86.014 sản phẩm**. Test chưa được đánh giá. Kết quả dưới đây là baseline TF-IDF và popularity trên validation, không phải kết quả UFM hoặc đánh giá chuyển miền của mô hình đề xuất.
@@ -200,16 +213,27 @@ TF-IDF tăng overall NDCG@10 thêm 0,005276 so với popularity; mức tăng t�
 
 Giao thức lấy mẫu All Beauty có 100 ứng viên/ca, lấy negative uniform không hoàn lại; nhóm cold gồm toàn bộ 7.381 ca sẵn có, còn các nhóm khác lấy tối đa 10.000 ca. Giao thức này khác Toys (40.000 ca cân bằng và popularity negative sampling), vì vậy không so sánh trực tiếp metric giữa hai dataset. Nguồn: [`sampling_report.json`](../data/processed/all_beauty_full_temporal/evaluation/sampling_report.json), [`metrics.json`](../data/processed/all_beauty_full_temporal/models/content_baseline/metrics.json), [`split_manifest.json`](../data/processed/all_beauty_full_temporal/split_manifest.json).
 
-#### 4.6. Giới Hạn Nghiên Cứu & Trạng Thái Thực Nghiệm Hiện Tại (Limitations & Threats to Validity)
-Để đảm bảo tính trung thực và minh bạch học thuật, báo cáo công bố rõ các giới hạn hiện tại của thực nghiệm tính đến thời điểm lập báo cáo:
-1. **Kết quả UFM hiện tại dựa trên một hạt giống (`seed=42`) và tập Validation**:
-   - Bảng so sánh chính của UFM-Rec hiện được trích từ lượt chạy `ufm_full_v1` (`seed=42`) trên 40.000 ca validation (nơi tập validation cũng được sử dụng để chọn best epoch 9/12 và fit nhiệt độ $T$). Khoảng tin cậy bootstrap 95% theo user phản ánh độ biến thiên lấy mẫu người dùng trên tập validation, không thay thế cho độ lệch chuẩn đa hạt giống (`mean ± std` qua nhiều random seeds).
-2. **Tập Test độc lập chưa được mở (`test_evaluated = false`)**:
-   - Theo đúng giao thức chống rò rỉ kết quả kiểm thử trong [`docs/followup.md`](../docs/followup.md), tập Test (10% cuối theo thời gian) của UFM-Rec vẫn được khóa hoàn toàn và chưa chạy đánh giá. Tập Test chỉ được mở đúng một lần duy nhất sau khi khóa manifest (gồm SHA-256 của checkpoint, cấu hình và nhiệt độ hiệu chuẩn $T$).
-3. **Kết quả ablation, đa hạt giống và benchmark UFM trên All Beauty chưa có trong bộ bằng chứng hiện lưu**:
-   - Snapshot FITLAB gần nhất có trong repo là ngày 03/10/2026. Tại snapshot đó, **7 biến thể Ablation** (`no_uncertainty`, `fixed_fusion`, `no_cross_align`, `semantic_only`, `collaborative_only`, `text_only`, `image_only`), **11 lượt chạy bổ sung trên Toys & Games** (SASRec, BERT4Rec thích nghi, CLIP Concat với 3 seeds `42, 7, 2026` và 2 seeds UFM bổ sung `7, 2026`), cùng **13 công việc All Beauty** (trích xuất CLIP + 4 mô hình × 3 seeds; kế hoạch tại [`reports/second_dataset_plan_v1.json`](../reports/second_dataset_plan_v1.json)) đã được gửi vào queue. Repo không chứa snapshot FITLAB mới hơn hoặc thư mục `runs`; vì vậy không thể suy ra các job hiện còn chạy, đã hoàn tất hay thất bại. Chỉ cập nhật trạng thái sau khi đọc heartbeat và marker trên FITLAB; riêng All Beauty hiện có TF-IDF baseline validation ở mục 4.5, chưa có CLIP/UFM comparison.
-4. **Phạm vi của đại lượng Uncertainty**:
-   - Đại lượng $u_{cf}, u_{sem}$ là *learned reliability proxy* phục vụ điều tiết cổng dung hợp, không phải ước lượng hậu nghiệm Bayes (Bayesian posterior) hay tách biệt bất định nhận thức/ngẫu nhiên (epistemic/aleatoric).
+#### 4.6. Giới hạn và trạng thái thực nghiệm đối chiếu ngày 27/10/2026
+1. **UFM hiện có một seed**: bootstrap theo user trên validation lịch sử không thay thế cho biến thiên giữa các seed. Calibration lịch sử mang tính thăm dò vì checkpoint đã được chọn bằng validation.
+2. **Test UFM đã xuất hiện trong artifact v2**: report `reeval_ufm_full_v1_v2.json` có cả `splits.validation` và `splits.test`. Cờ `test_evaluated=false` trong audit lịch sử chỉ mô tả lượt chạy lúc đó; không còn là trạng thái toàn dự án. Chưa có bằng chứng manifest khóa đầy đủ trước lượt test v2, nên không gọi đây là nghiệm thu test cuối độc lập. Các thực nghiệm tiếp theo cần công bố test đã được xem và tránh chọn cấu hình theo điểm test này.
+3. **Trạng thái máy chủ**: ngày 27/10 đã kiểm tra trực tiếp FITLAB-01. Checkpoint epoch 9, mã nguồn tạo checkpoint và cache CLIP khớp fingerprint; forward CPU hai ca validation hữu hạn và metric tính lại từ predictions lưu khớp marker. Các snapshot 03/10 và 24/10 chỉ là lịch sử. Nguồn: [kết quả sửa mục 1–15](../reports/fix_1_15_20261027/README.md).
+4. **Thực nghiệm còn thiếu**: đã có popularity và TF-IDF validation v2. Còn cần multi-seed UFM, mở rộng ablation qua nhiều seed, kết quả hai biến thể mới, UFM All Beauty và benchmark tài nguyên theo phạm vi giảng viên chốt. Không mô tả các job lịch sử như queue đang chạy.
+5. **Kiểm thử phần mềm sau sửa**: local có **84 passed, 3 skipped, 10 subtests passed**; ba skip là kiểm tra Linux flock/procfs trên Windows. Đã sửa fixture, test vô điều kiện, sample builder, audit và ledger. Bản mã hiện tại được kiểm thử riêng trên FITLAB-01; mã tạo checkpoint được giữ nguyên. Chưa chạy GitHub Actions. Nguồn: [kết quả sửa mục 1–15](../reports/fix_1_15_20261027/README.md).
+6. **Demo và độ tin cậy**: `Start_Demo.cmd` mở backend content và sinh catalog mẫu nếu thiếu dữ liệu; bằng chứng 4/4 API UFM là lịch sử. Uncertainty là learned reliability proxy; xác suất calibration có điều kiện trên sampled candidates, không phải xác suất mua.
+
+#### 4.7. Kết quả UFM trên bộ ứng viên evaluation_v2
+Nguồn: [`reeval_ufm_full_v1_v2.json`](../reports/ufm_evaluation_v2_20261027/reeval_ufm_full_v1_v2.json), checkpoint epoch 9, SHA-256 `5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8`. Đã kiểm tra hash mẫu/metadata và xác minh trực tiếp checkpoint, nguồn huấn luyện, cache trên FITLAB-01. Không chạy lại toàn bộ suy luận UFM trong lần cập nhật này.
+
+| Nhóm | Số ca mỗi split | Validation NDCG@10 | Test NDCG@10 |
+| --- | ---: | ---: | ---: |
+| Zero-shot (0) | 10.000 | 0,156641 | 0,157281 |
+| Extreme cold (1–5) | 10.000 | 0,191567 | 0,195261 |
+| Cold (6–20) | 10.000 | 0,197946 | 0,198373 |
+| Warm (>20) | 10.000 | 0,110375 | 0,113859 |
+| **Cold macro** | 30.000 | **0,182051** | **0,183638** |
+| **Overall** | 40.000 | **0,164132** | **0,166193** |
+
+V2 có giao thức và hash bộ mẫu khác bảng 4.1, vì vậy **không so trực tiếp điểm v2 với TF-IDF/BPR-MF/SVD lịch sử**, không kết luận extreme-cold đã được sửa, và không gán mức tăng/giảm giữa hai bộ mẫu cho thay đổi mô hình. Baseline mới trên cùng validation v2 đã có: **TF-IDF Overall/Cold macro 0,181498 / 0,195672; popularity 0,040904 / 0,042527**. UFM tương ứng **0,164132 / 0,182051**, thấp hơn TF-IDF. TF-IDF dùng 10 history item, UFM dùng 20; đây chưa phải ablation kiểm soát chỉ một thành phần. Nguồn: [kết quả sửa mục 1–15](../reports/fix_1_15_20261027/README.md). Test đã được đánh giá; không tiếp tục dùng cách diễn đạt “chưa mở test”.
 
 ---
 
@@ -220,8 +244,8 @@ Giao thức lấy mẫu All Beauty có 100 ứng viên/ca, lấy negative unifor
      $$u_{cf} \leftarrow u_{cf} + \exp\left(-\frac{count_{train}}{5.0}\right)$$
    - Kết hợp cùng tần suất dropout thích nghi $p_{\text{drop}}(i) = p_0 \cdot \exp(-count_{train}(i)/10.0)$, cơ chế này ép mô hình giảm trọng số Collaborative và ưu tiên nhánh Semantic CLIP khi sản phẩm có từ 1–5 tương tác. Biến thể này đã được cài đặt và kiểm thử đơn vị trong `UFMRec` (`variant="count_aware_fusion"`), sẵn sàng đưa vào chạy thực nghiệm đối chứng trên GPU.
 2. **Tăng tốc độ truy vấn phục vụ Production với FAISS Vector Index (Two-stage Retrieval)**:
-   - Hiện tại Demo UFM quét toàn bộ danh mục 767.045 sản phẩm bằng ma trận dày trên CPU mất 2,89s – 7,27s. Trong phiên bản triển khai quy mô lớn, kiến trúc được tách thành 2 giai đoạn:
-     * *Giai đoạn 1 (Candidate Retrieval)*: Dùng chỉ mục xấp xỉ FAISS HNSW / IVF trên vector người dùng và sản phẩm để trích xuất top 100–200 ứng viên tiềm năng trong $< 20\text{ ms}$.
+   - Bằng chứng demo UFM lịch sử ghi nhận quét toàn bộ danh mục 767.045 sản phẩm bằng ma trận dày trên CPU mất 2,89s – 7,27s. Trong phiên bản triển khai quy mô lớn, kiến trúc được tách thành 2 giai đoạn:
+     * *Giai đoạn 1 (Candidate Retrieval)*: Dùng chỉ mục xấp xỉ FAISS HNSW / IVF trên vector người dùng và sản phẩm để trích xuất top 100–200 ứng viên tiềm năng; độ trễ mục tiêu cần đo, chưa có benchmark xác nhận.
      * *Giai đoạn 2 (UFM Reranking)*: Đưa 100–200 ứng viên qua cổng UFM-Rec Head để chấm điểm xếp hạng tinh vi và trích xuất trọng số giải thích $w_{cf}, w_{sem}$.
 3. **Mở rộng và Kiểm chứng Đa miền (Cross-domain Generalization)**:
    - Hoàn tất chuỗi thực nghiệm chuyển giao sang tập dữ liệu thứ hai **All Beauty (86.014 items, 37.381 ca validation)** theo đúng kế hoạch đã đóng băng SHA-256 tại [`reports/second_dataset_plan_v1.json`](../reports/second_dataset_plan_v1.json).
@@ -230,8 +254,9 @@ Giao thức lấy mẫu All Beauty có 100 ứng viên/ca, lấy negative unifor
 
 ### CHƯƠNG 6: KẾT LUẬN
 
-Đề tài đã hoàn thành việc thiết kế, xây dựng pipeline dữ liệu thời gian thực quy mô lớn, huấn luyện mô hình **UFM-Rec** và kiểm toán kết quả chặt chẽ trên tập dữ liệu Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11,57 triệu tương tác). Những kết quả và đóng góp chính bao gồm:
-1. Xây dựng hoàn chỉnh kiến trúc dung hợp đa phương thức kết hợp biểu diễn đóng băng **CLIP ViT-B/32** (98,91% độ phủ ảnh hợp lệ) với **Causal Sequential Transformer**, mang lại bước tiến lớn ở phân khúc Warm (**0,651231 NDCG@10**, +0,183570 so với TF-IDF) và nâng Overall NDCG@10 lên **0,285611**.
-2. Kiểm toán minh bạch và lý giải bằng thực nghiệm nguyên nhân khiến Cold Macro của UFM (`0,163738`) còn thấp hơn TF-IDF (`0,191270`): sự suy giảm tập trung ở nhóm Extreme Cold (1–5 tương tác) khi nhánh ID bắt đầu mở cổng nhưng embedding bị nhiễu do thiếu mẫu, từ đó thiết kế giải pháp `count_aware_fusion` trong mã nguồn.
-3. Cân chỉnh thành công xác suất dự đoán Top-1 trên tập ứng viên với Temperature Scaling ($T = 1,789353$), giúp giảm sai số **ECE từ 0,164477 xuống 0,041497** trên 20.000 ca kiểm định độc lập theo thời gian.
-4. Xây dựng hệ thống phần mềm nghiên cứu có khả năng tái lập cao: kiểm tra toàn vẹn mã nguồn và dữ liệu bằng SHA-256, cơ chế tự phục hồi hàng đợi huấn luyện, giao diện Demo Web Pro Max Dark Glassmorphism vượt qua 4/4 ca kiểm thử API thực tế, cùng bộ kiểm thử tự động 14/14 test suites đạt chuẩn.
+Nhóm đã triển khai pipeline chia thời gian, kiến trúc UFM-Rec kết hợp CLIP đóng băng với Transformer và cổng độ tin cậy, cùng demo và công cụ kiểm toán. Phần thực nghiệm vẫn đang hoàn thiện.
+
+- Trên bộ validation lịch sử, UFM có Overall NDCG@10 **0,285611** và Cold macro **0,163738**; TF-IDF tương ứng **0,260367 / 0,191270**. UFM chưa đạt mục tiêu cold-start trên bộ này. Nhiễu ID là giả thuyết chưa được ablation xác nhận.
+- Trên `evaluation_v2`, artifact UFM ghi validation Overall/Cold macro **0,164132 / 0,182051**, test **0,166193 / 0,183638**. Đã có baseline cùng validation v2: TF-IDF Overall/Cold macro 0,181498 / 0,195672, cao hơn UFM. Cần ablation để kết luận nguyên nhân; đã có điểm validation v3 tại phần cập nhật đầu tài liệu.
+- Temperature scaling lịch sử giảm ECE **0,164477 → 0,041497** trên phần validation muộn; đây là kiểm toán thăm dò có điều kiện trên sampled candidates.
+- Cần hoàn thiện tính nhất quán giao thức, baseline v2, kiểm thử phần mềm, multi-seed/ablation và xác nhận tài nguyên FITLAB trước khi chốt báo cáo cuối. Các con số demo và tài nguyên lịch sử không xác nhận khả năng vận hành hiện tại.

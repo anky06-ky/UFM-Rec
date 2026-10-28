@@ -1,0 +1,48 @@
+{
+  "observed_at_utc": "2026-10-28T07:16:55.113839+00:00",
+  "catalog_items": 767045,
+  "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+  "availability_counts": {
+    "text_only": 8353,
+    "image_only": 1,
+    "neither": 0
+  },
+  "cases": [
+    {
+      "kind": "text_only",
+      "row_index": 402,
+      "asin": "B09X9KG6KY",
+      "feature_mask_text_image": [
+        true,
+        false
+      ],
+      "result_asins": [
+        "B0BQXW5SDZ",
+        "B09WGRQQWZ",
+        "B09F394KMB"
+      ],
+      "model_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8"
+    },
+    {
+      "kind": "image_only",
+      "row_index": 135056,
+      "asin": "B015D9O7G0",
+      "feature_mask_text_image": [
+        false,
+        true
+      ],
+      "result_asins": [
+        "B09BFY2J8B",
+        "B0054TRQA4",
+        "B0BSXDB363"
+      ],
+      "model_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8"
+    }
+  ],
+  "missing_local_jpeg_status": 404,
+  "limitations": [
+    "No real item lacks both text and image in this feature cache.",
+    "A missing display JPEG does not invalidate the saved CLIP embedding.",
+    "This is API behavior, not a browser image-error visual check."
+  ]
+}

@@ -1,4 +1,38 @@
+# Tiến độ UFM-Rec — 28/10/2026
+
+Phạm vi giảng viên đã chốt theo xác nhận của nhóm: hệ gợi ý sản phẩm dựa trên hành vi, hình ảnh và tên/mô tả. Phân tích [validation v3 theo train count](continuation_20261028/count_effect_v3.json) đã hoàn tất trên dự đoán lưu sẵn; nhóm 1–5 tương tác có full − semantic-only NDCG@10 = −0,024101, nhóm 21+ là +0,014865. Hai biến thể count-aware và adaptive dropout đã được tách cơ chế trong mã. [Giao thức 15 lượt train](../configs/multimodal_followup_20261028.json) đã khóa và qua preflight 9 hash trên bản sao local; **chưa có lượt train mới** vì local không có CUDA và chưa truy cập được FITLAB.
+
+Checkpoint UFM từ bản sao local đã khởi động trên Windows, 767.045 sản phẩm; [6/6 ca API](continuation_20261028/windows_ufm_verification.json) đạt. Kiểm thử mã hiện tại: **94 passed, 3 skipped, 10 subtests passed** trên Windows. Các phần lịch sử bên dưới giữ theo ngày ghi nhận, không thay thế trạng thái hiện tại.
+
+[Benchmark Windows](continuation_20261028/windows_ufm_benchmark.json): 2 warm-up + 10 request đầy đủ, p50 21,25 giây, p95 26,35 giây, RSS server cao nhất quan sát 2.551,5 MiB; hai request đồng thời một 200 và một 429. Đây là giới hạn vận hành cần nêu rõ khi trình bày demo.
+
+<!-- current-evidence-20261028 -->
+> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
+<!-- /current-evidence-20261028 -->
+
+
+Đối chiếu ngày **28/10/2026**: bộ sửa 1–15 trước đây đạt Linux **87 pass** / Windows **84 pass, 3 skip**. Mã bổ sung calibration/source loader đạt Linux **94 pass** / Windows **91 pass, 3 skip**; các bổ sung restore sau đó có kiểm thử riêng. Xem báo cáo sửa mục 1–15 và log để phân biệt bản mã hiện tại với bản mã đã tạo checkpoint.
+
+Đã thực hiện phần kỹ thuật của mục 1–15; [bản tổng hợp và bằng chứng](fix_1_15_20261027/README.md) lưu bằng chứng của mốc cũ. Checkpoint/cache đã được xác minh trên máy chủ; baseline validation v2 đã chạy cùng hash; v3 đã tạo và audit. Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. GitHub Actions cho bản mã mới chưa được chạy; không suy luận test thêm.
+
+Cold macro NDCG@10 validation v2: UFM 0,182051; TF-IDF 0,195672; popularity 0,042527. UFM chưa vượt baseline chính. Các mốc bên dưới giữ nguyên như lịch sử trước lần kiểm tra trực tiếp FITLAB-01 này; không dùng trạng thái thiếu checkpoint/baseline trong mốc cũ làm trạng thái hiện tại.
+
+---
+
 # Tiến độ UFM-Rec
+
+## Cập nhật đối chiếu bằng chứng ngày 27/10/2026
+
+Đã tìm thấy bộ kết quả `evaluation_v2` trong thư mục local `tmp/transfer/evaluation_v2` và lưu ba JSON nhỏ vào [reports/ufm_evaluation_v2_20261027](ufm_evaluation_v2_20261027/README.md). Hash SHA-256 của cả hai bộ mẫu NPZ và hai file metadata CSV gzip trên local khớp các hash trong report nhập về. Đây là đối chiếu artifact, chưa phải lượt huấn luyện hoặc đánh giá GPU được chạy lại trong lần chỉnh tài liệu này.
+
+- **Test UFM đã được đánh giá trong artifact v2**: validation Overall/Cold macro NDCG@10 là **0,164132 / 0,182051**; test là **0,166193 / 0,183638**. Không tiếp tục mô tả toàn dự án bằng `test_evaluated = false`; cờ đó thuộc bộ kết quả lịch sử.
+- Checkpoint trong report là `ufm_full_v1`, epoch 9, SHA-256 `5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8`. V2 dùng mẫu validation có hash `c71906e6…`, khác mẫu lịch sử `8efa1165…`; không ghép baseline hoặc temperature cũ vào bảng v2. Chưa có baseline chạy trên đúng mẫu v2 trong bộ bàn giao đã kiểm tra.
+- Candidate audit v2 báo structure, exclusions, regimes và replay đều đạt. Sampling report dùng mô tả tổng quát; audit và code cho biết negative cùng regime với target, có trọng số theo số tương tác đến cuối split. Audit cũng ghi nhận 3 negative trùng positive train ngoài cửa sổ history ở validation và 7 ở test; vì vậy `passed=true` không có nghĩa toàn bộ negative đã được xác nhận là không liên quan.
+- Bản ghi FITLAB ngày **24/10** bên dưới là trạng thái khôi phục tại thời điểm đó, không thể dùng để phủ nhận sự tồn tại của artifact v2 nhập về ngày 27/10. Chưa kiểm tra trực tiếp trạng thái máy chủ hoặc vị trí checkpoint hiện tại trong lần cập nhật này.
+- Kết quả kiểm thử local ngày 27/10: `python -m pytest tests/ -q -p no:cacheprovider --tb=short` có **55 passed, 7 failed, 2 errors, 3 skipped** (Python 3.14.8, NumPy 2.5.4, PyTorch 2.14.1+cpu). Bộ cũ, bỏ hai file test mới, có **53 passed, 3 skipped**. Không ghi toàn bộ test đã đạt; các lệnh này không chạy lại huấn luyện hay mở thêm test recommendation.
+- Bước tiếp theo: đối chiếu code/checkpoint và bộ mẫu v2; chạy baseline trên đúng validation v2; công bố việc test đã được xem và chốt giao thức đánh giá cho các biến thể sau, tránh chọn mô hình theo điểm test đã biết. Khôi phục tài nguyên FITLAB chỉ sau khi xác nhận tình trạng máy chủ thực tế.
+
+---
 
 ## Mốc 24/10/2026 — khôi phục và kiểm tra workspace FITLAB-02
 
@@ -121,7 +155,9 @@ Calibration không đổi thứ hạng, không khắc phục thiếu hụt cold-
 Demo API mất 2,89–7,27 giây mỗi ca trong bốn lượt đo đơn. Đây là thời gian inference
 server, chưa phải p50/p95, throughput hay benchmark tài nguyên.
 
-## Đang chờ và thứ tự tiếp tục
+## Hàng đợi và kế hoạch tại mốc 03/10 — thông tin lịch sử
+
+Các bước bên dưới phản ánh kế hoạch tại mốc 03/10. Kế hoạch hiện tại đã được thay bằng mục đối chiếu 27/10 ở đầu tài liệu; không coi các job này là đang chạy và không coi test còn chưa được đánh giá.
 
 [Snapshot gốc](campaign_snapshot_20261003.json): GPU utilization **96%**, trống
 18.678 MiB; ablation 0/7 hoàn tất. Các tiến trình tồn tại khi kiểm tra:
@@ -161,6 +197,6 @@ Biểu đồ đã render và kiểm tra trực quan:
 [calibration](../output/figures/validation_20261003/calibration_reliability.png).
 Cùng thư mục có SVG/PDF để đưa vào báo cáo; tái tạo bằng `scripts/plot_validation_audit.py`.
 
-[Snapshot trước 02/10](Tien_do_UFM_2026-10-02.md) · [Nguồn All Beauty](second_dataset_preparation.json)
+[Snapshot trước 02/10](../docs/history/Tien_do_UFM_2026-10-02.md) · [Nguồn All Beauty](second_dataset_preparation.json)
 · [Kế hoạch dataset thứ hai đã khóa hash](second_dataset_plan_v1.json)
 · [Protocol bổ sung](../docs/followup.md).
