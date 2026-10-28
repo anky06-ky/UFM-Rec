@@ -6,11 +6,12 @@ import heapq
 import json
 from pathlib import Path
 from types import SimpleNamespace
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlencode
 
 import numpy as np
 from scipy import sparse
 from evaluate_content_baseline import tie_noise
+from demo_product_images import image_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT/'data/processed/toys_games_full_temporal'
@@ -60,7 +61,16 @@ class Catalog:
     def item(self,row):
         n = int(self.counts[row])
         regime = 'zero_shot' if n==0 else 'extreme_cold' if n<=5 else 'cold' if n<=20 else 'warm'
-        return dict(asin=self.asins[row],title=self.titles[row],image=self.images[row],train_count=n,regime=regime)
+        asin = self.asins[row]
+        uploaded = image_path(self.data, asin).is_file()
+        image = '/api/product-image?' + urlencode({'asin': asin}) if uploaded else self.images[row]
+        return dict(asin=asin,title=self.titles[row],image=image,train_count=n,regime=regime)
+
+    def provenance(self):
+        simulated = (self.data/'demo_manifest.json').is_file()
+        return dict(mode='synthetic_demo' if simulated else 'catalog_from_disk',
+                    catalog=self.data.name, items=len(self.asins),
+                    counts_simulated=simulated, display_images_affect_scores=False)
 
     def search(self,q,limit=20):
         q = q.strip().lower()[:80]
@@ -89,6 +99,8 @@ class ContentBackend:
     warning = 'Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.'
     def __init__(self,catalog):
         self.catalog = catalog
+        if (catalog.data/'demo_manifest.json').is_file():
+            self.warning += ' Catalog mẫu 30 sản phẩm; số tương tác được mô phỏng.'
         self.matrix = sparse.load_npz(catalog.data/'content/tfidf_all.npz').tocsr()
         if self.matrix.shape[0]!=len(catalog.asins) or not np.isfinite(self.matrix.data).all():
             raise ValueError('TF-IDF mapping/finite check failed.')
@@ -116,10 +128,12 @@ class ContentBackend:
 
 class UFMBackend:
     name = 'UFM Rec'
-    warning = 'Điểm và uncertainty là tín hiệu nghiên cứu, không phải xác suất mua hàng hay độ chắc chắn Bayesian.'
-    def __init__(self,catalog,run,chunk=1024,_allow_technical_smoke=False,features=None):
+    warning = ('UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. '
+               'JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. '
+               'Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.')
+    def __init__(self,catalog,run,chunk=1024,_allow_technical_smoke=False,features=None,training_source=None):
         import torch
-        from ufm_model import UFMConfig,UFMRec
+        from trained_ufm import model_classes
         from train_ufm_recommender import feature_audit
         from common import sha256
         self.catalog,self.chunk,self.torch = catalog,chunk,torch
@@ -132,14 +146,18 @@ class UFMBackend:
         if config['feature_marker_sha256'] != sha256(self.features/'complete.json'):
             raise ValueError('Feature marker changed since training.')
         feature_audit(SimpleNamespace(features=self.features,data=catalog.data),len(catalog.asins))
-        if config['code_sha256']['ufm_model.py'] != sha256(ROOT/'src/ufm_model.py'):
-            raise ValueError('Model code does not match training checkpoint.')
         state = torch.load(run/'best.pt',map_location='cpu',weights_only=True)
         if state['config'] != config: raise ValueError('Best checkpoint/config mismatch.')
+        UFMConfig,UFMRec = model_classes(config,training_source)
         self.cfg = UFMConfig(**state['model_config'])
         if self.cfg.items != len(catalog.asins) or chunk<1: raise ValueError('Model/catalog mismatch.')
         self.model = UFMRec(self.cfg).eval()
         self.model.load_state_dict(state['model'])
+        self.provenance = dict(checkpoint_sha256=sha256(run/'best.pt'),
+            model_source_sha256=config['code_sha256']['ufm_model.py'],
+            feature_marker_sha256=config['feature_marker_sha256'],
+            variant=self.cfg.variant, checkpoint_epoch=state.get('epoch'),
+            training_source=str(training_source) if training_source else str(ROOT/'src'))
         del state
         self.tables = tuple(torch.from_numpy(np.load(self.features/n)) for n in ['text.npy','image.npy','modalities.npy'])
         self.tables += (torch.from_numpy(np.concatenate([[0],catalog.counts]).astype(np.int64)),)
@@ -178,6 +196,7 @@ def parse_args():
     p.add_argument('--backend',choices=['content','ufm'],default='content')
     p.add_argument('--run',type=Path,default=ROOT/'runs/ufm_full_v1')
     p.add_argument('--features',type=Path,help='Relocated identical CLIP cache; hashes must still match.')
+    p.add_argument('--training-source',type=Path,help='Archived source matching all recorded training hashes.')
     p.add_argument('--history',nargs='*',default=[])
     p.add_argument('--top-k',type=int,default=10)
     return p.parse_args()
@@ -192,5 +211,6 @@ if __name__ == '__main__':
         from build_mock_demo_data import build_mock_catalog
         args.data = build_mock_catalog()
     catalog = Catalog(args.data)
-    backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(catalog,args.run,features=args.features)
+    backend = ContentBackend(catalog) if args.backend=='content' else UFMBackend(
+        catalog,args.run,features=args.features,training_source=args.training_source)
     print(json.dumps(dict(backend=backend.name,warning=backend.warning,items=backend.recommend(args.history,args.top_k)),ensure_ascii=False,indent=2))

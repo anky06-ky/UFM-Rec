@@ -1,0 +1,136 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Write bug condition exploration test": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945165631
+      },
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945491704
+      }
+    ],
+    "2. Write preservation property tests (BEFORE implementing fix)": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166013
+      }
+    ],
+    "3.1 Add new configuration parameters to UFMConfig": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166213
+      }
+    ],
+    "3.2 Implement count_aware_hard variant": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166447
+      }
+    ],
+    "3.3 Implement hybrid_confidence_gate variant": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166557
+      }
+    ],
+    "3.4 Implement cold_adapter variant": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166690
+      }
+    ],
+    "3.5 Add command-line arguments to train_ufm_recommender.py": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166793
+      }
+    ],
+    "3.6 Verify bug condition exploration test now passes": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166886
+      }
+    ],
+    "3.7 Verify preservation tests still pass": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945166987
+      }
+    ],
+    "4.1 Create scripts/run_cold_start_experiments.py": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167083
+      }
+    ],
+    "4.2 Create configs/cold_start_variants.json": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167292
+      }
+    ],
+    "5.1 Create tests/test_cold_start_variants.py": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167390
+      }
+    ],
+    "5.2 Run all unit tests": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167521
+      }
+    ],
+    "6.1 Run full training with count_aware_hard variant": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167638
+      }
+    ],
+    "6.2 Run full training with hybrid_confidence_gate variant": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167758
+      }
+    ],
+    "6.3 Run full training with cold_adapter variant": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167863
+      }
+    ],
+    "6.4 Compare all variants against TF-IDF baseline": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945167975
+      }
+    ],
+    "6.5 Ensure all tests pass": [
+      {
+        "executionId": "6e0e7c43-6af6-4c05-b748-e522c77711ba",
+        "chatSessionId": "sess_d1d42e37-257f-400c-8949-33ec314a2515",
+        "timestamp": 1792945168090
+      }
+    ]
+  }
+}

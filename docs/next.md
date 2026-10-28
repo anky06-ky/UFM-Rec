@@ -1,57 +1,60 @@
-# Bước tiếp theo — 24/10/2026 (cập nhật 12:28 UTC+07)
+# Hướng làm tiếp theo của UFM-Rec
 
-Source commit `faad9ed` và môi trường CUDA đã sẵn sàng trên FITLAB-02. Snapshot
-12:28 báo `status.py` CLIP 0/767.045, không có queue/checkpoint. `items.csv.gz` và
-`products_text.csv.gz` còn trên FITLAB, nhưng metadata nguồn và catalog URL ảnh chưa
-có. Năm shard Parquet đã được tải về local và kiểm tra SHA-256; chi tiết trong
-`data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/download_manifest.json`. Xem
-[tiến độ có bằng chứng](../reports/progress.md) và [protocol hàng đợi](followup.md).
+Cập nhật 28/10/2026. **Phạm vi giảng viên đã chốt theo thông tin nhóm cung cấp:** hệ khuyến nghị sản phẩm dùng lịch sử hành vi, hình ảnh và tên/mô tả sản phẩm. Toys & Games là tập thực nghiệm chính; cold-start sản phẩm là phân tích trọng tâm trong phạm vi hệ gợi ý này. Trường hợp người dùng không có lịch sử hiện là fallback; chưa có kết quả chứng minh cá nhân hóa người dùng mới. Cold macro NDCG@10 và ba seed dưới đây là **giao thức nhóm khóa để kiểm chứng**, không ghi là giảng viên đã duyệt từng chi tiết.
 
-1. Chuyển 5 shard đã xác minh từ local vào
-   `data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/` trên FITLAB, đồng thời
-   đồng bộ `src/prepare_ufm_catalog.py` và `requirements-catalog-parquet.txt` đã cập
-   nhật. Tệp nguồn tổng cộng **972.667.016 byte**; manifest ghi revision và SHA-256.
-   Các file Parquet lớn không đưa vào Git.
-2. Trong venv `/home/coder/.venv-ufm`, cài `pyarrow` theo
-   `requirements-catalog-parquet.txt`. Trên FITLAB, `items.csv.gz` 7,2 MiB và
-   `products_text.csv.gz` 283 MiB đã tồn tại. Gọi builder với 5 shard theo thứ tự
-   (`full-00000` đến `full-00004`) và output mới
-   `data/processed/toys_games_full_temporal/foundation_catalog_restore_20261024`.
-   Không dùng report cũ thay catalog.
+## Căn cứ để chọn hướng
 
-   ```bash
-   /home/coder/.venv-ufm/bin/pip install -r requirements-catalog-parquet.txt
-   /home/coder/.venv-ufm/bin/python src/prepare_ufm_catalog.py \
-     --data data/processed/toys_games_full_temporal \
-     --metadata data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00000-of-00005.parquet \
-                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00001-of-00005.parquet \
-                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00002-of-00005.parquet \
-                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00003-of-00005.parquet \
-                data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games/full-00004-of-00005.parquet \
-     --output data/processed/toys_games_full_temporal/foundation_catalog_restore_20261024
-   ```
+Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed 42. Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only CLIP 0,190036; UFM full 0,182056**. Full chưa vượt hai đối chứng này. Bảy ablation đã có kết quả, nhưng chưa có độ biến thiên giữa các seed. Nguồn: [kết quả và hash](../reports/continuation_20261028/README.md).
 
-3. Đối chiếu catalog với đúng **767.045 `parent_asin`** và mapping theo thứ tự hiện
-   tại; dừng nếu thiếu/trùng ID hoặc checksum nguồn không khớp. Checkout local còn
-   report cũ với catalog SHA256 dự kiến
-   `65d63e7b58babb133db78f3369b3224db6a451d80c4f616a4b8c0023f73b9003`; dùng nó
-   để đối chiếu sau khi tái tạo, không dùng report thay file catalog.
-4. Môi trường đã kiểm tra: `/home/coder/.venv-ufm/bin/python`; PyTorch
-   `2.14.1+cu132`, CUDA khả dụng. Chạy CLIP smoke nhỏ sau khi có catalog, kiểm tra
-   hash/shape/norm/mask, rồi mới trích xuất đủ item và xác nhận marker hoàn tất.
-5. Không resume: không có checkpoint. Sau khi cache hợp lệ, chạy UFM/ablation từ
-   đầu qua queue hiện có; trước mỗi đợt xác nhận không có trainer khác và GPU đủ
-   ngưỡng protocol. Không chạy đồng thời nhiều queue.
-6. Chọn checkpoint/calibration bằng validation, khóa config/hash/candidates trong
-   manifest, rồi chạy một đợt test. Ghi rõ kết quả benchmark lịch sử không phải kết quả
-   của workspace hiện tại.
-7. Đo VRAM/RAM, latency p50/p95 và throughput; cập nhật báo cáo/slide từ số đo mới.
-   UFM chưa có test metric mới; cold macro lịch sử thấp hơn TF-IDF khoảng 0,027532.
+Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi giúp hay làm giảm chất lượng ở từng mức train count, và điều chỉnh theo tần suất có giúp không?** Kết quả semantic-only tốt hơn full là bằng chứng để khảo sát; chưa tự chứng minh ID embedding hoặc gate là nguyên nhân.
 
-Hiện các shard đã sẵn sàng ở local nhưng chưa được chuyển lên FITLAB; không coi
-catalog hay CLIP là đã chạy. Xem trạng thái từng bước trong
-[báo cáo tiến độ](../reports/progress.md).
+## 1. Chốt phạm vi và kế hoạch thí nghiệm
 
-Các queue/snapshot ngày 03/10 và ghi chép CLIP/UFM ngày 28/09 chỉ là lịch sử. Dùng
-[hướng dẫn phục hồi](recovery.md) và [protocol queue](followup.md) khi đã có đủ
-source/checkpoint; không kết luận hoàn tất chỉ từ heartbeat.
+- Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. Nếu cần phản hồi thêm, tập trung vào cách nghiệm thu chỉ số và bộ test, hoặc yêu cầu tập dữ liệu thứ hai; dùng [lời trình bày cập nhật](trao_doi_gvhd_2026_10_28.md).
+- Giữ riêng v1/v2/v3; mọi mô hình trong một bảng dùng cùng candidate hash. V3 vẫn là negative sampling hồi cứu theo regime của target, không phải đánh giá online/full-catalog.
+- Test v2 đã được xem. V3 dùng lại quần thể validation đã tham gia chọn checkpoint, chưa tạo holdout độc lập. Cần thống nhất thiết kế nghiệm thu tiếp theo trước khi mở thêm test; không chọn mô hình theo test đã biết.
+- Đã khóa source, dữ liệu, features, candidates, selection rule, ngân sách và thứ tự 15 run trong [manifest thực nghiệm](../configs/multimodal_followup_20261028.json). [Runner](../scripts/run_locked_ufm_followup.py) đã qua dry-run trên bản sao FITLAB, kiểm tra 9 đầu vào SHA; chưa có train mới.
+
+**Đầu ra cần có:** cấu hình/manifest của vòng chạy mới và phạm vi nghiệm thu rõ ràng.
+
+## 2. Làm đối chứng vững trước khi thêm cải tiến
+
+- Ưu tiên **full UFM, semantic-only và fixed-fusion**. Dùng cùng CLIP, history, loss/ngân sách và quy tắc chọn checkpoint.
+- Dùng các seed đã khai báo **42, 7, 2026**; báo từng seed và mean ± sample standard deviation. Không chọn seed đẹp hoặc dùng bootstrap user thay cho nhiều lần huấn luyện.
+- Nếu train bằng mã hiện tại, train lại các đối chứng trên cùng snapshot mã. Checkpoint lịch sử vẫn dùng đúng archived source khi nạp; không bỏ kiểm tra hash để gộp hai phiên bản mã.
+- Báo thêm zero-shot/extreme-cold/cold/warm, có/không history và repeat/new purchase. Giữ TF-IDF làm mốc so sánh hệ thống; nó dùng history/objective khác UFM nên không quy chênh lệch cho riêng một thành phần.
+
+**Đầu ra cần có:** bảng so sánh tái lập được, từng seed, config và predictions. Chỉ mở job train khi có tài nguyên phù hợp; không dừng job khác để lấy GPU.
+
+Trạng thái 28/10: máy local chỉ có PyTorch CPU, SSH FITLAB-01 không kết nối, tab code-server không khả dụng. Chưa chạy 15 run mới. Runner mặc định chỉ kiểm tra; `--execute` cần GPU có quyền truy cập và source đúng hash.
+
+## 3. Kiểm chứng cải tiến theo train count
+
+1. Phân tích chất lượng và phân phối trọng số CF/semantic theo train count, tách các ca không có tín hiệu.
+2. Đánh giá `count_aware_fusion` trước: cơ chế đã có mã nhưng chưa có kết quả train được xác minh. So với full và fixed-fusion trên cùng code/seed/budget.
+3. Đánh giá `adaptive_dropout` thành thí nghiệm riêng sau đó; không gộp hai thay đổi rồi quy kết tác dụng cho một cơ chế.
+
+Không lấy trọng số CF dưới một ngưỡng tùy ý làm tiêu chí thành công. Kết luận dựa trên chất lượng cold, ảnh hưởng ở warm và độ ổn định qua seed. Nếu không cải thiện, báo giới hạn một cách trung thực; đây vẫn là kết quả thực nghiệm có ích.
+
+Đã phân tích [dự đoán v3 theo train count](../reports/continuation_20261028/count_effect_v3.json): full − semantic-only lần lượt **−0,002424** (count 0), **−0,024101** (1–5), **+0,002586** (6–20), **+0,014865** (21+). Đây là chênh lệch trên checkpoint cũ một seed, không phải kết quả của cải tiến mới. Mã `count_aware_fusion` đã được tách khỏi `adaptive_dropout`: biến thể thứ nhất giữ fixed ID dropout như full; biến thể thứ hai chỉ đổi dropout theo count. Bằng chứng tác dụng sau train còn chờ 15 run.
+
+## 4. Nghiệm thu ứng dụng trên máy
+
+- UFM thật trên FITLAB đã qua 6 ca API và UI zero-shot. UFM trên Windows cũng đã khởi động từ bản sao SHA và qua 6/6 ca API với 767.045 item, checkpoint SHA `5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8`: [receipt Windows](../reports/continuation_20261028/windows_ufm_verification.json). Thêm [ca thiếu modality](../reports/continuation_20261028/windows_ufm_missing_modalities.json): history chứa item chỉ có text hoặc chỉ có ảnh vẫn trả gợi ý, tìm kiếm và loại history đúng; không có item thiếu cả hai trong cache thực. JPEG local thiếu trả 404 có kiểm soát. Còn nghiệm thu lỗi ảnh trực quan và export trên giao diện local; export UFM đã có bằng chứng trên FITLAB.
+- File export UFM thật đã được tải về và chuyển vào `reports/continuation_20261028/ui_export_ufm_zero_shot.json`; đây là bằng chứng luồng export, không phải metric recommendation.
+- Đã đo [benchmark HTTP Windows](../reports/continuation_20261028/windows_ufm_benchmark.json) trên UFM thật: 2 warm-up, 10 request có một item lịch sử và K=5, p50 **21,25 giây**, p95 **26,35 giây**; RSS server cao nhất quan sát **2.551,5 MiB**. Với hai request đồng thời, một thành công và một trả 429 vì server chỉ chạy một suy luận tại một thời điểm. Đây là số của một máy CPU/một cấu hình request, chưa phải throughput đồng thời hoặc peak training RAM.
+**Đầu ra cần có:** demo UFM chạy lại từ bản sao local, toàn bộ ca API/UI và benchmark có bằng chứng.
+
+## 5. Báo cáo và bàn giao
+
+- Đồng bộ báo cáo, slide và generator Word; xuất Word/PDF rồi kiểm tra từng trang. Bản Word/PDF cũ chưa là bản nộp cuối.
+- Rà diff, đồng bộ repo và chạy GitHub Actions. Không đưa dataset/checkpoint/ZIP lớn vào Git; giữ manifest và hướng dẫn khôi phục.
+- Ghi riêng phần đã chạy và phần chưa có kết quả train, nhất là 15 lượt đa seed và cải tiến. Không gọi trạng thái chuẩn bị là hoàn tất thực nghiệm.
+
+**Đầu ra cần có:** hướng dẫn cài/chạy, CI đạt và bộ báo cáo cùng phiên bản.
+
+## Sau khi hoàn tất phần chính
+
+UFM trên All Beauty chỉ ưu tiên nếu giảng viên giữ yêu cầu dataset thứ hai. Retrieval/ANN, fine-tune encoder và các tính năng mở rộng nên để sau khi có kết quả đối chứng ổn định.
+
+Xem [checklist chi tiết](checklist_hoan_thien_2026_10_27.md), [bản sao dữ liệu đã kiểm tra](../reports/continuation_20261028/backup_handoff.md) và [hướng dẫn demo](demo.md).

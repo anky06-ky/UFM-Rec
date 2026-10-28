@@ -1,0 +1,26 @@
+{
+  "observed_at_utc": "2026-10-27T14:41:19.929356+00:00",
+  "python": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "scipy": "1.18.1",
+    "pytest": "9.1.1",
+    "scikit-learn": "1.9.1"
+  },
+  "tests": {
+    "passed": 84,
+    "skipped": 3,
+    "subtests_passed": 10,
+    "skip_reason": "FITLAB recovery uses Linux flock and procfs",
+    "new_test_inference": false
+  },
+  "source_sha256": {
+    "src/build_recommender_samples.py": "049cd344823b3151a458329fe8e3936240e7a338cf35f549a2ed57ccd4c8aa91",
+    "src/test_candidate_validity.py": "20862de997de86767c71205683f48c79115207d6d806ee7689adeab1364cc0e4",
+    "src/evaluation_ledger.py": "a586f61fa59d0976897e7eaaa5301dd104138961a19b42fee8549c80b630ed6f",
+    "src/evaluate_content_baseline.py": "d1072e4938f6fc2ca8e5d87c879267832ba768c063b28eb0026551636605b972",
+    "src/ufm_model.py": "65d2510ce5fae6f4be197634342a8aa7577e86ce6c7015a65ca95c00478ab532"
+  }
+}

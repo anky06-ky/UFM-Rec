@@ -1,0 +1,39 @@
+.....................FF................F........................ [ 79%]
+.................                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_count_penalty_attenuates_cf_without_changing_branch_vectors _______
+tests/test_cold_start_bug_condition.py:43: in test_count_penalty_attenuates_cf_without_changing_branch_vectors
+    penalized = UFMRec(replace(config, variant='count_aware_fusion')).eval()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:13: in __init__
+    ???
+src/ufm_model.py:87: in __post_init__
+    raise ValueError("Unknown ablation variant.")
+E   ValueError: Unknown ablation variant.
+__________ test_adaptive_dropout_favors_frequent_ids_but_never_unseen __________
+tests/test_cold_start_bug_condition.py:59: in test_adaptive_dropout_favors_frequent_ids_but_never_unseen
+    model = UFMRec(replace(config, variant='adaptive_dropout', id_dropout=.8)).train()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:13: in __init__
+    ???
+src/ufm_model.py:87: in __post_init__
+    raise ValueError("Unknown ablation variant.")
+E   ValueError: Unknown ablation variant.
+_______ QueueTests.test_gpu_thresholds_reject_busy_or_low_memory_device ________
+tests/test_foundation_queue.py:54: in test_gpu_thresholds_reject_busy_or_low_memory_device
+    self.assertFalse(queue.gpu_idle()[0])
+E   AssertionError: True is not false
+=============================== warnings summary ===============================
+tests/test_ufm_core.py::UFMCoreTests::test_no_uncertainty_ablation_does_not_train_uncertainty_heads
+  /home/coder/iDragonCloud/DA_AI/tests/test_ufm_core.py:138: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+  Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:838.)
+    self.assertEqual(float(result["unc"]), 0.)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+3 failed, 78 passed, 1 warning, 8 subtests passed in 50.71s

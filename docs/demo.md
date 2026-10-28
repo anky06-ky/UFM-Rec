@@ -1,5 +1,10 @@
 # Cập nhật bản sửa proxy ngày 02/10/2026
 
+<!-- current-evidence-20261028 -->
+> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](../reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
+<!-- /current-evidence-20261028 -->
+
+
 Handler nhận cả đường dẫn giữ prefix và đường dẫn đã loại prefix theo hành vi
 [code-server](https://coder.com/docs/code-server/guide). Năm kiểm thử demo local
 PASS, bao gồm GET/POST qua hai dạng path và từ chối origin sai. Bản sửa mới chưa
@@ -10,7 +15,21 @@ Trạng thái mới: [reports/progress.md](../reports/progress.md).
 
 # Chạy và trình bày demo UFM Rec
 
+## Ảnh sản phẩm trong demo local
+
+Catalog mẫu đã kèm **30 ảnh sản phẩm thật**, cùng tên và ASIN lấy từ metadata Amazon Reviews 2023 Toys & Games. Ảnh nằm ở `demo/demo_images/`; nguồn URL, shard metadata và SHA-256 được ghi trong `demo/catalog_products.json`. Khi khởi động, `scripts/build_mock_demo_data.py` tự chép ảnh vào catalog local và phục vụ từ máy, không cần tải thủ công hoặc truy cập Amazon CDN lúc trình diễn.
+
+Mở `Start_Demo.cmd` rồi tải lại trang. Nếu đang giữ server phiên bản cũ, dừng bằng Ctrl+C và mở lại. Ảnh tự xuất hiện ở danh sách tìm kiếm và kết quả gợi ý.
+
+**Phạm vi:** số tương tác và nhãn cold-start của catalog 30 sản phẩm được mô phỏng để minh họa luồng demo, không phải thống kê train của các ASIN này trên Amazon. Ảnh local phục vụ hiển thị; checkpoint, đặc trưng CLIP và kết quả thực nghiệm không đổi. Catalog đầy đủ vẫn cần nguồn ảnh đúng mapping riêng.
+
 ## Demo UFM trên FITLAB
+
+**Nghiệm thu mới ngày 28/10/2026 — FITLAB-01:** backend UFM full epoch 9 đã nạp đúng hash, catalog **767.045 sản phẩm** với counts thật. Sáu ca API đạt: không history, có history và bốn regime. UI đã tìm LEGO và trả Top 5 zero-shot; hiển thị weights/uncertainty. [Bằng chứng](../reports/continuation_20261028/demo_ufm_verification.json).
+
+Phiên demo được kiểm tra tại `https://coder-2474802010460.fitlab-01.is-tech.vn/proxy/8770/`. Dịch vụ phụ thuộc phiên host; dữ liệu phải có bản sao local. Thời gian quan sát CPU khoảng 11–53 giây/request đơn lẻ, chưa phải benchmark latency/throughput. Ảnh của catalog thật dùng URL metadata; 30 ảnh mẫu offline là chế độ riêng.
+
+Phần ghi ngày 24/10 bên dưới là lịch sử khôi phục FITLAB-02, không mô tả endpoint FITLAB-01 vừa nghiệm thu.
 
 **Trạng thái 24/10/2026:** endpoint UFM trên FITLAB-02 hiện chưa sẵn sàng. Workspace
 được dựng lại từ archive ngày 24/09; không có `runs/ufm_full_v1`, checkpoint hay

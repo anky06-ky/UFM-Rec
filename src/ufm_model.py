@@ -162,13 +162,11 @@ class UFMRec(nn.Module):
     def collaborative_items(self, ids, counts):
         known = ids.ne(0) & counts[ids].gt(0)
         if self.training and self.config.id_dropout:
-            if self.config.variant in ("adaptive_dropout", "count_aware_fusion"):
-                # Frequency-adaptive dropout: items with fewer train interactions
-                # are dropped more aggressively, forcing the model to rely on the
-                # semantic branch for cold items — matching TF-IDF behaviour.
+            if self.config.variant == "adaptive_dropout":
+                # Keep this intervention separate from count_aware_fusion so
+                # their training comparisons change one mechanism at a time.
                 item_counts = counts[ids].float()
-                # Scale dropout rate: high dropout for low-count, low for high-count.
-                # At count=0 → rate=id_dropout; at count→∞ → rate→0.
+                # Low-count known IDs are dropped more often than frequent IDs.
                 adaptive_rate = self.config.id_dropout * torch.exp(-item_counts / 10.0)
                 known &= torch.rand_like(known.float()).ge(adaptive_rate)
             else:

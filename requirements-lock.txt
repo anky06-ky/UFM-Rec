@@ -1,0 +1,1 @@
+﻿# Generated from requirements.txt and requirements-dev.txt. FITLAB installs CUDA-compatible torch separately; CI installs CPU torch.

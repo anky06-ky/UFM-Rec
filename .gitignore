@@ -7,6 +7,7 @@ tmp/
 *.py[cod]
 *.egg-info/
 .ipynb_checkpoints/
+.pytest_cache/
 archive/
 .vscode/
 .playwright-cli/
@@ -20,6 +21,10 @@ strix_runs/
 *.part[0-9]
 *.tar
 *.parquet
+/bundle_*.zip
+/continuation_delta*.zip
+/probe_evidence.zip
+/ufm-rec-demo*.json
 
 # Reproducible data and trained artifacts (too large for Git)
 *.gz
@@ -29,6 +34,7 @@ strix_runs/
 *.pt
 runs/
 data/raw/
+data/processed/**/demo_images/
 
 # Local credentials and machine-specific settings
 .env

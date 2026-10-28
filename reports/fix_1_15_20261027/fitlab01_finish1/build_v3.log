@@ -1,0 +1,43 @@
+Sampling validation targets...
+  built 10,000/40,000
+  built 20,000/40,000
+  built 30,000/40,000
+  built 40,000/40,000
+{
+  "seed": 42,
+  "regimes": [
+    "zero_shot",
+    "extreme_cold",
+    "cold",
+    "warm"
+  ],
+  "samples_per_regime_cap": 10000,
+  "min_interactions_filter": 0,
+  "protocol_version": 3,
+  "exclude_known_positives": true,
+  "negative_pool": "target_regime",
+  "popularity_scope": "end_of_split_retrospective",
+  "splits": {
+    "validation": {
+      "population_by_regime": {
+        "zero_shot": 269934,
+        "extreme_cold": 131150,
+        "cold": 163409,
+        "warm": 595334
+      },
+      "samples_by_regime": {
+        "zero_shot": 10000,
+        "extreme_cold": 10000,
+        "cold": 10000,
+        "warm": 10000
+      },
+      "empty_history_samples": 19399,
+      "repeat_purchase_samples": 58,
+      "eligible_candidate_items": 671887,
+      "candidates_per_sample": 100,
+      "exclude_known_positives": true,
+      "negative_sampling": "Per-regime sampling: 99 negatives weighted by popularity at the end of the split; target and recorded history excluded. All positives strictly before the target are also excluded."
+    }
+  }
+}
+PASS: shared evaluation samples created at reports/fix_1_15_20261027/fitlab01_finish1/evaluation_v3

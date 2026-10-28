@@ -1,0 +1,64 @@
+{
+  "main": {
+    "verified_at_utc": "2026-10-28T04:39:45.192455+00:00",
+    "files": 796,
+    "logical_bytes": 15010960088,
+    "manifest_sha256": "baac3f20333fa8400e0d99780100f3b57f086c0426cd0179d624951cbd625bf1",
+    "all_files_sha256_verified": true,
+    "restored_files_sha256_verified": true,
+    "missing_bundles": [],
+    "relocated_case_conflicts": {
+      "docs/fitlab.md": ".restore_case_conflicts/cc685e59a885a3060f5bb2b68c439c7ebab8d309bdd27f3b3586ee1428b31274/docs/fitlab.md"
+    },
+    "missing_files": [],
+    "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\restored_complete_20261028"
+  },
+  "delta": {
+    "verified_at_utc": "2026-10-28T04:32:07.201113+00:00",
+    "files": 137,
+    "logical_bytes": 171240067,
+    "manifest_sha256": "80fd517f91d7adb09d835aa2036c4cfacd1ade676b3c16998d11d4b2679dcb3f",
+    "all_files_sha256_verified": true,
+    "restored_files_sha256_verified": true,
+    "missing_bundles": [],
+    "relocated_case_conflicts": {},
+    "missing_files": [],
+    "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\restored_delta_20261028"
+  },
+  "raw_metadata": {
+    "files": [
+      {
+        "path": "download_manifest.json",
+        "bytes": 1057,
+        "sha256": "0d5fc75f8f043ae081f0e954a2ba4b40665d6eceace16d0e5d782c4de859427f"
+      },
+      {
+        "path": "full-00000-of-00005.parquet",
+        "bytes": 218253388,
+        "sha256": "de03dc00dd34e5f3a37d9fcb85c16d3352d768d88d3b25df655723596e697d08"
+      },
+      {
+        "path": "full-00001-of-00005.parquet",
+        "bytes": 209914262,
+        "sha256": "fbb68c7938ee7cd233755e96b65735fceff5ac52c00e28923f751336c9aa2237"
+      },
+      {
+        "path": "full-00002-of-00005.parquet",
+        "bytes": 199494366,
+        "sha256": "e6b616e21b127deabe9c53f01129cf4213dd7a9161dd45d80392250b4f661ff4"
+      },
+      {
+        "path": "full-00003-of-00005.parquet",
+        "bytes": 187869599,
+        "sha256": "5afbcb1084071ccea033960236131feac73cd9f1771990dde13e53b34447a460"
+      },
+      {
+        "path": "full-00004-of-00005.parquet",
+        "bytes": 157135401,
+        "sha256": "1beb755c24eb9b33505b69924809d1290d824ba1e053d7b559b3519faa4bb668"
+      }
+    ],
+    "all_files_sha256_verified": true,
+    "source": "D:\\Nam3_ki1\\UFM-Rec\\data\\raw\\amazon_reviews_2023\\raw_meta_Toys_and_Games"
+  }
+}

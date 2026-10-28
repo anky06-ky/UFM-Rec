@@ -1,0 +1,37 @@
+{
+  "backend": "UFM Rec",
+  "regime": "zero_shot",
+  "items": 767045,
+  "images": [
+    {
+      "height": 192,
+      "inside": true,
+      "parentHeight": 240,
+      "title": "LEGO Series 15 Collectible Minifigure 71011 - Faun Minifig"
+    },
+    {
+      "height": 192,
+      "inside": true,
+      "parentHeight": 240,
+      "title": "LEGO Hot Dog Man #14 of 16, Minifigures Series 13 Set 71008SEALED Retail Packaging"
+    },
+    {
+      "height": 192,
+      "inside": true,
+      "parentHeight": 240,
+      "title": "LEGO Series 4 Collectible Minifigure Monster (Frankenstein)"
+    },
+    {
+      "height": 192,
+      "inside": true,
+      "parentHeight": 240,
+      "title": "LEGO Minifig: Ghost with White Hood from Haunted House"
+    },
+    {
+      "height": 192,
+      "inside": true,
+      "parentHeight": 240,
+      "title": "Lego Frankenstein Minifigure - Halloween Spooky Scary Haunted Ghost Minifig"
+    }
+  ]
+}

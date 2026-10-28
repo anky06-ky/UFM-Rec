@@ -1,0 +1,44 @@
+{
+  "protocol": "validation_v3",
+  "candidate_sha256": "9387e66e9f1905c44d02b65c3809f5fa8b6c022f6abf0c1a37d52cb57767a60e",
+  "samples": 40000,
+  "candidates_per_case": 100,
+  "seed": 42,
+  "test_evaluated": false,
+  "checkpoint_selection": "historical validation v1",
+  "cold_macro_ndcg10": {
+    "ufm_full_v1": 0.182056,
+    "ufm_ablation_semantic_only_s42_v1": 0.19003599999999998,
+    "ufm_ablation_fixed_fusion_s42_v1": 0.18130533333333335,
+    "ufm_ablation_no_uncertainty_s42_v1": 0.182253,
+    "ufm_ablation_no_cross_align_s42_v1": 0.1833933333333333,
+    "ufm_ablation_text_only_s42_v1": 0.181982,
+    "ufm_ablation_image_only_s42_v1": 0.14963166666666666,
+    "ufm_ablation_collaborative_only_s42_v1": 0.070003,
+    "popularity": 0.042527,
+    "tfidf_profile": 0.195682
+  },
+  "full_calibration": {
+    "temperature": 2.0124047834832193,
+    "fit_samples": 20000,
+    "audit_samples": 20000,
+    "before": {
+      "ece": 0.08206148325429938,
+      "nll": 4.497666549311549,
+      "brier_multiclass": 0.9693415862254656
+    },
+    "after": {
+      "ece": 0.037478324939694836,
+      "nll": 4.258086454225355,
+      "brier_multiclass": 0.9606049175293303
+    }
+  },
+  "limitations": [
+    "V3 is retrospective, same-regime negative sampling.",
+    "Same validation population as prior selection; not an independent holdout.",
+    "No claim of training-seed variability or successful improvements.",
+    "Exploratory: checkpoint selection already used validation; these are not independent final-test results.",
+    "Temperature scaling does not improve ranking metrics.",
+    "Temporal folds can share users."
+  ]
+}

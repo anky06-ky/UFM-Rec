@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "3a6911918af84b10b6e81775c4f26e53",
+      "status": "imported",
+      "observed_at_utc": "2026-10-27T14:11:51.828627+00:00",
+      "executed_at_utc": null,
+      "first_evaluation": null,
+      "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+      "samples_test_sha256": "a4422c2cfe420e7ffc072915b16ff88a218d640054fb107c937d867dca20b109",
+      "dataset_sha256": "585f102f14e12bfae332f53d28bb1f853acde1586eb102555c4b118ccee75763",
+      "training_code_sha256": {
+        "train_ufm_recommender.py": "d92d32a1c6c6b3c230976ccb3f8a1773b935df1b8dfed8c691c315ddaae05543",
+        "ufm_model.py": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+        "train_gpu_recommender.py": "e6ca4b9b1e2e620e689272cb2d8c29094153d0ffbbb6465eb56324bd637b3546"
+      },
+      "scorer_sha256": null,
+      "evidence": "D:\\Nam3_ki1\\UFM-Rec\\reports\\ufm_evaluation_v2_20261027\\reeval_ufm_full_v1_v2.json",
+      "evidence_sha256": "051bca4e5e56990475f28b23bcb86403c92929a0b8f2169c2cbc314b727ead80",
+      "test_metrics": {
+        "samples": 40000,
+        "recall@10": 0.2662,
+        "ndcg@10": 0.166193,
+        "mrr@10": 0.135742,
+        "mean_rank": 37.832
+      },
+      "purpose": "Imported historical evidence; execution time and prior history unverified."
+    }
+  ]
+}

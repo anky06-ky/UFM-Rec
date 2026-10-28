@@ -1,0 +1,86 @@
+{
+  "created_at_utc": "2026-10-27T14:43:27.652149+00:00",
+  "purpose": "Validation comparison on preserved v2 candidates; not a pre-test lock.",
+  "primary_metric": "cold_macro_ndcg@10",
+  "test_already_observed": true,
+  "instructor_approval": "not_recorded",
+  "inputs": {
+    "dataset_manifest": {
+      "path": "data/processed/toys_games_full_temporal/split_manifest.json",
+      "sha256": "585f102f14e12bfae332f53d28bb1f853acde1586eb102555c4b118ccee75763"
+    },
+    "items": {
+      "path": "data/processed/toys_games_full_temporal/content/items.csv.gz",
+      "sha256": "e67e6310a6076f1e66ff14b8ce68e3d28a1aba204498175ae77eb0b04d0050fc"
+    },
+    "validation_candidates": {
+      "path": "data/processed/toys_games_full_temporal/evaluation_v2/samples_validation.npz",
+      "sha256": "c71906e65ce4067b405a94c13e22e8a25a17f46cbee5b1315f07d01d4d1e59df"
+    },
+    "validation_metadata": {
+      "path": "data/processed/toys_games_full_temporal/evaluation_v2/samples_validation.csv.gz",
+      "sha256": "d529b0aeb68e4b026556756601efc4380b179dc43f96e05a76eccef0843a051c"
+    },
+    "baseline_report": {
+      "path": "reports/fix_1_15_20261027/fitlab01_run1/baseline_v2/metrics.json",
+      "sha256": "fbfb87eb0ab868d51ba9b194a27e46a94ce6f9b9b24575092bca66ab5a12fe67"
+    },
+    "inventory_report": {
+      "path": "reports/fix_1_15_20261027/fitlab01_run1/inventory.json",
+      "sha256": "be1fd5a8db3bf85cee0c67c7cc1206652b3111975da77ef2dabdf8d239599bd5"
+    },
+    "ufm_report": {
+      "path": "/home/coder/iDragonCloud/DA_AI/reports/ufm_evaluation_v2_20261027/reeval_ufm_full_v1_v2.json",
+      "sha256": "051bca4e5e56990475f28b23bcb86403c92929a0b8f2169c2cbc314b727ead80"
+    },
+    "feature_marker": {
+      "path": "data/processed/toys_games_full_temporal/foundation_clip_b32_v1/complete.json",
+      "sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98"
+    },
+    "run_config": {
+      "path": "/home/coder/iDragonCloud/DA_AI/runs/ufm_full_v1/config.json",
+      "sha256": "5c52fa7e5e60eda6cd1a2d93a14f3865a680cf2f4e9ca889b53ed361e95ee97a"
+    },
+    "protocol_config": {
+      "path": "/home/coder/iDragonCloud/DA_AI/configs/evaluation_protocol_v2.json",
+      "sha256": "3427106f68681f5df9e8cf490f5ec557078a92d2918ad30fea6c612e095c6eb1"
+    }
+  },
+  "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+  "checkpoint_verification": {
+    "training_code_matches": true,
+    "feature_marker_matches": true,
+    "feature_hashes_shapes_masks_norms": true,
+    "train_counts_match_mapping": true,
+    "checkpoint_config_matches": true,
+    "cpu_validation_forward_finite": true,
+    "saved_validation_metric_matches": true
+  },
+  "training_code_hashes": {
+    "train_ufm_recommender.py": {
+      "expected": "d92d32a1c6c6b3c230976ccb3f8a1773b935df1b8dfed8c691c315ddaae05543",
+      "actual": "d92d32a1c6c6b3c230976ccb3f8a1773b935df1b8dfed8c691c315ddaae05543"
+    },
+    "ufm_model.py": {
+      "expected": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+      "actual": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6"
+    },
+    "train_gpu_recommender.py": {
+      "expected": "e6ca4b9b1e2e620e689272cb2d8c29094153d0ffbbb6465eb56324bd637b3546",
+      "actual": "e6ca4b9b1e2e620e689272cb2d8c29094153d0ffbbb6465eb56324bd637b3546"
+    }
+  },
+  "feature_hashes": {
+    "text.npy": "d8f507d65712fefdd98c5463d55836512ea281d8ecf199508e595c0ba86f1e3d",
+    "image.npy": "eece460c4860751f9463bbeaac64fe09cc939f44e6f96d7435d5239faf155efa",
+    "modalities.npy": "03f495e9429751c05ebf96618cf70546e1d91b4a335a77017adee62eb87f07c2"
+  },
+  "selection_rule": "Best historical validation cold macro NDCG@10; this v2 comparison does not reselect the checkpoint.",
+  "calibration": "No new temperature fitting or test inference in this comparison; imported UFM report retains original scoring metadata.",
+  "scorer_sha256": "d1072e4938f6fc2ca8e5d87c879267832ba768c063b28eb0026551636605b972",
+  "limitations": [
+    "Candidate sampling is retrospective and regime-conditioned.",
+    "Old UFM and new baselines require the same candidate hash.",
+    "This manifest cannot retroactively establish test independence."
+  ]
+}

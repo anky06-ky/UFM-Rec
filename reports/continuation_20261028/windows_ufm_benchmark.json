@@ -1,0 +1,62 @@
+{
+  "observed_at_utc": "2026-10-28T07:16:01.856385+00:00",
+  "status": {
+    "app": "ufm-rec-demo",
+    "backend": "UFM Rec",
+    "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+    "items": 767045,
+    "data": {
+      "mode": "catalog_from_disk",
+      "catalog": "toys_games_full_temporal",
+      "items": 767045,
+      "counts_simulated": false,
+      "display_images_affect_scores": false
+    },
+    "model": {
+      "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+      "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+      "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+      "variant": "full",
+      "checkpoint_epoch": 9,
+      "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+    },
+    "max_history": 20,
+    "profile_items": 20
+  },
+  "hardware": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "logical_cpu": 8,
+    "physical_ram_mib": 16190.3
+  },
+  "request": {
+    "history": [
+      "B004S8F7QM"
+    ],
+    "regime": "all",
+    "k": 5
+  },
+  "warmup_requests": 2,
+  "measured_requests": 10,
+  "latency_seconds": {
+    "p50": 21.24844794999808,
+    "p95": 26.349821314978175,
+    "p99": 28.022602822970367,
+    "min": 19.252505300100893,
+    "max": 28.440798199968413
+  },
+  "sequential_qps": 0.04565960925576886,
+  "server_rss_mib": {
+    "at_start": 2512.6,
+    "observed_max": 2551.5
+  },
+  "concurrent_two_request_statuses": [
+    200,
+    429
+  ],
+  "limitations": [
+    "One Windows host and one history/K setting; no inference VRAM on CPU.",
+    "Observed RSS during this run is not training peak RAM.",
+    "Server allows one active inference and returns HTTP 429 to the other request.",
+    "Sequential throughput is not concurrent throughput."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "working_protocol_pending_instructor_feedback",
+  "purpose": "Reproduce comparisons on the existing UFM evaluation_v2 validation candidates.",
+  "primary_dataset": "Amazon Reviews 2023 Toys and Games",
+  "primary_task": "item_cold_start",
+  "primary_metric": "cold_macro_ndcg@10",
+  "regimes_train_count": {"zero_shot": [0, 0], "extreme_cold": [1, 5], "cold": [6, 20], "warm": [21, null]},
+  "candidate_protocol": {
+    "positive_column": 0,
+    "negative_count": 99,
+    "pool": "target_regime",
+    "weights": "popularity_observed_by_end_of_split",
+    "availability": "end_of_split_retrospective",
+    "exclude_target": true,
+    "exclude_recorded_history": true,
+    "exclude_all_earlier_positives": false,
+    "cases_per_regime_cap": 10000,
+    "seed": 42,
+    "validation_sha256": "c71906e65ce4067b405a94c13e22e8a25a17f46cbee5b1315f07d01d4d1e59df",
+    "test_sha256": "a4422c2cfe420e7ffc072915b16ff88a218d640054fb107c937d867dca20b109"
+  },
+  "comparison": {"default_split": "validation", "baselines": ["popularity", "tfidf_profile"], "never_mix_candidate_hashes": true},
+  "test_history": {"already_observed": true, "first_evaluation_established": false, "new_test_inference_in_this_repair": false},
+  "new_samples": {"version": 3, "exclude_all_earlier_positives": true, "preserve_existing_v2_files": true, "comparison_requires_new_predictions": true},
+  "scope_limits": [
+    "New-user empty-history behavior is a popularity fallback, not demonstrated personalization.",
+    "Overall reflects a regime-balanced sample, not natural traffic.",
+    "Same-regime/end-of-split sampling is not online or full-catalog evaluation.",
+    "All Beauty and publication-level novelty remain scope decisions for the instructor."
+  ]
+}

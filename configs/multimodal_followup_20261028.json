@@ -1,0 +1,51 @@
+{
+  "name": "toys_multimodal_followup_20261028",
+  "scope_confirmed_by_user": "Product recommendation using interaction history, product image, and product title/description. Cold-start item performance is a subgroup analysis; no-history is a fallback, not proven new-user personalization.",
+  "dataset": "Amazon Reviews 2023 Toys and Games",
+  "seeds": [42, 7, 2026],
+  "stages": [
+    {"name": "controls", "variants": ["full", "semantic_only", "fixed_fusion"]},
+    {"name": "count_aware", "variants": ["count_aware_fusion"]},
+    {"name": "adaptive_dropout", "variants": ["adaptive_dropout"]}
+  ],
+  "training": {
+    "epochs": 20,
+    "batch_size": 256,
+    "dim": 128,
+    "history": 20,
+    "heads": 4,
+    "layers": 2,
+    "negatives": 8,
+    "patience": 3,
+    "checkpoint_every": 1000,
+    "eval_batch": 64,
+    "validation_cap": 0,
+    "max_steps": 0,
+    "threads": 4,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "dropout": 0.1,
+    "id_dropout": 0.5,
+    "fixed_alpha": 0.5,
+    "lambda_align": 0.01,
+    "lambda_unc": 0.01,
+    "lambda_cal": 0.1,
+    "amp": true
+  },
+  "selection": "Select best checkpoint by arithmetic mean NDCG@10 over zero_shot, extreme_cold, and cold on historical validation v1, with the same early-stopping rule for all variants. Never select by v3 or seen test v2.",
+  "reporting": "Report every training seed, mean and sample standard deviation for cold macro NDCG@10 and each regime; include overall, history/no-history, repeat/new purchase and predictions. Validation v3 is exploratory on a population already used for checkpoint selection, not a fresh holdout.",
+  "sources_sha256": {
+    "src/train_ufm_recommender.py": "a391936dcae4b13808a9bed30518d18a779244d4740bf0466f2db8e121200d1d",
+    "src/ufm_model.py": "3f6fad5dcd847f431716cf410412ab32b81ce1bc8d706edc269a3a46a67eaaca",
+    "src/train_gpu_recommender.py": "3913d4696943008f2f833ecace2e0136cb7d74b9a8f3a344bd73756459f27ad2",
+    "data/processed/toys_games_full_temporal/split_manifest.json": "585f102f14e12bfae332f53d28bb1f853acde1586eb102555c4b118ccee75763",
+    "data/processed/toys_games_full_temporal/evaluation/samples_validation.npz": "8efa116508fddd6b5227b69d6c65e3b635de634dd542046463fda84e78b47162",
+    "reports/fix_1_15_20261027/fitlab01_finish1/evaluation_v3/samples_validation.npz": "9387e66e9f1905c44d02b65c3809f5fa8b6c022f6abf0c1a37d52cb57767a60e",
+    "data/processed/toys_games_full_temporal/foundation_clip_b32_v1/complete.json": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+    "data/processed/gpu_cache_h20_t64_v1/train_counts.npy": "b8c37d48e55654eb091d3d8e9a3a61efa76c2e2c988747fbecd1b16f536f9564",
+    "data/processed/ufm_positive_graph_h20_v1/complete.json": "db655f42ff829de69d3c4b0c5e0f0f1b33e00aae84a2fb1a6b406e6404f1b9b4"
+  },
+  "source_layout": "Paths above are relative to a complete restored FITLAB workspace. The three src files must be updated together from this repository before any new run; archived checkpoints are only for historical evaluation with their archived source.",
+  "test_policy": "Do not use test v2 for checkpoint/model/seed choice. A new independent test requires a separately justified source and protocol before opening labels.",
+  "status": "protocol_locked_no_new_training_results"
+}

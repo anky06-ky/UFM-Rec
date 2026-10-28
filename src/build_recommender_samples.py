@@ -10,6 +10,7 @@ from collections import Counter
 from pathlib import Path
 
 import numpy as np
+from temporal_positives import positive_events, known_before, prior_paths
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,10 +25,12 @@ NEGATIVES = 99
 SEED = 42
 
 
-def load_catalog():
+def load_catalog(data=None):
+    data = DATA if data is None else Path(data)
+    content = CONTENT if data == DATA else data / 'content'
     ids = []
     train_counts = []
-    with gzip.open(CONTENT / "items.csv.gz", "rt", encoding="utf-8", newline="") as source:
+    with gzip.open(content / "items.csv.gz", "rt", encoding="utf-8", newline="") as source:
         for row in csv.DictReader(source):
             if int(row["row_index"]) != len(ids):
                 raise AssertionError("Content item mapping is not contiguous")
@@ -36,7 +39,7 @@ def load_catalog():
     id_to_row = {item: index for index, item in enumerate(ids)}
     validation_counts = np.zeros(len(ids), dtype=np.int32)
     test_counts = np.zeros(len(ids), dtype=np.int32)
-    with gzip.open(DATA / "item_statistics.csv.gz", "rt", encoding="utf-8", newline="") as source:
+    with gzip.open(data / "item_statistics.csv.gz", "rt", encoding="utf-8", newline="") as source:
         for row in csv.DictReader(source):
             index = id_to_row[row["parent_asin"]]
             validation_counts[index] = int(row["validation_count"])
@@ -50,11 +53,16 @@ def load_catalog():
     )
 
 
-def reservoir_sample(split: str, min_interactions: int = 0):
+def reservoir_sample(split: str, min_interactions: int = 0, *, data=None, cap=None, seed=None):
+    data = DATA if data is None else Path(data)
+    cap = SAMPLES_PER_REGIME if cap is None else cap
+    seed = SEED if seed is None else seed
+    if cap < 1 or min_interactions < 0:
+        raise ValueError('Positive sample cap and nonnegative history filter required.')
     reservoirs = {regime: [] for regime in REGIMES}
     seen = Counter()
-    rng = random.Random(SEED + SPLITS.index(split))
-    path = DATA / f"{split}_with_history.csv.gz"
+    rng = random.Random(seed + SPLITS.index(split))
+    path = data / f"{split}_with_history.csv.gz"
     with gzip.open(path, "rt", encoding="utf-8", newline="") as source:
         for row in csv.DictReader(source):
             if min_interactions > 0:
@@ -63,11 +71,11 @@ def reservoir_sample(split: str, min_interactions: int = 0):
             regime = row["cold_start_regime"]
             seen[regime] += 1
             reservoir = reservoirs[regime]
-            if len(reservoir) < SAMPLES_PER_REGIME:
+            if len(reservoir) < cap:
                 reservoir.append(row)
             else:
                 replacement = rng.randrange(seen[regime])
-                if replacement < SAMPLES_PER_REGIME:
+                if replacement < cap:
                     reservoir[replacement] = row
     samples = []
     for regime in REGIMES:
@@ -83,10 +91,26 @@ def reservoir_sample(split: str, min_interactions: int = 0):
     return samples, seen
 
 
-def choose_negatives(rng, pool, cdf, excluded, count):
+def choose_negatives(rng, pool, cdf, excluded, count, *, validate=True):
+    pool, cdf = np.asarray(pool), np.asarray(cdf)
+    if count == 0:
+        return []
+    if count < 0 or pool.ndim != 1 or cdf.shape != pool.shape or not len(pool):
+        raise ValueError('Nonempty matching candidate pool/CDF and nonnegative count required.')
+    if validate and (not np.isfinite(cdf).all() or cdf[0] <= 0 or (np.diff(cdf) <= 0).any()):
+        raise ValueError('CDF must have finite, strictly positive increments.')
+    if len(pool) - len(excluded) < count and np.count_nonzero(~np.isin(pool, list(excluded))) < count:
+        raise RuntimeError(f'Cannot draw {count} unique negatives after exclusions.')
     selected = []
     selected_set = set()
+    attempts = 0
     while len(selected) < count:
+        attempts += 1
+        if attempts > 1000:
+            raise RuntimeError(
+                f"Cannot draw {count} unique negatives from a pool of {len(pool)} items "
+                f"({len(selected)} unique after {attempts} attempts)."
+            )
         draws = pool[np.searchsorted(cdf, rng.random(max(128, count * 2)) * cdf[-1])]
         for candidate in draws:
             value = int(candidate)
@@ -106,9 +130,23 @@ def build_split(
     validation_counts,
     test_counts,
     min_interactions=0,
+    output=None,
+    *, data=None, cap=None, negatives=None, seed=None, exclude_known_positives=False,
 ):
+    output = OUTPUT if output is None else Path(output)
+    output.mkdir(parents=True, exist_ok=True)
     print(f"Sampling {split} targets...", flush=True)
-    samples, population = reservoir_sample(split, min_interactions)
+    for name in (f'samples_{split}.npz', f'samples_{split}.csv.gz'):
+        if (output / name).exists():
+            raise FileExistsError(f'Refusing to overwrite fixed samples: {output / name}')
+    negatives = NEGATIVES if negatives is None else negatives
+    seed = SEED if seed is None else seed
+    samples, population = reservoir_sample(split, min_interactions, data=data, cap=cap, seed=seed)
+    if not samples:
+        raise ValueError('No targets remain after filtering; refusing to write an empty benchmark.')
+    known = (positive_events(prior_paths(DATA if data is None else data, split),
+                             id_to_row, {row['user_id'] for row in samples})
+             if exclude_known_positives else {})
     if split == "validation":
         counts = train_counts + validation_counts
     else:
@@ -120,63 +158,77 @@ def build_split(
 
     pools = {k: np.flatnonzero((item_regime == k) & (counts > 0)) for k in range(4)}
     cdfs = {k: np.cumsum(counts[pools[k]]) for k in range(4)}
+    eligible = np.flatnonzero(counts > 0)
 
     sample_count = len(samples)
-    candidates = np.empty((sample_count, NEGATIVES + 1), dtype=np.int32)
+    candidates = np.empty((sample_count, negatives + 1), dtype=np.int32)
     history_indptr = np.zeros(sample_count + 1, dtype=np.int64)
     history_values = []
     regime_codes = np.empty(sample_count, dtype=np.uint8)
     repeat_purchases = np.empty(sample_count, dtype=np.uint8)
-    rng = np.random.default_rng(SEED + 100 + SPLITS.index(split))
-    trace_path = OUTPUT / f"samples_{split}.csv.gz.tmp"
-    with gzip.open(trace_path, "wt", encoding="utf-8", newline="") as output:
-        writer = csv.DictWriter(
-            output,
-            fieldnames=(
-                "sample_index",
-                "user_id",
-                "parent_asin",
-                "rating",
-                "timestamp",
-                "history",
-                "history_length",
-                "train_item_count",
-                "cold_start_regime",
-                "is_repeat_purchase",
-            ),
-        )
-        writer.writeheader()
-        for sample_index, row in enumerate(samples):
-            target = id_to_row[row["parent_asin"]]
-            history = [id_to_row[item] for item in row["history"].split()]
-            excluded = set(history)
-            excluded.add(target)
-            candidates[sample_index, 0] = target
-            regime_code = REGIME_CODE[row["cold_start_regime"]]
-            regime_codes[sample_index] = regime_code
-            candidates[sample_index, 1:] = choose_negatives(
-                rng, pools[regime_code], cdfs[regime_code], excluded, NEGATIVES
+    rng = np.random.default_rng(seed + 100 + SPLITS.index(split))
+    trace_path = output / f"samples_{split}.csv.gz.tmp"
+    arrays_path = output / f"samples_{split}.npz.tmp"
+    published = []
+    try:
+        with gzip.open(trace_path, "wt", encoding="utf-8", newline="") as output_file:
+            writer = csv.DictWriter(
+                output_file,
+                fieldnames=(
+                    "sample_index",
+                    "user_id",
+                    "parent_asin",
+                    "rating",
+                    "timestamp",
+                    "history",
+                    "history_length",
+                    "train_item_count",
+                    "cold_start_regime",
+                    "is_repeat_purchase",
+                ),
             )
-            history_values.extend(history)
-            history_indptr[sample_index + 1] = len(history_values)
-            is_repeat = 1 if target in set(history) else 0
-            repeat_purchases[sample_index] = is_repeat
-            writer.writerow({"sample_index": sample_index, "is_repeat_purchase": is_repeat, **row})
-            if (sample_index + 1) % 10_000 == 0:
-                print(f"  built {sample_index + 1:,}/{sample_count:,}", flush=True)
+            writer.writeheader()
+            for sample_index, row in enumerate(samples):
+                target = id_to_row[row["parent_asin"]]
+                history = [id_to_row[item] for item in row["history"].split()]
+                excluded = set(history)
+                excluded.add(target)
+                if exclude_known_positives:
+                    excluded.update(known_before(known, row['user_id'], int(row['timestamp'])))
+                candidates[sample_index, 0] = target
+                regime_code = REGIME_CODE[row["cold_start_regime"]]
+                regime_codes[sample_index] = regime_code
+                candidates[sample_index, 1:] = choose_negatives(
+                    rng, pools[regime_code], cdfs[regime_code], excluded, negatives, validate=False
+                )
+                history_values.extend(history)
+                history_indptr[sample_index + 1] = len(history_values)
+                is_repeat = 1 if target in set(history) else 0
+                repeat_purchases[sample_index] = is_repeat
+                writer.writerow({"sample_index": sample_index, "is_repeat_purchase": is_repeat, **row})
+                if (sample_index + 1) % 10_000 == 0:
+                    print(f"  built {sample_index + 1:,}/{sample_count:,}", flush=True)
 
-    arrays_path = OUTPUT / f"samples_{split}.npz.tmp"
-    with arrays_path.open("wb") as output:
-        np.savez_compressed(
-            output,
-            candidates=candidates,
-            history_indices=np.asarray(history_values, dtype=np.int32),
-            history_indptr=history_indptr,
-            regime_codes=regime_codes,
-            repeat_purchases=repeat_purchases,
-        )
-    trace_path.replace(OUTPUT / f"samples_{split}.csv.gz")
-    arrays_path.replace(OUTPUT / f"samples_{split}.npz")
+        with arrays_path.open("wb") as output_file:
+            np.savez_compressed(
+                output_file,
+                candidates=candidates,
+                history_indices=np.asarray(history_values, dtype=np.int32),
+                history_indptr=history_indptr,
+                regime_codes=regime_codes,
+                repeat_purchases=repeat_purchases,
+            )
+        for temporary, final in ((trace_path, output / f"samples_{split}.csv.gz"),
+                                 (arrays_path, output / f"samples_{split}.npz")):
+            temporary.replace(final)
+            published.append(final)
+    except BaseException:
+        for path in published:
+            path.unlink(missing_ok=True)
+        raise
+    finally:
+        trace_path.unlink(missing_ok=True)
+        arrays_path.unlink(missing_ok=True)
     return {
         "population_by_regime": {name: population[name] for name in REGIMES},
         "samples_by_regime": {
@@ -188,8 +240,9 @@ def build_split(
             if candidates[i, 0] in set(history_values[history_indptr[i]:history_indptr[i+1]])
         )),
         "eligible_candidate_items": len(eligible),
-        "candidates_per_sample": NEGATIVES + 1,
-        "negative_sampling": "Proportional to popularity among items observed by the end of the split; exclude target and history items.",
+        "candidates_per_sample": negatives + 1,
+        "exclude_known_positives": exclude_known_positives,
+        "negative_sampling": f"Per-regime sampling: {negatives} negatives weighted by popularity at the end of the split; target and recorded history excluded. " + ("All positives strictly before the target are also excluded." if exclude_known_positives else "Legacy history-window exclusion only."),
     }
 
 
@@ -197,20 +250,33 @@ def main() -> None:
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--min-interactions', type=int, default=0,
-                        help='Minimum total interactions (train + history + 1) for a user to be evaluated')
+                        help='Minimum recorded history length plus target (not lifetime user interactions).')
+    parser.add_argument('--output', type=Path, default=OUTPUT,
+                        help='Directory for the generated samples (must be empty or new).')
+    parser.add_argument('--data', type=Path, default=DATA)
+    parser.add_argument('--splits', nargs='+', choices=SPLITS, default=['validation'])
+    parser.add_argument('--exclude-known-positives', action=argparse.BooleanOptionalAction, default=True,
+                        help='Exclude positives strictly before target; disable only for legacy v2 replay.')
     args = parser.parse_args()
-    if OUTPUT.exists() and any(OUTPUT.iterdir()):
-        raise FileExistsError(f"Refusing to overwrite non-empty output: {OUTPUT}")
-    OUTPUT.mkdir(parents=True, exist_ok=True)
-    ids, id_to_row, train_counts, validation_counts, test_counts = load_catalog()
+    if (args.data / 'demo_manifest.json').exists():
+        raise ValueError('Synthetic demo counts cannot define a research benchmark.')
+    output = args.output
+    if output.exists() and any(output.iterdir()):
+        raise FileExistsError(f"Refusing to overwrite non-empty output: {output}")
+    output.mkdir(parents=True, exist_ok=True)
+    ids, id_to_row, train_counts, validation_counts, test_counts = load_catalog(args.data)
     report = {
         "seed": SEED,
         "regimes": list(REGIMES),
         "samples_per_regime_cap": SAMPLES_PER_REGIME,
         "min_interactions_filter": args.min_interactions,
+        "protocol_version": 3 if args.exclude_known_positives else 2,
+        "exclude_known_positives": args.exclude_known_positives,
+        "negative_pool": "target_regime",
+        "popularity_scope": "end_of_split_retrospective",
         "splits": {},
     }
-    for split in SPLITS:
+    for split in args.splits:
         report["splits"][split] = build_split(
             split,
             ids,
@@ -219,12 +285,14 @@ def main() -> None:
             validation_counts,
             test_counts,
             args.min_interactions,
+            output,
+            data=args.data, exclude_known_positives=args.exclude_known_positives,
         )
-    temporary = OUTPUT / "sampling_report.json.tmp"
+    temporary = output / "sampling_report.json.tmp"
     temporary.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    temporary.replace(OUTPUT / "sampling_report.json")
+    temporary.replace(output / "sampling_report.json")
     print(json.dumps(report, indent=2), flush=True)
-    print(f"PASS: shared evaluation samples created at {OUTPUT}", flush=True)
+    print(f"PASS: shared evaluation samples created at {output}", flush=True)
 
 
 if __name__ == "__main__":

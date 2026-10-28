@@ -1,0 +1,841 @@
+{
+  "observed_at_utc": "2026-10-28T07:10:48.122105+00:00",
+  "phase": "complete",
+  "status": {
+    "app": "ufm-rec-demo",
+    "backend": "UFM Rec",
+    "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+    "items": 767045,
+    "data": {
+      "mode": "catalog_from_disk",
+      "catalog": "toys_games_full_temporal",
+      "items": 767045,
+      "counts_simulated": false,
+      "display_images_affect_scores": false
+    },
+    "model": {
+      "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+      "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+      "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+      "variant": "full",
+      "checkpoint_epoch": 9,
+      "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+    },
+    "max_history": 20,
+    "profile_items": 20
+  },
+  "cases": [
+    {
+      "name": "no_history",
+      "request": {
+        "history": [],
+        "k": 5,
+        "regime": "all"
+      },
+      "response": {
+        "backend": "UFM Rec",
+        "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+        "data": {
+          "mode": "catalog_from_disk",
+          "catalog": "toys_games_full_temporal",
+          "items": 767045,
+          "counts_simulated": false,
+          "display_images_affect_scores": false
+        },
+        "model": {
+          "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+          "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+          "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+          "variant": "full",
+          "checkpoint_epoch": 9,
+          "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+        },
+        "results": [
+          {
+            "asin": "B004S8F7QM",
+            "title": "Cards Against Humanity",
+            "image": "https://m.media-amazon.com/images/I/3141QHwqrZL._AC_.jpg",
+            "train_count": 17410,
+            "regime": "warm",
+            "score": 9.764857292175293,
+            "weights": [
+              0.0,
+              0.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.4954114556312561
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0054TRQA4",
+            "title": "Aurora World Flopsie Drake Dolphin 12\"",
+            "image": "https://m.media-amazon.com/images/I/41gI+pZ--5S._AC_.jpg",
+            "train_count": 10836,
+            "regime": "warm",
+            "score": 9.290721893310547,
+            "weights": [
+              0.0,
+              0.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.4954114556312561
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0BW3QTWJJ",
+            "title": "Baby Einstein Baby's First Music Teacher Developmental Toys Kit and Gift Set, Newborn and up",
+            "image": "https://m.media-amazon.com/images/I/41ffM4G31AL.jpg",
+            "train_count": 8703,
+            "regime": "warm",
+            "score": 9.071537971496582,
+            "weights": [
+              0.0,
+              0.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.4954114556312561
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B07N29HQMN",
+            "title": "Aurora - Mini Flopsie - 8\" Caramel Horse",
+            "image": "https://m.media-amazon.com/images/I/51k3RSftmuS._AC_.jpg",
+            "train_count": 7560,
+            "regime": "warm",
+            "score": 8.930758476257324,
+            "weights": [
+              0.0,
+              0.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.4954114556312561
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0C3H818H4",
+            "title": "Exploding Kittens Party Pack Card Game by Exploding kittens - A Russian Roulette Fun Family Games for Adults, Teens & Kids, 2-10 Players",
+            "image": "https://m.media-amazon.com/images/I/51mmc9FwDgL._AC_.jpg",
+            "train_count": 7293,
+            "regime": "warm",
+            "score": 8.894807815551758,
+            "weights": [
+              0.0,
+              0.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.4954114556312561
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          }
+        ],
+        "elapsed_ms": 18970.8,
+        "regime": "all",
+        "history_count": 0
+      },
+      "wall_seconds": 18.973682199954055
+    },
+    {
+      "name": "history",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "all"
+      },
+      "response": {
+        "backend": "UFM Rec",
+        "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+        "data": {
+          "mode": "catalog_from_disk",
+          "catalog": "toys_games_full_temporal",
+          "items": 767045,
+          "counts_simulated": false,
+          "display_images_affect_scores": false
+        },
+        "model": {
+          "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+          "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+          "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+          "variant": "full",
+          "checkpoint_epoch": 9,
+          "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+        },
+        "results": [
+          {
+            "asin": "B0B2BQXPPJ",
+            "title": "Cards Against Humanity: Tiny Edition • Miniature Main Game with 600 Ridiculously Tiny Cards",
+            "image": "https://m.media-amazon.com/images/I/31TRHqalHXL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 7.629580497741699,
+            "weights": [
+              0.0,
+              1.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.022365661337971687
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0C3H818H4",
+            "title": "Exploding Kittens Party Pack Card Game by Exploding kittens - A Russian Roulette Fun Family Games for Adults, Teens & Kids, 2-10 Players",
+            "image": "https://m.media-amazon.com/images/I/51mmc9FwDgL._AC_.jpg",
+            "train_count": 7293,
+            "regime": "warm",
+            "score": 7.005155563354492,
+            "weights": [
+              0.47841987013816833,
+              0.5215801000595093
+            ],
+            "uncertainty": [
+              0.11826783418655396,
+              0.03189370036125183
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B003I64OT6",
+            "title": "LCR® Left Center Right™ Dice Game - Blue Tin",
+            "image": "https://m.media-amazon.com/images/I/51MPVZnPOCL._AC_.jpg",
+            "train_count": 3342,
+            "regime": "warm",
+            "score": 6.153925895690918,
+            "weights": [
+              0.4768712818622589,
+              0.5231286883354187
+            ],
+            "uncertainty": [
+              0.12708723545074463,
+              0.03450636938214302
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0C4CTC9H5",
+            "title": "WHAT DO YOU MEME? Core Game - The Hilarious Adult Party Game for Meme Lovers (Bigger Better Edition)",
+            "image": "https://m.media-amazon.com/images/I/41WS5OXd-1L._AC_.jpg",
+            "train_count": 5063,
+            "regime": "warm",
+            "score": 6.069908618927002,
+            "weights": [
+              0.4832417368888855,
+              0.5167582631111145
+            ],
+            "uncertainty": [
+              0.11846525967121124,
+              0.05140705034136772
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B00H59EMD0",
+            "title": "Crabs Adjust Humidity - Vol One",
+            "image": "https://m.media-amazon.com/images/I/51+jThNS2KL._AC_.jpg",
+            "train_count": 464,
+            "regime": "warm",
+            "score": 5.984333038330078,
+            "weights": [
+              0.4620598554611206,
+              0.5379401445388794
+            ],
+            "uncertainty": [
+              0.1986525058746338,
+              0.0465996116399765
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          }
+        ],
+        "elapsed_ms": 20010.2,
+        "regime": "all",
+        "history_count": 1
+      },
+      "wall_seconds": 20.01257630006876
+    },
+    {
+      "name": "zero_shot",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "zero_shot"
+      },
+      "response": {
+        "backend": "UFM Rec",
+        "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+        "data": {
+          "mode": "catalog_from_disk",
+          "catalog": "toys_games_full_temporal",
+          "items": 767045,
+          "counts_simulated": false,
+          "display_images_affect_scores": false
+        },
+        "model": {
+          "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+          "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+          "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+          "variant": "full",
+          "checkpoint_epoch": 9,
+          "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+        },
+        "results": [
+          {
+            "asin": "B0B2BQXPPJ",
+            "title": "Cards Against Humanity: Tiny Edition • Miniature Main Game with 600 Ridiculously Tiny Cards",
+            "image": "https://m.media-amazon.com/images/I/31TRHqalHXL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 7.629580497741699,
+            "weights": [
+              0.0,
+              1.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.022365661337971687
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0B97KMX3D",
+            "title": "Carcassonne 20th Anniversary Edition| Family Board Game for Adults and Kids | Strategy /Adventure Game | Ages 7+ | 2-5 Players | Avg. Playtime 30-45 Minutes | Made by Z-Man Games",
+            "image": "https://m.media-amazon.com/images/I/5155VqGmgjL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 4.830232620239258,
+            "weights": [
+              0.0,
+              1.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.12080568820238113
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0B8ZR46YP",
+            "title": "Dixit Board Game 2021 Refresh | Storytelling Game for Kids and Adults | Fun Family Party Game | Creative Kids Game | Ages 8+ | 3-8 Players | Average Playtime 30 Minutes | Made by Libellud",
+            "image": "https://m.media-amazon.com/images/I/51ppstGppqL._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 4.815559387207031,
+            "weights": [
+              0.0,
+              1.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.12155384570360184
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B094V2C3YG",
+            "title": "Crobyi 13.5 Inches Large Shut The Box Game for 1-4 Players，Educational & Fun Wooden Board Game with 10 Dice and Shut-The-Box Instructions for Kids & Family，Great Pub Dice Game.",
+            "image": "https://m.media-amazon.com/images/I/51p1KB4xh7L._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 4.406194686889648,
+            "weights": [
+              0.0,
+              1.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.13621988892555237
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B093RB185K",
+            "title": "Façade Games Dark Cities Collection - 4 Game Set Including Salem 1692, Bristol 1350, Tortuga 1667, and Deadwood 1876",
+            "image": "https://m.media-amazon.com/images/I/41PZ1bSXHHS._AC_.jpg",
+            "train_count": 0,
+            "regime": "zero_shot",
+            "score": 4.269320487976074,
+            "weights": [
+              0.0,
+              1.0
+            ],
+            "uncertainty": [
+              0.28280109167099,
+              0.18566441535949707
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          }
+        ],
+        "elapsed_ms": 10574.4,
+        "regime": "zero_shot",
+        "history_count": 1
+      },
+      "wall_seconds": 10.577591000008397
+    },
+    {
+      "name": "extreme_cold",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "extreme_cold"
+      },
+      "response": {
+        "backend": "UFM Rec",
+        "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+        "data": {
+          "mode": "catalog_from_disk",
+          "catalog": "toys_games_full_temporal",
+          "items": 767045,
+          "counts_simulated": false,
+          "display_images_affect_scores": false
+        },
+        "model": {
+          "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+          "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+          "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+          "variant": "full",
+          "checkpoint_epoch": 9,
+          "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+        },
+        "results": [
+          {
+            "asin": "B07F2P3MM1",
+            "title": "Cards Against Humanity Saves America Pack • Mini expansion",
+            "image": "https://m.media-amazon.com/images/I/31M7eLwXldL._AC_.jpg",
+            "train_count": 5,
+            "regime": "extreme_cold",
+            "score": 2.637436628341675,
+            "weights": [
+              0.5038133859634399,
+              0.4961865544319153
+            ],
+            "uncertainty": [
+              0.04755182936787605,
+              0.06280576437711716
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B00HJ99BUA",
+            "title": "Cards Against Humanity",
+            "image": "https://m.media-amazon.com/images/I/31t5P2nh7FL._AC_.jpg",
+            "train_count": 1,
+            "regime": "extreme_cold",
+            "score": 2.020158529281616,
+            "weights": [
+              0.49883151054382324,
+              0.5011685490608215
+            ],
+            "uncertainty": [
+              0.008669271133840084,
+              0.0039951796643435955
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B01H4DW77O",
+            "title": "Apostrophe Games Clones Attack Hilarity, 150 Card Expansion Pack",
+            "image": "https://m.media-amazon.com/images/I/41tnLsyEgSL._AC_.jpg",
+            "train_count": 4,
+            "regime": "extreme_cold",
+            "score": 1.5846824645996094,
+            "weights": [
+              0.5050276517868042,
+              0.4949723780155182
+            ],
+            "uncertainty": [
+              0.03243112191557884,
+              0.052542343735694885
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B00VWJNJHE",
+            "title": "USAOPOLY Pass The Blame Board Game",
+            "image": "https://m.media-amazon.com/images/I/51IM3Aqp7JL._AC_.jpg",
+            "train_count": 3,
+            "regime": "extreme_cold",
+            "score": 0.5939273238182068,
+            "weights": [
+              0.5103107690811157,
+              0.48968926072120667
+            ],
+            "uncertainty": [
+              0.03672277182340622,
+              0.07797162234783173
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B013PE868A",
+            "title": "Cards Against Humanity: Design Pack",
+            "image": "https://m.media-amazon.com/images/I/41qGNQeiooL._AC_.jpg",
+            "train_count": 4,
+            "regime": "extreme_cold",
+            "score": 0.3279998302459717,
+            "weights": [
+              0.5252599120140076,
+              0.47474002838134766
+            ],
+            "uncertainty": [
+              0.036313075572252274,
+              0.13743895292282104
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          }
+        ],
+        "elapsed_ms": 14877.3,
+        "regime": "extreme_cold",
+        "history_count": 1
+      },
+      "wall_seconds": 14.87966169998981
+    },
+    {
+      "name": "cold",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "cold"
+      },
+      "response": {
+        "backend": "UFM Rec",
+        "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+        "data": {
+          "mode": "catalog_from_disk",
+          "catalog": "toys_games_full_temporal",
+          "items": 767045,
+          "counts_simulated": false,
+          "display_images_affect_scores": false
+        },
+        "model": {
+          "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+          "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+          "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+          "variant": "full",
+          "checkpoint_epoch": 9,
+          "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+        },
+        "results": [
+          {
+            "asin": "B015IQZO4M",
+            "title": "God Hates Charades",
+            "image": "https://m.media-amazon.com/images/I/511Q2lTXQ7L._AC_.jpg",
+            "train_count": 18,
+            "regime": "cold",
+            "score": 2.0239675045013428,
+            "weights": [
+              0.49557262659072876,
+              0.5044273138046265
+            ],
+            "uncertainty": [
+              0.11673334240913391,
+              0.09902351349592209
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B004DCO0CA",
+            "title": "Give Me The Brain",
+            "image": "https://m.media-amazon.com/images/I/51qwNFNdosL._AC_.jpg",
+            "train_count": 12,
+            "regime": "cold",
+            "score": 1.8276019096374512,
+            "weights": [
+              0.5101165175437927,
+              0.4898834824562073
+            ],
+            "uncertainty": [
+              0.08385264128446579,
+              0.1243242546916008
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B075Y1LF8Y",
+            "title": "Crabs Adjust Humidity - Vol Seven",
+            "image": "https://m.media-amazon.com/images/I/51V83nVjSgL._AC_.jpg",
+            "train_count": 18,
+            "regime": "cold",
+            "score": 1.7093682289123535,
+            "weights": [
+              0.5062217116355896,
+              0.4937782287597656
+            ],
+            "uncertainty": [
+              0.08516718447208405,
+              0.11005541682243347
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B077LXTKG1",
+            "title": "Mindmade Games Debatable - A Hilarious Party Game for People who Love to Argue",
+            "image": "https://m.media-amazon.com/images/I/514YoM4qauL._AC_.jpg",
+            "train_count": 16,
+            "regime": "cold",
+            "score": 1.5690243244171143,
+            "weights": [
+              0.5094199776649475,
+              0.4905800223350525
+            ],
+            "uncertainty": [
+              0.1341676265001297,
+              0.1718519926071167
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B073K1CXVL",
+            "title": "Clones Attack Hilarity #2, 150 Card Expansion Pack for The World's Most Popular Party Game",
+            "image": "https://m.media-amazon.com/images/I/514gewW+XXL._AC_.jpg",
+            "train_count": 14,
+            "regime": "cold",
+            "score": 1.4592716693878174,
+            "weights": [
+              0.506329357624054,
+              0.49367064237594604
+            ],
+            "uncertainty": [
+              0.09261291474103928,
+              0.11793167889118195
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          }
+        ],
+        "elapsed_ms": 9012.3,
+        "regime": "cold",
+        "history_count": 1
+      },
+      "wall_seconds": 9.014497400028631
+    },
+    {
+      "name": "warm",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "warm"
+      },
+      "response": {
+        "backend": "UFM Rec",
+        "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+        "data": {
+          "mode": "catalog_from_disk",
+          "catalog": "toys_games_full_temporal",
+          "items": 767045,
+          "counts_simulated": false,
+          "display_images_affect_scores": false
+        },
+        "model": {
+          "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+          "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+          "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+          "variant": "full",
+          "checkpoint_epoch": 9,
+          "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+        },
+        "results": [
+          {
+            "asin": "B0C3H818H4",
+            "title": "Exploding Kittens Party Pack Card Game by Exploding kittens - A Russian Roulette Fun Family Games for Adults, Teens & Kids, 2-10 Players",
+            "image": "https://m.media-amazon.com/images/I/51mmc9FwDgL._AC_.jpg",
+            "train_count": 7293,
+            "regime": "warm",
+            "score": 7.005155563354492,
+            "weights": [
+              0.47841987013816833,
+              0.5215801000595093
+            ],
+            "uncertainty": [
+              0.11826783418655396,
+              0.03189373016357422
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B003I64OT6",
+            "title": "LCR® Left Center Right™ Dice Game - Blue Tin",
+            "image": "https://m.media-amazon.com/images/I/51MPVZnPOCL._AC_.jpg",
+            "train_count": 3342,
+            "regime": "warm",
+            "score": 6.153926372528076,
+            "weights": [
+              0.4768712818622589,
+              0.5231286883354187
+            ],
+            "uncertainty": [
+              0.12708725035190582,
+              0.03450638800859451
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B0C4CTC9H5",
+            "title": "WHAT DO YOU MEME? Core Game - The Hilarious Adult Party Game for Meme Lovers (Bigger Better Edition)",
+            "image": "https://m.media-amazon.com/images/I/41WS5OXd-1L._AC_.jpg",
+            "train_count": 5063,
+            "regime": "warm",
+            "score": 6.06990909576416,
+            "weights": [
+              0.4832417070865631,
+              0.5167582631111145
+            ],
+            "uncertainty": [
+              0.11846528947353363,
+              0.05140702426433563
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B00H59EMD0",
+            "title": "Crabs Adjust Humidity - Vol One",
+            "image": "https://m.media-amazon.com/images/I/51+jThNS2KL._AC_.jpg",
+            "train_count": 464,
+            "regime": "warm",
+            "score": 5.9843339920043945,
+            "weights": [
+              0.4620598554611206,
+              0.5379402041435242
+            ],
+            "uncertainty": [
+              0.1986525058746338,
+              0.046599555760622025
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          },
+          {
+            "asin": "B00000IZJB",
+            "title": "Rummikub - The Original Rummy Tile Game by Pressman",
+            "image": "https://m.media-amazon.com/images/I/51DuqEGZCEL._AC_.jpg",
+            "train_count": 2840,
+            "regime": "warm",
+            "score": 5.957268238067627,
+            "weights": [
+              0.4902713894844055,
+              0.5097286105155945
+            ],
+            "uncertainty": [
+              0.12280572205781937,
+              0.08388639241456985
+            ],
+            "modalities": [
+              true,
+              true
+            ]
+          }
+        ],
+        "elapsed_ms": 7849.6,
+        "regime": "warm",
+        "history_count": 1
+      },
+      "wall_seconds": 7.851839300012216
+    }
+  ],
+  "limitations": [
+    "API correctness evidence; not recommendation-quality evidence.",
+    "Sequential CPU requests; not a concurrent latency benchmark."
+  ]
+}
