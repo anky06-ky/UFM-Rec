@@ -23,6 +23,12 @@
     "utilization_percent": 100,
     "training_allowed_by_idle_guard": false
   },
+  "gpu_recheck_20261029": {
+    "observed_at_utc": "2026-10-28T23:11:14Z",
+    "memory_used_mib": 19400,
+    "utilization_percent": 100,
+    "training_allowed_by_idle_guard": false
+  },
   "distinct_from_fitlab01_gpu": true,
   "default_python_torch_available": false,
   "shared_ufm_python": "/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python",

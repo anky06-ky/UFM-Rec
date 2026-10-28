@@ -1,0 +1,23 @@
+{
+  "run_date_local": "2026-10-28",
+  "recorded_at_utc": "2026-10-28T23:08:59Z",
+  "notebook_url": "https://colab.research.google.com/drive/10IPoEd3Y4nsb45pKEwOwRvOFaxLqei1O",
+  "source_commit": "7fac756d3f6f33116f9bd5d8d25f4849e93b72e4",
+  "script": "scripts/smoke_ufm_cuda.py",
+  "scope": "synthetic_cuda_smoke_only",
+  "dataset_opened": false,
+  "test_labels_opened": false,
+  "ranking_metric_reported": false,
+  "torch_version": "2.11.0+cu130",
+  "gpu": "Tesla T4",
+  "gpu_total_mib_reported_by_torch": 14913,
+  "model_source_sha256": "3f6fad5dcd847f431716cf410412ab32b81ce1bc8d706edc269a3a46a67eaaca",
+  "variants": {
+    "full": {"forward_finite": true, "loss_finite": true, "backward_finite": true, "optimizer_step_finite": true},
+    "semantic_only": {"forward_finite": true, "loss_finite": true, "backward_finite": true, "optimizer_step_finite": true},
+    "fixed_fusion": {"forward_finite": true, "loss_finite": true, "backward_finite": true, "optimizer_step_finite": true},
+    "count_aware_fusion": {"forward_finite": true, "loss_finite": true, "backward_finite": true, "optimizer_step_finite": true},
+    "adaptive_dropout": {"forward_finite": true, "loss_finite": true, "backward_finite": true, "optimizer_step_finite": true}
+  },
+  "artifact_state": "The notebook output was visible after Colab disconnected. Its /content JSON file was ephemeral; this repo receipt records the observed output on the local machine."
+}
