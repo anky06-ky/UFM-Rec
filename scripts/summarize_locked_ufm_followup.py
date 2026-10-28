@@ -35,7 +35,16 @@ def main() -> None:
             if (report.get("test_evaluated") is not False or set(report["splits"]) != {"validation"}
                     or report["sources"]["samples_validation"] != expected_sample
                     or report["checkpoint_variant"] != variant
-                    or report["model_config"]["variant"] != variant):
+                    or report["checkpoint_seed"] != seed
+                    or report["model_config"]["variant"] != variant
+                    or report["recorded_code_sha256"] != {
+                        Path(relative).name: expected for relative, expected in protocol["sources_sha256"].items()
+                        if relative.startswith("src/")
+                    }
+                    or report["sources"]["features_complete"] != protocol["sources_sha256"][
+                        "data/processed/toys_games_full_temporal/foundation_clip_b32_v1/complete.json"]
+                    or report["sources"]["train_counts"] != protocol["sources_sha256"][
+                        "data/processed/gpu_cache_h20_t64_v1/train_counts.npy"]):
                 raise ValueError(f"Protocol mismatch: {path}")
             if result["overall"]["samples"] != 40000 or any(
                 result["by_regime"][regime]["samples"] != 10000 for regime in REGIMES

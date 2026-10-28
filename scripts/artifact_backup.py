@@ -45,7 +45,19 @@ def allowed(path, root):
         ".pyc", ".pyo", ".pem", ".key", ".partial", ".tmp"}
 
 
-def source_files(root):
+def source_files(root, includes=None):
+    if includes:
+        files = []
+        for relative in includes:
+            start = safe_path(root, relative)
+            if not start.exists() or start.is_symlink() or not allowed(start, root):
+                raise ValueError(f"Missing or excluded backup input: {relative}")
+            candidates = start.rglob("*") if start.is_dir() else [start]
+            files.extend(p for p in candidates if p.is_file() and not p.is_symlink()
+                         and allowed(p, root) and not any(parent.is_symlink() for parent in p.parents if parent != root))
+        if not files:
+            raise ValueError("No eligible files in selected backup inputs")
+        return sorted(set(files), key=lambda p: p.relative_to(root).as_posix())
     files = []
     for folder in FOLDERS:
         start = root / folder
@@ -73,7 +85,7 @@ def save_json(path, value):
     partial.replace(path)
 
 
-def create(root, output, bundle_bytes=768 * 1024**2):
+def create(root, output, bundle_bytes=768 * 1024**2, includes=None):
     root, output = root.resolve(), output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     if (output / "manifest.json").exists() or list(output.glob("bundle_*.zip*")):
@@ -82,7 +94,7 @@ def create(root, output, bundle_bytes=768 * 1024**2):
                     source_root=str(root), phase="hashing", files=[], bundles=[],
                     excluded="Virtual environments, Git internals, secrets, temporary caches; no source files deleted.")
     seen = {}
-    for p in source_files(root):
+    for p in source_files(root, includes):
         before = p.stat()
         sha = digest(p)
         after = p.stat()
@@ -228,6 +240,8 @@ if __name__ == "__main__":
     p.add_argument("--root", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--bundle-mib", type=int, default=768)
+    p.add_argument("--include", action="append", default=[],
+                   help="Relative file or directory to back up; repeat to make a small batch instead of the full workspace.")
     p = sub.add_parser("restore")
     p.add_argument("--backup", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
@@ -236,6 +250,6 @@ if __name__ == "__main__":
     if args.command == "create":
         if args.bundle_mib < 1:
             parser.error("--bundle-mib must be positive")
-        create(args.root, args.output, args.bundle_mib * 1024**2)
+        create(args.root, args.output, args.bundle_mib * 1024**2, args.include)
     else:
         restore(args.backup, args.output, available_only=args.available_only)

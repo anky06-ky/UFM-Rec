@@ -16,7 +16,7 @@ import docx
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls, qn
 
-BASE_DIR = Path(r"D:\Nam3_ki1\UFM-Rec")
+BASE_DIR = Path(__file__).resolve().parents[1]
 EQUATION_RESOURCE = BASE_DIR / "scripts" / "report_equations_omml.json"
 
 GREEK = {

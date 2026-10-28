@@ -28,6 +28,8 @@ Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi 
 
 Trạng thái 28/10: máy local chỉ có PyTorch CPU, SSH FITLAB-01 không kết nối, tab code-server không khả dụng. Chưa chạy 15 run mới. Runner mặc định chỉ kiểm tra; `--execute` cần GPU có quyền truy cập và source đúng hash.
 
+Lệnh checkout, chạy từng run và khôi phục gói sao lưu có trong [runbook FITLAB](gpu_followup_runbook.md). Gói chỉ chứa artifact của một run để tránh sao lưu lặp và phải được xác minh SHA trên máy trước khi dọn `latest.pt` phía FITLAB.
+
 ## 3. Kiểm chứng cải tiến theo train count
 
 1. Phân tích chất lượng và phân phối trọng số CF/semantic theo train count, tách các ca không có tín hiệu.
