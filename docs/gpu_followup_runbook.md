@@ -2,6 +2,8 @@
 
 Vòng này chỉ dùng Toys & Games. Phạm vi sản phẩm kết hợp hành vi, ảnh và tên/mô tả đã được nhóm xác nhận với giảng viên. [Manifest](../configs/multimodal_followup_20261028.json) khóa **15 run**: full, semantic-only, fixed-fusion, count-aware fusion, adaptive dropout × seed 42, 7, 2026. Chưa có kết quả huấn luyện mới. Test v2 đã được xem; không dùng nó để chọn mô hình.
 
+Ngày 28/10, checkout bên dưới đã có trên filesystem dùng chung và dry-run 9/9 đầu vào SHA đạt cả FITLAB-01 lẫn FITLAB-02. [Receipt cổng 01](../reports/continuation_20261028/fitlab01_reopen_20261028.json), [cổng 02](../reports/continuation_20261028/fitlab02_check_20261028.json). Hai cổng dùng GPU khác nhau nhưng cả hai đang bận. Trên FITLAB-02, `python` mặc định thiếu PyTorch; dùng `/home/coder/iDragonCloud/DA_AI/.venv_ufm_runtime/bin/python` đã xác nhận PyTorch `2.12.1+cu130` và `torch.cuda.is_available() == True`. Thay `python` trong các lệnh huấn luyện/đánh giá dưới đây bằng đường dẫn này khi thao tác từ FITLAB-02. Kiểm tra lại GPU trống ngay trước lúc chạy và sao lưu từng run về máy.
+
 ## 1. Dùng source mới trong workspace riêng
 
 Trên FITLAB-01, giữ nguyên dữ liệu/checkpoint cũ tại `/home/coder/iDragonCloud/DA_AI`. Tạo checkout mới của nhánh `followup/multimodal-20261028` ở một thư mục khác, ví dụ `.../DA_AI/audit_v2/followup_multimodal_20261028`. Không sửa archived training source của checkpoint cũ. Chạy bằng môi trường Python UFM đã có trên FITLAB.
