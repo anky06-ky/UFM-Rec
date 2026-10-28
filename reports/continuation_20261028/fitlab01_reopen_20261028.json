@@ -1,0 +1,25 @@
+{
+  "observed_at_utc": "2026-10-28T13:44:50Z",
+  "host": "FITLAB-01 code-server",
+  "workspace": "/home/coder/iDragonCloud/DA_AI",
+  "remote_checkout": "/home/coder/iDragonCloud/DA_AI/audit_v2/followup_multimodal_20261028",
+  "branch": "followup/multimodal-20261028",
+  "commit_short": "8c4ee94",
+  "preflight": {
+    "status": "passed",
+    "locked_inputs_sha256_checked": 9,
+    "planned_jobs": 15,
+    "mode": "dry_run"
+  },
+  "gpu": {
+    "name": "Quadro RTX 6000",
+    "memory_total_mib": 24576,
+    "memory_used_mib_last_observed": 23162,
+    "utilization_percent_last_observed": 100,
+    "other_compute_processes_observed": 4
+  },
+  "ssh_port_22_reachable": false,
+  "training_started_in_this_visit": false,
+  "new_checkpoint_created_in_this_visit": false,
+  "note": "Remote checks were observed in code-server terminal. GPU users outside this session were left running; the locked runner was not executed. Historical data and checkpoints had already been restored and SHA-256 verified on Windows; see backup_receipts.json."
+}

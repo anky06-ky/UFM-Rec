@@ -1,6 +1,6 @@
 # Kết quả tiếp tục ngày 28/10/2026
 
-Phạm vi hệ gợi ý sản phẩm dùng hành vi, hình ảnh và tên/mô tả đã được nhóm xác nhận với giảng viên. Bản [giao thức cho vòng tiếp theo](../../configs/multimodal_followup_20261028.json) khóa ba seed, ba đối chứng và hai cải tiến đánh giá riêng; **15 run mới chưa được huấn luyện**. Máy local không có CUDA và phiên FITLAB chưa truy cập được để khởi chạy. Những số dưới đây vẫn là checkpoint lịch sử một seed.
+Phạm vi hệ gợi ý sản phẩm dùng hành vi, hình ảnh và tên/mô tả đã được nhóm xác nhận với giảng viên. Bản [giao thức cho vòng tiếp theo](../../configs/multimodal_followup_20261028.json) khóa ba seed, ba đối chứng và hai cải tiến đánh giá riêng; **15 run mới chưa được huấn luyện**. FITLAB-01 đã mở lại qua code-server, checkout commit `8c4ee94` và dry-run kiểm tra 9/9 đầu vào SHA cùng 15 job đều đạt. FITLAB-02 dùng GPU khác, truy cập cùng workspace và cũng qua preflight 9/9. Khi kiểm tra, GPU cổng 01 dùng 23.162/24.576 MiB, tải 100%; cổng 02 ban đầu dùng 21.720/24.576 MiB, tải 94%, có sáu tiến trình khác. Cổng 02 sau đó giảm còn 10.662 MiB nhưng vẫn tải 100%; idle guard chưa cho train. Receipt: [cổng 01](fitlab01_reopen_20261028.json), [cổng 02](fitlab02_check_20261028.json). Những số dưới đây vẫn là checkpoint lịch sử một seed.
 
 Checkpoint UFM đã được nạp từ bản sao local trên Windows: catalog 767.045 item, counts thật, checkpoint SHA `5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8`. [Sáu ca API Windows](windows_ufm_verification.json) đều đạt: no-history, history, zero-shot, extreme-cold, cold, warm; bộ lọc và loại item lịch sử được kiểm tra. Đây là bằng chứng vận hành, không phải metric chất lượng.
 
@@ -51,7 +51,7 @@ SASRec/BERT4Rec là bản thích nghi trong repo, chưa phải reproduction chu�
 
 ## Phần còn phải nghiệm thu
 
-- Sao lưu FITLAB: chỉ xem hoàn tất khi đủ 22 gói khớp hash và có restore receipt đầy đủ; theo dõi receipt ngoài repo.
+- Bản sao lịch sử FITLAB đã có 22/22 gói khớp SHA, khôi phục 796 tệp và không thiếu tệp; [receipt tổng hợp](backup_receipts.json) và [hướng dẫn bàn giao](backup_handoff.md). Nếu vòng 15 run tạo artifact mới, phải tải và xác minh từng run trên máy trước khi coi là an toàn.
 - Demo UFM thật: giữ bằng chứng request/checkpoint/candidate regime và nghiệm thu giao diện.
 - Nhiều seed và cải tiến count-aware/adaptive: chưa có kết quả train được xác minh.
 - CI GitHub đã đạt Windows/Ubuntu cho [nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Phạm vi ba tín hiệu đã được nhóm xác nhận với giảng viên; metric nghiệm thu và yêu cầu UFM All Beauty vẫn cần góp ý. Word/PDF báo cáo toàn văn chưa đồng bộ; [PDF tiến độ ngắn](../../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã được kiểm tra trực quan.

@@ -26,7 +26,7 @@ Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi 
 
 **Đầu ra cần có:** bảng so sánh tái lập được, từng seed, config và predictions. Chỉ mở job train khi có tài nguyên phù hợp; không dừng job khác để lấy GPU.
 
-Trạng thái 28/10: máy local chỉ có PyTorch CPU, SSH FITLAB-01 không kết nối, tab code-server không khả dụng. Chưa chạy 15 run mới. Runner mặc định chỉ kiểm tra; `--execute` cần GPU có quyền truy cập và source đúng hash.
+Trạng thái 28/10: máy local chỉ có PyTorch CPU. FITLAB-01 đã mở lại qua code-server; checkout `8c4ee94` qua dry-run 9/9 đầu vào SHA, đủ kế hoạch 15 job. FITLAB-02 dùng GPU riêng, truy cập cùng dữ liệu, cũng qua preflight 9/9. SSH cổng 22 của cổng 01 vẫn không kết nối. Khi kiểm tra, cả hai GPU đều có tiến trình khác; GPU 02 đã có lúc giảm dùng bộ nhớ xuống 10.662/24.576 MiB nhưng tải vẫn 100%. Chưa chạy 15 run mới. Receipt: [cổng 01](../reports/continuation_20261028/fitlab01_reopen_20261028.json), [cổng 02](../reports/continuation_20261028/fitlab02_check_20261028.json). Runner mặc định chỉ kiểm tra; `--execute` cần GPU trống phù hợp và môi trường Python có CUDA.
 
 Lệnh checkout, chạy từng run và khôi phục gói sao lưu có trong [runbook FITLAB](gpu_followup_runbook.md). Gói chỉ chứa artifact của một run để tránh sao lưu lặp và phải được xác minh SHA trên máy trước khi dọn `latest.pt` phía FITLAB.
 
@@ -55,7 +55,7 @@ Không lấy trọng số CF dưới một ngưỡng tùy ý làm tiêu chí th�
 
 **Đầu ra cần có:** hướng dẫn cài/chạy, CI đạt và bộ báo cáo cùng phiên bản.
 
-Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). [PDF tiến độ 2 trang](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi, không thay thế bản Word/PDF báo cáo toàn văn. Script Word hiện thiếu `Mau_Bao_Cao_Nhom_4.docx` trong workspace và chưa có renderer LibreOffice đi kèm để nghiệm thu từng trang, nên chưa xuất lại bản toàn văn.
+Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40696732869). [PDF tiến độ 2 trang](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi, không thay thế bản Word/PDF báo cáo toàn văn. Script Word hiện thiếu `Mau_Bao_Cao_Nhom_4.docx` trong workspace và chưa có renderer LibreOffice đi kèm để nghiệm thu từng trang, nên chưa xuất lại bản toàn văn.
 
 ## Sau khi hoàn tất phần chính
 
