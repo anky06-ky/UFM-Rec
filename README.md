@@ -29,6 +29,8 @@ Hướng triển khai tiếp theo theo thứ tự ưu tiên: [docs/next.md](docs
 
 Bàn giao ngày 28/10: [kết quả validation v3 và nghiệm thu UFM thật](reports/continuation_20261028/README.md), [bản sao dữ liệu đã khôi phục đủ](reports/continuation_20261028/backup_handoff.md), [lời trao đổi mới với giảng viên](docs/trao_doi_gvhd_2026_10_28.md). Bản sao nằm ngoài repo tại `D:\Nam3_ki1\UFM-Rec_Backups`; có launcher `Start_UFM_From_Backup.cmd` dùng dữ liệu đã phục hồi.
 
+[PDF tiến độ trước buổi gặp](output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) được tạo từ JSON bằng chứng và đã kiểm tra cả hai trang. Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) có [CI Windows/Ubuntu đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Báo cáo Word/PDF toàn văn cũ chưa đồng bộ và 15 lượt train mới chưa chạy.
+
 ## Kết quả lịch sử đã đo
 
 - CLIP hoàn tất **767.045/767.045** item; **758.692** ảnh OK.

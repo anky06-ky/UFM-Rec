@@ -53,6 +53,8 @@ Không lấy trọng số CF dưới một ngưỡng tùy ý làm tiêu chí th�
 
 **Đầu ra cần có:** hướng dẫn cài/chạy, CI đạt và bộ báo cáo cùng phiên bản.
 
+Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). [PDF tiến độ 2 trang](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi, không thay thế bản Word/PDF báo cáo toàn văn. Script Word hiện thiếu `Mau_Bao_Cao_Nhom_4.docx` trong workspace và chưa có renderer LibreOffice đi kèm để nghiệm thu từng trang, nên chưa xuất lại bản toàn văn.
+
 ## Sau khi hoàn tất phần chính
 
 UFM trên All Beauty chỉ ưu tiên nếu giảng viên giữ yêu cầu dataset thứ hai. Retrieval/ANN, fine-tune encoder và các tính năng mở rộng nên để sau khi có kết quả đối chứng ổn định.

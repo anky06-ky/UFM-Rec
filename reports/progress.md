@@ -6,6 +6,8 @@ Checkpoint UFM từ bản sao local đã khởi động trên Windows, 767.045 s
 
 [Benchmark Windows](continuation_20261028/windows_ufm_benchmark.json): 2 warm-up + 10 request đầy đủ, p50 21,25 giây, p95 26,35 giây, RSS server cao nhất quan sát 2.551,5 MiB; hai request đồng thời một 200 và một 429. Đây là giới hạn vận hành cần nêu rõ khi trình bày demo.
 
+[CI trên nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511) đạt cả Windows và Ubuntu. [PDF tiến độ 28/10](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render/kiểm tra 2 trang để trao đổi với giảng viên; bản báo cáo Word/PDF toàn văn cũ chưa đồng bộ.
+
 <!-- current-evidence-20261028 -->
 > Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
 <!-- /current-evidence-20261028 -->

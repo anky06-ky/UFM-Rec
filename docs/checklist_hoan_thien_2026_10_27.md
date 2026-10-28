@@ -16,7 +16,7 @@ Cập nhật sau khi sửa mục 1–15 ngày 27/10/2026 trên FITLAB-01. Mô t�
 - V2 giữ nguyên; audit mới ghi 7 prior-positive negative trong 6 ca. V3 đã được tạo riêng và audit đạt chính sách loại mọi positive trước target; đã có điểm tám checkpoint UFM và baseline v3.
 - Test local **84 passed, 3 skipped**, 10 subtests passed; ba skip dành cho Linux. Bản mã hiện tại được kiểm thử riêng trên FITLAB-01 để giữ nguyên nguồn tạo checkpoint.
 - Demo TF-IDF có 30 ảnh local, synthetic counts được gắn nhãn trong UI/API/export; ảnh chỉ hiển thị ở backend này.
-- **Mục 8 còn chờ GitHub Actions; mục 9 còn chờ giảng viên xác nhận phạm vi.** Không tích hoàn thành hai phần cần bằng chứng bên ngoài này. Word/PDF chưa xuất lại.
+- **Mục P0-08 đã có CI GitHub Actions đạt trên Windows và Ubuntu** cho nhánh `followup/multimodal-20261028` ngày 28/10. Nhóm xác nhận giảng viên đã chốt phạm vi ba tín hiệu; metric và dataset thứ hai vẫn là câu hỏi nghiệm thu. Word/PDF báo cáo toàn văn chưa xuất lại.
 
 ## P0 — Sửa lỗi và xác minh tài nguyên trước khi chạy thí nghiệm dài
 
@@ -41,7 +41,7 @@ Cập nhật sau khi sửa mục 1–15 ngày 27/10/2026 trên FITLAB-01. Mô t�
 - [x] **P0-07 — Sửa ghi nhận lịch sử đánh giá test.** [run_final_test.py](../src/run_final_test.py) kiểm tra marker cũ và file output, nhưng chưa có sổ ghi nhận đầy đủ lượt test v2; đổi output có thể tránh guard hiện tại. Ghi theo dataset/candidate hash/checkpoint/code/scorer/temperature và thời điểm đánh giá; không mặc định `first_evaluation=true` khi chưa có bằng chứng.
   Hoàn thành khi trạng thái test trong tool và tài liệu cùng phản ánh lượt đã xảy ra, không gọi test đã xem là test chưa mở.
 
-- [ ] **P0-08 — Ổn định môi trường và CI.** Xác định Python/dependency thực sự hỗ trợ, phân biệt môi trường CPU/GPU; cấu hình discovery để không thu nhầm `tmp/transfer/verify/test_*.py`. Cập nhật tên job/số suite đã cũ; chạy CI với dữ liệu nhỏ độc lập, công bố lý do skip.
+- [x] **P0-08 — Ổn định môi trường và CI.** Python 3.12 CPU, test discovery chỉ `tests/`, GitHub Actions matrix Windows/Ubuntu [đạt cho nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Local Windows 94 pass, 3 skip Linux-only; CI chạy cả hai hệ điều hành.
   Hoàn thành khi `pytest tests/` và CI đạt với các test cần thiết; không bỏ test hợp lệ để làm xanh CI. Lưu lại phiên bản môi trường của từng lượt chạy.
 
 ## P1 — Chốt dữ liệu và cách đánh giá
