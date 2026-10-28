@@ -1,0 +1,29 @@
+{
+  "observed_at_local": "2026-10-28T20:26:59+07:00",
+  "surface": "Chrome at http://127.0.0.1:8771/ on Windows",
+  "backend": "UFM Rec",
+  "catalog_items_displayed": 767045,
+  "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+  "workflow": {
+    "search_query": "LEGO",
+    "search_results_displayed": 20,
+    "history_asins": ["B00EYHD42G"],
+    "regime": "zero_shot",
+    "k": 5,
+    "results_displayed": 5,
+    "ui_elapsed_seconds_displayed": 11.11,
+    "result_asins": ["B0B2X3G9L5", "B01J8QDLZW", "B0B2WY3ZT8", "B09HSKQ9V8", "B08FM1NBZ3"],
+    "all_results_zero_train_interactions": true,
+    "history_excluded": true
+  },
+  "result_images": [
+    {"asin": "B0B2X3G9L5", "loaded": true, "natural_width": 320, "natural_height": 468},
+    {"asin": "B01J8QDLZW", "loaded": true, "natural_width": 131, "natural_height": 202},
+    {"asin": "B0B2WY3ZT8", "loaded": true, "natural_width": 201, "natural_height": 391},
+    {"asin": "B09HSKQ9V8", "loaded": true, "natural_width": 255, "natural_height": 494},
+    {"asin": "B08FM1NBZ3", "loaded": true, "natural_width": 270, "natural_height": 477}
+  ],
+  "method": "Observed the live page accessibility tree and DOM image natural dimensions; visually checked the result cards in Chrome.",
+  "export": "Button enabled and clicked; Chrome did not provide a verified downloaded file in this session, so local export remains unconfirmed. A separate FITLAB UI export is verified in ui_export_verification.json.",
+  "limits": ["One UI scenario and browser session; image URLs may fail at another time or network.", "This UI observation is not a recommendation-quality metric."]
+}

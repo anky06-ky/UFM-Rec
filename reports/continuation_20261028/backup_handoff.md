@@ -24,7 +24,7 @@ Tên Linux `docs/FITLAB.md` và `docs/fitlab.md` cùng tồn tại. Bản thứ 
 
 CLIP image embeddings đã nằm trên máy; embeddings không phải bộ JPEG gốc. Catalog đầy đủ giữ tên/ASIN/URL ảnh, hiển thị ảnh qua mạng. Chế độ mẫu 30 sản phẩm có ảnh offline trong repo. Không gọi đây là đã tải offline toàn bộ 758.692 JPEG.
 
-Demo UFM trên FITLAB-01 đã qua 6 ca API và giao diện zero-shot. Bản UFM dùng toàn bộ dữ liệu khôi phục trên Windows đã qua [6/6 ca API](windows_ufm_verification.json), [ca thiếu modality](windows_ufm_missing_modalities.json) và [benchmark HTTP](windows_ufm_benchmark.json); giao diện local vẫn cần kiểm tra trực quan. Bản content 30 sản phẩm phục vụ minh họa offline.
+Demo UFM trên FITLAB-01 đã qua 6 ca API và giao diện zero-shot. Bản UFM dùng toàn bộ dữ liệu khôi phục trên Windows đã qua [6/6 ca API](windows_ufm_verification.json), [ca thiếu modality](windows_ufm_missing_modalities.json), [benchmark HTTP](windows_ufm_benchmark.json) và [giao diện Chrome local](windows_ufm_ui_visual_check.json); export local chưa xác minh file tải. Bản content 30 sản phẩm phục vụ minh họa offline.
 
 `Start_UFM_From_Backup.cmd` ở thư mục backup truyền đầy đủ đường dẫn catalog/checkpoint/cache/snapshot cho launcher hiện tại. Giao diện đã sửa ảnh cao tràn xuống nội dung và nghiệm thu lại trên UFM thật. File xuất JSON đã tải về sau đó, được chuyển vào [ui_export_ufm_zero_shot.json](ui_export_ufm_zero_shot.json) và kiểm tra backend, checkpoint SHA, catalog size, Top 5, regime và loại history; xem [receipt](ui_export_verification.json). Việc này không thay thế toàn bộ nghiệm thu ứng dụng trên Windows.
 
