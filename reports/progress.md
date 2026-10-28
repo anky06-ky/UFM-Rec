@@ -2,11 +2,13 @@
 
 Phạm vi giảng viên đã chốt theo xác nhận của nhóm: hệ gợi ý sản phẩm dựa trên hành vi, hình ảnh và tên/mô tả. Phân tích [validation v3 theo train count](continuation_20261028/count_effect_v3.json) đã hoàn tất trên dự đoán lưu sẵn; nhóm 1–5 tương tác có full − semantic-only NDCG@10 = −0,024101, nhóm 21+ là +0,014865. Hai biến thể count-aware và adaptive dropout đã được tách cơ chế trong mã. [Giao thức 15 lượt train](../configs/multimodal_followup_20261028.json) đã khóa và qua preflight 9 hash trên cả FITLAB-01 lẫn FITLAB-02; **chưa có lượt train mới** vì GPU hai cổng đều đang bận với các tiến trình ngoài phiên. Receipt: [cổng 01](continuation_20261028/fitlab01_reopen_20261028.json), [cổng 02](continuation_20261028/fitlab02_check_20261028.json).
 
+[Smoke CUDA Colab](continuation_20261028/colab_cuda_smoke_20261028.json) đạt 5/5 biến thể với dữ liệu giả lập, gồm forward, loss, backward và optimizer step. Notebook vẫn giữ đầu ra sau khi runtime T4 ngắt theo giới hạn phiên. Đây là kiểm thử kỹ thuật, không phải lượt train hay chỉ số chất lượng trên Toys & Games.
+
 Checkpoint UFM từ bản sao local đã khởi động trên Windows, 767.045 sản phẩm; [6/6 ca API](continuation_20261028/windows_ufm_verification.json) đạt. Kiểm thử mã hiện tại: **96 passed, 3 skipped, 10 subtests passed** trên Windows. Các phần lịch sử bên dưới giữ theo ngày ghi nhận, không thay thế trạng thái hiện tại.
 
 [Benchmark Windows](continuation_20261028/windows_ufm_benchmark.json): 2 warm-up + 10 request đầy đủ, p50 21,25 giây, p95 26,35 giây, RSS server cao nhất quan sát 2.551,5 MiB; hai request đồng thời một 200 và một 429. Đây là giới hạn vận hành cần nêu rõ khi trình bày demo.
 
-[CI trên nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40696732869) đạt cả Windows và Ubuntu. [PDF tiến độ 28/10](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render/kiểm tra 2 trang để trao đổi với giảng viên; bản báo cáo Word/PDF toàn văn cũ chưa đồng bộ.
+[CI trên nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40700844278) đạt cả Windows và Ubuntu. [PDF tiến độ 28/10](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render/kiểm tra 2 trang để trao đổi với giảng viên; bản báo cáo Word/PDF toàn văn cũ chưa đồng bộ.
 
 <!-- current-evidence-20261028 -->
 > Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
