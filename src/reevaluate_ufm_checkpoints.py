@@ -143,6 +143,7 @@ def main():
         "checkpoint_sha256": sha256(args.checkpoint),
         "checkpoint_epoch": state.get("epoch"),
         "checkpoint_variant": recorded_config.get("variant"),
+        "checkpoint_seed": recorded_config.get("seed"),
         "recorded_code_sha256": recorded_config.get("code_sha256"),
         "training_source": str(args.training_source) if args.training_source else str(Path(__file__).parent),
         "model_config": asdict(model_config),

@@ -84,3 +84,25 @@ def test_case_collisions_preserved_with_recorded_relocation(tmp_path):
     relocated = receipt['relocated_case_conflicts'][alias['path']]
     assert (restored / relocated).read_bytes() == (restored / original['path']).read_bytes()
     assert receipt['all_files_sha256_verified']
+
+
+def test_selected_batch_contains_only_requested_run_and_report(tmp_path):
+    root = tmp_path / 'source'
+    (root / 'runs/ufm_followup_20261028/full_s42').mkdir(parents=True)
+    (root / 'reports/ufm_followup_20261028').mkdir(parents=True)
+    (root / 'runs/ufm_followup_20261028/full_s42/best.pt').write_bytes(b'model')
+    (root / 'runs/ufm_followup_20261028/other_s7.pt').write_bytes(b'other')
+    (root / 'reports/ufm_followup_20261028/full_s42_v3.json').write_text('{}')
+    selected = ['runs/ufm_followup_20261028/full_s42',
+                'reports/ufm_followup_20261028/full_s42_v3.json']
+    packed = tmp_path / 'batch'
+    manifest = backup.create(root, packed, bundle_bytes=20, includes=selected)
+    assert {entry['path'] for entry in manifest['files']} == {
+        'runs/ufm_followup_20261028/full_s42/best.pt',
+        'reports/ufm_followup_20261028/full_s42_v3.json'}
+    receipt = backup.restore(packed, tmp_path / 'restored')
+    assert receipt['all_files_sha256_verified']
+    with pytest.raises(ValueError, match='Missing or excluded'):
+        backup.source_files(root, ['runs/ufm_followup_20261028/missing'])
+    with pytest.raises(ValueError, match='Unsafe'):
+        backup.source_files(root, ['../outside'])

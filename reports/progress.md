@@ -2,7 +2,7 @@
 
 Phạm vi giảng viên đã chốt theo xác nhận của nhóm: hệ gợi ý sản phẩm dựa trên hành vi, hình ảnh và tên/mô tả. Phân tích [validation v3 theo train count](continuation_20261028/count_effect_v3.json) đã hoàn tất trên dự đoán lưu sẵn; nhóm 1–5 tương tác có full − semantic-only NDCG@10 = −0,024101, nhóm 21+ là +0,014865. Hai biến thể count-aware và adaptive dropout đã được tách cơ chế trong mã. [Giao thức 15 lượt train](../configs/multimodal_followup_20261028.json) đã khóa và qua preflight 9 hash trên bản sao local; **chưa có lượt train mới** vì local không có CUDA và chưa truy cập được FITLAB.
 
-Checkpoint UFM từ bản sao local đã khởi động trên Windows, 767.045 sản phẩm; [6/6 ca API](continuation_20261028/windows_ufm_verification.json) đạt. Kiểm thử mã hiện tại: **94 passed, 3 skipped, 10 subtests passed** trên Windows. Các phần lịch sử bên dưới giữ theo ngày ghi nhận, không thay thế trạng thái hiện tại.
+Checkpoint UFM từ bản sao local đã khởi động trên Windows, 767.045 sản phẩm; [6/6 ca API](continuation_20261028/windows_ufm_verification.json) đạt. Kiểm thử mã hiện tại: **96 passed, 3 skipped, 10 subtests passed** trên Windows. Các phần lịch sử bên dưới giữ theo ngày ghi nhận, không thay thế trạng thái hiện tại.
 
 [Benchmark Windows](continuation_20261028/windows_ufm_benchmark.json): 2 warm-up + 10 request đầy đủ, p50 21,25 giây, p95 26,35 giây, RSS server cao nhất quan sát 2.551,5 MiB; hai request đồng thời một 200 và một 429. Đây là giới hạn vận hành cần nêu rõ khi trình bày demo.
 
@@ -15,7 +15,7 @@ Checkpoint UFM từ bản sao local đã khởi động trên Windows, 767.045 s
 
 Đối chiếu ngày **28/10/2026**: bộ sửa 1–15 trước đây đạt Linux **87 pass** / Windows **84 pass, 3 skip**. Mã bổ sung calibration/source loader đạt Linux **94 pass** / Windows **91 pass, 3 skip**; các bổ sung restore sau đó có kiểm thử riêng. Xem báo cáo sửa mục 1–15 và log để phân biệt bản mã hiện tại với bản mã đã tạo checkpoint.
 
-Đã thực hiện phần kỹ thuật của mục 1–15; [bản tổng hợp và bằng chứng](fix_1_15_20261027/README.md) lưu bằng chứng của mốc cũ. Checkpoint/cache đã được xác minh trên máy chủ; baseline validation v2 đã chạy cùng hash; v3 đã tạo và audit. Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. GitHub Actions cho bản mã mới chưa được chạy; không suy luận test thêm.
+Đã thực hiện phần kỹ thuật của mục 1–15; [bản tổng hợp và bằng chứng](fix_1_15_20261027/README.md) lưu bằng chứng của mốc cũ. Checkpoint/cache đã được xác minh trên máy chủ; baseline validation v2 đã chạy cùng hash; v3 đã tạo và audit. Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. CI của nhánh followup đã đạt như ghi ở đầu tài liệu; không suy luận test thêm.
 
 Cold macro NDCG@10 validation v2: UFM 0,182051; TF-IDF 0,195672; popularity 0,042527. UFM chưa vượt baseline chính. Các mốc bên dưới giữ nguyên như lịch sử trước lần kiểm tra trực tiếp FITLAB-01 này; không dùng trạng thái thiếu checkpoint/baseline trong mốc cũ làm trạng thái hiện tại.
 

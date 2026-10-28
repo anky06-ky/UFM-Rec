@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
@@ -99,7 +100,11 @@ def main() -> None:
     parser.add_argument("--report-root", type=Path,
                         help="Fresh report root, defaults to source-root/reports/ufm_followup_20261028")
     parser.add_argument("--execute", action="store_true", help="Start declared GPU jobs sequentially")
+    parser.add_argument("--max-new-jobs", type=int, default=0,
+                        help="Limit newly trained runs per invocation so results can be backed up between batches; 0 means all")
     args = parser.parse_args()
+    if args.max_new_jobs < 0:
+        parser.error("--max-new-jobs must be nonnegative")
     protocol = json.loads(MANIFEST.read_text(encoding="utf-8"))
     source_root, workspace = args.source_root.resolve(), args.workspace.resolve()
     checked = preflight(protocol, source_root, workspace)
@@ -114,12 +119,28 @@ def main() -> None:
         for stage, variant, seed in jobs:
             print(f"{stage}: {variant} seed={seed}")
         return
+    pending = sum(not ((output_root / f"{variant}_s{seed}") / "completed.json").is_file()
+                  for _, variant, seed in jobs)
+    planned = min(pending, args.max_new_jobs) if args.max_new_jobs else pending
+    disk_path = output_root
+    while not disk_path.exists():
+        disk_path = disk_path.parent
+    free = shutil.disk_usage(disk_path).free
+    required = (planned * 2 + 2) * 2**30
+    if free < required:
+        raise RuntimeError(f"Only {free / 2**30:.1f} GiB free at {disk_path}; "
+                           f"need about {required / 2**30:.1f} GiB for {planned} new runs plus reserve. "
+                           "Use a larger --output-root or --max-new-jobs 1 and back up each batch locally.")
+    started = 0
     for stage, variant, seed in jobs:
         label = f"{variant}_s{seed}"
         output = output_root / label
         report = report_root / f"{label}_v3.json"
         predictions = report_root / f"{label}_v3_scores"
         if not (output / "completed.json").exists():
+            if args.max_new_jobs and started >= args.max_new_jobs:
+                print("Batch limit reached; back up new artifacts locally before resuming", flush=True)
+                return
             if not gpu_idle():
                 raise RuntimeError(f"GPU busy before {label}; no other job was stopped")
             resume = (output / "latest.pt").is_file()
@@ -129,6 +150,7 @@ def main() -> None:
             with (output.parent / f"{label}.log").open("a", encoding="utf-8") as log:
                 subprocess.run(command_for(protocol, source_root, workspace, variant, seed, output, resume),
                                cwd=source_root, stdout=log, stderr=subprocess.STDOUT, check=True)
+            started += 1
         verify_completed(output, variant, seed, protocol)
         if report.exists() or predictions.exists():
             if not (report.is_file() and (predictions / "scores_validation.npz").is_file()):

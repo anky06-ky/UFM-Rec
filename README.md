@@ -27,6 +27,8 @@ Việc cần làm và điều kiện nghiệm thu từng mục: [checklist hoàn
 
 Hướng triển khai tiếp theo theo thứ tự ưu tiên: [docs/next.md](docs/next.md). Thư mục đã dọn cache và tệp thao tác một lần; [nhật ký và cách khôi phục](reports/workspace_cleanup_20261028.md).
 
+Vòng huấn luyện đa seed trên FITLAB và sao lưu từng run về Windows: [hướng dẫn thực hiện](docs/gpu_followup_runbook.md). Runner mặc định chỉ kiểm tra 9 hash và 15 job; huấn luyện cần GPU và tùy chọn `--execute`.
+
 Bàn giao ngày 28/10: [kết quả validation v3 và nghiệm thu UFM thật](reports/continuation_20261028/README.md), [bản sao dữ liệu đã khôi phục đủ](reports/continuation_20261028/backup_handoff.md), [lời trao đổi mới với giảng viên](docs/trao_doi_gvhd_2026_10_28.md). Bản sao nằm ngoài repo tại `D:\Nam3_ki1\UFM-Rec_Backups`; có launcher `Start_UFM_From_Backup.cmd` dùng dữ liệu đã phục hồi.
 
 [PDF tiến độ trước buổi gặp](output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) được tạo từ JSON bằng chứng và đã kiểm tra cả hai trang. Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) có [CI Windows/Ubuntu đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Báo cáo Word/PDF toàn văn cũ chưa đồng bộ và 15 lượt train mới chưa chạy.
@@ -43,7 +45,7 @@ Bàn giao ngày 28/10: [kết quả validation v3 và nghiệm thu UFM thật](r
 - Audit validation: cold macro thấp hơn TF-IDF 0,027532; calibration thăm dò giảm
   ECE 0,164477 → 0,041497. [Số liệu](reports/ufm_validation_audit_v2/report.md).
 - Audit cũ ghi `test_evaluated = false`; artifact `evaluation_v2` tìm thấy ngày 27/10 đã có UFM validation và test. Xem mục cập nhật bên dưới. Baseline cổ điển đã có test trong lịch sử.
-- Báo cáo và slide đã được đối chiếu ngày 27/10. Kiểm thử local ngày 28/10 trước khi bổ sung restore từng phần: **91 passed, 3 skipped, 10 subtests passed**. Ba skip dành riêng Linux. GitHub Actions chưa được xác nhận.
+- Báo cáo và slide đã được đối chiếu ngày 27/10. Kiểm thử local trước khi bổ sung restore từng phần: **91 passed, 3 skipped, 10 subtests passed**. Ba skip dành riêng Linux. Trạng thái CI hiện tại xem ở đầu README.
 
 ## Artifact mới đối chiếu ngày 27/10/2026
 
@@ -85,5 +87,5 @@ cần ReportLab và Arial (Windows) hoặc DejaVu Sans (Linux).
 | data / runs | Dataset, checkpoint, log; không đẩy file lớn lên GitHub |
 | archive / tmp | File làm việc cũ và cache local; không theo dõi trong Git |
 
-**Còn chờ:** 15 lượt train theo giao thức đã khóa trên GPU, đánh giá cải tiến tách biệt, benchmark vận hành đủ mẫu, đồng bộ Word/PDF và xác nhận GitHub Actions. Bản sao FITLAB đã được khôi phục và kiểm tra SHA trên máy local; test v2 đã có kết quả, v3 là phân tích validation. Xem [bước tiếp theo](docs/next.md) và [giao thức đã khóa](configs/multimodal_followup_20261028.json).
+**Còn chờ:** 15 lượt train theo giao thức đã khóa trên GPU, kết luận cải tiến đa seed và đồng bộ Word/PDF toàn văn. Benchmark HTTP CPU và CI Windows/Ubuntu đã có bằng chứng; bản sao FITLAB đã được khôi phục và kiểm tra SHA trên máy local. Test v2 đã có kết quả, v3 là phân tích validation. Xem [bước tiếp theo](docs/next.md) và [giao thức đã khóa](configs/multimodal_followup_20261028.json).
 [Lịch sử README](docs/history/readme-20261002.md) · [Proposal ban đầu](docs/history/proposal-v1.pdf).
