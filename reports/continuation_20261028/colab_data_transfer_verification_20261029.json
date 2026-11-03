@@ -1,0 +1,41 @@
+{
+  "created_at_utc": "2026-10-29T00:55:09.986792+00:00",
+  "scope": "local verification for Colab data transfer / SHA-256 / checkpoint download",
+  "git_commit": "4b72a2de05e16a14a068b26389bdf3d45e2b8264",
+  "backup_dir": "D:\\Nam3_ki1\\UFM-Rec_Backups\\colab_training_inputs_20261029",
+  "restore_dir": "D:\\Nam3_ki1\\UFM-Rec_Backups\\restored_colab_training_inputs_20261029",
+  "restore_receipt": {
+    "verified_at_utc": "2026-10-29T00:51:11.543754+00:00",
+    "files": 49,
+    "logical_bytes": 3846478960,
+    "manifest_sha256": "37691d8bc8a3e5e2acfb641394cfcd8da366eda6a987b7cc0584081de29bc6b1",
+    "all_files_sha256_verified": true,
+    "restored_files_sha256_verified": true,
+    "missing_bundles": [],
+    "relocated_case_conflicts": {},
+    "missing_files": [],
+    "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\restored_colab_training_inputs_20261029"
+  },
+  "preflight": {
+    "status": "passed",
+    "locked_inputs": 9,
+    "jobs": 15,
+    "mode": "dry_run"
+  },
+  "checkpoint": {
+    "path": "D:\\Nam3_ki1\\UFM-Rec_Backups\\restored_complete_20261028\\runs\\ufm_full_v1\\best.pt",
+    "sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+    "expected_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+    "match": true
+  },
+  "local_runtime": {
+    "python": "2.14.1+cpu",
+    "cuda_available": false,
+    "device": "CPU"
+  },
+  "not_verified_here": [
+    "Actual upload/receipt on Google Colab or Google Drive (requires Colab session)",
+    "T4 training throughput measurement (requires CUDA T4)",
+    "The 15 locked training/evaluation runs"
+  ]
+}

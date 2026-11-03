@@ -1,0 +1,37 @@
+{
+  "observed_at_utc": "2026-11-03T08:31:15+00:00",
+  "source": "docs/final_report.md (validation v3 evidence, seed 42); slides patched from output/history/presentation/UFM_Rec_Bao_Ve_Hien_Trang_20261029.pptx",
+  "builder": "python scripts/build_school_report_docx.py (Pandoc 3.13 + LibreOffice 26.8 portable runtime)",
+  "cover": {
+    "advisor": "Phan Hồ Viết Trường",
+    "members": 4,
+    "pending": "Họ tên đầy đủ, MSSV và nhiệm vụ của Hân"
+  },
+  "artifacts": [
+    {
+      "path": "output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx",
+      "bytes": 349855,
+      "sha256": "0563ea8a7148efb846c685871ca1a0708d5c0f35b7d10306485ae4c54fd9c7aa",
+      "note": "Mục lục lưu sẵn số trang theo bản PDF; trong Word nhấn F9 nếu lệch."
+    },
+    {
+      "path": "output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf",
+      "bytes": 939520,
+      "sha256": "ccb3d0b953d45223b13a99e22c47937f634dcfa73294bd93f13dabb699d2abbb",
+      "pages": 20,
+      "fonts": "Times New Roman embedded"
+    },
+    {
+      "path": "output/presentation/UFM_Rec_Bao_Ve_20261103.pptx",
+      "bytes": 966764,
+      "sha256": "b821a1b269197d5244a6d4fd0fc9e7992724e13581fbc066f42da523ca923127",
+      "slides": 14
+    }
+  ],
+  "checks": {
+    "pytest": "119 passed, 3 skipped, 10 subtests passed (Python 3.14, CPU torch)",
+    "pdf_pages_reviewed": "1-20 rendered with pdftoppm and inspected",
+    "docx_structure": "unique drawing ids, all relationships present, valid section order, no unsupported namespaces",
+    "slides_reviewed": "1, 13, 14 rendered after text patch"
+  }
+}

@@ -32,3 +32,9 @@ Các lệnh mặc định chỉ chạy validation. Muốn đánh giá lại test
 ## Điều còn cần giảng viên góp ý
 
 Thầy/cô cần xác nhận mức nghiệm thu: một hay hai dataset; đối chứng/ablation và số seed tối thiểu; giữ sampled retrospective làm kết quả chính hay bổ sung protocol availability/holdout khác. Mã, config và dữ liệu được giữ thành phiên bản có thể đối chiếu để áp dụng góp ý sau này.
+
+## Đề xuất chốt giao thức ngày 30/10/2026
+
+Đề xuất dùng **Cold macro NDCG@10** làm chỉ số chính; báo thêm **Recall@10, MRR@10**, điểm và số ca theo zero-shot (0 tương tác), extreme-cold (1–5), cold (6–20), warm (21+). Năm biến thể × ba seed trong [manifest đã khóa](../configs/multimodal_followup_20261028.json) cần báo từng seed và trung bình ± độ lệch chuẩn mẫu; [bản trao đổi với giảng viên](trao_doi_gvhd_2026_10_30.md) ghi câu hỏi của từng biến thể. Đây là đề xuất của nhóm, chưa ghi là giảng viên đã duyệt.
+
+Checkpoint/variant/siêu tham số được chọn trên validation theo quy tắc ghi trước. Nếu có holdout cuối độc lập, phải chốt nguồn và protocol trước khi mở nhãn; holdout chỉ dùng **một lần để đánh giá mô hình đã chọn**, không dùng để chọn lại mô hình hoặc seed. Test v2 đã xem và validation v3 liên quan validation v1 không đủ vai trò đó. Nếu không thể có nguồn độc lập phù hợp, kết luận cần giới hạn ở đánh giá thăm dò. UFM trên All Beauty còn phụ thuộc yêu cầu nghiệm thu và không nằm trong 15 lượt Toys & Games.

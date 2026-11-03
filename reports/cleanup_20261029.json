@@ -1,0 +1,178 @@
+{
+  "observed_at": "2026-10-29T22:49:51.6037969+07:00",
+  "workspace": "D:\\Nam3_ki1\\UFM-Rec",
+  "backup": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining",
+  "phase": "verified",
+  "moved_pdfs": [
+    {
+      "from": "output/pdf/Bao_cao_chi_tiet_UFM_Rec_2026_09_28_2223.pdf",
+      "to": "output/history/pdf/Bao_cao_chi_tiet_UFM_Rec_2026_09_28_2223.pdf",
+      "bytes": 682075,
+      "sha256": "A4C2C62EC946BCB008396029121F1C851432EB4BF2A569150F76C4BE6011BAB4"
+    },
+    {
+      "from": "output/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf",
+      "to": "output/history/pdf/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.pdf",
+      "bytes": 325387,
+      "sha256": "8E528E8776100897B187BAF30ABD713533307F39CAE3C9EE8781077FCEE77D40"
+    },
+    {
+      "from": "output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf",
+      "to": "output/history/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf",
+      "bytes": 86183,
+      "sha256": "6B68D94A5730ED0FACC98674284CAB3A554B3412241DC5D689988ADCCD526F1F"
+    },
+    {
+      "from": "output/pdf/proposal.pdf",
+      "to": "output/history/pdf/proposal.pdf",
+      "bytes": 124341,
+      "sha256": "88B75189364033955398DFF8B0159668AE83A456432D8D6A78627EFCC6641FEB"
+    }
+  ],
+  "deleted_cache_roots": [],
+  "removed_files": 0,
+  "removed_bytes": 0,
+  "retained_duplicate_groups": [
+    {
+      "bytes_each": 3877,
+      "sha256": "de4788d29006ed8f4a14d5b7171d6c96db46bdfe8bc47521fdc37efd1f48213d",
+      "paths": [
+        "scripts/audit_modality_coverage.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/scripts/audit_modality_coverage.py"
+      ]
+    },
+    {
+      "bytes_each": 8058,
+      "sha256": "d81677de960137de1b0c67acf5b6bb8f99f95717c508adaf80aed4495a2e8a50",
+      "paths": [
+        "scripts/audit_ufm_workspace.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/scripts/audit_ufm_workspace.py"
+      ]
+    },
+    {
+      "bytes_each": 3638,
+      "sha256": "a3a1569d2394858555f2db90832149467f51888ad37d0e96576cb8d9f1a32779",
+      "paths": [
+        "scripts/lock_evaluation_manifest.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/scripts/lock_evaluation_manifest.py"
+      ]
+    },
+    {
+      "bytes_each": 9023,
+      "sha256": "d1072e4938f6fc2ca8e5d87c879267832ba768c063b28eb0026551636605b972",
+      "paths": [
+        "src/evaluate_content_baseline.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/evaluate_content_baseline.py"
+      ]
+    },
+    {
+      "bytes_each": 4974,
+      "sha256": "a586f61fa59d0976897e7eaaa5301dd104138961a19b42fee8549c80b630ed6f",
+      "paths": [
+        "src/evaluation_ledger.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/evaluation_ledger.py"
+      ]
+    },
+    {
+      "bytes_each": 12541,
+      "sha256": "93e6d84d0f99cc4ee44f9dec005f2575eded8336255e213a62dea584aa478b1d",
+      "paths": [
+        "src/run_final_test.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/run_final_test.py"
+      ]
+    },
+    {
+      "bytes_each": 1248,
+      "sha256": "f3eb55d80f97f05b10bb899cdfe58b8ddb1b9237a1538a7caa7ed04faed15e13",
+      "paths": [
+        "src/temporal_positives.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/temporal_positives.py"
+      ]
+    },
+    {
+      "bytes_each": 20945,
+      "sha256": "20862de997de86767c71205683f48c79115207d6d806ee7689adeab1364cc0e4",
+      "paths": [
+        "src/test_candidate_validity.py",
+        "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/test_candidate_validity.py"
+      ]
+    },
+    {
+      "bytes_each": 12964,
+      "sha256": "338208222fb5d859d3ba1237dadb4c3a06d6f93653dbc845c96f98f85ac7e33f",
+      "paths": [
+        "reports/fix_1_15_20261027/source_manifest.json",
+        "reports/fix_1_15_20261027/fitlab01_finish1/current_source_manifest.json"
+      ]
+    },
+    {
+      "bytes_each": 170,
+      "sha256": "f3497a82ec072bff2790a643efa030c01c08ef419988f28c2238902fc61428f8",
+      "paths": [
+        "data/processed/toys_games_full_temporal/models/bpr_mf/graph_report.json",
+        "data/processed/toys_games_full_temporal/models/bpr_mf_seed2026/graph_report.json",
+        "data/processed/toys_games_full_temporal/models/bpr_mf_seed7/graph_report.json"
+      ]
+    }
+  ],
+  "links_checked": 340,
+  "missing_links": [],
+  "changed_builder_scripts_parse": "passed",
+  "archived_cache_roots": [
+    {
+      "source": ".pytest_cache",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\.pytest_cache",
+      "files": 5,
+      "bytes": 12551
+    },
+    {
+      "source": "__pycache__",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\__pycache__",
+      "files": 1,
+      "bytes": 11685
+    },
+    {
+      "source": "ops\\__pycache__",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\ops\\__pycache__",
+      "files": 1,
+      "bytes": 3673
+    },
+    {
+      "source": "scripts\\__pycache__",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\scripts\\__pycache__",
+      "files": 7,
+      "bytes": 88856
+    },
+    {
+      "source": "src\\__pycache__",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\src\\__pycache__",
+      "files": 27,
+      "bytes": 468592
+    },
+    {
+      "source": "tests\\__pycache__",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\tests\\__pycache__",
+      "files": 24,
+      "bytes": 287660
+    },
+    {
+      "source": "tmp",
+      "destination": "D:\\Nam3_ki1\\UFM-Rec_Backups\\cleanup_20261029_nontraining\\temporary_files\\tmp",
+      "files": 3880,
+      "bytes": 242794950
+    }
+  ],
+  "archived_files": 3945,
+  "archived_bytes": 243667967,
+  "deletion_policy_result": "Automatic approval review rejected recursive cache deletion: blocked by policy. Files archived without deletion instead; disk space is not reclaimed.",
+  "protected_tracked_paths_changed": [],
+  "current_pdf_sha_verified": true,
+  "historical_pdf_shas_verified": 4,
+  "tracked_backup_files": 12,
+  "local_tests": "116 passed, 3 skipped, 1 warning, 10 subtests passed",
+  "preflight": "passed; 9 locked inputs; 15 jobs; dry_run",
+  "cache_roots_remaining": 0,
+  "deleted_files": 0,
+  "freed_disk_bytes": 0,
+  "git_diff_check": "passed"
+}

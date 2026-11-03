@@ -1,13 +1,13 @@
 # Checklist hoàn thiện UFM Rec
 
 <!-- current-evidence-20261028 -->
-> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](../reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
+> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](../../reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
 <!-- /current-evidence-20261028 -->
 
 
 Đối chiếu ngày **28/10/2026**: bộ sửa 1–15 trước đây đạt Linux **87 pass** / Windows **84 pass, 3 skip**. Mã bổ sung calibration/source loader đạt Linux **94 pass** / Windows **91 pass, 3 skip**; các bổ sung restore sau đó có kiểm thử riêng. Xem báo cáo sửa mục 1–15 và log để phân biệt bản mã hiện tại với bản mã đã tạo checkpoint.
 
-Cập nhật sau khi sửa mục 1–15 ngày 27/10/2026 trên FITLAB-01. Mô tả lỗi bên dưới giữ lại làm tiêu chí đối chiếu; checkbox phản ánh trạng thái sau sửa. Xem [bằng chứng và trạng thái từng mục](../reports/fix_1_15_20261027/README.md).
+Cập nhật sau khi sửa mục 1–15 ngày 27/10/2026 trên FITLAB-01. Mô tả lỗi bên dưới giữ lại làm tiêu chí đối chiếu; checkbox phản ánh trạng thái sau sửa. Xem [bằng chứng và trạng thái từng mục](../../reports/fix_1_15_20261027/README.md).
 
 ## Trạng thái hiện tại
 
@@ -26,7 +26,7 @@ Cập nhật sau khi sửa mục 1–15 ngày 27/10/2026 trên FITLAB-01. Mô t�
 - [x] **P0-02 — Khôi phục checkpoint và CLIP cache có nguồn gốc.** Tìm `best.pt`, `config.json`, `completed.json`, predictions, text/image tables, masks, train counts và code snapshot đúng lượt chạy. Đối chiếu SHA-256, mapping, shapes, padding và tensor hữu hạn. Chỉ lập kế hoạch train lại sau khi xác nhận không có bản khôi phục dùng được.
   Hoàn thành khi nạp được model đúng fingerprint và tái tạo được dự đoán/metric kiểm tra trên validation; không bỏ guard hash để ép nạp checkpoint khác code.
 
-- [x] **P0-03 — Sửa hai lỗi fixture trong cold-start tests.** `setup_model` hiện không khả dụng cho lớp `TestBugConditionDocumentation` trong [test_cold_start_bug_condition.py](../tests/test_cold_start_bug_condition.py).
+- [x] **P0-03 — Sửa hai lỗi fixture trong cold-start tests.** `setup_model` hiện không khả dụng cho lớp `TestBugConditionDocumentation` trong [test_cold_start_bug_condition.py](../../tests/test_cold_start_bug_condition.py).
   Hoàn thành khi test chạy tới logic cần kiểm tra, không lỗi collection/setup.
 
 - [x] **P0-04 — Viết lại năm test luôn gọi `pytest.fail()`.** Bỏ kết luận về chất lượng NDCG dựa trên mô hình chưa huấn luyện; thay bằng kiểm tra invariant có ý nghĩa. Các giả thuyết về trọng số CF phải được kiểm chứng trên validation/checkpoint thật. Chỉ dùng xfail nếu có bug xác định, điều kiện tái hiện và lý do cụ thể; không dùng để che lỗi.
@@ -35,10 +35,10 @@ Cập nhật sau khi sửa mục 1–15 ngày 27/10/2026 trên FITLAB-01. Mô t�
 - [x] **P0-05 — Sửa hai test/sample-builder lỗi đường dẫn.** `build_split(..., output=OUTPUT)` giữ default từ lúc định nghĩa hàm, trong khi fixture chỉ monkeypatch `OUTPUT`. Truyền output rõ ràng hoặc giải quyết default tại lúc gọi; bảo đảm test chỉ ghi vào thư mục tạm.
   Hoàn thành khi hai test hồi quy chạy được và không ghi đè bộ mẫu thật hoặc để lại output hoàn tất một phần.
 
-- [x] **P0-06 — Sửa và xác minh candidate audit.** Trong [test_candidate_validity.py](../src/test_candidate_validity.py), `past_positive_check` lấy start/end từ cùng vị trí nên slice history luôn rỗng; rà lại mốc thời gian khi gọi “past positive”, việc dùng `--data`, và replay khi số ca thấp hơn cap hoặc có lọc min-interactions. Việc sửa slice không tự chứng minh các chỉ số disclosure cũ sẽ thay đổi; phải chạy đối chiếu.
+- [x] **P0-06 — Sửa và xác minh candidate audit.** Trong [test_candidate_validity.py](../../src/test_candidate_validity.py), `past_positive_check` lấy start/end từ cùng vị trí nên slice history luôn rỗng; rà lại mốc thời gian khi gọi “past positive”, việc dùng `--data`, và replay khi số ca thấp hơn cap hoặc có lọc min-interactions. Việc sửa slice không tự chứng minh các chỉ số disclosure cũ sẽ thay đổi; phải chạy đối chiếu.
   Hoàn thành khi audit có kiểm tra bằng fixture tính tay, đọc đúng dataset truyền vào và công bố lại kết quả từ logic đã kiểm tra.
 
-- [x] **P0-07 — Sửa ghi nhận lịch sử đánh giá test.** [run_final_test.py](../src/run_final_test.py) kiểm tra marker cũ và file output, nhưng chưa có sổ ghi nhận đầy đủ lượt test v2; đổi output có thể tránh guard hiện tại. Ghi theo dataset/candidate hash/checkpoint/code/scorer/temperature và thời điểm đánh giá; không mặc định `first_evaluation=true` khi chưa có bằng chứng.
+- [x] **P0-07 — Sửa ghi nhận lịch sử đánh giá test.** [run_final_test.py](../../src/run_final_test.py) kiểm tra marker cũ và file output, nhưng chưa có sổ ghi nhận đầy đủ lượt test v2; đổi output có thể tránh guard hiện tại. Ghi theo dataset/candidate hash/checkpoint/code/scorer/temperature và thời điểm đánh giá; không mặc định `first_evaluation=true` khi chưa có bằng chứng.
   Hoàn thành khi trạng thái test trong tool và tài liệu cùng phản ánh lượt đã xảy ra, không gọi test đã xem là test chưa mở.
 
 - [x] **P0-08 — Ổn định môi trường và CI.** Python 3.12 CPU, test discovery chỉ `tests/`, GitHub Actions matrix Windows/Ubuntu [đạt cho nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Local Windows 94 pass, 3 skip Linux-only; CI chạy cả hai hệ điều hành.
@@ -122,7 +122,7 @@ Bằng chứng ngày 28/10: Bảy ablation đã train thực tế, source/cache/
 
 Bằng chứng ngày 28/10: launcher chọn backend/readiness; sáu request UFM thật trả weights/uncertainty và checkpoint/cache provenance. UI zero-shot đã nghiệm thu trên FITLAB-01, catalog 767.045 item.
 
-Thêm bằng chứng Windows ngày 28/10: nạp checkpoint từ bản sao local đã kiểm tra SHA, 6/6 ca API thật đạt; xem [receipt](../reports/continuation_20261028/windows_ufm_verification.json). Chưa tích P4-03 vì còn ca thiếu modality/ảnh lỗi và nghiệm thu giao diện local.
+Thêm bằng chứng Windows ngày 28/10: nạp checkpoint từ bản sao local đã kiểm tra SHA, 6/6 ca API thật đạt; xem [receipt](../../reports/continuation_20261028/windows_ufm_verification.json). Chưa tích P4-03 vì còn ca thiếu modality/ảnh lỗi và nghiệm thu giao diện local.
 
 - [x] **P4-01 — Cho phép chọn backend UFM có kiểm tra readiness.** Nạp đúng checkpoint/cache đã xác minh; thêm lựa chọn content/UFM vào cách khởi động. Nếu thiếu tài nguyên, báo rõ lý do thay vì hiển thị nhãn UFM cho kết quả baseline.
   Hoàn thành khi một request thật chạy qua UFM, trả weights/uncertainty và có log tên model, dữ liệu, feature version.

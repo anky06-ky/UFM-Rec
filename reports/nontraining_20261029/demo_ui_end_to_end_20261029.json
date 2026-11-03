@@ -1,0 +1,50 @@
+{
+  "observed_at_utc": "2026-10-29T16:12:52.753Z",
+  "browser": "Chrome headless via CDP",
+  "backend_url": "http://127.0.0.1:8774",
+  "cases": [
+    {
+      "name": "ui_ready_real_backend",
+      "passed": true,
+      "observed": {
+        "backend": "UFM Rec",
+        "catalog": "767.045",
+        "matches": 8
+      }
+    },
+    {
+      "name": "zero_shot_and_image_error",
+      "passed": true,
+      "history_asins": [
+        "B004S8F7QM"
+      ],
+      "model_checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+      "result_asins": [
+        "B0B2BQXPPJ",
+        "B0B97KMX3D",
+        "B0B8ZR46YP",
+        "B094V2C3YG",
+        "B093RB185K"
+      ],
+      "missing_image_placeholders": 5,
+      "screenshot": "reports/nontraining_20261029/demo_ui_zero_shot_20261029.png"
+    },
+    {
+      "name": "downloaded_json_matches_ui",
+      "passed": true,
+      "file": "reports/nontraining_20261029/demo_ui_downloads/ufm-rec-demo.json"
+    },
+    {
+      "name": "offline_error_state",
+      "passed": true,
+      "observed": {
+        "message": "Chưa tạo được gợi ý: Failed to fetch",
+        "exportDisabled": true,
+        "resultsOpacity": "0.55"
+      },
+      "screenshot": "reports/nontraining_20261029/demo_ui_offline_20261029.png"
+    }
+  ],
+  "status": "passed",
+  "summary": "4/4 UI cases passed: real backend, zero-shot with blocked images, downloaded JSON, offline error state."
+}

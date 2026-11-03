@@ -1,5 +1,7 @@
 # Hướng làm tiếp theo của UFM-Rec
 
+> **Cập nhật 03/11/2026:** nhóm chốt đồ án với kết quả hiện có; [bộ nộp và việc còn lại](../reports/final_20261103/README.md). Kế hoạch dưới đây (mốc 28–29/10) trở thành **hướng phát triển**, áp dụng khi nhóm quay lại phần train.
+
 Cập nhật 28/10/2026. **Phạm vi giảng viên đã chốt theo thông tin nhóm cung cấp:** hệ khuyến nghị sản phẩm dùng lịch sử hành vi, hình ảnh và tên/mô tả sản phẩm. Toys & Games là tập thực nghiệm chính; cold-start sản phẩm là phân tích trọng tâm trong phạm vi hệ gợi ý này. Trường hợp người dùng không có lịch sử hiện là fallback; chưa có kết quả chứng minh cá nhân hóa người dùng mới. Cold macro NDCG@10 và ba seed dưới đây là **giao thức nhóm khóa để kiểm chứng**, không ghi là giảng viên đã duyệt từng chi tiết.
 
 ## Căn cứ để chọn hướng
@@ -10,9 +12,9 @@ Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi 
 
 ## 1. Chốt phạm vi và kế hoạch thí nghiệm
 
-- Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. Nếu cần phản hồi thêm, tập trung vào cách nghiệm thu chỉ số và bộ test, hoặc yêu cầu tập dữ liệu thứ hai; dùng [lời trình bày cập nhật](trao_doi_gvhd_2026_10_28.md).
+- Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. Trước vòng train mới, xin chốt chỉ số nghiệm thu, nguồn đánh giá cuối và yêu cầu tập dữ liệu thứ hai bằng [tin nhắn và bảng câu hỏi cho 15 lượt](trao_doi_gvhd_2026_10_30.md). Đây chưa phải những chi tiết đã được giảng viên duyệt.
 - Giữ riêng v1/v2/v3; mọi mô hình trong một bảng dùng cùng candidate hash. V3 vẫn là negative sampling hồi cứu theo regime của target, không phải đánh giá online/full-catalog.
-- Test v2 đã được xem. V3 dùng lại quần thể validation đã tham gia chọn checkpoint, chưa tạo holdout độc lập. Cần thống nhất thiết kế nghiệm thu tiếp theo trước khi mở thêm test; không chọn mô hình theo test đã biết.
+- Test v2 đã được xem. V3 dùng lại quần thể validation đã tham gia chọn checkpoint, chưa tạo holdout độc lập. Nếu có nguồn holdout cuối, chọn mô hình/seed trên validation trước và chỉ dùng holdout để đánh giá cuối; không chọn lại theo điểm holdout. Nếu không có nguồn độc lập, ghi rõ kết luận thăm dò.
 - Đã khóa source, dữ liệu, features, candidates, selection rule, ngân sách và thứ tự 15 run trong [manifest thực nghiệm](../configs/multimodal_followup_20261028.json). [Runner](../scripts/run_locked_ufm_followup.py) đã qua dry-run trên bản sao FITLAB, kiểm tra 9 đầu vào SHA; chưa có train mới.
 
 **Đầu ra cần có:** cấu hình/manifest của vòng chạy mới và phạm vi nghiệm thu rõ ràng.
@@ -51,16 +53,16 @@ Không lấy trọng số CF dưới một ngưỡng tùy ý làm tiêu chí th�
 
 ## 5. Báo cáo và bàn giao
 
-- Đồng bộ báo cáo, slide và generator Word; xuất Word/PDF rồi kiểm tra từng trang. Bản Word/PDF cũ chưa là bản nộp cuối.
+- Đã xuất Word/PDF/PPTX hiện trạng và kiểm tra từng trang/slide. Sau kết quả train mới, cập nhật số liệu, áp mẫu trường cho Word, hoàn thiện thông tin nhóm rồi render và rà lại. Bản hiện trạng chưa là bản nộp cuối.
 - Rà diff, đồng bộ repo và chạy GitHub Actions. Không đưa dataset/checkpoint/ZIP lớn vào Git; giữ manifest và hướng dẫn khôi phục.
 - Ghi riêng phần đã chạy và phần chưa có kết quả train, nhất là 15 lượt đa seed và cải tiến. Không gọi trạng thái chuẩn bị là hoàn tất thực nghiệm.
 
 **Đầu ra cần có:** hướng dẫn cài/chạy, CI đạt và bộ báo cáo cùng phiên bản.
 
-Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40700844278). [PDF tiến độ 2 trang](../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi, không thay thế bản Word/PDF báo cáo toàn văn. Script Word hiện thiếu `Mau_Bao_Cao_Nhom_4.docx` trong workspace và chưa có renderer LibreOffice đi kèm để nghiệm thu từng trang, nên chưa xuất lại bản toàn văn.
+Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40700844278) ở mốc trước. [PDF tiến độ 2 trang](../output/history/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi. Ngày 29/10 đã xuất Word/PDF toàn văn hiện trạng bằng generator mới và rà từng trang; `Mau_Bao_Cao_Nhom_4.docx` vẫn thiếu nên chưa áp mẫu UFM.
 
 ## Sau khi hoàn tất phần chính
 
 UFM trên All Beauty chỉ ưu tiên nếu giảng viên giữ yêu cầu dataset thứ hai. Retrieval/ANN, fine-tune encoder và các tính năng mở rộng nên để sau khi có kết quả đối chứng ổn định.
 
-Xem [checklist chi tiết](checklist_hoan_thien_2026_10_27.md), [bản sao dữ liệu đã kiểm tra](../reports/continuation_20261028/backup_handoff.md) và [hướng dẫn demo](demo.md).
+Xem [checklist chi tiết](../reports/project_readiness_20261029.md) ([bản 27/10](history/checklist_hoan_thien_2026_10_27.md)), [bản sao dữ liệu đã kiểm tra](../reports/continuation_20261028/backup_handoff.md) và [hướng dẫn demo](demo.md).

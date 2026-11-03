@@ -16,7 +16,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "reports/continuation_20261028"
-OUTPUT = ROOT / "output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf"
+OUTPUT = ROOT / "output/history/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf"
 
 
 def load(name: str) -> dict:

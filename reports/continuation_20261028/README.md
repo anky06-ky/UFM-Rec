@@ -56,7 +56,7 @@ SASRec/BERT4Rec là bản thích nghi trong repo, chưa phải reproduction chu�
 - Bản sao lịch sử FITLAB đã có 22/22 gói khớp SHA, khôi phục 796 tệp và không thiếu tệp; [receipt tổng hợp](backup_receipts.json) và [hướng dẫn bàn giao](backup_handoff.md). Nếu vòng 15 run tạo artifact mới, phải tải và xác minh từng run trên máy trước khi coi là an toàn.
 - Demo UFM thật: giữ bằng chứng request/checkpoint/candidate regime và nghiệm thu giao diện.
 - Nhiều seed và cải tiến count-aware/adaptive: chưa có kết quả train được xác minh.
-- CI GitHub đã đạt Windows/Ubuntu cho [nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Phạm vi ba tín hiệu đã được nhóm xác nhận với giảng viên; metric nghiệm thu và yêu cầu UFM All Beauty vẫn cần góp ý. Word/PDF báo cáo toàn văn chưa đồng bộ; [PDF tiến độ ngắn](../../output/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã được kiểm tra trực quan.
+- CI GitHub đã đạt Windows/Ubuntu cho [nhánh followup](https://github.com/anky06-ky/UFM-Rec/actions/runs/40693524511). Phạm vi ba tín hiệu đã được nhóm xác nhận với giảng viên; metric nghiệm thu và yêu cầu UFM All Beauty vẫn cần góp ý. Word/PDF báo cáo toàn văn chưa đồng bộ; [PDF tiến độ ngắn](../../output/history/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã được kiểm tra trực quan.
 
 ## Nghiệm thu phần mềm và demo
 

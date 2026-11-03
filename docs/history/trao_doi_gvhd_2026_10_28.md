@@ -12,4 +12,4 @@ Ba câu xin góp ý:
 2. Nhóm đã khóa full, semantic-only và fixed-fusion qua ba seed trước hai cải tiến. Thầy muốn dùng thêm chỉ số nghiệm thu nào ngoài Cold macro NDCG@10?
 3. Với test v2 đã được xem và negative sampling có tính hồi cứu, cách đánh giá tiếp theo nào phù hợp để kết luận đóng góp trong phạm vi đồ án?
 
-Bằng chứng mang theo: [kết quả và calibration v3](../reports/continuation_20261028/README.md), [request UFM thật](../reports/continuation_20261028/demo_ufm_verification.json), [checklist còn lại](checklist_hoan_thien_2026_10_27.md). File Word/PDF cũ chưa đồng bộ nội dung mới nên chưa dùng làm bản nộp cuối.
+Bằng chứng mang theo: [kết quả và calibration v3](../../reports/continuation_20261028/README.md), [request UFM thật](../../reports/continuation_20261028/demo_ufm_verification.json), [checklist còn lại](checklist_hoan_thien_2026_10_27.md). File Word/PDF cũ chưa đồng bộ nội dung mới nên chưa dùng làm bản nộp cuối.
