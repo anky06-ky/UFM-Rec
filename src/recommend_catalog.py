@@ -2,11 +2,11 @@
 import argparse
 import csv
 import gzip
-import heapq
 import json
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlsplit, urlencode
+import warnings
 
 import numpy as np
 from scipy import sparse
@@ -15,6 +15,32 @@ from demo_product_images import image_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT/'data/processed/toys_games_full_temporal'
+# Blend weight chosen on the earlier half of validation v3 (reports/hybrid_20261103/hybrid_v3.json).
+HYBRID_ALPHA = 0.55
+# Candidates taken from each source in the fast scope; UFM rescores their union.
+FAST_CANDIDATES = dict(semantic=2000, behavior=2000, tfidf=1000, popularity=500)
+
+
+def tfidf_scores(matrix,history,popularity):
+    """TF-IDF profile of the latest 10 history items, popularity as fallback and tie-break."""
+    available = np.diff(matrix.indptr)>0
+    past = [r for r in history[-10:] if available[r]]
+    if not past: return popularity.astype(np.float64)
+    profile = np.asarray(matrix[past].sum(0)).ravel()
+    scores = np.asarray(matrix.dot(profile)).ravel().astype(np.float64)
+    return scores+popularity/(float(popularity.max()) or 1)*1e-7
+
+
+def standardize(scores):
+    std = scores.std()
+    return (scores-scores.mean())/std if std>0 else np.zeros_like(scores)
+
+
+def top_allowed(scores,mask,n):
+    rows = np.flatnonzero(mask)
+    if len(rows)<=n: return rows
+    values = scores[rows]+tie_noise(rows)*1e-10
+    return rows[np.argpartition(-values,n-1)[:n]]
 
 
 def safe_image(url):
@@ -97,6 +123,7 @@ class Catalog:
 class ContentBackend:
     name = 'TF-IDF content baseline'
     warning = 'Demo baseline TF-IDF, không phải UFM đã train. Điểm xếp hạng không phải xác suất mua hàng.'
+    options = dict(models=['content'],scopes=['full'])
     def __init__(self,catalog):
         self.catalog = catalog
         if (catalog.data/'demo_manifest.json').is_file():
@@ -104,25 +131,21 @@ class ContentBackend:
         self.matrix = sparse.load_npz(catalog.data/'content/tfidf_all.npz').tocsr()
         if self.matrix.shape[0]!=len(catalog.asins) or not np.isfinite(self.matrix.data).all():
             raise ValueError('TF-IDF mapping/finite check failed.')
+        self.last_stats = {}
 
-    def recommend(self,asins,k=10,regime='all'):
+    def recommend(self,asins,k=10,regime='all',model='content',scope='full'):
         history = self.catalog.rows(asins)
         if not 1<=k<=50: raise ValueError('Top K must be 1-50.')
-        past = history[-10:]
-        available = np.diff(self.matrix.indptr)>0
-        past = [r for r in past if available[r]]
-        popularity = np.log1p(self.catalog.counts)
-        if past:
-            profile = np.asarray(self.matrix[past].sum(0)).ravel()
-            scores = np.asarray(self.matrix.dot(profile)).ravel().astype(np.float64)
-            scores += popularity/(float(popularity.max()) or 1)*1e-7
-        else: scores = popularity.astype(np.float64)
+        if model not in self.options['models'] or scope not in self.options['scopes']:
+            raise ValueError('Unknown ranking model or scope.')
+        scores = tfidf_scores(self.matrix,history,np.log1p(self.catalog.counts))
         # Full catalog, int64 ranks (do not reuse sampled uint8 rank helper).
         scores += tie_noise(np.arange(len(scores)))*1e-10
         scores[~self.catalog.regime_mask(regime)] = -np.inf
         scores[np.asarray(history,dtype=np.int64)] = -np.inf
         rows = np.flatnonzero(np.isfinite(scores))
         best = rows[np.argsort(-scores[rows],kind='stable')[:k]]
+        self.last_stats = dict(model=model,scope=scope,candidates=int(len(rows)))
         return [dict(self.catalog.item(int(r)),score=float(scores[r])) for r in best]
 
 
@@ -131,7 +154,7 @@ class UFMBackend:
     warning = ('UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. '
                'JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. '
                'Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.')
-    def __init__(self,catalog,run,chunk=1024,_allow_technical_smoke=False,features=None,training_source=None):
+    def __init__(self,catalog,run,chunk=8192,_allow_technical_smoke=False,features=None,training_source=None):
         import torch
         from trained_ufm import model_classes
         from train_ufm_recommender import feature_audit
@@ -159,35 +182,85 @@ class UFMBackend:
             variant=self.cfg.variant, checkpoint_epoch=state.get('epoch'),
             training_source=str(training_source) if training_source else str(ROOT/'src'))
         del state
-        self.tables = tuple(torch.from_numpy(np.load(self.features/n)) for n in ['text.npy','image.npy','modalities.npy'])
+        # Memory-map the CLIP tables: pages are shared with the file cache instead of copied.
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore',message='The given NumPy array is not writable')
+            self.tables = tuple(torch.from_numpy(np.load(self.features/n,mmap_mode='r')) for n in ['text.npy','image.npy','modalities.npy'])
         self.tables += (torch.from_numpy(np.concatenate([[0],catalog.counts]).astype(np.int64)),)
         # Deliberate CPU serving: do not compete with the long-running GPU suite.
         torch.set_num_threads(4)
+        path = catalog.data/'content/tfidf_all.npz'
+        self.matrix = sparse.load_npz(path).tocsr() if path.is_file() else None
+        if self.matrix is not None and self.matrix.shape[0]!=len(catalog.asins):
+            raise ValueError('TF-IDF mapping check failed.')
+        # The semantic item side depends only on the frozen CLIP tables and the adapter: compute it once
+        # (row 0 is padding) and serve lookups, so requests skip the adapter and never page in the tables.
+        with torch.inference_mode():
+            ids = torch.arange(self.cfg.items+1)
+            parts = [self.model.semantic_items(ids[i:i+self.chunk],*self.tables[:3]) for i in range(0,len(ids),self.chunk)]
+        semantic,present = (torch.cat(x) for x in zip(*parts))
+        self.model.semantic_items = lambda ids,*tables: (semantic[ids],present[ids])
+        self.item_semantic = semantic[1:]  # also used to retrieve fast-scope candidates
+        self.options = dict(models=['ufm','hybrid'] if self.matrix is not None else ['ufm'],scopes=['full','fast'],
+                            hybrid_alpha=HYBRID_ALPHA,fast_candidates=FAST_CANDIDATES)
+        self.last_stats = {}
 
-    def recommend(self,asins,k=10,regime='all'):
+    def retrieve(self,h,allowed,popularity,lexical):
+        """Fast scope: union of the nearest items by UFM's own semantic and behaviour embeddings,
+        TF-IDF and popularity; UFM then rescores only these candidates."""
+        F,n = self.torch.nn.functional,FAST_CANDIDATES
+        pools = [top_allowed(popularity,allowed,n['popularity'])]
+        semantic,present = self.model.semantic_items(h,*self.tables[:3])
+        if present.any():
+            user = F.normalize(semantic.sum(1)/present.sum(1,keepdim=True).clamp_min(1),dim=-1)[0]
+            pools.append(top_allowed((self.item_semantic@user).numpy(),allowed,n['semantic']))
+        vectors,known = self.model.collaborative_items(h,self.tables[3])
+        user,available = self.model.encode_cf_history(vectors,h,known)
+        if available.any():
+            behaviour = (self.model.item_ids.weight[1:]@user[0]).numpy()
+            pools.append(top_allowed(behaviour,allowed&(self.catalog.counts>0),n['behavior']))
+        if lexical is not None:
+            pools.append(top_allowed(lexical,allowed,n['tfidf']))
+        return np.unique(np.concatenate(pools))
+
+    def recommend(self,asins,k=10,regime='all',model='ufm',scope='full'):
         torch = self.torch
         history = self.catalog.rows(asins)
         if not 1<=k<=50: raise ValueError('Top K must be 1-50.')
+        if model not in self.options['models'] or scope not in self.options['scopes']:
+            raise ValueError('Unknown ranking model or scope.')
         h = np.zeros((1,self.cfg.history_size),dtype=np.int64)
         past = history[-self.cfg.history_size:]
         h[0,:len(past)] = np.asarray(past,dtype=np.int64)+1
-        excluded = set(history); best = []
-        allowed = self.catalog.regime_mask(regime)
+        h = torch.from_numpy(h)
+        allowed = self.catalog.regime_mask(regime).copy()
+        allowed[np.asarray(history,dtype=np.int64)] = False
+        popularity = np.log1p(self.catalog.counts)
+        lexical = tfidf_scores(self.matrix,history,popularity) if self.matrix is not None and (
+            model=='hybrid' or scope=='fast') else None
         with torch.inference_mode():
-            for start in range(0,len(self.catalog.asins),self.chunk):
-                rows = np.array([r for r in range(start,min(start+self.chunk,len(self.catalog.asins))) if r not in excluded and allowed[r]],dtype=np.int64)
-                if not len(rows): continue
-                output = self.model(torch.from_numpy(h),torch.from_numpy(rows[None]+1),*self.tables)
-                scores = output['scores'][0].numpy().astype(np.float64)
-                if not np.isfinite(scores).all(): raise FloatingPointError('Nonfinite inference scores.')
-                adjusted = scores+tie_noise(rows)*1e-10
-                for j in np.argsort(-adjusted,kind='stable')[:k]:
-                    record = dict(self.catalog.item(int(rows[j])),score=float(scores[j]),
-                        weights=output['weights'][0,j].tolist(),uncertainty=output['uncertainty'][0,j].tolist(),
-                        modalities=self.tables[2][int(rows[j])+1].tolist())
-                    heapq.heappush(best,(float(adjusted[j]),int(rows[j]),record))
-                    if len(best)>k: heapq.heappop(best)
-        return [record for _,_,record in sorted(best,key=lambda x:(-x[0],x[1]))]
+            rows = np.flatnonzero(allowed) if scope=='full' else self.retrieve(h,allowed,popularity,lexical)
+            scores = np.empty(len(rows),dtype=np.float64)
+            for start in range(0,len(rows),self.chunk):
+                part = rows[start:start+self.chunk]
+                scores[start:start+len(part)] = self.model(h,torch.from_numpy(part[None]+1),*self.tables)['scores'][0].numpy()
+            if not np.isfinite(scores).all(): raise FloatingPointError('Nonfinite inference scores.')
+            ranking = scores
+            if model=='hybrid' and len(rows):
+                ranking = HYBRID_ALPHA*standardize(scores)+(1-HYBRID_ALPHA)*standardize(lexical[rows])
+            best = np.argsort(-(ranking+tie_noise(rows)*1e-10),kind='stable')[:k]
+            top = rows[best]
+            # Branch weights and uncertainty only for the returned items.
+            detail = self.model(h,torch.from_numpy(top[None]+1),*self.tables) if len(top) else None
+        self.last_stats = dict(model=model,scope=scope,candidates=int(len(rows)))
+        results = []
+        for j,(i,row) in enumerate(zip(best,top)):
+            record = dict(self.catalog.item(int(row)),score=float(ranking[i]),
+                weights=detail['weights'][0,j].tolist(),uncertainty=detail['uncertainty'][0,j].tolist(),
+                modalities=self.tables[2][int(row)+1].tolist())
+            if model=='hybrid': record.update(ufm_score=float(scores[i]),tfidf_score=float(lexical[row]))
+            results.append(record)
+        return results
 
 
 def parse_args():

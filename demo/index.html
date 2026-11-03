@@ -213,7 +213,8 @@ select option { background: #111827; color: white; }
 .empty-history { padding: 20px; background: rgba(0,0,0,0.2); border: 1px dashed var(--border-strong); border-radius: var(--radius-md); font-size: 14px; color: var(--text-muted); text-align: center; }
 .hint { font-size: 13px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
 
-.controls { display: grid; grid-template-columns: 1fr 100px; gap: 16px; margin: 24px 0; }
+.controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+.controls .span { grid-column: 1 / -1; }
 .primary {
   width: 100%; padding: 18px; 
   background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
@@ -255,7 +256,7 @@ select option { background: #111827; color: white; }
 .block.yellow { background: var(--accent-1); top: 30px; left: 30px; animation-delay: 1.5s; box-shadow: 0 10px 20px rgba(0,240,255,0.4); }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 20px; }
 .card {
   background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: var(--radius-lg);
   overflow: hidden; display: flex; flex-direction: column;
@@ -264,10 +265,10 @@ select option { background: #111827; color: white; }
 }
 .card:hover { transform: translateY(-10px) scale(1.02); box-shadow: var(--shadow-md), 0 0 30px rgba(82,0,255,0.15); border-color: var(--border-glow); }
 .product-visual {
-  height: 240px; flex: 0 0 240px; overflow: hidden; background: #fff; padding: 24px; position: relative;
+  height: 180px; flex: 0 0 180px; overflow: hidden; background: #fff; padding: 16px; position: relative;
   display: grid; place-items: center; color: var(--text-muted); font-size: 28px;
 }
-.product-visual img { position: absolute; inset: 24px; width: calc(100% - 48px); height: calc(100% - 48px); object-fit: contain; transition: transform 0.5s ease; }
+.product-visual img { position: absolute; inset: 16px; width: calc(100% - 32px); height: calc(100% - 32px); object-fit: contain; transition: transform 0.5s ease; }
 .card:hover .product-visual img { transform: scale(1.1); }
 .rank {
   position: absolute; top: 16px; left: 16px; background: rgba(0,0,0,0.8);
@@ -275,14 +276,14 @@ select option { background: #111827; color: white; }
   color: var(--accent-1); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,240,255,0.3);
   backdrop-filter: blur(4px);
 }
-.card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+.card-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
 .badge {
   align-self: flex-start; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
   padding: 6px 12px; border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--text-primary); margin-bottom: 16px;
   border: 1px solid var(--border-light);
 }
 .badge.zero_shot { background: rgba(245,158,11,0.2); color: #FCD34D; border-color: rgba(245,158,11,0.4); }
-.card h3 { font-size: 16px; font-weight: 700; margin: 0 0 10px; line-height: 1.5; color: white; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 72px; }
+.card h3 { font-size: 15px; font-weight: 700; margin: 0 0 10px; line-height: 1.5; color: white; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 68px; }
 .asin { font-family: monospace; font-size: 13px; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px; display: inline-block; }
 .card-stats {
   display: flex; justify-content: space-between; align-items: flex-end;
@@ -292,9 +293,17 @@ select option { background: #111827; color: white; }
 .score-box { text-align: right; }
 .score-box small { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 .score-box b { font-size: 18px; font-weight: 800; color: var(--accent-1); text-shadow: 0 0 10px rgba(0,240,255,0.4); }
-.card .secondary { margin-top: 24px; width: 100%; justify-content: center; padding: 14px; background: transparent; border-color: var(--border-strong); }
+.card .secondary { margin-top: 18px; width: 100%; justify-content: center; padding: 12px; background: transparent; border-color: var(--border-strong); }
 .card .secondary:hover { background: var(--accent-1); color: #000; border-color: var(--accent-1); }
 .details { font-size: 13px; color: var(--text-muted); margin-top: 14px; line-height: 1.5; }
+.weight-bar + .details, .details + .details { margin-top: 6px; }
+.weight-bar { display: flex; height: 6px; margin-top: 14px; border-radius: 3px; overflow: hidden; background: rgba(255,255,255,0.08); }
+.weight-bar .w-cf, .details .cf { background: #F59E0B; color: #FCD34D; }
+.weight-bar .w-sem, .details .sem { background: var(--accent-1); color: var(--accent-1); }
+.details .cf, .details .sem { background: none; font-weight: 700; }
+.notice span { flex: 1; }
+.notice.clamped span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notice .textbutton { flex-shrink: 0; }
 
 .guide {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
@@ -313,7 +322,6 @@ details p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
 .busy { animation: pulse 2s ease-in-out infinite; opacity: 0.8; pointer-events: none; }
 @keyframes pulse { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
 
-@media (min-width: 1400px) { .grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 1100px) {
   .workspace { grid-template-columns: 1fr; }
   .panel { position: static; }
@@ -334,7 +342,7 @@ details p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
 </style></head><body><div class="shell">
 <header><div class="brand"><span class="brandmark" aria-hidden="true">u.</span>UFM Rec</div><span class="eyebrow header-note">Recommendation research lab</span><span class="live"><span class="dot" id="connection"></span><span id="connectionText">Đang kết nối</span></span></header>
 <section class="hero"><div><div class="eyebrow">Amazon · Toys & Games</div><h1>Khám phá món đồ chơi<br>tiếp theo của bạn.</h1><p>Chọn những sản phẩm bạn quan tâm và xem hệ thống tìm các gợi ý phù hợp, kể cả sản phẩm chưa từng có tương tác trong tập train.</p></div><div class="count"><strong id="catalogCount">—</strong><span>sản phẩm trong catalog</span></div></section>
-<div class="notice"><b id="model">Đang tải mô hình</b><span id="warning">Đang đọc trạng thái demo…</span></div>
+<div class="notice clamped" id="notice"><b id="model">Đang tải mô hình</b><span id="warning">Đang đọc trạng thái demo…</span><button id="warningToggle" class="textbutton" type="button" aria-expanded="false">Chi tiết</button></div>
 <main class="workspace"><aside class="panel" aria-label="Thiết lập gợi ý"><h2 class="step"><span>01</span>Tạo lịch sử của bạn</h2>
 <label for="search">Tìm theo tên hoặc mã ASIN</label><input id="search" type="search" autocomplete="off" placeholder="LEGO, puzzle, B006GBITXC…" maxlength="80">
 <div class="themes" aria-label="Tìm nhanh"><button class="chip" data-query="LEGO">LEGO</button><button class="chip" data-query="puzzle">Puzzle</button><button class="chip" data-query="plush">Thú bông</button><button class="chip" data-query="Montessori">Montessori</button></div>
@@ -343,17 +351,19 @@ details p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
 <ol id="history" class="history-list"></ol><div id="historyEmpty" class="empty-history">Chưa chọn sản phẩm. Bạn vẫn có thể khám phá các sản phẩm phổ biến.</div>
 <p class="hint" id="profileHint">Thứ tự từ cũ đến mới. Sản phẩm đã chọn sẽ được loại khỏi kết quả.</p>
 <div class="divider"></div><h2 class="step"><span>02</span>Chọn cách khám phá</h2>
-<div class="controls"><div><label for="regime">Nhóm sản phẩm</label><select id="regime"><option value="all">Tất cả sản phẩm</option><option value="zero_shot">Zero-shot · chưa có tương tác</option><option value="extreme_cold">Extreme cold · 1–5 tương tác</option><option value="cold">Cold · 6–20 tương tác</option><option value="warm">Warm · trên 20 tương tác</option></select></div><div><label for="k">Top K</label><select id="k"><option>10</option><option>5</option><option>20</option></select></div></div>
+<div class="controls"><div class="span"><label for="regime">Nhóm sản phẩm</label><select id="regime"><option value="all">Tất cả sản phẩm</option><option value="zero_shot">Zero-shot (0 tương tác)</option><option value="extreme_cold">Extreme cold (1–5)</option><option value="cold">Cold (6–20)</option><option value="warm">Warm (trên 20)</option></select></div><div id="rankModelBox" hidden><label for="rankModel">Mô hình</label><select id="rankModel"><option value="ufm">UFM</option><option value="hybrid">UFM + TF-IDF</option></select></div><div id="scopeBox" hidden><label for="scope">Phạm vi chấm</label><select id="scope" title="Nhanh: chấm lại các ứng viên gần nhất. Toàn catalog: chấm mọi sản phẩm."><option value="fast">Nhanh</option><option value="full">Toàn catalog</option></select></div><div><label for="k">Top K</label><select id="k"><option>10</option><option>5</option><option>20</option></select></div></div>
 <button id="recommend" class="primary" disabled><span>Tìm gợi ý cho tôi</span><span aria-hidden="true">↗</span></button><p id="message" class="status" role="status" aria-live="polite"></p>
-<details style="margin-top:14px"><summary>Hiểu dữ liệu và các nhóm cold-start</summary><p>Nhóm được tính từ số tương tác trong tập train: zero-shot = 0; extreme cold = 1–5; cold = 6–20; warm &gt; 20. Zero-shot không có nghĩa là sản phẩm vừa được phát hành.</p><p>Lịch sử chỉ tồn tại trong phiên trang này. Ảnh hiện trên màn hình lấy từ catalog hoặc bản demo offline; ảnh hiển thị lỗi vẫn giữ tên sản phẩm.</p><p id="signalExplanation">Nguồn tín hiệu phụ thuộc vào backend đang chạy.</p></details>
+<details style="margin-top:14px"><summary>Hiểu dữ liệu và các nhóm cold-start</summary><p>Nhóm được tính từ số tương tác trong tập train: zero-shot = 0; extreme cold = 1–5; cold = 6–20; warm &gt; 20. Zero-shot không có nghĩa là sản phẩm vừa được phát hành.</p><p>Lịch sử chỉ tồn tại trong phiên trang này. Ảnh hiện trên màn hình lấy từ catalog hoặc bản demo offline; ảnh hiển thị lỗi vẫn giữ tên sản phẩm.</p><p id="signalExplanation">Nguồn tín hiệu phụ thuộc vào backend đang chạy.</p><p id="modeExplanation" hidden>Nhanh: UFM chỉ chấm lại tối đa 5.500 ứng viên gần nhất theo ngữ nghĩa, hành vi, TF-IDF và độ phổ biến, nên kết quả có thể khác một phần so với Toàn catalog. Toàn catalog: UFM chấm mọi sản phẩm, chậm hơn nhưng không bỏ sót. UFM + TF-IDF: trộn 55% điểm UFM với 45% điểm TF-IDF sau khi chuẩn hóa, theo mục 5.12 của báo cáo.</p></details>
 </aside><section aria-label="Kết quả khuyến nghị"><div class="result-head"><div><h2>Gợi ý dành cho bạn</h2><div id="resultMeta" class="result-meta">Từ sở thích của bạn đến những khám phá mới</div></div><button id="export" class="secondary" disabled>↓ Xuất JSON</button></div>
 <div id="empty" class="empty-state"><div><div class="art" aria-hidden="true"><span class="block"></span><span class="block yellow"></span></div><h3>Bắt đầu bằng một sở thích.</h3><p>Thêm 1–3 sản phẩm từ ô tìm kiếm rồi bấm “Tìm gợi ý cho tôi”. Hoặc thử ngay với các sản phẩm phổ biến.</p><button id="explore" class="secondary" disabled>Khám phá sản phẩm phổ biến ↗</button></div></div><div id="results" class="grid" aria-live="polite"></div>
 <div class="guide"><div><strong>01 / Chọn sản phẩm</strong><p>Chọn đồ chơi, bộ xếp hình hoặc sản phẩm bạn đã quan tâm.</p></div><div><strong>02 / Khám phá cold-start</strong><p>Lọc zero-shot để xem gợi ý cho sản phẩm chưa có tương tác train.</p></div><div><strong>03 / Xem & so sánh</strong><p>Kiểm tra thứ hạng, nhóm sản phẩm và xuất kết quả để trình bày.</p></div></div>
-</section></main><footer class="foot"><span>UFM Rec · Demo nghiên cứu · Amazon Reviews 2023</span><span>Điểm xếp hạng không phải xác suất mua hàng. Demo toàn catalog khác đánh giá 100 candidates.</span></footer></div>
+</section></main><footer class="foot"><span>UFM Rec · Demo nghiên cứu · Amazon Reviews 2023</span><span>Điểm xếp hạng không phải xác suất mua hàng. Demo xếp hạng trên catalog, khác đánh giá 100 ứng viên trong báo cáo.</span></footer></div>
 <script>
 'use strict';
 const $=id=>document.getElementById(id),fmt=new Intl.NumberFormat('vi-VN');
 const labels={zero_shot:'Zero-shot',extreme_cold:'Extreme cold',cold:'Cold',warm:'Warm'};
+const modeLabels={ufm:'UFM',hybrid:'UFM + TF-IDF'},scopeLabels={fast:'Nhanh',full:'Toàn catalog'};
+const num=(x,d)=>Number(x).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d}),pct=x=>Math.round(x*100)+'%';
 let history=[],examples=[],timer,searchVersion=0,lastResponse=null,busy=false,ready=false,currentMatches=[];
 function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
 function notice(text,error=false){$('message').textContent=text;$('message').className='status'+(error?' error':'')}
@@ -368,11 +378,12 @@ async function search(){const version=++searchVersion,q=$('search').value.trim()
 $('search').oninput=()=>{++searchVersion;clearTimeout(timer);timer=setTimeout(search,300)};
 document.querySelectorAll('[data-query]').forEach(b=>b.onclick=()=>{$('search').value=b.dataset.query;clearTimeout(timer);search()});
 $('clear').onclick=()=>{history=[];renderHistory();invalidate();renderMatches(currentMatches);notice('Đã xóa lịch sử. Gợi ý tiếp theo dùng độ phổ biến trong train.')};
-$('regime').onchange=invalidate;$('k').onchange=invalidate;
-function setBusy(value){busy=value;$('recommend').disabled=value||!ready;$('explore').disabled=value||!ready;$('regime').disabled=value;$('k').disabled=value;$('recommend').classList.toggle('busy',value);$('recommend').firstElementChild.textContent=value?'Đang tìm gợi ý…':'Tìm gợi ý cho tôi';renderHistory();renderMatches(currentMatches)}
-function renderResults(response){$('results').replaceChildren();$('results').style.opacity='1';$('empty').style.display='none';response.results.forEach((row,i)=>{const card=el('article','card'),img=visual(row,'product-visual');img.append(el('span','rank','#'+String(i+1).padStart(2,'0')));card.append(img);const body=el('div','card-body');body.append(el('span','badge '+row.regime,labels[row.regime]),el('h3','',row.title),el('div','asin',row.asin));const stats=el('div','card-stats'),count=el('span','',fmt.format(row.train_count)+' tương tác'),score=el('b','',row.score.toFixed(4));score.title='Điểm xếp hạng của mô hình';const scoreBox=el('span','score-box');scoreBox.append(el('small','','Điểm xếp hạng'),score);stats.append(count,scoreBox);body.append(stats);if(row.weights){body.append(el('div','details','CF '+(row.weights[0]*100).toFixed(1)+'% · Semantic '+(row.weights[1]*100).toFixed(1)+'%'),el('div','details','Uncertainty proxy: CF '+row.uncertainty[0].toFixed(3)+' · Semantic '+row.uncertainty[1].toFixed(3)))}const b=el('button','secondary','+ Thêm vào lịch sử');b.onclick=()=>add(row);body.append(b);card.append(body);$('results').append(card)});if(!response.results.length)$('results').append(el('p','hint','Không còn sản phẩm phù hợp với bộ lọc và lịch sử hiện tại.'));$('resultMeta').textContent=response.results.length+' sản phẩm · '+(response.elapsed_ms/1000).toFixed(2)+' giây xử lý · '+(response.regime==='all'?'Tất cả nhóm':labels[response.regime]);$('export').disabled=false}
-async function recommend(){if(busy||!ready)return;setBusy(true);lastResponse=null;$('export').disabled=true;notice('Đang xếp hạng catalog…');const input={history:history.map(x=>x.asin),k:Number($('k').value),regime:$('regime').value};try{const response=await api('/api/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)});lastResponse={created_at:new Date().toISOString(),request:input,...response};renderResults(response);notice(input.history.length?'Đã loại các sản phẩm có trong lịch sử.':'Đang gợi ý theo độ phổ biến trong tập train.')}catch(e){notice('Chưa tạo được gợi ý: '+e.message,true);$('resultMeta').textContent='Yêu cầu chưa thành công · Hãy thử lại';$('results').style.opacity='.55'}finally{setBusy(false)}}
+$('regime').onchange=invalidate;$('k').onchange=invalidate;$('rankModel').onchange=invalidate;$('scope').onchange=invalidate;
+$('warningToggle').onclick=()=>{const open=!$('notice').classList.toggle('clamped');$('warningToggle').textContent=open?'Thu gọn':'Chi tiết';$('warningToggle').setAttribute('aria-expanded',String(open))};
+function setBusy(value){busy=value;$('recommend').disabled=value||!ready;$('explore').disabled=value||!ready;$('regime').disabled=value;$('k').disabled=value;$('rankModel').disabled=value;$('scope').disabled=value;$('recommend').classList.toggle('busy',value);$('recommend').firstElementChild.textContent=value?'Đang tìm gợi ý…':'Tìm gợi ý cho tôi';renderHistory();renderMatches(currentMatches)}
+function renderResults(response){$('results').replaceChildren();$('results').style.opacity='1';$('empty').style.display='none';response.results.forEach((row,i)=>{const card=el('article','card'),img=visual(row,'product-visual');img.append(el('span','rank','#'+String(i+1).padStart(2,'0')));card.append(img);const body=el('div','card-body');body.append(el('span','badge '+row.regime,labels[row.regime]),el('h3','',row.title),el('div','asin',row.asin));const hybrid=(response.ranking||{}).model==='hybrid',stats=el('div','card-stats'),count=el('span','',fmt.format(row.train_count)+' tương tác'),score=el('b','',num(row.score,4));score.title=hybrid?'Điểm kết hợp sau khi chuẩn hóa':'Điểm xếp hạng của mô hình';const scoreBox=el('span','score-box');scoreBox.append(el('small','',hybrid?'Điểm kết hợp':'Điểm xếp hạng'),score);stats.append(count,scoreBox);body.append(stats);if(hybrid)body.append(el('div','details','UFM '+num(row.ufm_score,3)+' · TF-IDF '+num(row.tfidf_score,3)));if(row.weights){const bar=el('div','weight-bar'),cf=el('span','w-cf'),sem=el('span','w-sem');cf.style.width=row.weights[0]*100+'%';sem.style.width=row.weights[1]*100+'%';bar.title='Trọng số hai nhánh của UFM';bar.append(cf,sem);const weights=el('div','details');weights.append(el('b','cf','Hành vi '+pct(row.weights[0])),' · ',el('b','sem','Ngữ nghĩa '+pct(row.weights[1])));body.append(bar,weights,el('div','details','Độ bất định: hành vi '+num(row.uncertainty[0],3)+' · ngữ nghĩa '+num(row.uncertainty[1],3)))}const b=el('button','secondary','+ Thêm vào lịch sử');b.onclick=()=>add(row);body.append(b);card.append(body);$('results').append(card)});if(!response.results.length)$('results').append(el('p','hint','Không còn sản phẩm phù hợp với bộ lọc và lịch sử hiện tại.'));const r=response.ranking||{},meta=[response.results.length+' sản phẩm',num(response.elapsed_ms/1000,1)+' giây'];if(modeLabels[r.model])meta.push(modeLabels[r.model]+' · '+scopeLabels[r.scope]+' ('+fmt.format(r.candidates)+(r.scope==='fast'?' ứng viên)':' sản phẩm)'));meta.push(response.regime==='all'?'Tất cả nhóm':labels[response.regime]);$('resultMeta').textContent=meta.join(' · ');$('export').disabled=false}
+async function recommend(){if(busy||!ready)return;setBusy(true);lastResponse=null;$('export').disabled=true;const input={history:history.map(x=>x.asin),k:Number($('k').value),regime:$('regime').value};if(!$('rankModelBox').hidden)input.model=$('rankModel').value;if(!$('scopeBox').hidden)input.scope=$('scope').value;notice(input.scope==='fast'?'Đang chấm lại các ứng viên gần nhất…':'Đang xếp hạng toàn catalog…');const started=performance.now(),tick=setInterval(()=>{$('recommend').firstElementChild.textContent='Đang tìm gợi ý… '+Math.floor((performance.now()-started)/1000)+' giây'},500);try{const response=await api('/api/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)});lastResponse={created_at:new Date().toISOString(),request:input,...response};renderResults(response);notice(input.history.length?'Đã loại các sản phẩm có trong lịch sử.':'Đang gợi ý theo độ phổ biến trong tập train.')}catch(e){notice('Chưa tạo được gợi ý: '+e.message,true);$('resultMeta').textContent='Yêu cầu chưa thành công · Hãy thử lại';$('results').style.opacity='.55'}finally{clearInterval(tick);setBusy(false)}}
 $('recommend').onclick=recommend;$('explore').onclick=recommend;
 $('export').onclick=()=>{if(!lastResponse)return;const url=URL.createObjectURL(new Blob([JSON.stringify(lastResponse,null,2)],{type:'application/json'})),a=el('a');a.href=url;a.download='ufm-rec-demo.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)};
-(async()=>{try{const s=await api('/api/status');$('model').textContent=s.backend;$('warning').textContent=s.warning;$('signalExplanation').textContent=s.backend==='UFM Rec'?'UFM xếp hạng bằng lịch sử hành vi và CLIP embedding đã trích xuất từ văn bản, ảnh sản phẩm. JPEG hiển thị trên trang không được đọc lại khi bấm gợi ý; trọng số nhánh chỉ mô tả tín hiệu mô hình.':'Backend TF-IDF dùng mô tả sản phẩm và lịch sử đã chọn; ảnh trên trang chỉ để hiển thị.';$('catalogCount').textContent=fmt.format(s.items);$('connection').classList.add('ready');$('connectionText').textContent='Demo sẵn sàng';$('profileHint').textContent='Thứ tự từ cũ đến mới. Mô hình dùng tối đa '+s.profile_items+' sản phẩm gần nhất; loại toàn bộ sản phẩm đã chọn khỏi kết quả.';ready=true;setBusy(false);examples=await api('/api/examples');if(!$('search').value)renderMatches(examples)}catch(e){$('connectionText').textContent='Chưa kết nối';notice('Không thể tải demo. Kiểm tra máy chủ và tải lại trang.',true)}})();
+(async()=>{try{const s=await api('/api/status');$('model').textContent=s.backend;$('warning').textContent=s.warning;$('warning').title=s.warning;const o=s.options||{models:[],scopes:[]};$('rankModelBox').hidden=!o.models.includes('hybrid');$('scopeBox').hidden=!o.scopes.includes('fast');$('modeExplanation').hidden=$('scopeBox').hidden;$('signalExplanation').textContent=s.backend==='UFM Rec'?'UFM xếp hạng bằng lịch sử hành vi và CLIP embedding đã trích xuất từ văn bản, ảnh sản phẩm. JPEG hiển thị trên trang không được đọc lại khi bấm gợi ý; trọng số nhánh chỉ mô tả tín hiệu mô hình.':'Backend TF-IDF dùng mô tả sản phẩm và lịch sử đã chọn; ảnh trên trang chỉ để hiển thị.';$('catalogCount').textContent=fmt.format(s.items);$('connection').classList.add('ready');$('connectionText').textContent='Demo sẵn sàng';$('profileHint').textContent='Thứ tự từ cũ đến mới. Mô hình dùng tối đa '+s.profile_items+' sản phẩm gần nhất; loại toàn bộ sản phẩm đã chọn khỏi kết quả.';ready=true;setBusy(false);examples=await api('/api/examples');if(!$('search').value)renderMatches(examples)}catch(e){$('connectionText').textContent='Chưa kết nối';notice('Không thể tải demo. Kiểm tra máy chủ và tải lại trang.',true)}})();
 </script></body></html>

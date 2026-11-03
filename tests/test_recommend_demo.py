@@ -120,6 +120,10 @@ class DemoTests(unittest.TestCase):
             if r['regime']=='zero_shot': self.assertEqual(r['weights'][0],0)
             self.assertTrue(np.isfinite(r['uncertainty']).all())
         self.assertEqual(a.recommend([],1)[0]['asin'],'ASIN8')
+        del a.model.semantic_items  # back to the adapter over the CLIP tables
+        direct = a.recommend(['ASIN1','ASIN2'],10)
+        self.assertEqual([r['asin'] for r in direct],[r['asin'] for r in one])
+        np.testing.assert_allclose([r['score'] for r in direct],[r['score'] for r in one],atol=1e-6)
         relocated = self.data/'relocated_clip'
         shutil.copytree(self.fixture.features,relocated)
         moved = UFMBackend(self.catalog,args.output,features=relocated,_allow_technical_smoke=True)
@@ -130,6 +134,25 @@ class DemoTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Feature marker changed'):
             UFMBackend(self.catalog,args.output,features=relocated,_allow_technical_smoke=True)
 
+    def test_ufm_fast_scope_and_hybrid_blend(self):
+        args = self.fixture.args('inference')
+        with contextlib.redirect_stdout(io.StringIO()): trainer.train(args)
+        backend = UFMBackend(self.catalog,args.output,_allow_technical_smoke=True)
+        self.assertEqual(backend.options['models'],['ufm','hybrid'])
+        full = backend.recommend(['ASIN1','ASIN2'],10)
+        self.assertEqual(backend.last_stats,dict(model='ufm',scope='full',candidates=10))
+        # Every retrieval pool exceeds this 12-item catalog, so the fast scope rescores the same items.
+        fast = backend.recommend(['ASIN1','ASIN2'],10,scope='fast')
+        self.assertEqual([r['asin'] for r in fast],[r['asin'] for r in full])
+        np.testing.assert_allclose([r['score'] for r in fast],[r['score'] for r in full],atol=1e-6)
+        hybrid = backend.recommend(['ASIN1','ASIN2'],10,model='hybrid')
+        self.assertEqual(sorted(r['asin'] for r in hybrid),sorted(r['asin'] for r in full))
+        ufm,lexical = (np.array([r[key] for r in hybrid]) for key in ('ufm_score','tfidf_score'))
+        z = lambda x: (x-x.mean())/x.std() if x.std()>0 else np.zeros_like(x)
+        np.testing.assert_allclose([r['score'] for r in hybrid],0.55*z(ufm)+0.45*z(lexical),atol=1e-9)
+        for bad in (dict(model='bm25'),dict(scope='partial')):
+            with self.assertRaisesRegex(ValueError,'model or scope'): backend.recommend(['ASIN1'],5,**bad)
+
     def test_http_end_to_end_and_cross_origin_rejection(self):
         server = ThreadingHTTPServer(('127.0.0.1',0),handler_for(ContentBackend(self.catalog)))
         thread = threading.Thread(target=server.serve_forever,daemon=True); thread.start()
@@ -137,15 +160,17 @@ class DemoTests(unittest.TestCase):
         try:
             with urllib.request.urlopen(url+'/api/status') as r: status = json.load(r)
             self.assertIn('TF-IDF',status['backend'])
+            self.assertEqual(status['options'],dict(models=['content'],scopes=['full']))
             request = urllib.request.Request(url+'/api/recommend',data=json.dumps({'history':['ASIN1'],'k':3}).encode(),headers={'Content-Type':'application/json'})
             with urllib.request.urlopen(request) as r: response = json.load(r)
             self.assertEqual(len(response['results']),3)
             self.assertNotIn('ASIN1',[x['asin'] for x in response['results']])
             self.assertGreaterEqual(response['elapsed_ms'],0)
+            self.assertEqual(response['ranking'],dict(model='content',scope='full',candidates=11))
             with urllib.request.urlopen(url+'/api/examples') as r: examples = json.load(r)
             self.assertEqual(examples[0]['asin'],'ASIN8')
             for payload in [[],None,{'regime':[]},{'k':True},{'history':['not-in-catalog']},
-                            {'history':['ASIN1']*21}]:
+                            {'history':['ASIN1']*21},{'model':'hybrid'},{'scope':'fast'},{'model':['content']}]:
                 request = urllib.request.Request(url+'/api/recommend',data=json.dumps(payload).encode())
                 with self.assertRaises(urllib.error.HTTPError) as caught: urllib.request.urlopen(request)
                 self.assertEqual(caught.exception.code,400)

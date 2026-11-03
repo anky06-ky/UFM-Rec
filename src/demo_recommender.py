@@ -59,7 +59,8 @@ def handler_for(backend, allowed_origin=None, base_path=''):
             if path=='/': self.send(200,page,'text/html; charset=utf-8')
             elif path=='/api/status': self.send(200,dict(app='ufm-rec-demo',backend=backend.name,warning=backend.warning,
                 items=len(backend.catalog.asins),data=backend.catalog.provenance(),
-                model=getattr(backend,'provenance',None),max_history=20,profile_items=10 if isinstance(backend,ContentBackend) else backend.cfg.history_size))
+                model=getattr(backend,'provenance',None),max_history=20,profile_items=10 if isinstance(backend,ContentBackend) else backend.cfg.history_size,
+                options=backend.options))
             elif path=='/api/examples': self.send(200,backend.catalog.examples())
             elif path=='/api/search': self.send(200,backend.catalog.search(parse_qs(urlsplit(self.path).query).get('q',[''])[0]))
             elif path=='/api/product-image':
@@ -84,12 +85,20 @@ def handler_for(backend, allowed_origin=None, base_path=''):
                 if not isinstance(history,list) or len(history)>20 or any(not isinstance(x,str) or len(x)>40 for x in history):
                     raise ValueError('Invalid history')
                 if not isinstance(k,int) or isinstance(k,bool) or not 1<=k<=50: raise ValueError('Invalid Top K')
+                # Requests without these fields keep the original full-catalog ranking.
+                model,scope = value.get('model',backend.options['models'][0]),value.get('scope',backend.options['scopes'][0])
+                if not isinstance(model,str) or model not in backend.options['models'] or \
+                   not isinstance(scope,str) or scope not in backend.options['scopes']:
+                    raise ValueError('Invalid ranking model or scope')
                 if not lock.acquire(blocking=False): self.send(429,{'error':'Inference busy'}); return
                 started = time.perf_counter()
-                try: results = backend.recommend(history,k,regime)
+                try:
+                    results = backend.recommend(history,k,regime,model=model,scope=scope)
+                    stats = dict(backend.last_stats)
                 finally: lock.release()
+                if model=='hybrid': stats['hybrid_alpha'] = backend.options['hybrid_alpha']
                 self.send(200,dict(backend=backend.name,warning=backend.warning,data=backend.catalog.provenance(),
-                    model=getattr(backend,'provenance',None),results=results,
+                    model=getattr(backend,'provenance',None),results=results,ranking=stats,
                     elapsed_ms=round((time.perf_counter()-started)*1000,1),regime=regime,history_count=len(history)))
             except (ValueError,KeyError,TypeError) as e: self.send(400,{'error':str(e)})
             except Exception: self.send(500,{'error':'Inference failed; inspect local server log'})

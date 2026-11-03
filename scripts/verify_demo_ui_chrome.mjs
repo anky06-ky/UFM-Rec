@@ -3,18 +3,22 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 
+// Usage: node scripts/verify_demo_ui_chrome.mjs [backend URL] [output directory] [file tag]
 const root = path.resolve(import.meta.dirname, '..');
 const base = process.argv[2] || 'http://127.0.0.1:8774';
+const output = path.resolve(process.argv[3] || path.join(root, 'reports/nontraining_20261029'));
+const tag = process.argv[4] || '20261029';
 const port = 9227;
 const chrome = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const profile = 'D:/Nam3_ki1/UFM-Rec_Backups/cleanup_20261029_nontraining/demo_ui_chrome_profile_20261029';
-const output = path.join(root, 'reports/nontraining_20261029');
+const profile = path.join(os.tmpdir(), `ufm_rec_demo_ui_chrome_${tag}`);
 const downloads = path.join(output, 'demo_ui_downloads');
-const screenshot = path.join(output, 'demo_ui_zero_shot_20261029.png');
-const offlineScreenshot = path.join(output, 'demo_ui_offline_20261029.png');
-const receiptPath = path.join(output, 'demo_ui_end_to_end_20261029.json');
+const screenshot = path.join(output, `demo_ui_zero_shot_${tag}.png`);
+const hybridScreenshot = path.join(output, `demo_ui_hybrid_${tag}.png`);
+const offlineScreenshot = path.join(output, `demo_ui_offline_${tag}.png`);
+const receiptPath = path.join(output, `demo_ui_end_to_end_${tag}.json`);
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function until(fn, timeoutMs, label) {
@@ -121,6 +125,20 @@ async function main() {
     assert.equal(downloaded.results.length, 5);
     receipt.cases.push({name:'downloaded_json_matches_ui',passed:true,file:path.relative(root,path.join(downloads,'ufm-rec-demo.json')).replaceAll('\\','/')});
 
+    const modes = await evaluate("!document.querySelector('#rankModelBox').hidden && !document.querySelector('#scopeBox').hidden");
+    if (modes) {
+      await evaluate("for (const [id,value] of [['rankModel','hybrid'],['scope','full'],['regime','all']]) {const e=document.querySelector('#'+id); e.value=value; e.dispatchEvent(new Event('change',{bubbles:true}))} document.querySelector('#recommend').click(); true");
+      await until(async () => await evaluate("!document.querySelector('#recommend').classList.contains('busy') && !document.querySelector('#export').disabled && document.querySelectorAll('#results .card').length === 5"), 120000, 'hybrid full-catalog results');
+      const hybrid = await evaluate("({meta:document.querySelector('#resultMeta').textContent,label:document.querySelector('#results .card .score-box small').textContent,bars:document.querySelectorAll('#results .weight-bar').length})");
+      assert.ok(hybrid.meta.includes('UFM + TF-IDF · Toàn catalog'));
+      assert.equal(hybrid.label, 'Điểm kết hợp');
+      assert.equal(hybrid.bars, 5);
+      const hybridShot = await tab.send('Page.captureScreenshot', {format:'png', captureBeyondViewport:true});
+      await fs.writeFile(hybridScreenshot, Buffer.from(hybridShot.data,'base64'));
+      receipt.cases.push({name:'hybrid_full_catalog_controls',passed:true,observed:{meta:hybrid.meta,label:hybrid.label},
+        screenshot:path.relative(root,hybridScreenshot).replaceAll('\\','/')});
+    }
+
     await tab.send('Network.emulateNetworkConditions', {offline:true, latency:0, downloadThroughput:0, uploadThroughput:0});
     await evaluate("document.querySelector('#recommend').click(); true");
     await until(async () => await evaluate("document.querySelector('#message').textContent.startsWith('Chưa tạo được gợi ý:') && !document.querySelector('#recommend').classList.contains('busy')"), 20000, 'offline failure state');
@@ -132,7 +150,7 @@ async function main() {
     receipt.cases.push({name:'offline_error_state',passed:true,observed:offline,screenshot:path.relative(root,offlineScreenshot).replaceAll('\\','/')});
 
     receipt.status='passed';
-    receipt.summary='4/4 UI cases passed: real backend, zero-shot with blocked images, downloaded JSON, offline error state.';
+    receipt.summary=`${receipt.cases.length}/${receipt.cases.length} UI cases passed: ${receipt.cases.map(c=>c.name).join(', ')}.`;
   } catch (error) {
     receipt.status='failed';
     receipt.error=String(error.stack || error);
