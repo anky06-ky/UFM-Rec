@@ -14,14 +14,22 @@ import build_school_report_docx as report  # noqa: E402
 def test_every_table_and_figure_gets_a_numbered_caption():
     source = report.SOURCE.read_text(encoding="utf-8")
     markdown = report.report_markdown()
-    tables = re.findall(r"^@@TABLE@@Bảng (\d+)\.(\d+)\. \S", markdown, re.M)
-    figures = re.findall(r"^@@FIGURE@@Hình (\d+)\.(\d+)\. \S", markdown, re.M)
+    tables = re.findall(r"^@@TABLE@@Bảng (\w+)\.(\d+)\. \S", markdown, re.M)
+    figures = re.findall(r"^@@FIGURE@@Hình (\w+)\.(\d+)\. \S", markdown, re.M)
     assert len(tables) == len(re.findall(r"^\|\s*:?-", source, re.M))
     assert len(figures) == len(re.findall(r"^!\[", source, re.M))
     for numbers in (tables, figures):
         for chapter in {c for c, _ in numbers}:
             assert [int(n) for c, n in numbers if c == chapter] == list(
                 range(1, sum(c == chapter for c, _ in numbers) + 1))
+
+
+def test_numbered_equations_keep_their_numbers_outside_the_math():
+    source = report.SOURCE.read_text(encoding="utf-8")
+    markdown = report.report_markdown()
+    numbers = re.findall(r"\\qquad \((\d+\.\d+)\)\$\$", source)
+    assert numbers and re.findall(rf"^{report.EQUATION_MARK}\((\d+\.\d+)\)$", markdown, re.M) == numbers
+    assert "\\qquad (" not in markdown
 
 
 def test_repository_links_become_printable_paths():

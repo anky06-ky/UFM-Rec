@@ -1,5 +1,7 @@
 # Đối chiếu kết quả UFM evaluation_v2 ngày 27/10/2026
 
+> **Cập nhật 03/11/2026:** các tệp mẫu `evaluation_v2` trong thư mục chuyển tạm đã bỏ vì trùng SHA với `restored_complete_20261028/data/processed/toys_games_full_temporal/evaluation_v2/`; xem [biên nhận lọc trùng](../final_20261103/dedup_20261103.json).
+
 Ba JSON trong thư mục này được sao chép nguyên byte từ `tmp/transfer/evaluation_v2` để giữ bằng chứng nhỏ trong repo. Các file mẫu NPZ/CSV gzip lớn vẫn ở local và bị Git bỏ qua. Ngày 27/10 là ngày đối chiếu artifact local; report không ghi thời điểm hoàn tất lượt đánh giá, nên không gán ngày đó cho thời điểm chạy mô hình.
 
 Sau đợt dọn thư mục 28/10, thư mục chuyển tạm được lưu ngoài repo tại `D:\Nam3_ki1\UFM-Rec_Backups\workspace_cleanup_20261028\tmp\transfer\evaluation_v2`. Mỗi tệp chuyển ra đã được đối chiếu SHA; ba JSON bằng chứng tại đây được giữ nguyên.

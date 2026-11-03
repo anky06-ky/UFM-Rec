@@ -4,8 +4,10 @@ Content comes from docs/final_report.md (validation v3 evidence). Pandoc turns t
 Markdown into Word; python-docx restyles it to the team's template conventions
 (Times New Roman 13, A4, 3 cm left margin, navy headings), prepends the template
 cover with its logos and page border, and adds the acknowledgements, task table,
-contents and abbreviation pages. A portable LibreOffice fills the contents and
-exports the PDF. Nothing is trained.
+contents, abbreviation and table/figure lists. A portable LibreOffice lays the
+document out twice: the first pass measures the page of every heading and caption,
+the second exports the PDF after those page numbers are written into the DOCX.
+Run scripts/build_report_figures.py first. Nothing is trained.
 
 Edit ADVISOR and TEAM when the cover details change, then run
     python scripts/build_school_report_docx.py
@@ -110,6 +112,11 @@ TEXT_WIDTH = Cm(21 - 3.0 - 2.01)
 MAX_FIGURE_EMU = int(Cm(15))
 TABLE_MARK, FIGURE_MARK = "@@TABLE@@", "@@FIGURE@@"
 TOC_PLACEHOLDER = "Mục lục được cập nhật khi xuất PDF; trong Word nhấn F9 để cập nhật."
+CAPTION_STYLE, LIST_STYLE = "UFM Caption", "UFM List"
+EXPLICIT_CAPTION = re.compile(r"^\*Bảng: (.+)\*\s*$")
+EQUATION_MARK = "@@EQNUM@@"
+NUMBERED_EQUATION = re.compile(r"^\s*\$\$(.*?)\s*\\qquad\s*\((\w+\.\d+)\)\s*\$\$\s*$")
+MATH_NS = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
 R_NS = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}"
 # Namespaces declared on Pandoc's document root; anything else in the cover needs mc:Ignorable.
 CORE_NS = {
@@ -136,12 +143,13 @@ def plain_link(match: re.Match) -> str:
 
 
 def report_markdown() -> str:
+    """Front matter (preface, abstract) and every chapter, appendix included, numbered per chapter."""
     lines = SOURCE.read_text(encoding="utf-8").splitlines()
-    abstract = next(i for i, s in enumerate(lines) if s.startswith("### TÓM TẮT"))
+    starts = [i for i, s in enumerate(lines) if s.startswith(("### LỜI NÓI ĐẦU", "### TÓM TẮT"))]
     contents = next(i for i, s in enumerate(lines) if s.startswith("### MỤC LỤC"))
     chapters = next(i for i, s in enumerate(lines) if s.startswith("### CHƯƠNG 1"))
-    selected = lines[abstract:contents] + lines[chapters:]
-    out, chapter, figures, tables = [], 0, 0, 0
+    selected = lines[min(starts):contents] + lines[chapters:]
+    out, chapter, figures, tables, pending = [], "0", 0, 0, None
     for n, line in enumerate(selected):
         if line.strip() == "---":
             continue
@@ -151,14 +159,29 @@ def report_markdown() -> str:
             continue
         heading = re.match(r"### CHƯƠNG (\d+): (.+)", line)
         if heading:
-            chapter, figures, tables = int(heading[1]), 0, 0
+            chapter, figures, tables = heading[1], 0, 0
             line = f"# CHƯƠNG {heading[1]}. {heading[2]}"
         elif line.startswith("### TÓM TẮT"):
             line = "# TÓM TẮT ĐỀ TÀI"
         elif line.startswith("### Tài liệu tham khảo"):
             line = "# TÀI LIỆU THAM KHẢO"
+        elif line.startswith("### PHỤ LỤC"):
+            chapter, figures, tables = "PL", 0, 0
+            line = "# PHỤ LỤC"
+        elif line.startswith("### "):
+            line = "# " + line[4:]
+        elif line.startswith("##### "):
+            line = "### " + line[6:]
         elif line.startswith("#### "):
             line = "## " + line[5:]
+        explicit = EXPLICIT_CAPTION.match(line)
+        if explicit:
+            pending = explicit[1]
+            continue
+        numbered = NUMBERED_EQUATION.match(line)
+        if numbered:  # LibreOffice drops math spacing, so the number is laid out with tabs later
+            out += [f"$${numbered[1]}$$", "", f"{EQUATION_MARK}({numbered[2]})"]
+            continue
         image = IMAGE.match(line)
         if image:
             figures += 1
@@ -166,13 +189,29 @@ def report_markdown() -> str:
                     f"{FIGURE_MARK}Hình {chapter}.{figures}. {image[1]}"]
             continue
         if line.startswith("|") and n + 1 < len(selected) and re.match(r"^\|\s*:?-", selected[n + 1]):
-            caption = next((c for key, c in TABLE_CAPTIONS.items() if line.startswith(key)), None)
+            caption = pending or next((c for key, c in TABLE_CAPTIONS.items() if line.startswith(key)), None)
             if caption is None:
                 raise ValueError(f"Thiếu chú thích cho bảng bắt đầu bằng: {line[:60]}")
-            tables += 1
+            tables, pending = tables + 1, None
             out += ["", f"{TABLE_MARK}Bảng {chapter}.{tables}. {caption}", ""]
         out.append(LINK.sub(plain_link, line))
+    if pending:
+        raise ValueError(f"Chú thích không đứng trước bảng nào: {pending}")
     return "\n".join(out) + "\n"
+
+
+def table_widths(markdown: str) -> list:
+    """Relative column widths per pipe table, read from the dash counts of its separator row.
+
+    Pandoc's GFM reader ignores them, so they are applied after conversion; tables whose
+    columns all have the same dash count return None and keep LibreOffice/Word autofit.
+    """
+    lines, widths = markdown.splitlines(), []
+    for i, line in enumerate(lines[:-1]):
+        if line.startswith("|") and re.match(r"^\|\s*:?-", lines[i + 1]) and not lines[i - 1].startswith("|"):
+            dashes = [cell.count("-") for cell in lines[i + 1].strip().strip("|").split("|")]
+            widths.append(dashes if len(set(dashes)) > 1 else None)
+    return widths
 
 
 def run_pandoc(markdown: str) -> Path:
@@ -224,7 +263,7 @@ def paragraph_style(doc, name, *, size=13.0, bold=None, color=None, align=None, 
         fmt.page_break_before = page_break
 
 
-def style_document(doc) -> None:
+def style_document(doc, widths: list) -> None:
     use_times(doc)
     justify, center, left = WD_ALIGN_PARAGRAPH.JUSTIFY, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.LEFT
     paragraph_style(doc, "Normal", align=justify)
@@ -240,20 +279,23 @@ def style_document(doc) -> None:
     for name in ("Heading 1", "Heading 2", "Heading 3"):
         if name in [s.name for s in doc.styles]:
             doc.styles[name].font.italic = False
-    if "Verbatim Char" in [s.name for s in doc.styles]:
-        doc.styles["Verbatim Char"].font.name = "Consolas"
-        doc.styles["Verbatim Char"].font.size = Pt(10.5)
-    for level, indent in ((1, 0), (2, 0.6)):
-        name = f"toc {level}"
+    for name in ("Verbatim Char", "Source Code"):
+        if name in [s.name for s in doc.styles]:
+            doc.styles[name].font.name = "Consolas"
+            doc.styles[name].font.size = Pt(10)
+    for name, indent, bold in (("toc 1", 0, True), ("toc 2", 0.6, False), (LIST_STYLE, 0, False)):
         style = (doc.styles[name] if name in [s.name for s in doc.styles]
                  else doc.styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH))
         style.base_style = doc.styles["Normal"]
-        style.font.name, style.font.size, style.font.bold = FONT, Pt(13), level == 1
+        style.font.name, style.font.size, style.font.bold = FONT, Pt(13), bold
         fmt = style.paragraph_format
         fmt.alignment, fmt.left_indent, fmt.first_line_indent = left, Cm(indent), Pt(0)
         fmt.space_before, fmt.space_after, fmt.line_spacing = Pt(0), Pt(4), 1.15
         fmt.tab_stops.add_tab_stop(TEXT_WIDTH, WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
+    if CAPTION_STYLE not in [s.name for s in doc.styles]:
+        doc.styles.add_style(CAPTION_STYLE, WD_STYLE_TYPE.PARAGRAPH).base_style = doc.styles["Normal"]
 
+    number_equations(doc)
     for p in doc.paragraphs:
         xml = p._p.xml
         if "<w:drawing" in xml:
@@ -269,8 +311,36 @@ def style_document(doc) -> None:
         for mark in (TABLE_MARK, FIGURE_MARK):
             if text.startswith(mark):
                 caption(p, text[len(mark):], keep_with_next=mark == TABLE_MARK)
-    for table in doc.tables:
-        style_table(table)
+    if len(widths) != len(doc.tables):
+        raise ValueError(f"{len(widths)} bảng trong Markdown nhưng Pandoc tạo {len(doc.tables)} bảng")
+    text_width_cm = TEXT_WIDTH.cm
+    for table, relative in zip(doc.tables, widths):
+        style_table(table, widths_cm=[text_width_cm * w / sum(relative) for w in relative] if relative else None)
+
+
+def number_equations(doc) -> None:
+    """Display equation + '@@EQNUM@@(x.y)' paragraph -> one line: tab, equation, right tab, number."""
+    paragraphs = doc.paragraphs
+    for equation, marker in zip(paragraphs, paragraphs[1:]):
+        if not marker.text.startswith(EQUATION_MARK):
+            continue
+        block = equation._p.find(MATH_NS + "oMathPara")
+        if block is None:
+            raise ValueError(f"Số công thức không đứng sau công thức nào: {marker.text}")
+        math = block.find(MATH_NS + "oMath")
+        block.addprevious(math)
+        block.getparent().remove(block)
+        for insert in (math.addprevious, math.addnext):
+            run = OxmlElement("w:r")
+            run.append(OxmlElement("w:tab"))
+            insert(run)
+        equation.add_run(marker.text[len(EQUATION_MARK):])
+        fmt = equation.paragraph_format
+        equation.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        fmt.first_line_indent, fmt.keep_together = Pt(0), True
+        fmt.tab_stops.add_tab_stop(int(TEXT_WIDTH / 2), WD_TAB_ALIGNMENT.CENTER)
+        fmt.tab_stops.add_tab_stop(int(TEXT_WIDTH), WD_TAB_ALIGNMENT.RIGHT)
+        marker._p.getparent().remove(marker._p)
 
 
 def scale_drawings(element) -> None:
@@ -286,6 +356,7 @@ def scale_drawings(element) -> None:
 
 
 def caption(paragraph, text: str, *, keep_with_next: bool) -> None:
+    paragraph.style = paragraph.part.document.styles[CAPTION_STYLE]  # LibreOffice finds captions by style
     for run in list(paragraph.runs):
         run._r.getparent().remove(run._r)
     label, _, rest = text.partition(". ")
@@ -512,14 +583,36 @@ def toc_field(doc):
     return p
 
 
-def build_front_matter(doc, before) -> None:
-    start = len(doc.element.body) - 1  # new blocks are added before the final sectPr
+def move_new_blocks(doc, start: int, before) -> None:
+    """Blocks appended since `start` (python-docx adds them before the final sectPr) move before `before`."""
+    for element in list(doc.element.body)[start:-1]:
+        before.addprevious(element)
+
+
+def build_front_matter(doc, preface, abstract) -> list:
+    """Thanks before the preface; task table, contents and lists between the preface and the abstract.
+
+    Returns the placeholder list paragraphs, in the same order as the captions in the document.
+    """
+    start = len(doc.element.body) - 1
     heading(doc, "LỜI CẢM ƠN")
     for text in ACKNOWLEDGEMENTS:
         body_paragraph(doc, text)
     body_paragraph(doc, "TP. Hồ Chí Minh, tháng 11 năm 2026", align=WD_ALIGN_PARAGRAPH.RIGHT,
                    italic=True, indent=False)
     body_paragraph(doc, "Nhóm sinh viên thực hiện", align=WD_ALIGN_PARAGRAPH.RIGHT, indent=False)
+    move_new_blocks(doc, start, preface)
+
+    start = len(doc.element.body) - 1
+    heading(doc, "NHẬN XÉT CỦA GIẢNG VIÊN HƯỚNG DẪN")
+    for _ in range(20):  # dotted lines for the advisor's handwritten comments
+        line = body_paragraph(doc, "\t", indent=False)
+        line.paragraph_format.tab_stops.add_tab_stop(TEXT_WIDTH, WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
+        line.paragraph_format.space_after = Pt(8)
+    body_paragraph(doc, "TP. Hồ Chí Minh, ngày ..... tháng ..... năm 2026", align=WD_ALIGN_PARAGRAPH.RIGHT,
+                   italic=True, indent=False)
+    body_paragraph(doc, "Giảng viên hướng dẫn", align=WD_ALIGN_PARAGRAPH.RIGHT, indent=False)
+    body_paragraph(doc, "(Ký và ghi rõ họ tên)", align=WD_ALIGN_PARAGRAPH.RIGHT, italic=True, indent=False)
 
     heading(doc, "BẢNG PHÂN CÔNG NHIỆM VỤ VÀ ĐÁNH GIÁ MỨC ĐỘ HOÀN THÀNH")
     caption(doc.add_paragraph(), "Bảng 0.1. Phân công nhiệm vụ và mức độ hoàn thành của thành viên",
@@ -535,10 +628,40 @@ def build_front_matter(doc, before) -> None:
     heading(doc, "DANH MỤC TỪ VIẾT TẮT")
     simple_table(doc, ["Từ viết tắt", "Ý nghĩa"], ABBREVIATIONS, [3.5, 12.49])
 
-    body = doc.element.body
-    created = list(body)[start:-1]
-    for element in created:
-        before.addprevious(element)
+    captions = [p.text for p in doc.paragraphs if p.style.name == CAPTION_STYLE]
+    captions.sort(key=lambda text: not text.startswith("Bảng 0."))  # front-matter table is still at the end
+    entries = []
+    for title, prefix in (("DANH MỤC BẢNG BIỂU", "Bảng "), ("DANH MỤC HÌNH ẢNH", "Hình ")):
+        heading(doc, title)
+        for text in captions:
+            if text.startswith(prefix):
+                entries.append(doc.add_paragraph(f"{text}\t00", style=LIST_STYLE))
+    move_new_blocks(doc, start, abstract)
+    return entries
+
+
+def roman(number: int) -> str:
+    values = ((10, "x"), (9, "ix"), (5, "v"), (4, "iv"), (1, "i"))
+    out = ""
+    for value, symbol in values:
+        while number >= value:
+            out, number = out + symbol, number - value
+    return out
+
+
+def caption_pages(layout: dict) -> dict[str, str]:
+    """Printed page label of every caption: roman numerals before chapter 1, then 1, 2, 3..."""
+    front, body = layout["anchors"]["front"], layout["anchors"]["body"]
+    return {c["text"]: str(c["page"] - body + 1) if c["page"] >= body else roman(c["page"] - front + 1)
+            for c in layout["captions"]}
+
+
+def fill_lists(entries: list, pages: dict[str, str]) -> None:
+    for paragraph in entries:
+        text = paragraph.text.rsplit("\t", 1)[0]
+        if text not in pages:
+            raise ValueError(f"LibreOffice không thấy chú thích: {text[:60]}")
+        paragraph.runs[-1].text = paragraph.runs[-1].text.rsplit("\t", 1)[0] + "\t" + pages[text]
 
 
 def fill_toc(doc, entries: list[tuple[str, str]]) -> None:
@@ -574,8 +697,8 @@ def fill_toc(doc, entries: list[tuple[str, str]]) -> None:
     field._p.getparent().remove(field._p)
 
 
-def read_toc(path: Path) -> list[tuple[str, str]]:
-    texts = json.loads(path.read_text(encoding="utf-8"))
+def read_toc(layout: dict) -> list[tuple[str, str]]:
+    texts = layout["indexes"]
     if len(texts) != 1:
         raise ValueError(f"Cần đúng một mục lục, LibreOffice trả về {len(texts)}")
     entries = []
@@ -586,18 +709,29 @@ def read_toc(path: Path) -> list[tuple[str, str]]:
     return entries
 
 
+def libreoffice(source: Path, pdf: Path, name: str) -> dict:
+    """Lay the document out with LibreOffice, export `pdf`, and return pages of headings and captions."""
+    layout_json = BUILD / f"{name}_layout.json"
+    subprocess.run([str(LO_PYTHON), str(Path(__file__).with_name("lo_update_export.py")), str(source),
+                    str(pdf), str(layout_json), str(BUILD / "lo_profile"), CAPTION_STYLE], check=True)
+    return json.loads(layout_json.read_text(encoding="utf-8"))
+
+
 def main() -> None:
     BUILD.mkdir(parents=True, exist_ok=True)
     OUTPUT_DOCX.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PDF.parent.mkdir(parents=True, exist_ok=True)
-    doc = Document(run_pandoc(report_markdown()))
-    style_document(doc)
+    markdown = report_markdown()
+    doc = Document(run_pandoc(markdown))
+    style_document(doc, table_widths(markdown))
     configure_body_section(doc)
     body = doc.element.body
     first = body[0]
-    chapter_one = next(p._p for p in doc.paragraphs if p.text.startswith("CHƯƠNG 1."))
+    headings = {p.text.strip(): p._p for p in doc.paragraphs if p.style.name == "Heading 1"}
+    chapter_one = next(e for t, e in headings.items() if t.startswith("CHƯƠNG 1."))
     chapter_one.addprevious(section_break(doc, "lowerRoman"))
-    build_front_matter(doc, first)
+    abstract = headings["TÓM TẮT ĐỀ TÀI"]
+    entries = build_front_matter(doc, headings.get("LỜI NÓI ĐẦU", first), abstract)
     insert_cover(doc, body[0])
     doc.core_properties.title = "UFM-Rec: Hệ khuyến nghị sản phẩm cold-start đa phương thức"
     doc.core_properties.subject = "Báo cáo đồ án môn Học máy ứng dụng"
@@ -605,11 +739,14 @@ def main() -> None:
     stage = BUILD / "stage.docx"
     doc.save(stage)
 
-    toc_json = BUILD / "toc.json"
-    subprocess.run([str(LO_PYTHON), str(Path(__file__).with_name("lo_update_export.py")), str(stage),
-                    str(OUTPUT_PDF), str(toc_json), str(BUILD / "lo_profile")], check=True)
-    fill_toc(doc, read_toc(toc_json))
+    # Pass 1 measures pages; pass 2 lays out the DOCX that already carries those numbers.
+    measured = libreoffice(stage, BUILD / "stage.pdf", "pass1")
+    fill_toc(doc, read_toc(measured))
+    fill_lists(entries, caption_pages(measured))
     doc.save(OUTPUT_DOCX)
+    final = libreoffice(OUTPUT_DOCX, OUTPUT_PDF, "pass2")
+    if read_toc(final) != read_toc(measured) or caption_pages(final) != caption_pages(measured):
+        raise RuntimeError("Số trang thay đổi giữa hai lượt dàn trang; kiểm tra lại danh mục.")
     print(OUTPUT_DOCX)
     print(OUTPUT_PDF)
 

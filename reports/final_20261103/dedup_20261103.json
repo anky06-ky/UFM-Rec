@@ -1,0 +1,198 @@
+{
+ "observed_at_utc": "2026-11-03T08:52:37+00:00",
+ "action": "sent to Windows Recycle Bin (restorable until emptied)",
+ "rule": "removed only when an identical copy (same SHA-256, or same size+CRC inside its ZIP) is kept elsewhere, or the item is a temp file/installer already extracted",
+ "kept_on_purpose": [
+  "data/processed/toys_games_full_temporal/models/bpr_mf*/graph_report.json: per-seed run records, identical because the graph is the same",
+  "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/reevaluate_ufm_checkpoints.py: differs from current code",
+  "D:/Nam3_ki1/UFM-Rec_Backups/restored_complete_20261028 and the ZIP bundles: complete backups used by Start_UFM_From_Backup.cmd and Colab"
+ ],
+ "removed_bytes": 1674111820,
+ "items": [
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/raw_meta_Toys_and_Games_20261028",
+   "bytes": 972669252,
+   "kept_copy": "data/raw/amazon_reviews_2023/raw_meta_Toys_and_Games (5 parquet cùng SHA; tải lại được bằng scripts/download_toys_metadata.py)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/restored_delta_20261028",
+   "bytes": 171240067,
+   "kept_copy": "D:/Nam3_ki1/UFM-Rec_Backups/continuation_delta_20261028/continuation_delta_20261028.zip + project + restored_complete (137/137 file khớp)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/restored_local_source_final_20261028",
+   "bytes": 10115397,
+   "kept_copy": "D:/Nam3_ki1/UFM-Rec_Backups/local_source_final_20261028/bundle_000.zip + project + restored_complete (259/259 file khớp)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/bundle_005",
+   "bytes": 14467637,
+   "kept_copy": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/bundle_005.zip + restored_complete (3/3 file khớp)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/slide_build_temp",
+   "bytes": 2095265,
+   "kept_copy": "thư mục tạm khi dựng slide (dữ liệu biểu đồ tạm)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/slide_drafts",
+   "bytes": 80001,
+   "kept_copy": "bản nháp slide trước khi sửa ảnh; bản 29/10 ở output/history/presentation"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/document_runtime/LibreOffice_26.8.1.1_Machine_X64_msi_en-US.msi",
+   "bytes": 374870016,
+   "kept_copy": "đã giải nén ở document_runtime/lo_extracted"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/document_runtime/Pandoc_3.13_User_X64_wix_en-US.msi",
+   "bytes": 42700800,
+   "kept_copy": "đã giải nén ở document_runtime/pandoc_extracted"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/document_runtime/Poppler_25.07.0-0_X64_portable_en-US.zip",
+   "bytes": 16037650,
+   "kept_copy": "đã giải nén ở document_runtime/poppler_extracted"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/document_runtime/extract.log",
+   "bytes": 34984124,
+   "kept_copy": "log cài đặt MSI (rác)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/colab_training_inputs_20261029/document_runtime/pandoc_extract.log",
+   "bytes": 81690,
+   "kept_copy": "log cài đặt MSI (rác)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/partial_restore_20261028.log",
+   "bytes": 0,
+   "kept_copy": "file rỗng"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/git_lost_found_20261103/Bao_Cao_Do_An_UFM_Rec_Nhom_4_20261027.docx",
+   "bytes": 2297035,
+   "kept_copy": "output/history/docx/Bao_Cao_Do_An_UFM_Rec_Nhom_4_20261027.docx"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/git_lost_found_20261103/Bao_cao_tien_do_UFM_Rec_Nhom_4_2026_10_27.pdf",
+   "bytes": 932925,
+   "kept_copy": "output/history/pdf/Bao_cao_tien_do_UFM_Rec_Nhom_4_2026_10_27.pdf"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/git_lost_found_20261103/Bao_Cao_Do_An_orphan_20261026.docx",
+   "bytes": 1182288,
+   "kept_copy": "git_lost_found_20261103/blobs/516d4e5fb1d2e5b25ad97ff2a73606209bd6f060.bin"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/git_lost_found_20261103/Bia_mau_orphan_20261027.docx",
+   "bytes": 1139757,
+   "kept_copy": "git_lost_found_20261103/blobs/a40d39a737ad1fdce1c9e87d21e20c5042cd1349.bin"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/evaluation_v2/samples_test.npz",
+   "bytes": 12408599,
+   "kept_copy": "restored_complete_20261028/.../evaluation_v2/samples_test.npz (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/evaluation_v2/samples_validation.npz",
+   "bytes": 12355653,
+   "kept_copy": "restored_complete_20261028/.../evaluation_v2/samples_validation.npz (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/evaluation_v2/samples_test.csv.gz",
+   "bytes": 2117629,
+   "kept_copy": "restored_complete_20261028/.../evaluation_v2/samples_test.csv.gz (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/evaluation_v2/samples_validation.csv.gz",
+   "bytes": 2110935,
+   "kept_copy": "restored_complete_20261028/.../evaluation_v2/samples_validation.csv.gz (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/evaluation_v2/reeval_ufm_full_v1_v2.json",
+   "bytes": 11480,
+   "kept_copy": "restored_complete_20261028/.../evaluation_v2/reeval_ufm_full_v1_v2.json (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/evaluation_v2/candidate_validity_v2.json",
+   "bytes": 4699,
+   "kept_copy": "restored_complete_20261028/.../evaluation_v2/candidate_validity_v2.json (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/fix_1_15_evidence_20261027.zip",
+   "bytes": 80289,
+   "kept_copy": "D:/Nam3_ki1/UFM-Rec_Backups/fitlab01_20261028/auxiliary/probe_evidence.zip (cùng SHA)"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/verify/ufm_model.py",
+   "bytes": 19286,
+   "kept_copy": "restored_complete_20261028/audit_v2/fix_1_15_workspace_20261027/src/ufm_model.py"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/verify/reevaluate_ufm_checkpoints.py",
+   "bytes": 7030,
+   "kept_copy": "workspace_cleanup_20261028/tmp/fix_1_15_backup/src/reevaluate_ufm_checkpoints.py"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/transfer/verify/evaluate_content_baseline.py",
+   "bytes": 6597,
+   "kept_copy": "workspace_cleanup_20261028/tmp/fix_1_15_backup/src/evaluate_content_baseline.py"
+  },
+  {
+   "path": "D:/Nam3_ki1/UFM-Rec_Backups/workspace_cleanup_20261028/tmp/fit_temperature_v2_before_validation_only.py",
+   "bytes": 5411,
+   "kept_copy": "restored_complete_20261028/audit_v2/fix_1_15_workspace_20261027/src/fit_temperature_v2.py"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/scripts/audit_modality_coverage.py",
+   "bytes": 3877,
+   "kept_copy": "scripts/audit_modality_coverage.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/scripts/audit_ufm_workspace.py",
+   "bytes": 8058,
+   "kept_copy": "scripts/audit_ufm_workspace.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/scripts/lock_evaluation_manifest.py",
+   "bytes": 3638,
+   "kept_copy": "scripts/lock_evaluation_manifest.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/build_recommender_samples.py",
+   "bytes": 13040,
+   "kept_copy": "src/build_recommender_samples.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/evaluate_content_baseline.py",
+   "bytes": 9023,
+   "kept_copy": "src/evaluate_content_baseline.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/evaluation_ledger.py",
+   "bytes": 4974,
+   "kept_copy": "src/evaluation_ledger.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/run_final_test.py",
+   "bytes": 12541,
+   "kept_copy": "src/run_final_test.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/temporal_positives.py",
+   "bytes": 1248,
+   "kept_copy": "src/temporal_positives.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/executed_source/src/test_candidate_validity.py",
+   "bytes": 20945,
+   "kept_copy": "src/test_candidate_validity.py (cùng SHA; mã băm ghi trong reports/fix_1_15_20261027/source_manifest.json)"
+  },
+  {
+   "path": "reports/fix_1_15_20261027/fitlab01_finish1/current_source_manifest.json",
+   "bytes": 12964,
+   "kept_copy": "reports/fix_1_15_20261027/source_manifest.json (cùng SHA 338208222fb5…)"
+  }
+ ]
+}

@@ -4,7 +4,7 @@
 
 ## Bộ tài liệu hiện hành
 
-- [Báo cáo nguồn](final_report.md) → [Word theo mẫu trường](../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf); dựng bằng `scripts/build_school_report_docx.py`.
+- [Báo cáo nguồn](final_report.md) → [Word 60 trang theo mẫu trường](../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf). Báo cáo tổng hợp nội dung của các tài liệu `.md` trong thư mục này; dựng bằng `scripts/build_report_figures.py` rồi `scripts/build_school_report_docx.py`. Các tệp `.md` là nguồn để sửa; bản đọc và nộp là tệp Word/PDF.
 - [Nguồn 14 slide](presentation_slides.md) → [PPTX bảo vệ](../output/presentation/UFM_Rec_Bao_Ve_20261103.pptx).
 - [Kịch bản bảo vệ và câu hỏi](defense_guide.md), [hướng dẫn demo](demo.md).
 - [Giao thức](protocol_current.md), [tin nhắn đề xuất metric/holdout gửi giảng viên ngày 30/10](trao_doi_gvhd_2026_10_30.md).
