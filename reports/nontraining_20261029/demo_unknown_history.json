@@ -1,0 +1,16 @@
+{
+  "observed_at_utc": "2026-10-29T11:16:37.568359+00:00",
+  "name": "all_unknown_history",
+  "request": {
+    "history": [
+      "UNKNOWN_ACCEPTANCE_20261029"
+    ],
+    "k": 5,
+    "regime": "all"
+  },
+  "http_status": 400,
+  "response": {
+    "error": "Unknown ASIN: UNKNOWN_ACCEPTANCE_20261029"
+  },
+  "interpretation": "Unknown history is rejected by the public API; it is not a no-history inference result."
+}

@@ -22,4 +22,4 @@ Workspace gốc `/home/coder/iDragonCloud/DA_AI` giữ dataset, checkpoint và b
 - Checkpoint đã xác minh: `runs/ufm_full_v1/best.pt` trong workspace gốc.
 - Các lệnh audit/baseline của bản mã mới nhận `--data` và `--evaluation`; truyền đường dẫn tuyệt đối tới dữ liệu cần dùng. Không giả định thư mục dữ liệu mặc định của bản mã mới đã chứa benchmark.
 
-Xem [báo cáo sửa](../reports/fix_1_15_20261027/README.md) và [nội dung trao đổi với giảng viên](trao_doi_gvhd_2026_10_27.md). Chưa có kết quả mô hình trên validation v3; chưa push GitHub.
+Xem [báo cáo sửa](../../reports/fix_1_15_20261027/README.md) và [nội dung trao đổi với giảng viên](trao_doi_gvhd_2026_10_27.md). Chưa có kết quả mô hình trên validation v3; chưa push GitHub.

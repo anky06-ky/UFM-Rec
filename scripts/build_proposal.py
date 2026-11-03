@@ -195,11 +195,12 @@ def main():
         canvas.setFillColor(MUTED)
         canvas.drawString(50, 27, 'UFM-Rec | Proposal 2.0 | 02/10/2026')
         canvas.drawRightString(A4[0]-50, 27, str(doc.page))
-    SimpleDocTemplate(str(OUT/'pdf/proposal.pdf'), pagesize=A4, leftMargin=50, rightMargin=50,
+    (OUT/'history/pdf').mkdir(parents=True, exist_ok=True)
+    SimpleDocTemplate(str(OUT/'history/pdf/proposal.pdf'), pagesize=A4, leftMargin=50, rightMargin=50,
                       topMargin=43, bottomMargin=45).build(story, onFirstPage=footer, onLaterPages=footer)
     css = 'body{font:16px/1.65 Arial,sans-serif;color:#182e35;background:#eaf1ee;margin:0}section{max-width:850px;margin:30px auto;padding:45px;background:white}h1{font-size:42px;color:black}h2{font-size:27px}h3{font-size:19px}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:10px;vertical-align:top;border-bottom:1px solid #dae5df}tr:first-child{background:#dcebe6;font-weight:bold}tr:nth-child(even){background:#eff5f3}img{width:100%}figure{margin:20px 0}figcaption{font-size:13px;color:#586b73}a{color:#177566}@media print{body{background:white}section{margin:0;padding:0;break-after:page}}@media(max-width:600px){section{padding:20px;margin:10px}table{font-size:12px}}'
     (ROOT/'docs/proposal.html').write_text('<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UFM-Rec Proposal 2.0</title><style>'+css+'</style><body>'+''.join(web)+'</body></html>', encoding='utf-8')
-    print('Created output/pdf/proposal.pdf, docs/proposal.html and 5 vector figures.')
+    print('Created historical output/history/pdf/proposal.pdf, docs/proposal.html and 5 vector figures.')
 
 
 if __name__ == '__main__':

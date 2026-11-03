@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-29",
+  "artifact_scope": "current_state_not_final_submission",
+  "files": {
+    "docx": {
+      "path": "output/docx/UFM_Rec_Bao_Cao_Hien_Trang_20261029.docx",
+      "bytes": 167574,
+      "sha256": "434c0a23e781309dd75171e8fdf1aa1e9bcdb55ce1158f356dde27104016643c",
+      "native_word_equations": 27,
+      "rendered_pages_reviewed": 12
+    },
+    "pdf": {
+      "path": "output/pdf/UFM_Rec_Bao_Cao_Hien_Trang_20261029.pdf",
+      "bytes": 462542,
+      "sha256": "ccda2b7c12daa6034cd9dd5db89b3ca8cc8b991e83715d806569ecf869285596",
+      "rendered_pages_reviewed": 11
+    },
+    "pptx": {
+      "path": "output/presentation/UFM_Rec_Bao_Ve_Hien_Trang_20261029.pptx",
+      "bytes": 965934,
+      "sha256": "6585d455f3f3f4f7b20ac5b837eb37cf5e753a5bac37116f8946a1534ae5a31c",
+      "slides": 14,
+      "rendered_slides_reviewed": 14
+    }
+  }
+}

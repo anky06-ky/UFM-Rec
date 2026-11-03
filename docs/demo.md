@@ -1,4 +1,16 @@
-# Cập nhật bản sửa proxy ngày 02/10/2026
+# Nghiệm thu demo Windows ngày 29/10/2026
+
+Backend **UFM Rec** đã được khởi động lại từ checkpoint epoch 9 trong bản backup đầy đủ: catalog **767.045 sản phẩm**, train counts thật, archived training source và CLIP cache đúng provenance. [Sáu ca API](../reports/nontraining_20261029/demo_api_verification.json) đạt: không history, có history và bốn regime. [History toàn unknown](../reports/nontraining_20261029/demo_unknown_history.json) trả HTTP 400 `Unknown ASIN` đúng kiểm tra đầu vào; không gọi đó là fallback gợi ý.
+
+Trên máy hiện tại có thể mở `D:\Nam3_ki1\UFM-Rec_Backups\Start_UFM_From_Backup.cmd`; kiểm tra URL launcher in ra và nhãn **UFM Rec**. Launcher/bản backup nằm ngoài Git. Chế độ content mẫu 30 sản phẩm bên dưới là chế độ riêng với counts mô phỏng. Lượt nghiệm thu API này dùng cổng 8773 riêng; không coi URL của một phiên đã kiểm tra là dịch vụ luôn sẵn sàng.
+
+UI đã được bấm thử bằng Chrome headless trên Windows với backend UFM thật: [4/4 ca UI](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json) đạt gồm request zero-shot, tải [JSON](../reports/nontraining_20261029/demo_ui_downloads/ufm-rec-demo.json) khớp request/model/results, ảnh bị chặn vẫn có placeholder và mất mạng hiện lỗi. Có [ảnh màn hình zero-shot](../reports/nontraining_20261029/demo_ui_zero_shot_20261029.png) và [ảnh màn hình lỗi mạng](../reports/nontraining_20261029/demo_ui_offline_20261029.png) để dự phòng. Bằng chứng tự động này cần được thử lại trên chính máy/phòng bảo vệ; nhóm chưa diễn tập hoặc quay video. [Kịch bản bảo vệ](defense_guide.md) và [danh sách còn thiếu](../reports/nontraining_20261029/status.md) ghi rõ các bước còn lại. Benchmark Windows cũ: p50 21,25 giây, p95 26,35 giây trên 10 request sau 2 warm-up; thời gian từng ca kiểm tra mới không thay benchmark.
+
+Phần FITLAB/proxy dưới đây là lịch sử có ngày tháng. Lỗi mount/checkpoint thiếu trong bản khôi phục cũ không mô tả bản backup Windows đầy đủ hiện tại.
+
+---
+
+# Lịch sử bản sửa proxy ngày 02/10/2026
 
 <!-- current-evidence-20261028 -->
 > Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](../reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.

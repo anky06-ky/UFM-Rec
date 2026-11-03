@@ -1,0 +1,15 @@
+{
+  "observed_at_utc": "2026-10-29T15:57:22.483321+00:00",
+  "command": [
+    "D:\\Program Files\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/",
+    "-q",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "exit_code": 0,
+  "context": "after workspace cleanup; bytecode/cache generation disabled"
+}

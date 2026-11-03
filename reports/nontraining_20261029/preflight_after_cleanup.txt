@@ -1,0 +1,16 @@
+{"preflight": "passed", "locked_inputs": 9, "jobs": 15, "mode": "dry_run", "output_root": "D:\\Nam3_ki1\\UFM-Rec\\runs\\ufm_followup_20261028", "report_root": "D:\\Nam3_ki1\\UFM-Rec\\reports\\ufm_followup_20261028"}
+controls: full seed=42
+controls: full seed=7
+controls: full seed=2026
+controls: semantic_only seed=42
+controls: semantic_only seed=7
+controls: semantic_only seed=2026
+controls: fixed_fusion seed=42
+controls: fixed_fusion seed=7
+controls: fixed_fusion seed=2026
+count_aware: count_aware_fusion seed=42
+count_aware: count_aware_fusion seed=7
+count_aware: count_aware_fusion seed=2026
+adaptive_dropout: adaptive_dropout seed=42
+adaptive_dropout: adaptive_dropout seed=7
+adaptive_dropout: adaptive_dropout seed=2026

@@ -1,0 +1,63 @@
+{
+  "pdf": "output/pdf/UFM_Rec_Bao_Cao_Hien_Trang_20261029.pdf",
+  "sha256": "93db9b310e1ca659a23864e805fb7fd9b53a31cb1c903277e5f253514dda984d",
+  "pages": 11,
+  "page_checks": [
+    {
+      "page": 1,
+      "characters": 786,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 2,
+      "characters": 2755,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 3,
+      "characters": 2602,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 4,
+      "characters": 1869,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 5,
+      "characters": 3203,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 6,
+      "characters": 1189,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 7,
+      "characters": 1884,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 8,
+      "characters": 2645,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 9,
+      "characters": 2724,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 10,
+      "characters": 2643,
+      "out_of_bounds": 0
+    },
+    {
+      "page": 11,
+      "characters": 1724,
+      "out_of_bounds": 0
+    }
+  ],
+  "visual_review": "All 11 rendered pages inspected; final changed pages re-inspected. No clipping or overlapping content observed."
+}

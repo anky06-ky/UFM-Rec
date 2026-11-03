@@ -41,7 +41,7 @@ GPU Quadro RTX 6000: tổng 24.576 MiB, tại một lần lấy mẫu dùng 3.49
 
 ### 4. Sơ đồ pipeline thực tế
 
-![Sơ đồ pipeline UFM-Rec theo trạng thái 22:23](../output/figures/UFM_pipeline_2026_09_28_2223.png)
+![Sơ đồ pipeline UFM-Rec theo trạng thái 22:23](../../output/figures/UFM_pipeline_2026_09_28_2223.png)
 
 Hình 1. Xanh: đã hoàn tất; vàng: đang chạy; xám: đang chờ hoặc chưa thực nghiệm. Sơ đồ thể hiện dữ liệu và các điều kiện chuyển giai đoạn, không tuyên bố tất cả khối đã hoàn tất. Demo TF-IDF là sản phẩm riêng đã kiểm tra trước đó; demo UFM chờ checkpoint production.
 
@@ -65,7 +65,7 @@ Lịch sử positive chỉ trước mục tiêu; cùng timestamp không thấy n
 
 ### 6. Semantic + Collaborative + Dual uncertainty + UGAF
 
-![Kiến trúc UFM-Rec đã triển khai trong mã](../output/figures/UFM_architecture_2026_09_28_2223.png)
+![Kiến trúc UFM-Rec đã triển khai trong mã](../../output/figures/UFM_architecture_2026_09_28_2223.png)
 
 Hình 2. Kiến trúc trong src/ufm_model.py, không phải mô hình đã train xong. Foundation encoder đóng băng; adapter, nhánh tuần tự, uncertainty, alignment và scoring được học bằng train. Missing-modality và cold-ID masks quyết định nhánh nào khả dụng.
 

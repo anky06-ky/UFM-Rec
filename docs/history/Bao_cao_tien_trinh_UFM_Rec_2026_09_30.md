@@ -73,7 +73,7 @@ Tái tạo score TF-IDF của 40.000 validation cases; toàn bộ target ranks k
 | NLL | 4.750213 | 4.513757 |
 | Brier multiclass | 0.999966 | 0.983381 |
 
-![Reliability diagram](../output/figures/calibration_validation_20260930.svg)
+![Reliability diagram](../../output/figures/calibration_validation_20260930.svg)
 
 Temperature dương không đổi thứ tự ranking; nó đổi phân phối softmax trên 100 candidates. Các trường hợp đồng hạng top-1 dùng xác suất đúng kỳ vọng với tie-break đều để không thiên vị cột positive.
 
@@ -92,7 +92,7 @@ Temperature dương không đổi thứ tự ranking; nó đổi phân phối so
 
 Mở Start_Demo.cmd tại thư mục dự án hoặc truy cập http://127.0.0.1:8765 khi server đang chạy. Demo dùng TF-IDF trên dữ liệu thật; backend và giới hạn được ghi ngay trên giao diện.
 
-![Demo TF-IDF, Top 5 zero-shot từ lịch sử LEGO](../output/demo/UFM_Rec_demo_2026_09_30.png)
+![Demo TF-IDF, Top 5 zero-shot từ lịch sử LEGO](../../output/demo/UFM_Rec_demo_2026_09_30.png)
 
 Tìm LEGO → thêm sản phẩm → chọn Top K → tìm gợi ý → lọc zero-shot → xuất JSON. Có xóa lịch sử, chống thêm trùng, đánh dấu kết quả cũ khi thay lựa chọn, fallback khi ảnh lỗi và popularity khi lịch sử rỗng. File JSON tải qua UI đã được kiểm tra: đúng 5 kết quả zero-shot, không chứa ASIN lịch sử.
 

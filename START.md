@@ -1,32 +1,10 @@
 # Bắt đầu
 
-<!-- current-evidence-20261028 -->
-> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
-<!-- /current-evidence-20261028 -->
+> **Cập nhật 03/11/2026:** nhóm chốt đồ án với kết quả hiện có. Bộ nộp: [Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf), [PPTX](output/presentation/UFM_Rec_Bao_Ve_20261103.pptx); [hồ sơ hoàn thiện và việc còn lại](reports/final_20261103/README.md).
 
+1. **Trước khi nộp:** điền họ tên, MSSV và nhiệm vụ của Hân vào `TEAM` trong `scripts/build_school_report_docx.py`, chạy `python scripts/build_school_report_docx.py`, rồi sửa tên Hân trên slide 1. Rà lại Word/PDF/PPTX và phân công người trình bày theo [kịch bản bảo vệ](docs/defense_guide.md).
+2. **Demo local:** mở [Start_Demo.cmd](Start_Demo.cmd). Launcher tự chọn UFM khi tìm thấy checkpoint hoàn tất, hoặc content khi chưa có checkpoint. Chọn rõ bằng `Start_Demo.cmd --backend ufm` hoặc `Start_Demo.cmd --backend content`; kiểm tra backend hiển thị. Bản sao đầy đủ ngoài repo có launcher `D:\Nam3_ki1\UFM-Rec_Backups\Start_UFM_From_Backup.cmd`. [Hướng dẫn demo](docs/demo.md) có bằng chứng UFM trên catalog 767.045 sản phẩm.
+3. **Kết quả và giới hạn:** [báo cáo nguồn](docs/final_report.md), [kết quả validation v3](reports/continuation_20261028/README.md), [giao thức](docs/protocol_current.md). Cold macro NDCG@10 v3: TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056. Test v2 đã được xem; validation v3 không phải holdout độc lập. Không ghép số v1/v2/v3 vào cùng bảng.
+4. **Khi muốn train tiếp (hướng phát triển):** làm theo [hướng dẫn Colab](docs/colab.md) với bộ `toys_games_full_temporal`; notebook cũ trỏ `toys_games_70_15_15` không thuộc vòng đã khóa. Trên FITLAB theo [runbook](docs/gpu_followup_runbook.md) và chạy `python3 status.py` để biết tiến trình thực tế.
 
-1. Đọc [bằng chứng cập nhật 27/10](reports/ufm_evaluation_v2_20261027/README.md) trước khi dùng số liệu: UFM v2 đã có test, khác bộ mẫu lịch sử. Sau đó đọc [tiến độ](reports/progress.md) và [proposal mới](output/pdf/proposal.pdf).
-2. Demo local: mở [Start_Demo.cmd](Start_Demo.cmd); backend content, tự tạo catalog mẫu nếu thiếu dữ liệu. Đây không phải demo checkpoint UFM.
-3. FITLAB: chạy `python3 status.py` tại thư mục `DA_AI` để đọc heartbeat/PID.
-   Snapshot 12:28 ngày 24/10 báo CLIP 0/767.045; chưa có queue/checkpoint.
-4. Môi trường CUDA đã sẵn sàng tại `/home/coder/.venv-ufm/bin/python`;
-   `torch.cuda.is_available()` là True. Chưa chạy campaign vì catalog metadata và
-   URL ảnh còn thiếu. Năm shard metadata public đã được tải và kiểm checksum ở local;
-   xem [bước tiếp theo](docs/next.md) để chuyển đầu vào sang FITLAB và dựng catalog.
-
-Kết quả CLIP/UFM và demo API trong báo cáo là kết quả lịch sử. Workspace FITLAB-02
-được khôi phục từ archive ngày 24/09 và source mới đã đồng bộ; chưa có cache
-CLIP, queue, checkpoint hoặc metadata catalog cần cho backend UFM. Dùng
-`Start_Demo.cmd` để mở demo local.
-
-| Cần tìm | Đường dẫn |
-| --- | --- |
-| Đề xuất nghiên cứu | [docs/proposal.md](docs/proposal.md) |
-| Việc tiếp theo | [docs/next.md](docs/next.md) |
-| Demo và proxy | [docs/demo.md](docs/demo.md) |
-| Training / CLIP | [docs/train.md](docs/train.md) · [docs/foundation.md](docs/foundation.md) |
-| Kết quả / lịch sử | [reports/README.md](reports/README.md) |
-| Bằng chứng mới | [evaluation_v2](reports/ufm_evaluation_v2_20261027/README.md) |
-
-Dataset, checkpoint, môi trường Python và model cache được giữ nguyên. File tạm
-chuyển vào archive có manifest; dữ liệu/model lớn không đẩy lên GitHub.
+Dữ liệu/model lớn được lưu ngoài Git, kèm [hướng dẫn khôi phục và bằng chứng SHA](reports/continuation_20261028/backup_handoff.md). Các trạng thái 28–29/10 nằm trong [checklist 29/10](reports/project_readiness_20261029.md) và [hồ sơ ngoài train 29/10](reports/nontraining_20261029/status.md).

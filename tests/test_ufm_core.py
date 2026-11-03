@@ -167,7 +167,7 @@ class UFMCoreTests(unittest.TestCase):
         if cold_mask.any():
             u_full_cold = out_full["uncertainty"][cold_mask][..., 0].mean()
             u_caf_cold = out_caf["uncertainty"][cold_mask][..., 0].mean()
-            self.assertGreater(float(u_caf_cold), float(u_full_cold),
+            self.assertGreater(u_caf_cold.item(), u_full_cold.item(),
                 "CF uncertainty for cold items should be higher with count_aware_fusion.")
         self.assertTrue(torch.isfinite(out_caf["scores"]).all())
 
@@ -189,7 +189,7 @@ class UFMCoreTests(unittest.TestCase):
     def test_no_uncertainty_ablation_does_not_train_uncertainty_heads(self):
         model = UFMRec(replace(self.config, variant="no_uncertainty")).train()
         result = ufm_loss(self.predict(model), torch.ones(3, 2, dtype=torch.bool))
-        self.assertEqual(float(result["unc"]), 0.)
+        self.assertEqual(result["unc"].item(), 0.)
         result["total"].backward()
         self.assertTrue(all(p.grad is None for block in (model.cf_uncertainty, model.sem_uncertainty) for p in block.parameters()))
         self.assertTrue(any(p.grad is not None and p.grad.abs().sum() > 0 for p in model.learned_gate.parameters()))
