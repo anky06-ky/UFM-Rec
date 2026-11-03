@@ -15,7 +15,7 @@ Hệ khuyến nghị sản phẩm dùng lịch sử hành vi, ảnh và tên/mô
 
 Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed lịch sử 42. Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only CLIP 0,190036; UFM full 0,182056; popularity 0,042527**. Full chưa vượt hai đối chứng nội dung; chênh lệch lớn nhất ở nhóm 1–5 tương tác. Tám checkpoint UFM và hai baseline dùng cùng candidate hash; [JSON đối chiếu](reports/nontraining_20261029/evidence.json) truy được nguồn.
 
-Checkpoint chọn bằng validation v1; v3 dùng lại quần thể validation liên quan nên không phải holdout độc lập. Test v2 đã được xem. Sampling theo regime target và thống kê cuối split có tính hồi cứu; kết quả không tương đương full-catalog hoặc online. [Giao thức](docs/protocol_current.md) và [ledger test](reports/test_evaluation_ledger.json) ghi giới hạn.
+Checkpoint chọn bằng validation v1; v3 dùng lại quần thể validation liên quan nên không phải holdout độc lập. Test v2 đã được xem. Sampling theo regime target và thống kê cuối split có tính hồi cứu; kết quả không tương đương full-catalog hoặc online. [Giao thức](docs/history/protocol_current.md) và [ledger test](reports/test_evaluation_ledger.json) ghi giới hạn.
 
 Demo UFM trên Windows dùng checkpoint epoch 9, catalog 767.045 sản phẩm và counts thật: [API 6/6 ca](reports/nontraining_20261029/demo_api_verification.json), [UI tự động 4/4 ca](reports/nontraining_20261029/demo_ui_end_to_end_20261029.json). Kiểm thử local ngày 03/11 đạt **120 passed, 3 skipped, 10 subtests passed**.
 
@@ -36,15 +36,15 @@ Lệnh dựng báo cáo không train. Nó cần python-docx và bộ Pandoc/Libr
 
 ## Hướng phát triển
 
-[Manifest 15 run](configs/multimodal_followup_20261028.json) đã khóa năm biến thể × ba seed (42, 7, 2026), gồm hai can thiệp `count_aware_fusion` và `adaptive_dropout`. [Hướng dẫn Colab](docs/colab.md) dùng notebook trình duyệt (T4 mặc định, L4 bằng `GPU_TYPE`) hoặc VS Code; notebook lưu và resume theo đoạn. [Runbook GPU](docs/gpu_followup_runbook.md) và [bước tiếp theo](docs/next.md) ghi trình tự. [Đề xuất metric/holdout gửi giảng viên ngày 30/10](docs/trao_doi_gvhd_2026_10_30.md) áp dụng cho vòng này.
+[Manifest 15 run](configs/multimodal_followup_20261028.json) đã khóa năm biến thể × ba seed (42, 7, 2026), gồm hai can thiệp `count_aware_fusion` và `adaptive_dropout`. [Hướng dẫn Colab](docs/colab.md) dùng notebook trình duyệt (T4 mặc định, L4 bằng `GPU_TYPE`) hoặc VS Code; notebook lưu và resume theo đoạn. [Runbook GPU](docs/gpu_followup_runbook.md) và [kế hoạch 28–29/10](docs/history/next.md) ghi trình tự. [Đề xuất metric/holdout gửi giảng viên ngày 30/10](docs/history/trao_doi_gvhd_2026_10_30.md) áp dụng cho vòng này.
 
 ## Thư mục
 
 - `src/`, `tests/`, `scripts/`: mô hình, pipeline, demo và công cụ tái lập.
-- `docs/`: nguồn báo cáo/slide và hướng dẫn; `docs/history/` giữ tài liệu cũ (tin nhắn GVHD 27–28/10, checklist 27/10, ghi chú FITLAB, spec Kiro).
+- `docs/`: nguồn báo cáo/slide, kịch bản bảo vệ, hướng dẫn demo/Colab/GPU; `docs/history/` giữ tài liệu theo mốc (proposal, giao thức, ghi chép FITLAB/huấn luyện/sao lưu, báo cáo tiến độ, tin nhắn GVHD, spec Kiro).
 - `reports/`: metric, receipt, manifest và snapshot nguồn.
 - `output/`: chỉ chứa bộ nộp hiện hành; `output/history/` giữ mọi bản Word/PDF/PPTX cũ.
 - `notebooks/`: notebook Colab, notebook FITLAB cũ và notebook All Beauty.
 - `data/`, `runs/`: dữ liệu/checkpoint; không xóa khi dọn cache. `tmp/`, `__pycache__/`, `.pytest_cache/` có thể tái tạo.
 
-Proposal cũ còn dùng để đối chiếu phạm vi: [Markdown](docs/proposal.md), [HTML](docs/proposal.html), [PDF lịch sử](output/history/pdf/proposal.pdf). [README lịch sử](docs/history/readme-20261002.md) và [proposal ban đầu](docs/history/proposal-v1.pdf) giữ mốc cũ.
+Proposal cũ còn dùng để đối chiếu phạm vi: [Markdown](docs/history/proposal.md), [PDF lịch sử](output/history/pdf/proposal.pdf). [README lịch sử](docs/history/readme-20261002.md) và [proposal ban đầu](docs/history/proposal-v1.pdf) giữ mốc cũ.

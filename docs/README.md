@@ -1,24 +1,30 @@
-# Đọc và chỉnh sửa tài liệu UFM Rec
+# Tài liệu UFM Rec
 
 Đọc [hồ sơ hoàn thiện 03/11](../reports/final_20261103/README.md) trước. Nhóm chốt đồ án với kết quả hiện có; vòng 15 lượt đa seed là hướng phát triển.
 
-## Bộ tài liệu hiện hành
+## Bộ nộp và bảo vệ
 
-- [Báo cáo nguồn](final_report.md) → [Word 60 trang theo mẫu trường](../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf). Báo cáo tổng hợp nội dung của các tài liệu `.md` trong thư mục này; dựng bằng `scripts/build_report_figures.py` rồi `scripts/build_school_report_docx.py`. Các tệp `.md` là nguồn để sửa; bản đọc và nộp là tệp Word/PDF.
-- [Nguồn 14 slide](presentation_slides.md) → [PPTX bảo vệ](../output/presentation/UFM_Rec_Bao_Ve_20261103.pptx).
-- [Kịch bản bảo vệ và câu hỏi](defense_guide.md), [hướng dẫn demo](demo.md).
-- [Giao thức](protocol_current.md), [tin nhắn đề xuất metric/holdout gửi giảng viên ngày 30/10](trao_doi_gvhd_2026_10_30.md).
+| Tệp nguồn | Nội dung | Bản nộp |
+| --- | --- | --- |
+| [final_report.md](final_report.md) | Báo cáo 60 trang: bảy chương, tài liệu tham khảo, phụ lục | [Word](../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) |
+| [presentation_slides.md](presentation_slides.md) | Nội dung 14 slide | [PPTX](../output/presentation/UFM_Rec_Bao_Ve_20261103.pptx) |
+| [defense_guide.md](defense_guide.md) | Kịch bản trình bày và câu hỏi dễ gặp | |
+| [demo.md](demo.md) | Chạy demo, kiểm tra trước buổi bảo vệ, xử lý sự cố | |
 
-Chỉ sửa số liệu báo cáo/slide theo cùng bảng bằng chứng và protocol. Thông tin bìa (GVHD, thành viên, MSSV, nhiệm vụ) nằm trong `ADVISOR` và `TEAM` của script dựng báo cáo; slide 1 và `presentation_slides.md` phải sửa cùng lúc.
+Bản để đọc và nộp là Word/PDF/PPTX; tệp `.md` là nguồn để sửa. Không sửa số liệu trực tiếp trong Word/PDF: sửa `final_report.md`, chạy `python scripts/build_report_figures.py` rồi `python scripts/build_school_report_docx.py`. Mọi số liệu phải có tệp bằng chứng trong `reports/`. Thông tin bìa (GVHD, thành viên, MSSV, nhiệm vụ) nằm trong `ADVISOR` và `TEAM` của script dựng báo cáo; slide 1 và `presentation_slides.md` phải sửa cùng lúc.
 
-## Vận hành khi cần
+## Khi train tiếp
 
-- [Colab](colab.md), [runbook GPU](gpu_followup_runbook.md), [kế hoạch tiếp theo](next.md).
-- [Backup/restore](backup_restore.md), [khôi phục môi trường](recovery.md), [vận hành](ops.md).
-- [Nền tảng đặc trưng](foundation.md), [huấn luyện](train.md), [GPU](gpu.md), [phạm vi](scope.md).
+- [colab.md](colab.md): chạy vòng UFM trên Colab, ngắt phiên và resume.
+- [gpu_followup_runbook.md](gpu_followup_runbook.md): chạy vòng đa seed trên FITLAB và mang kết quả về máy.
 
-## Tài liệu tham khảo và lịch sử
+## Lịch sử
 
-`history/` giữ các báo cáo có ngày, README cũ, proposal v1, tin nhắn GVHD 27–28/10, checklist 27/10, ghi chú sửa FITLAB-01 và spec Kiro về cold-start. `proposal.md`, `proposal.html`, `overview.html` là tài liệu thiết kế/giới thiệu cũ; không dùng số trong đó thay validation v3.
+`history/` giữ tài liệu theo mốc. Số liệu trong đó theo giao thức của từng thời điểm; không dùng thay validation v3.
 
-Không sửa trực tiếp PDF/DOCX để cập nhật metric. Dựng lại từ nguồn: `build_school_report_docx.py` tạo bộ nộp hiện hành; `build_current_report_docx.py`, `build_current_report_pdf.py`, `build_proposal.py` và `build_advisor_update_pdf.py` dựng các bản lịch sử vào `output/history/`.
+- Đề xuất và phạm vi: [đề xuất ban đầu](history/proposal-v1.html) (TF-IDF, SVD, RRF), [proposal UFM v1](history/proposal-v1.pdf), [proposal 2.0](history/proposal.md), [phạm vi](history/scope.md), [trang giới thiệu cũ](history/overview.html).
+- Giao thức và trao đổi: [giao thức](history/protocol_current.md), [kế hoạch 28–29/10](history/next.md), [thí nghiệm 03/10](history/followup.md), [checklist 27/10](history/checklist_hoan_thien_2026_10_27.md), tin nhắn GVHD [27/10](history/trao_doi_gvhd_2026_10_27.md), [28/10](history/trao_doi_gvhd_2026_10_28.md), [30/10](history/trao_doi_gvhd_2026_10_30.md).
+- Vận hành FITLAB: [môi trường](history/fitlab.md), [trích CLIP](history/foundation.md), [huấn luyện UFM](history/train.md), [two-tower GPU](history/gpu.md), [lượt chạy dài](history/ops.md), [khôi phục chiến dịch](history/recovery.md), [sao lưu](history/backup_restore.md), [sửa FITLAB-01](history/fix_workspace_fitlab01.md).
+- Báo cáo tiến độ 28/09–02/10, [README cũ](history/readme-20261002.md) và spec Kiro về cold-start (`history/kiro_cold_start_spec/`).
+
+Bản Word/PDF/PPTX cũ nằm trong `output/history/`, dựng bằng `build_current_report_docx.py`, `build_current_report_pdf.py`, `build_proposal.py` và `build_advisor_update_pdf.py`.

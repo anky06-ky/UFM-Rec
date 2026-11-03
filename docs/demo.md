@@ -1,147 +1,51 @@
-# Nghiệm thu demo Windows ngày 29/10/2026
-
-Backend **UFM Rec** đã được khởi động lại từ checkpoint epoch 9 trong bản backup đầy đủ: catalog **767.045 sản phẩm**, train counts thật, archived training source và CLIP cache đúng provenance. [Sáu ca API](../reports/nontraining_20261029/demo_api_verification.json) đạt: không history, có history và bốn regime. [History toàn unknown](../reports/nontraining_20261029/demo_unknown_history.json) trả HTTP 400 `Unknown ASIN` đúng kiểm tra đầu vào; không gọi đó là fallback gợi ý.
-
-Trên máy hiện tại có thể mở `D:\Nam3_ki1\UFM-Rec_Backups\Start_UFM_From_Backup.cmd`; kiểm tra URL launcher in ra và nhãn **UFM Rec**. Launcher/bản backup nằm ngoài Git. Chế độ content mẫu 30 sản phẩm bên dưới là chế độ riêng với counts mô phỏng. Lượt nghiệm thu API này dùng cổng 8773 riêng; không coi URL của một phiên đã kiểm tra là dịch vụ luôn sẵn sàng.
-
-UI đã được bấm thử bằng Chrome headless trên Windows với backend UFM thật: [4/4 ca UI](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json) đạt gồm request zero-shot, tải [JSON](../reports/nontraining_20261029/demo_ui_downloads/ufm-rec-demo.json) khớp request/model/results, ảnh bị chặn vẫn có placeholder và mất mạng hiện lỗi. Có [ảnh màn hình zero-shot](../reports/nontraining_20261029/demo_ui_zero_shot_20261029.png) và [ảnh màn hình lỗi mạng](../reports/nontraining_20261029/demo_ui_offline_20261029.png) để dự phòng. Bằng chứng tự động này cần được thử lại trên chính máy/phòng bảo vệ; nhóm chưa diễn tập hoặc quay video. [Kịch bản bảo vệ](defense_guide.md) và [danh sách còn thiếu](../reports/nontraining_20261029/status.md) ghi rõ các bước còn lại. Benchmark Windows cũ: p50 21,25 giây, p95 26,35 giây trên 10 request sau 2 warm-up; thời gian từng ca kiểm tra mới không thay benchmark.
-
-Phần FITLAB/proxy dưới đây là lịch sử có ngày tháng. Lỗi mount/checkpoint thiếu trong bản khôi phục cũ không mô tả bản backup Windows đầy đủ hiện tại.
-
----
-
-# Lịch sử bản sửa proxy ngày 02/10/2026
-
-<!-- current-evidence-20261028 -->
-> Cập nhật 28/10/2026: validation v3 đã hoàn tất (40.000 ca, 100 ứng viên/ca, seed 42). Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only 0,190036; UFM full 0,182056; popularity 0,042527**. Tám checkpoint UFM dùng cùng candidate hash. Đây là đánh giá lại checkpoint chọn bằng validation v1, chưa phải holdout độc lập. Test v2 đã được xem; vòng v3 này không đánh giá test. Chi tiết và giới hạn: [bằng chứng mới](../reports/continuation_20261028/README.md). Các số liệu ở phần lịch sử phải đọc theo phiên bản giao thức ghi kèm. Word/PDF cũ chưa đồng bộ cập nhật này.
-<!-- /current-evidence-20261028 -->
-
-
-Handler nhận cả đường dẫn giữ prefix và đường dẫn đã loại prefix theo hành vi
-[code-server](https://coder.com/docs/code-server/guide). Năm kiểm thử demo local
-PASS, bao gồm GET/POST qua hai dạng path và từ chối origin sai. Bản sửa mới chưa
-được triển khai/nghiệm thu lại UFM inference trên FITLAB.
-Trạng thái mới: [reports/progress.md](../reports/progress.md).
-
----
-
 # Chạy và trình bày demo UFM Rec
 
-## Ảnh sản phẩm trong demo local
+Demo có hai chế độ. Chương 6 của [báo cáo](final_report.md) mô tả kiến trúc và kết quả nghiệm thu; tài liệu này chỉ hướng dẫn chạy và trình bày.
 
-Catalog mẫu đã kèm **30 ảnh sản phẩm thật**, cùng tên và ASIN lấy từ metadata Amazon Reviews 2023 Toys & Games. Ảnh nằm ở `demo/demo_images/`; nguồn URL, shard metadata và SHA-256 được ghi trong `demo/catalog_products.json`. Khi khởi động, `scripts/build_mock_demo_data.py` tự chép ảnh vào catalog local và phục vụ từ máy, không cần tải thủ công hoặc truy cập Amazon CDN lúc trình diễn.
+| Chế độ | Khi nào dùng | Dữ liệu |
+| --- | --- | --- |
+| **UFM Rec** (mô hình thật) | Máy có bản sao dữ liệu đầy đủ | Checkpoint epoch 9, đặc trưng CLIP, catalog 767.045 sản phẩm |
+| **Content** (TF-IDF) | Máy không có dữ liệu lớn | Tự tạo catalog mẫu 30 sản phẩm thật; số tương tác là mô phỏng |
 
-Mở `Start_Demo.cmd` rồi tải lại trang. Nếu đang giữ server phiên bản cũ, dừng bằng Ctrl+C và mở lại. Ảnh tự xuất hiện ở danh sách tìm kiếm và kết quả gợi ý.
+## Khởi động
 
-**Phạm vi:** số tương tác và nhãn cold-start của catalog 30 sản phẩm được mô phỏng để minh họa luồng demo, không phải thống kê train của các ASIN này trên Amazon. Ảnh local phục vụ hiển thị; checkpoint, đặc trưng CLIP và kết quả thực nghiệm không đổi. Catalog đầy đủ vẫn cần nguồn ảnh đúng mapping riêng.
+- **UFM trên máy có bản sao:** mở `D:\Nam3_ki1\UFM-Rec_Backups\Start_UFM_From_Backup.cmd`. Launcher chạy `Start_Demo.cmd --backend ufm --port 8771` với dữ liệu trong `restored_complete_20261028`. Đợi cửa sổ server in dòng `DEMO READY` rồi mới thao tác.
+- **Máy khác:** mở `Start_Demo.cmd` trong thư mục dự án. Mặc định (`--backend auto`) launcher dùng UFM khi thấy checkpoint hoàn tất (`runs/ufm_full_v1/best.pt` và `completed.json`), ngược lại dùng content với catalog mẫu. Chọn rõ bằng `--backend ufm` hoặc `--backend content`; đổi cổng bằng `--port`.
+- Trình duyệt tự mở `http://127.0.0.1:<cổng>` khi server sẵn sàng; mặc định cổng 8765. Giữ cửa sổ server mở khi trình bày, nhấn Ctrl+C để dừng. Server chỉ nhận kết nối từ chính máy đó.
 
-## Demo UFM trên FITLAB
+Dữ liệu lớn (checkpoint, CLIP, catalog) không nằm trên GitHub; cách khôi phục và mã băm ở [bàn giao backup](../reports/continuation_20261028/backup_handoff.md).
 
-**Nghiệm thu mới ngày 28/10/2026 — FITLAB-01:** backend UFM full epoch 9 đã nạp đúng hash, catalog **767.045 sản phẩm** với counts thật. Sáu ca API đạt: không history, có history và bốn regime. UI đã tìm LEGO và trả Top 5 zero-shot; hiển thị weights/uncertainty. [Bằng chứng](../reports/continuation_20261028/demo_ufm_verification.json).
+## Kiểm tra trước khi trình bày
 
-Phiên demo được kiểm tra tại `https://coder-2474802010460.fitlab-01.is-tech.vn/proxy/8770/`. Dịch vụ phụ thuộc phiên host; dữ liệu phải có bản sao local. Thời gian quan sát CPU khoảng 11–53 giây/request đơn lẻ, chưa phải benchmark latency/throughput. Ảnh của catalog thật dùng URL metadata; 30 ảnh mẫu offline là chế độ riêng.
+1. Nhãn backend trên giao diện là **UFM Rec** và số sản phẩm là **767.045**. Nếu thấy chế độ content, đang chạy catalog mẫu chứ không phải mô hình thật.
+2. Tìm "Cards Against Humanity", thêm `B004S8F7QM` vào lịch sử và chạy thử một lượt.
+3. Không hứa phản hồi tức thì: trên CPU, một lượt gợi ý toàn catalog mất 15–28 giây (trung vị 21 giây), lọc theo một nhóm sản phẩm mất 6–11 giây.
+4. Mở sẵn ảnh dự phòng [zero-shot](../reports/nontraining_20261029/demo_ui_zero_shot_20261029.png) và [mất mạng](../reports/nontraining_20261029/demo_ui_offline_20261029.png) phòng khi không chạy được.
 
-Phần ghi ngày 24/10 bên dưới là lịch sử khôi phục FITLAB-02, không mô tả endpoint FITLAB-01 vừa nghiệm thu.
+## Kịch bản 3 phút
 
-**Trạng thái 24/10/2026:** endpoint UFM trên FITLAB-02 hiện chưa sẵn sàng. Workspace
-được dựng lại từ archive ngày 24/09; không có `runs/ufm_full_v1`, checkpoint hay
-CLIP cache, nên lệnh khởi động bên dưới chưa thể chạy thành công. Kết quả API ghi
-ở phần lịch sử là từ lần triển khai trước, không phải dịch vụ đang chạy hiện nay.
-Hãy dùng demo local với backend `content` cho đến khi hoàn tất các bước trong
-[báo cáo tiến độ](../reports/progress.md).
-
-Trong lần triển khai trước, backend UFM được chạy bằng CPU trên checkpoint
-`runs/ufm_full_v1`, với catalog 767.045 sản phẩm. Mở cổng **8766** trong tab Ports
-của code-server; đường dẫn proxy hiện tại là:
-
-`https://coder-2474802010460.fitlab-02.is-tech.vn/proxy/8766/`
-
-App cần được khởi động với origin FITLAB được cho phép và base path `/proxy/8766`.
-Sau khi mở trang, xác nhận nhãn backend là **UFM Rec**, tìm từ khóa `LEGO`, thêm
-một món vào lịch sử, chọn `Zero-shot`, chạy Top 5 rồi thử xuất JSON. Nếu trang báo
-`Loopback origin required` hoặc API không tải, kiểm tra log `runs/demo_ufm_v1.log`
-và tham số proxy trước khi trình bày.
-
-**Trạng thái 02/10/2026, 18:04 UTC+07:** lần kiểm tra gần nhất, PID 72211 còn chạy
-server UFM bằng tham số cũ nên proxy trả `Loopback origin required`. Một request
-inference sau đó làm server thoát với `Bus error`; đồng thời workspace
-`/home/coder/iDragonCloud/DA_AI` trả `EIO` và code-server báo mất kết nối. Cổng
-8766 hiện không được xem là demo UFM sẵn sàng. Khôi phục mount và kiểm tra log/
-checkpoint trước khi khởi động lại. Trang `127.0.0.1:8766` có thể mở được nhưng
-đang dùng TF-IDF baseline, không phải UFM.
-
-## Giao diện hiện tại
-
-`demo/index.html` dùng giao diện tối kiểu glass: nền than, accent cyan/tím, thẻ
-kết quả nổi ảnh và nhãn cold-start, hover/focus rõ và bố cục thích ứng màn hình
-nhỏ. Trên mỗi thẻ, score được ghi rõ là **Điểm xếp hạng**; backend và giới hạn
-điểm được hiển thị để người xem không nhầm score với xác suất mua hàng.
-
-## Mở demo
-
-Trên máy hiện tại, mở `Start_Demo.cmd` trong thư mục dự án. Launcher mở lại server
-đang có hoặc tải catalog và chạy server mới. Lần tải đầu có thể mất khoảng một phút.
-Trình duyệt mở tại http://127.0.0.1:8765. Giữ cửa sổ server khi đang trình bày;
-Ctrl+C trong cửa sổ đó để dừng. Server chỉ nghe trên máy local.
-
-Nếu cần chạy thủ công:
-
-```powershell
-py src/demo_recommender.py --backend content --port 8765 --open-browser
-```
-
-Máy khác cần Python 3.11+, `pip install -r requirements.txt` và các file dữ liệu
-đúng mapping: `content/items.csv.gz`, `content/products_text.csv.gz`,
-`content/tfidf_all.npz`. Ảnh lấy từ `foundation_catalog_v1/catalog.csv.gz` nếu có.
-Các file lớn không nằm trên GitHub. Không thể clone repo trống dữ liệu rồi demo ngay.
-
-## Kịch bản trình bày 3 phút
-
-1. Giới thiệu catalog Amazon Toys and Games gồm 767.045 sản phẩm. Chỉ rõ tên
-   backend đang hiển thị và nói rõ đây là checkpoint UFM hoặc TF-IDF baseline.
-2. Bấm LEGO, thêm một sản phẩm. Lịch sử được đánh số từ cũ đến mới; không thêm
-   trùng một sản phẩm, tối đa 20. TF-IDF dùng 10 sản phẩm gần nhất.
-3. Chọn Top K = 5, bấm “Tìm gợi ý cho tôi”. Trình bày ảnh, tên, mã ASIN,
-   điểm xếp hạng và số tương tác train. Sản phẩm đã chọn không xuất hiện lại.
-4. Đổi nhóm sang zero-shot, chạy lại. Tất cả kết quả có train count = 0.
-   Tín hiệu văn bản vẫn cho phép baseline xếp hạng sản phẩm chưa có tương tác.
-5. Bấm “Xuất JSON” để lưu đúng đầu vào, tên backend, bộ lọc, thời gian và kết quả.
-   Khi đổi lịch sử/bộ lọc, kết quả cũ được làm mờ và tắt xuất cho đến khi chạy lại.
-6. Xóa lịch sử rồi chọn tất cả nhóm, chạy lại để minh họa fallback theo độ phổ biến.
+1. Giới thiệu catalog Toys & Games 767.045 sản phẩm và chỉ nhãn backend đang chạy.
+2. Tìm "Cards Against Humanity", thêm `B004S8F7QM` vào lịch sử. Lịch sử xếp từ cũ đến mới, tối đa 20 sản phẩm, không trùng.
+3. Chọn Top K = 5, nhóm **Zero-shot**, bấm "Tìm gợi ý cho tôi". Chỉ ra mọi kết quả có 0 tương tác train và dòng **CF 0% · Semantic 100%**: mô hình vẫn gợi ý được sản phẩm chưa có tương tác nhờ văn bản và ảnh.
+4. Đổi sang nhóm **Warm** và chạy lại: CF khoảng 46–48% vì các sản phẩm này đã có tương tác trong train.
+5. Bấm "Xuất JSON" để lưu đầu vào, mô hình và kết quả. Khi đổi lịch sử hoặc bộ lọc, kết quả cũ bị làm mờ và nút xuất bị khóa đến khi chạy lại.
+6. Bấm "Xóa tất cả" rồi chạy với mọi nhóm: không có lịch sử thì demo xếp theo độ phổ biến trong train, chưa cá nhân hóa cho người dùng mới.
 
 ## Cách giải thích đúng
 
-- Zero-shot là không có tương tác trong train; không có nghĩa vừa ra mắt.
-- Điểm không phải xác suất mua hàng. Không so trực tiếp score của hai mô hình.
-- Empty history + zero-shot không có tín hiệu cá nhân hóa hoặc popularity để
-  phân biệt các sản phẩm; thứ tự khi đó là tie-break xác định.
-- Thời gian hiển thị đo xử lý inference trên server; chưa gồm tải ảnh và mạng.
-- Demo xếp hạng toàn catalog hoặc toàn nhóm đã lọc. Metric trong báo cáo dùng
-  1 positive + 99 negative cố định, nên không phải chất lượng demo toàn catalog.
-- Ảnh lỗi có placeholder; tên sản phẩm vẫn hiển thị. Lịch sử không lưu lâu dài.
+- Zero-shot nghĩa là không có tương tác trong tập train, không nhất thiết là sản phẩm vừa ra mắt.
+- Điểm xếp hạng, trọng số và độ bất định là tín hiệu của mô hình, không phải xác suất mua hàng; không so điểm giữa hai mô hình.
+- Ảnh trên màn hình chỉ để xem: mô hình dùng đặc trưng CLIP đã trích xuất sẵn, nên ảnh tải lỗi không làm đổi điểm.
+- Demo xếp hạng toàn catalog hoặc toàn nhóm đã lọc; số liệu trong báo cáo đo trên 100 ứng viên mỗi ca, nên không phải chất lượng của demo.
 
-## Khởi động backend UFM trên FITLAB
+## Xử lý sự cố
 
-```bash
-python3 src/demo_recommender.py --backend ufm --run runs/ufm_full_v1 --port 8766 \
-  --allowed-origin https://coder-2474802010460.fitlab-02.is-tech.vn \
-  --base-path /proxy/8766
-```
+- **Cổng bận:** chạy lại với `--port` khác, ví dụ 8766; không dừng tiến trình không rõ nguồn.
+- **Thiếu thư viện:** launcher báo `Missing dependencies`; chạy `py -m pip install -r requirements.txt` rồi mở lại.
+- **Lỗi 429:** server chỉ xử lý một lượt suy luận mỗi lúc; đợi lượt trước xong rồi bấm lại.
+- **Lỗi 400 "Unknown ASIN":** lịch sử chứa mã không có trong catalog; chọn sản phẩm từ ô tìm kiếm.
+- **Thiếu dữ liệu UFM:** khôi phục từ bản sao lưu theo hướng dẫn bàn giao, hoặc dùng chế độ content; không tạo dữ liệu giả.
 
-Lệnh này chỉ bind loopback; truy cập từ ngoài đi qua proxy code-server. Origin phải
-khớp chính xác host HTTPS của workspace và path prefix phải khớp cổng đã forward.
-Khi chạy local, dùng `--backend content` hoặc bỏ hai tùy chọn proxy.
+## Bằng chứng nghiệm thu
 
-Checkpoint production phải có `completed.json`, `config.json`, `best.pt` và CLIP
-feature tables kèm manifest. Tham số `--features` cho phép đổi vị trí cache nếu
-chuyển môi trường; hash manifest và bảng gốc vẫn được kiểm tra. Giữ nguyên config
-và checkpoint; không dùng technical smoke làm checkpoint demo UFM. Alpha CF,
-semantic và uncertainty chỉ được trình bày khi backend UFM thật tải thành công.
-
-## Xử lý lỗi thường gặp
-
-- Cổng 8765 bận: nếu là demo hiện tại, launcher mở lại. Nếu là dịch vụ khác,
-  chạy thủ công với `--port 8766`; không dừng tiến trình không rõ nguồn.
-- Thiếu dữ liệu: khôi phục đúng bộ dữ liệu local đã xử lý; không tạo dữ liệu giả.
-- Không có kết quả: đổi từ khóa tiếng Anh, nhóm sản phẩm hoặc giảm lịch sử.
-- UFM chưa có completed.json: tiếp tục chờ pipeline GPU; dùng backend content.
+[6/6 ca API](../reports/nontraining_20261029/demo_api_verification.json), [4/4 ca giao diện](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json), [lịch sử toàn mã lạ trả 400](../reports/nontraining_20261029/demo_unknown_history.json), [đo độ trễ](../reports/continuation_20261028/windows_ufm_benchmark.json), [ca thiếu phương thức](../reports/continuation_20261028/windows_ufm_missing_modalities.json).

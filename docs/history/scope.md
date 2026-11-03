@@ -1,13 +1,13 @@
 # Phiên bản hiện hành
 
-Xem [proposal 2.0](proposal.md) và [tiến độ mới](../reports/progress.md).
+Xem [proposal 2.0](proposal.md) và [tiến độ mới](../../reports/progress.md).
 Phần dưới giữ phạm vi cùng diễn biến triển khai ngày 28/09, không là trạng thái hiện tại.
 
 ---
 
 # UFM-Rec: phạm vi đầy đủ và mốc triển khai
 
-Snapshot tiến trình mới nhất: [báo cáo ngày 30/09/2026](history/Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
+Snapshot tiến trình mới nhất: [báo cáo ngày 30/09/2026](Bao_cao_tien_trinh_UFM_Rec_2026_09_30.md).
 Demo TF-IDF, BPR-MF ba seed và calibration baseline đã được bổ sung sau mốc dưới đây;
 UFM full và những phần còn thiếu vẫn được theo dõi theo phạm vi đã chốt.
 

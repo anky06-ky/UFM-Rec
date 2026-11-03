@@ -1,5 +1,5 @@
 {
-  "observed_at_utc": "2026-11-03T09:29:14+00:00",
+  "observed_at_utc": "2026-11-03T13:20:23+00:00",
   "source": "docs/final_report.md (7 chương + phụ lục; số liệu validation v3, seed 42); slides patched from output/history/presentation/UFM_Rec_Bao_Ve_Hien_Trang_20261029.pptx",
   "builder": "python scripts/build_report_figures.py; python scripts/build_school_report_docx.py (Pandoc 3.13 + LibreOffice 26.8 portable, two layout passes)",
   "cover": {
@@ -10,14 +10,14 @@
   "artifacts": [
     {
       "path": "output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx",
-      "bytes": 2645352,
-      "sha256": "f53970d1e686020176b6424021a2c4edafbf52e181a907b2b776dc4ad8e14f75",
+      "bytes": 2645405,
+      "sha256": "0cb9da2746b90a3b4682f1a83be5ac4153485dcd88eb7ae143eb1a353e5a3d12",
       "note": "Mục lục và danh mục bảng/hình lưu sẵn số trang theo bản PDF; trong Word nhấn F9 nếu lệch."
     },
     {
       "path": "output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf",
-      "bytes": 3114422,
-      "sha256": "cdcb35911cbb372ca24de86aa860eb9260606c409c3aaebb81428b427cce6211",
+      "bytes": 3114634,
+      "sha256": "cf6278091fac260e1f86ed93350c4cea2d6e85291d70f32402b3bed840c08764",
       "pages": 60,
       "fonts": "Times New Roman, Consolas, Cambria Math embedded"
     },

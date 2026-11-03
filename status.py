@@ -111,7 +111,7 @@ def main(argv=None):
             except (ValueError,TypeError):pass
         if value.get('gpu'):print('  GPU: '+json.dumps(value['gpu']))
     print('FULL CHECKPOINT: '+('complete' if state['full_complete'] else 'not complete'))
-    print('NEXT: docs/next.md | LOGS: runs/ | GUIDE: START.md')
+    print('NEXT: docs/gpu_followup_runbook.md | LOGS: runs/ | GUIDE: START.md')
 
 
 if __name__=='__main__':main()

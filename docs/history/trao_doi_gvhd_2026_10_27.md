@@ -16,7 +16,7 @@ Audit mới xét mọi positive trước target, tìm được 7 negative trùng
 
 Local sau sửa có 84 test pass, 3 skip dành cho Linux. Bản mã hiện tại được kiểm thử riêng trên FITLAB-01; mã tạo checkpoint được giữ để tái lập. Chưa chạy GitHub Actions. Demo TF-IDF có 30 ảnh local, số tương tác mẫu là mô phỏng và được gắn nhãn.
 
-Nguồn: [báo cáo sửa 1–15 và log](../../reports/fix_1_15_20261027/README.md), [protocol](../protocol_current.md), [checklist](checklist_hoan_thien_2026_10_27.md).
+Nguồn: [báo cáo sửa 1–15 và log](../../reports/fix_1_15_20261027/README.md), [protocol](protocol_current.md), [checklist](checklist_hoan_thien_2026_10_27.md).
 
 ## Test và phần còn thiếu
 
