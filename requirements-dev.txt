@@ -1,5 +1,0 @@
-pytest
-pytest-cov
-psutil
-matplotlib
-reportlab

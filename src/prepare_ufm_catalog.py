@@ -67,7 +67,7 @@ def metadata_records(metadata_paths):
             except ImportError as error:
                 raise RuntimeError(
                     "Reading Parquet metadata requires pyarrow; install "
-                    "requirements-catalog-parquet.txt.") from error
+                    "requirements.txt.") from error
             source = parquet.ParquetFile(metadata)
             required = {"parent_asin", "images"}
             if not required.issubset(source.schema_arrow.names):

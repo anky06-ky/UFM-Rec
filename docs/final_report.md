@@ -29,7 +29,7 @@ Bài toán khởi đầu lạnh (cold-start) và đặc biệt là cực lạnh 
 
 Đề tài xây dựng và thực nghiệm kiến trúc **UFM-Rec (Uncertainty-aware Fusion Model Recommender)**. Mô hình kết hợp biểu diễn đa phương thức đóng băng từ **CLIP ViT-B/32** (văn bản tên, mô tả và hình ảnh sản phẩm) với biểu diễn tuần tự của lịch sử tương tác qua một Transformer nhân quả. Hai nhánh được hợp nhất bằng **proxy độ tin cậy học được** và **cổng căn chỉnh chéo**, cho phép mạng điều tiết trọng số giữa nhánh ngữ nghĩa và nhánh hành vi theo mức khả dụng của từng nguồn tín hiệu.
 
-Thực nghiệm dùng Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11.572.689 tương tác dương sau làm sạch, 6.158.534 người dùng), chia theo thời gian 80/10/10. Mô hình được huấn luyện 12 epoch trên GPU Quadro RTX 6000; checkpoint epoch 9 được chọn theo validation. Đánh giá chính dùng validation v3 cố định: 40.000 ca, mỗi ca 1 sản phẩm đúng và 99 sản phẩm âm, 10.000 ca cho mỗi nhóm zero-shot, cực lạnh, lạnh và ấm. Trên cùng bộ ứng viên, Cold macro NDCG@10 của TF-IDF là **0,195682**, semantic-only dùng CLIP **0,190036**, UFM full **0,182056**, popularity **0,042527**. Mô hình đầy đủ tốt hơn semantic-only ở nhóm có từ 6 tương tác trở lên nhưng thấp hơn rõ ở nhóm 1–5 tương tác (−0,024101). Hiệu chuẩn temperature scaling giảm ECE từ **0,082061** xuống **0,037478** trên phần validation dùng để kiểm tra. Demo trên Windows phục vụ toàn bộ catalog với checkpoint thật, đạt 6/6 ca API và 4/4 ca giao diện.
+Thực nghiệm dùng Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11.572.689 tương tác dương sau làm sạch, 6.158.534 người dùng), chia theo thời gian 80/10/10. Mô hình được huấn luyện 12 epoch trên GPU Quadro RTX 6000; checkpoint epoch 9 được chọn theo validation. Đánh giá chính dùng validation v3 cố định: 40.000 ca, mỗi ca 1 sản phẩm đúng và 99 sản phẩm âm, 10.000 ca cho mỗi nhóm zero-shot, cực lạnh, lạnh và ấm. Trên cùng bộ ứng viên, Cold macro NDCG@10 của TF-IDF là **0,195682**, semantic-only dùng CLIP **0,190036**, UFM full **0,182056**, popularity **0,042527**. Mô hình đầy đủ tốt hơn semantic-only ở nhóm có từ 6 tương tác trở lên nhưng thấp hơn rõ ở nhóm 1–5 tương tác (−0,024101). Ghép điểm UFM với TF-IDF mà không huấn luyện lại, với trọng số chọn trên 20.000 ca sớm của validation, đạt cold macro **0,215540** trên 20.000 ca muộn so với **0,203751** của TF-IDF (chênh lệch 0,011789, khoảng tin cậy 95% từ 0,009796 đến 0,013744). Hiệu chuẩn temperature scaling giảm ECE từ **0,082061** xuống **0,037478** trên phần validation dùng để kiểm tra. Demo trên Windows phục vụ toàn bộ catalog với checkpoint thật, đạt 6/6 ca API và 4/4 ca giao diện.
 
 Các kết quả chỉ có một seed và validation v3 dùng lại quần thể đã tham gia chọn checkpoint nên mang tính thăm dò. Hai can thiệp theo số tương tác (count-aware fusion và adaptive ID dropout) đã được cài đặt, kiểm thử và khóa kế hoạch 15 lượt huấn luyện, là hướng phát triển của đồ án.
 
@@ -124,7 +124,7 @@ Do giới hạn thời gian và tài nguyên GPU dùng chung, các kết quả U
 - **Phần kế thừa.** CLIP ViT-B/32, Transformer nhân quả, hàm mất mát xếp hạng kiểu BPR, TF-IDF và temperature scaling là các phương pháp đã có; nhóm sử dụng chúng, không tuyên bố đề xuất mới.
 - **Phần nhóm thiết kế và cài đặt.** Bộ chuyển đổi (adapter) đa phương thức có mặt nạ cho phương thức thiếu; cơ chế đánh dấu khả dụng cho từng nhánh; hai đầu ước lượng độ bất định dùng làm proxy độ tin cậy; hợp nhất có trọng số kèm căn chỉnh chéo có cổng; hai biến thể can thiệp theo số tương tác (count-aware fusion và adaptive ID dropout).
 - **Quy trình thực nghiệm.** Chia dữ liệu theo thời gian ở quy mô 11,57 triệu tương tác; bộ ứng viên cố định có mã băm cho 40.000 ca cân bằng bốn nhóm; mười mô hình và biến thể được đánh giá trên cùng một bộ ứng viên; tách bạch ba phiên bản giao thức đánh giá v1, v2, v3.
-- **Phát hiện thực nghiệm.** Mô hình đầy đủ chưa vượt đối chứng nội dung, và phần thua tập trung ở nhóm 1–5 tương tác. Đây là chỉ dẫn cụ thể cho hướng cải tiến tiếp theo.
+- **Phát hiện thực nghiệm.** Mô hình đầy đủ chưa vượt đối chứng nội dung, và phần thua tập trung ở nhóm 1–5 tương tác. Đây là chỉ dẫn cụ thể cho hướng cải tiến tiếp theo. Ghép điểm UFM với TF-IDF, không cần huấn luyện lại, vượt đối chứng mạnh nhất trên phần validation không dùng để chọn tham số (mục 5.12).
 - **Hệ thống.** Ứng dụng demo chạy trên 767.045 sản phẩm với checkpoint thật; bộ 123 ca kiểm thử tự động; quy trình sao lưu và khôi phục có kiểm tra SHA-256.
 
 #### 1.7. Quy trình thực hiện và tiến độ
@@ -829,7 +829,31 @@ All Beauty dùng giao thức lấy mẫu khác Toys: 100 ứng viên/ca với m�
 
 Nguồn: [`windows_ufm_benchmark.json`](../reports/continuation_20261028/windows_ufm_benchmark.json). Máy chủ chỉ cho phép một lượt suy luận tại một thời điểm và trả HTTP 429 cho yêu cầu đến sau, thay vì để hai lượt tranh tài nguyên. Mười lượt đo chưa đủ để ước lượng p99 ổn định. Độ trễ hơn 20 giây là điểm yếu lớn nhất của demo; nguyên nhân chính là phải chấm điểm toàn catalog bằng mô hình phụ thuộc ứng viên trên CPU. Hướng cải thiện là truy hồi một tập ứng viên nhỏ trước rồi mới xếp hạng lại bằng UFM (mục 7.3).
 
-#### 5.12. Thảo luận
+#### 5.12. Kết hợp UFM với TF-IDF không cần huấn luyện lại
+
+Các mục trên cho thấy không có mô hình đơn lẻ nào mạnh nhất ở mọi nơi: TF-IDF bắt tốt các từ khóa đặc thù, còn UFM mang thêm tín hiệu hành vi và ngữ nghĩa CLIP. Ngay cả khi chọn mô hình tốt nhất riêng cho từng nhóm sản phẩm theo bảng ở mục 5.4, cold macro cũng chỉ đạt 0,197232, gần như không hơn TF-IDF. Vì vậy nhóm thử kết hợp ở mức từng ứng viên. Với mỗi ca, điểm của 100 ứng viên ở mỗi mô hình được chuẩn hóa về trung bình 0 và độ lệch chuẩn 1, rồi trộn tuyến tính:
+
+$$h_{uj} = \alpha\, z^{\text{UFM}}_{uj} + (1 - \alpha)\, z^{\text{TF-IDF}}_{uj} \qquad (5.1)$$
+
+trong đó $z_{uj}$ là điểm đã chuẩn hóa của ứng viên $j$ trong ca của người dùng $u$. Cách làm này không huấn luyện lại mô hình nào và chạy trên CPU trong khoảng 4 phút.
+
+Để không chọn tham số trên chính dữ liệu dùng để báo cáo, 40.000 ca được chia theo thời gian như ở mục 5.8: 20.000 ca sớm hơn dùng để chọn α trong lưới 0; 0,05; …; 1 theo cold macro NDCG@10, còn 20.000 ca muộn hơn chỉ dùng để báo cáo. Trước khi trộn, điểm tính lại của TF-IDF và UFM full khớp hoàn toàn với số liệu đã công bố ở cả bốn nhóm. Trên phần chọn tham số, cold macro tăng từ 0,186157 khi chỉ dùng TF-IDF (α = 0) lên cao nhất 0,197824 tại α = 0,55, rồi giảm về 0,174227 khi chỉ dùng UFM (α = 1).
+
+*Bảng: NDCG@10 trên 20.000 ca muộn của validation v3, phần không dùng để chọn α*
+
+| Mô hình | Cold macro | Zero-shot | Cực lạnh | Lạnh | Ấm | Ca có lịch sử |
+| ------------------ | -------: | -------: | -------: | -------: | -------: | -------: |
+| TF-IDF | 0,203751 | 0,186926 | 0,225444 | 0,198884 | 0,146387 | 0,320726 |
+| UFM full | 0,189057 | 0,164372 | 0,202510 | 0,200290 | 0,115657 | 0,284666 |
+| Kết hợp, α = 0,55 | **0,215540** | **0,192011** | **0,236834** | **0,217776** | **0,146978** | **0,337155** |
+
+Nguồn: [`hybrid_v3.json`](../reports/hybrid_20261103/hybrid_v3.json), script `scripts/evaluate_hybrid_v3.py`. Nửa muộn gồm 6.161 ca zero-shot, 4.536 ca cực lạnh, 4.628 ca lạnh và 4.675 ca ấm. Mọi mô hình đều đạt NDCG cao hơn ở nửa này so với trên toàn bộ 40.000 ca, nên chỉ so sánh các dòng trong cùng bảng.
+
+Kết hợp vượt TF-IDF ở cả bốn nhóm. Cold macro tăng 0,011789 (khoảng 5,8%), với khoảng tin cậy 95% bootstrap [0,009796; 0,013744] (2.000 lần lấy mẫu lại các ca trong từng nhóm), không chứa 0. Mức tăng lớn nhất ở nhóm lạnh (+0,018892) và cực lạnh (+0,011390). Với ca không có lịch sử, cả hai mô hình đều về popularity nên kết hợp cho cùng kết quả. Trên toàn bộ 40.000 ca, gồm cả nửa đã dùng để chọn α nên lạc quan hơn, cold macro của kết hợp là 0,207261 so với 0,195682 của TF-IDF.
+
+Như vậy tín hiệu của UFM và tín hiệu từ vựng của TF-IDF bổ sung cho nhau: UFM đứng riêng thấp hơn TF-IDF, nhưng khi ghép lại thì vượt đối chứng mạnh nhất. Đây là phân tích sau (post hoc) trên validation, nên vẫn chịu các giới hạn ở mục 5.13: một seed, v3 không phải tập kiểm tra độc lập, và xếp hạng trên 100 ứng viên. Demo hiện vẫn xếp hạng bằng riêng UFM; đưa tín hiệu từ vựng vào chính mô hình là hướng phát triển ở mục 7.3.
+
+#### 5.13. Thảo luận
 
 **Vì sao TF-IDF mạnh?** Sản phẩm đồ chơi có nhiều từ khóa đặc thù như tên thương hiệu, tên dòng sản phẩm, số hiệu bộ, nhân vật bản quyền. TF-IDF với cặp từ bắt rất tốt các trùng khớp chính xác này. Trong khi đó, bộ mã hóa văn bản của CLIP chỉ đọc 77 token đầu, quá ngắn so với độ dài trung bình 985,73 ký tự của văn bản sản phẩm, và CLIP được huấn luyện cho chú thích ảnh chứ không cho mô tả thương mại. CLIP lại có lợi thế ở nhóm cực lạnh, nơi semantic-only vượt TF-IDF.
 
@@ -924,11 +948,11 @@ Trên máy có bản sao dữ liệu đầy đủ, mở `Start_UFM_From_Backup.c
 Trả lời các câu hỏi nghiên cứu ở mục 1.4:
 
 - **CH1.** Đặc trưng CLIP đóng băng cho kết quả tốt ở sản phẩm lạnh: semantic-only đạt cold macro NDCG@10 0,190036, cao nhất ở nhóm cực lạnh (0,215668). Văn bản đóng vai trò chính; ảnh đứng riêng yếu hơn (0,149632) nhưng giúp ở nhóm ấm. TF-IDF vẫn là đối chứng mạnh nhất về tổng thể (0,195682).
-- **CH2.** UFM full (0,182056) chưa vượt semantic-only và TF-IDF. Nhánh hành vi có lợi cho sản phẩm có từ 6 tương tác trở lên (đến +0,030183 ở nhóm 21+ trên ca có lịch sử) nhưng gây hại ở nhóm 1–5 tương tác (−0,045933 trên ca có lịch sử).
+- **CH2.** UFM full (0,182056) chưa vượt semantic-only và TF-IDF. Nhánh hành vi có lợi cho sản phẩm có từ 6 tương tác trở lên (đến +0,030183 ở nhóm 21+ trên ca có lịch sử) nhưng gây hại ở nhóm 1–5 tương tác (−0,045933 trên ca có lịch sử). Khi ghép điểm với TF-IDF (mục 5.12), kết hợp vượt TF-IDF 0,011789 cold macro trên phần validation không dùng để chọn tham số, cho thấy tín hiệu của UFM có giá trị bổ sung.
 - **CH3.** Văn bản và nhánh ngữ nghĩa là các thành phần không thể thiếu. Proxy độ tin cậy và căn chỉnh chéo chưa cho thấy lợi ích đo được với một seed; trọng số học được nhỉnh hơn trọng số cố định một cách nhất quán nhưng rất nhỏ.
 - **CH4.** Mô hình gốc tự tin quá mức; temperature scaling với $T = 2{,}012405$ giảm ECE từ 0,082061 xuống 0,037478 mà không đổi thứ hạng.
 
-Kết quả quan trọng nhất của đồ án vì vậy không phải một con số vượt đối chứng, mà là việc xác định được **chính xác vùng dữ liệu nơi việc dung hợp hành vi đang gây hại**, kèm hai can thiệp đã được cài đặt và kiểm thử để kiểm chứng. Về mặt kỹ thuật, nhóm đã tích lũy được quy trình thực nghiệm có thể tái lập và kiểm chứng: mã băm cho mọi đầu vào, tách bạch các phiên bản giao thức, sổ theo dõi việc mở tập test, huấn luyện chịu gián đoạn và sao lưu có kiểm tra.
+Kết quả quan trọng nhất của đồ án vì vậy là hai phát hiện: **vùng dữ liệu nơi việc dung hợp hành vi đang gây hại** (nhóm 1–5 tương tác), kèm hai can thiệp đã được cài đặt và kiểm thử để kiểm chứng; và **tín hiệu của UFM bổ sung cho TF-IDF**, nên ghép hai mô hình ở mức điểm số vượt đối chứng mạnh nhất mà không cần huấn luyện lại. Về mặt kỹ thuật, nhóm đã tích lũy được quy trình thực nghiệm có thể tái lập và kiểm chứng: mã băm cho mọi đầu vào, tách bạch các phiên bản giao thức, sổ theo dõi việc mở tập test, huấn luyện chịu gián đoạn và sao lưu có kiểm tra.
 
 #### 7.2. Hạn chế
 
@@ -939,6 +963,7 @@ Kết quả quan trọng nhất của đồ án vì vậy không phải một co
 5. **Giới hạn của CLIP.** Bộ mã hóa văn bản chỉ đọc 77 token đầu của mô tả; CLIP được đóng băng nên không thích nghi với miền đồ chơi.
 6. **Độ trễ demo cao.** Khoảng 21 giây mỗi lượt trên CPU khi chấm toàn catalog.
 7. **Một miền dữ liệu.** All Beauty mới có dữ liệu và baseline; chưa có UFM.
+8. **Kết hợp là phân tích sau.** Trọng số trộn ở mục 5.12 được chọn trên nửa sớm của validation v3, chưa kiểm chứng trên tập kiểm tra độc lập và chưa đưa vào demo.
 
 #### 7.3. Hướng phát triển
 
@@ -956,11 +981,12 @@ Mọi lượt dùng cùng siêu tham số ở Bảng 4.1, cùng quy tắc dừng
 
 Các hướng tiếp theo, theo thứ tự ưu tiên:
 
-1. **Phân tích cổng và độ bất định** trên checkpoint thật cho nhóm 1–5 tương tác, để biết cổng phân bổ trọng số thế nào trước và sau can thiệp.
-2. **Đánh giá trên tập kiểm tra độc lập** được thống nhất trước khi mở nhãn, chỉ dùng một lần cho mô hình đã chọn trên validation.
-3. **Truy hồi rồi xếp hạng lại:** dùng một bước truy hồi nhanh (ví dụ tìm láng giềng gần đúng trên vector ngữ nghĩa) để chọn vài trăm ứng viên rồi mới chấm bằng UFM, kèm đo recall của bước truy hồi, chất lượng cuối và độ trễ.
-4. **Bộ mã hóa văn bản dài hơn hoặc tinh chỉnh nhẹ** (ví dụ LoRA) để khắc phục giới hạn 77 token của CLIP.
-5. **Huấn luyện UFM trên All Beauty** để kiểm chứng trên miền thứ hai.
+1. **Đưa tín hiệu từ vựng vào mô hình:** thêm nhánh TF-IDF hoặc BM25 vào UFM để cổng hợp nhất học trọng số theo từng ca thay cho hệ số cố định α ở mục 5.12, rồi dùng điểm này cho demo.
+2. **Phân tích cổng và độ bất định** trên checkpoint thật cho nhóm 1–5 tương tác, để biết cổng phân bổ trọng số thế nào trước và sau can thiệp.
+3. **Đánh giá trên tập kiểm tra độc lập** được thống nhất trước khi mở nhãn, chỉ dùng một lần cho mô hình đã chọn trên validation.
+4. **Truy hồi rồi xếp hạng lại:** dùng một bước truy hồi nhanh (ví dụ tìm láng giềng gần đúng trên vector ngữ nghĩa) để chọn vài trăm ứng viên rồi mới chấm bằng UFM, kèm đo recall của bước truy hồi, chất lượng cuối và độ trễ.
+5. **Bộ mã hóa văn bản dài hơn hoặc tinh chỉnh nhẹ** (ví dụ LoRA) để khắc phục giới hạn 77 token của CLIP.
+6. **Huấn luyện UFM trên All Beauty** để kiểm chứng trên miền thứ hai.
 
 ---
 

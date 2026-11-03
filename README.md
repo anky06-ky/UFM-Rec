@@ -6,14 +6,14 @@ Hệ khuyến nghị sản phẩm dùng lịch sử hành vi, ảnh và tên/mô
 
 ## Bộ nộp
 
-- [Báo cáo Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) · [PDF 60 trang](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) · [nguồn báo cáo](docs/final_report.md): bảy chương, 36 bảng, 13 hình, 26 công thức, phụ lục. Dựng lại bằng `python scripts/build_report_figures.py` rồi `python scripts/build_school_report_docx.py`.
+- [Báo cáo Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) · [PDF 61 trang](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) · [nguồn báo cáo](docs/final_report.md): bảy chương, 37 bảng, 13 hình, 27 công thức, phụ lục. Dựng lại bằng `python scripts/build_report_figures.py` rồi `python scripts/build_school_report_docx.py`.
 - [Slide bảo vệ 14 trang](output/presentation/UFM_Rec_Bao_Ve_20261103.pptx) · [nguồn slide](docs/presentation_slides.md) · [kịch bản bảo vệ và câu hỏi](docs/defense_guide.md).
 - [Demo](docs/demo.md): mở [Start_Demo.cmd](Start_Demo.cmd).
 - [Bắt đầu](START.md) · [mục lục tài liệu](docs/README.md) · [mục lục bằng chứng](reports/README.md) · [các bản xuất](output/README.md).
 
 ## Kết quả chính
 
-Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed lịch sử 42. Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only CLIP 0,190036; UFM full 0,182056; popularity 0,042527**. Full chưa vượt hai đối chứng nội dung; chênh lệch lớn nhất ở nhóm 1–5 tương tác. Tám checkpoint UFM và hai baseline dùng cùng candidate hash; [JSON đối chiếu](reports/nontraining_20261029/evidence.json) truy được nguồn.
+Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed lịch sử 42. Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only CLIP 0,190036; UFM full 0,182056; popularity 0,042527**. Full chưa vượt hai đối chứng nội dung; chênh lệch lớn nhất ở nhóm 1–5 tương tác. Ghép điểm UFM với TF-IDF, không huấn luyện lại, với α = 0,55 chọn trên 20.000 ca sớm, đạt cold macro **0,215540** trên 20.000 ca muộn so với 0,203751 của TF-IDF (khoảng tin cậy 95% của chênh lệch [0,009796; 0,013744]; [kết quả](reports/hybrid_20261103/hybrid_v3.json), báo cáo mục 5.12). Tám checkpoint UFM và hai baseline dùng cùng candidate hash; [JSON đối chiếu](reports/nontraining_20261029/evidence.json) truy được nguồn.
 
 Checkpoint chọn bằng validation v1; v3 dùng lại quần thể validation liên quan nên không phải holdout độc lập. Test v2 đã được xem. Sampling theo regime target và thống kê cuối split có tính hồi cứu; kết quả không tương đương full-catalog hoặc online. [Giao thức](docs/history/protocol_current.md) và [ledger test](reports/test_evaluation_ledger.json) ghi giới hạn.
 
@@ -32,7 +32,7 @@ python scripts/build_report_figures.py
 python scripts/build_school_report_docx.py
 ```
 
-Lệnh dựng báo cáo không train. Nó cần python-docx và bộ Pandoc/LibreOffice portable trong `D:\Nam3_ki1\UFM-Rec_Backups\colab_training_inputs_20261029\document_runtime` (đổi bằng biến `UFM_DOC_RUNTIME`, `UFM_PANDOC`). Bìa lấy từ [bản Word mẫu trường ngày 27/10](output/history/docx/Bao_Cao_Do_An_UFM_Rec_Nhom_4_20261027.docx). [Dữ liệu](data/README.md) lớn giữ ngoài Git.
+Mọi thư viện Python (gồm python-docx để dựng báo cáo) nằm trong một tệp `requirements.txt`. Lệnh dựng báo cáo không train; ngoài thư viện, nó cần bộ Pandoc/LibreOffice portable trong `D:\Nam3_ki1\UFM-Rec_Backups\colab_training_inputs_20261029\document_runtime` (đổi bằng biến `UFM_DOC_RUNTIME`, `UFM_PANDOC`). Bìa lấy từ [bản Word mẫu trường ngày 27/10](output/history/docx/Bao_Cao_Do_An_UFM_Rec_Nhom_4_20261027.docx). [Dữ liệu](data/README.md) lớn giữ ngoài Git.
 
 ## Hướng phát triển
 

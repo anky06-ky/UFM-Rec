@@ -6,6 +6,7 @@
 
 - [Validation v3 ngày 28/10](continuation_20261028/README.md): 40.000 ca, 100 candidates, seed 42; checkpoint lịch sử, phân tích thăm dò.
 - [Bảng bằng chứng đã chuẩn hóa](nontraining_20261029/evidence.json): cùng candidates/source, đủ 10 mô hình; các biểu đồ và báo cáo hiện tại dùng nguồn này.
+- [Ghép UFM + TF-IDF ngày 03/11](hybrid_20261103/hybrid_v3.json): không huấn luyện lại; điểm tính lại khớp số v3 đã công bố, α chọn trên 20.000 ca sớm, kết quả trên 20.000 ca muộn. Dựng bằng `scripts/evaluate_hybrid_v3.py`.
 - [API Windows 6/6 ngày 29/10](nontraining_20261029/demo_api_verification.json) và [history toàn unknown](nontraining_20261029/demo_unknown_history.json).
 - [Kiểm thử local](nontraining_20261029/pytest.txt) · [kiểm tra PDF](nontraining_20261029/pdf_verification.json).
 - [Bàn giao backup](continuation_20261028/backup_handoff.md) · [receipt dữ liệu Colab local](continuation_20261028/colab_data_transfer_verification_20261029.json). Receipt local không thay nghiệm thu trên GPU.

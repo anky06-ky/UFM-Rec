@@ -7,6 +7,8 @@ Cập nhật 29/10/2026. Vòng đã khóa dùng **Toys & Games full temporal 80/
 - Colab trong trình duyệt: tải [UFM_Colab_Browser_Train.ipynb](../notebooks/UFM_Colab_Browser_Train.ipynb) từ repo local rồi mở bằng **Tệp → Mở sổ tay → Tải lên**. Mặc định runtime T4; nếu tài khoản có L4, đổi `GPU_TYPE = 'L4'` ở cell đầu (phép đo throughput lưu riêng `l4_throughput.json`). Bản `UFM_Colab_L4_Train.ipynb` trước đây chỉ khác chữ T4/L4 nên đã gộp vào biến này.
 - Colab trong VS Code: mở [UFM_Colab_Train.ipynb](../notebooks/UFM_Colab_Train.ipynb), chọn kernel Colab GPU T4.
 
+Ngày 03/11/2026 sáu ZIP đầu vào đã được xóa khỏi máy để giải phóng 3,33 GiB, sau khi đối chiếu đủ 49/49 tệp nguồn với SHA-256 trong `manifest.json` (vẫn giữ trong `colab_training_inputs_20261029`). Dữ liệu còn nguyên trong `D:\Nam3_ki1\UFM-Rec_Backups\restored_complete_20261028`. Nếu Drive chưa có sẵn sáu ZIP, cần đóng gói lại 49 tệp đó bằng `scripts/artifact_backup.py create`; ZIP mới có thể khác SHA nên phải thay `BACKUP_MANIFEST_TEXT` trong notebook bằng manifest mới.
+
 Chọn một cách để chạy nối tiếp cùng kế hoạch; không chạy hai notebook đồng thời vào cùng thư mục thí nghiệm. Khi đã mở notebook trên Colab, sửa file local không tự cập nhật bản đang mở; cần dùng bản mới khi bắt đầu phiên phù hợp.
 
 Ảnh người dùng cung cấp ngày 29/10 cho thấy `Huan_Luyen.ipynb` đang đặt `DATA_DIR` là `/content/drive/MyDrive/DA_AI/data/toys_games_70_15_15`. Đây là đường dẫn bộ chia cũ, **khác bộ đầu vào khóa của vòng 15 run**. Có GPU T4 chưa đủ để xác nhận đang chạy đúng vòng. Giữ bản notebook cũ và mở riêng bản UFM nêu trên; không sửa tên thư mục dữ liệu cũ thành `full_temporal` để ép chạy.

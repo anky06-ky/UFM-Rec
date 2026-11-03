@@ -1,5 +1,5 @@
 {
-  "observed_at_utc": "2026-11-03T13:20:23+00:00",
+  "observed_at_utc": "2026-11-03T15:42:39+00:00",
   "source": "docs/final_report.md (7 chương + phụ lục; số liệu validation v3, seed 42); slides patched from output/history/presentation/UFM_Rec_Bao_Ve_Hien_Trang_20261029.pptx",
   "builder": "python scripts/build_report_figures.py; python scripts/build_school_report_docx.py (Pandoc 3.13 + LibreOffice 26.8 portable, two layout passes)",
   "cover": {
@@ -10,21 +10,21 @@
   "artifacts": [
     {
       "path": "output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx",
-      "bytes": 2645405,
-      "sha256": "0cb9da2746b90a3b4682f1a83be5ac4153485dcd88eb7ae143eb1a353e5a3d12",
+      "bytes": 2648337,
+      "sha256": "926707d6b18e3a300aa2dc954e5d0f324e42ae0033bd9665d3d80c7aa7a23950",
       "note": "Mục lục và danh mục bảng/hình lưu sẵn số trang theo bản PDF; trong Word nhấn F9 nếu lệch."
     },
     {
       "path": "output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf",
-      "bytes": 3114634,
-      "sha256": "cf6278091fac260e1f86ed93350c4cea2d6e85291d70f32402b3bed840c08764",
-      "pages": 60,
+      "bytes": 3143044,
+      "sha256": "d5ebd040c16862d8fca4a2d68596518c75dd9ee4e8dd162a3821208293a48061",
+      "pages": 61,
       "fonts": "Times New Roman, Consolas, Cambria Math embedded"
     },
     {
       "path": "output/presentation/UFM_Rec_Bao_Ve_20261103.pptx",
-      "bytes": 966764,
-      "sha256": "b821a1b269197d5244a6d4fd0fc9e7992724e13581fbc066f42da523ca923127",
+      "bytes": 967060,
+      "sha256": "5131517dcde2b23e47aafe014410a6f432db8b10779ac7b2b017878658efaa39",
       "slides": 14
     }
   ],

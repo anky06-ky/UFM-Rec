@@ -92,7 +92,8 @@ $$h_{fused} = w_{cf} h_{cf} + w_{sem} h_{sem} + g_{align}$$
 - **Cold macro NDCG@10:** TF-IDF **0,195682**; semantic-only CLIP **0,190036**; UFM full **0,182056**; popularity **0,042527**.
 - Bảy ablation UFM đã train được kiểm toán và đánh giá lại cùng v3. Full thấp hơn semantic-only: chưa xác nhận lợi ích fusion/uncertainty ở chỉ số chính.
 - Checkpoint chọn trên validation v1; đây là đánh giá lại, chưa phải holdout độc lập. Chưa có mean/std nhiều seed UFM.
-- Nguồn: [kết quả và hash từng mô hình](../reports/continuation_20261028/README.md).
+- Ghép điểm UFM + TF-IDF (báo cáo §5.12), không train lại: α = 0,55 chọn trên 20.000 ca sớm; trên 20.000 ca muộn cold macro **0,215540** so với **0,203751** của TF-IDF.
+- Nguồn: [kết quả và hash từng mô hình](../reports/continuation_20261028/README.md), [kết quả ghép](../reports/hybrid_20261103/hybrid_v3.json).
 
 Ghi chú nói: TF-IDF dùng 10 history item, UFM dùng 20; đây là so sánh hệ thống. SASRec/BERT4Rec đã có bằng chứng v1, chưa có bảng v3 xác minh. Bảng v1/v2 giữ ở báo cáo và nguồn lịch sử, không ghép vào v3.
 
@@ -182,10 +183,11 @@ Ghi chú nói: Mở bản sao UFM đã kiểm SHA. Chuẩn bị ảnh/video đú
 ### SLIDE 13: KẾT LUẬN VÀ PHẦN CÒN THIẾU
 
 - Hệ thống ba nguồn tín hiệu đã có code, checkpoint, đối chứng một seed, audit và demo UFM thật.
-- Kết quả chính v3: full chưa vượt TF-IDF/semantic-only ở cold macro; nhóm 1–5 tương tác là hướng kiểm chứng tiếp.
+- Kết quả chính v3: full chưa vượt TF-IDF/semantic-only ở cold macro, yếu nhất ở nhóm 1–5 tương tác.
+- Ghép điểm UFM + TF-IDF, không train lại: 0,2155 so với 0,2038 của TF-IDF trên nửa muộn v3 (KTC 95% +0,0098 đến +0,0137); là phân tích sau trên validation.
 - CLIP đóng băng cho phép cache đặc trưng; chưa có đối chứng fine-tuning để định lượng mức tiết kiệm tài nguyên.
 - Kế hoạch 15 lượt gồm năm biến thể × ba seed; phần train hiện được để lại. Chưa có kết quả hai cải tiến hoặc UFM All Beauty.
-- Hướng tiếp theo: chạy 15 lượt đa seed đã khóa và đánh giá trên một holdout độc lập được thống nhất trước.
+- Hướng tiếp theo: đưa TF-IDF vào UFM, chạy 15 lượt đa seed đã khóa và đánh giá trên một holdout độc lập được thống nhất trước.
 
 Ghi chú nói: Không chọn seed hoặc cấu hình theo test đã biết; không coi bootstrap user là thay nhiều seed. Nội dung và số liệu cùng bản `docs/final_report.md`. Tài liệu gốc của CLIP, SASRec, BERT4Rec, BPR, calibration và dataset nằm ở phần tài liệu tham khảo của báo cáo.
 

@@ -1,6 +1,6 @@
 # Hoàn thiện đồ án UFM Rec ngày 03/11/2026
 
-Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không chạy train. Lần hoàn thiện đầu là commit `eaca833`; báo cáo 60 trang và đợt lọc trùng là commit `7376900`. Cả hai đã có trên `main` lẫn `followup/multimodal-20261028`, CI Windows/Ubuntu đạt. Phần "Sắp xếp lại tài liệu" là commit `9e92aba`; phần "Tinh gọn thư mục" là thay đổi sau commit đó.
+Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không chạy train. Lần hoàn thiện đầu là commit `eaca833`; báo cáo 60 trang và đợt lọc trùng là commit `7376900`. Cả hai đã có trên `main` lẫn `followup/multimodal-20261028`, CI Windows/Ubuntu đạt. Phần "Sắp xếp lại tài liệu" là commit `9e92aba`, "Tinh gọn thư mục" là commit `431c1b4`; gộp requirements, xóa ZIP Colab và phần "Ghép UFM với TF-IDF" là thay đổi sau đó.
 
 ## Quyết định của nhóm
 
@@ -10,9 +10,9 @@ Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không
 
 ## Bộ nộp
 
-- [Word theo mẫu Trường Đại học Văn Lang](../../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) và [PDF 60 trang](../../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf). Phần đầu 13 trang (bìa không đánh số, các trang sau đánh số La Mã i–xii): bìa, lời cảm ơn, lời nói đầu, trang nhận xét của giảng viên, bảng phân công, mục lục, từ viết tắt, danh mục 36 bảng và 13 hình, tóm tắt. Phần chính (47 trang): bảy chương (giới thiệu; cơ sở lý thuyết; dữ liệu và thiết kế; mô hình và cài đặt; thực nghiệm; demo; kết luận), 18 tài liệu tham khảo và phụ lục. Có 26 công thức đánh số.
+- [Word theo mẫu Trường Đại học Văn Lang](../../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) và [PDF 61 trang](../../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf). Phần đầu 13 trang (bìa không đánh số, các trang sau đánh số La Mã i–xii): bìa, lời cảm ơn, lời nói đầu, trang nhận xét của giảng viên, bảng phân công, mục lục, từ viết tắt, danh mục 37 bảng và 13 hình, tóm tắt. Phần chính (48 trang): bảy chương (giới thiệu; cơ sở lý thuyết; dữ liệu và thiết kế; mô hình và cài đặt; thực nghiệm; demo; kết luận), 18 tài liệu tham khảo và phụ lục. Có 27 công thức đánh số.
 - Nội dung tổng hợp từ các tài liệu `.md` trong `docs/` (đề xuất, phạm vi, trích xuất CLIP, huấn luyện, giao thức, demo, Colab, kịch bản bảo vệ) và bằng chứng trong `reports/`. Mọi số liệu lấy từ tệp bằng chứng; số trong bản Word 27/10 không được dùng lại khi chưa kiểm chứng.
-- [PPTX 14 slide](../../output/presentation/UFM_Rec_Bao_Ve_20261103.pptx): sửa tên nhóm, GVHD, ngày và dòng hướng tiếp theo trên slide 1, 13, 14.
+- [PPTX 14 slide](../../output/presentation/UFM_Rec_Bao_Ve_20261103.pptx): sửa tên nhóm, GVHD, ngày và dòng hướng tiếp theo trên slide 1, 13, 14. Ngày 03/11 thêm kết quả ghép UFM + TF-IDF vào slide 7 và 13, và sửa nhãn chương lệch theo báo cáo cũ ở slide 3, 4, 5, 13 (cả ghi chú thuyết trình).
 - Dựng lại: `python scripts/build_report_figures.py` (10 hình từ dữ liệu thật, gồm [lịch sử huấn luyện 12 epoch](ufm_full_v1_training_history.json)) rồi `python scripts/build_school_report_docx.py`. SHA-256, kích thước, số trang: [receipt](submission_artifacts.json).
 
 Mẫu trường được khôi phục từ Git: `Bao_Cao_Do_An_UFM_Rec_Nhom_4.docx` ngày 27/10 không còn trên đĩa nhưng còn trong một checkpoint của Cline. Bản này nay nằm ở [output/history/docx](../../output/history/docx/Bao_Cao_Do_An_UFM_Rec_Nhom_4_20261027.docx) và chỉ được dùng làm nguồn bìa. Phần kết quả của nó theo giao thức cũ (ví dụ "UFM Overall 0,285611 vượt TF-IDF") hoặc chưa có nguồn (ví dụ "3,8 triệu người dùng"; số thật là 6.158.534) nên không được tái sử dụng.
@@ -51,8 +51,17 @@ Quét SHA-256 toàn repo: 388 tệp, chỉ còn một nhóm trùng có chủ đ�
 
 - `tmp/` (255 tệp, 157 thư mục, phần lớn là hồ sơ tạm của LibreOffice khi dựng báo cáo) và ba thư mục `__pycache__` được đưa vào Thùng rác. `build_school_report_docx.py` nay để tệp tạm trong `%TEMP%\ufm_rec_school_report`; dựng thử ra PDF 60 trang có văn bản giống hệt bản đã commit.
 - Bản cũ trong `output/` chuyển vào `output/history/`: `demo/` ngày 30/09 cùng các hình proposal, báo cáo 28/09–30/09 và `validation_20261003/`. `build_proposal.py` và `plot_validation_audit.py` ghi vào vị trí mới. `output/figures/` chỉ còn hai bộ hình báo cáo đang dùng.
+- Gộp năm tệp requirements thành một `requirements.txt`, giữ nguyên các phiên bản đã ghim, thêm `python-docx` còn thiếu và bỏ `requirements-lock.txt` rỗng. CI nay cài một tệp; vì có `python-docx`, 4 test của bộ dựng báo cáo không còn bị bỏ qua trên CI. Đã đối chiếu trên PyPI: các gói mới có bản cho Python 3.12 trên Windows và Linux, không xung đột với phiên bản đã ghim.
 - Sau commit `9e92aba`, tệp Word bị extension Office Viewer của VS Code lưu đè: mất dòng "SVTH 4" trên bìa và dòng "LỜI CẢM ƠN" trong mục lục. Đã khôi phục bản trong commit; SHA khớp receipt.
-- Thư mục sao lưu giữ nguyên: phần còn chồng nhau là có chủ đích (ZIP để tải lên Colab, bản khôi phục đầy đủ cho demo, ZIP gốc kèm biên nhận).
+- Thư mục sao lưu: sáu ZIP đầu vào Colab (3,33 GiB) được đưa vào Thùng rác theo yêu cầu của nhóm, sau khi 49/49 tệp nguồn trong `restored_complete_20261028` khớp SHA-256 với `manifest.json`. Giữ `restored_complete_20261028` vì checkpoint, đặc trưng CLIP và dữ liệu đã xử lý không có trên GitHub (`.gitignore` loại `*.pt`, `*.npy`, `*.gz`; GitHub chỉ có 390 tệp, khoảng 27 MB), và giữ `document_runtime` để dựng lại báo cáo.
+
+## Ghép UFM với TF-IDF
+
+Nhóm chọn thử tối ưu không cần huấn luyện lại. [`scripts/evaluate_hybrid_v3.py`](../../scripts/evaluate_hybrid_v3.py) tính lại điểm của TF-IDF và UFM full cho 40.000 ca × 100 ứng viên của validation v3 trên CPU (229 giây), chuẩn hóa điểm theo từng ca rồi trộn α·z(UFM) + (1 − α)·z(TF-IDF).
+
+- Điểm tính lại khớp hoàn toàn số đã công bố ở cả bốn nhóm (độ lệch 0), và hai đầu mút α = 0, α = 1 cho đúng thứ hạng của từng mô hình.
+- α được chọn trên 20.000 ca sớm theo thời gian (cùng cách chia với hiệu chuẩn), α = 0,55. Kết quả báo cáo trên 20.000 ca muộn: cold macro **0,215540** so với 0,203751 của TF-IDF và 0,189057 của UFM full. Chênh lệch +0,011789, khoảng tin cậy 95% bootstrap [0,009796; 0,013744]. Kết hợp hơn TF-IDF ở cả bốn nhóm. Chi tiết: [`hybrid_v3.json`](../hybrid_20261103/hybrid_v3.json).
+- Báo cáo thêm mục 5.12 (Bảng 5.14, công thức 5.1; mục Thảo luận thành 5.13), cập nhật tóm tắt, mục 1.6, 7.1, 7.2 và 7.3. Slide 7, 13 và câu hỏi 11 trong [kịch bản bảo vệ](../../docs/defense_guide.md) nêu kết quả cùng giới hạn: phân tích sau trên validation, một seed, demo chưa dùng điểm ghép.
 
 ## Sửa lỗi
 
@@ -63,7 +72,8 @@ Quét SHA-256 toàn repo: 388 tệp, chỉ còn một nhóm trùng có chủ đ�
 ## Kiểm tra
 
 - `python -m pytest tests/ -q`: **120 passed, 3 skipped, 10 subtests passed**, không cảnh báo; chạy lại sau khi sắp xếp tài liệu cho cùng kết quả.
-- Đã render và xem cả 60 trang PDF; LibreOffice không báo lỗi công thức nào; mục lục và danh mục bảng/hình giống nhau giữa hai lượt dàn trang. Font được nhúng. File Word có 16 hình với id không trùng, đủ liên kết và thứ tự thẻ section hợp lệ. Word chưa được mở trên máy này vì không cài Microsoft Office.
+- Bản 61 trang sau khi thêm mục 5.12: so văn bản từng trang với bản trước, chỉ mục lục, danh mục, tóm tắt, mục 1.6 và các trang từ mục 5.12 trở đi thay đổi; đã render và xem lại trang tóm tắt, mục 5.12–5.13 và Chương 7; font vẫn được nhúng. Slide 7 và 13 được render bằng LibreOffice để kiểm tra bố cục.
+- Bản 60 trang trước đó: đã render và xem cả 60 trang PDF; LibreOffice không báo lỗi công thức nào; mục lục và danh mục bảng/hình giống nhau giữa hai lượt dàn trang. Font được nhúng. File Word có 16 hình với id không trùng, đủ liên kết và thứ tự thẻ section hợp lệ. Word chưa được mở trên máy này vì không cài Microsoft Office.
 - Kiểm tra 395 link nội bộ Markdown/HTML sau khi sắp xếp lại: không còn link hỏng.
 
 ## Việc còn lại
@@ -72,4 +82,5 @@ Quét SHA-256 toàn repo: 388 tệp, chỉ còn một nhóm trùng có chủ đ�
 2. Mở bản Word, nhấn F9 nếu số trang trong mục lục lệch. Rà lại mô tả nhiệm vụ của ba thành viên (lấy từ bản 27/10) và lời cảm ơn (đang dùng "giảng viên hướng dẫn"; có thể đổi thành "Thầy" hoặc "Cô").
 3. Diễn tập demo và phần trình bày trên máy bảo vệ, phân công người nói.
 4. Commit đợt tinh gọn thư mục, rồi push cùng `9e92aba` và xem CI.
-5. Dọn Thùng rác nếu muốn thật sự giải phóng khoảng 2,9 GB.
+5. Thùng rác ổ D: đang giữ khoảng 7,4 GB (giới hạn 8 GB), gồm sáu ZIP Colab. Dọn Thùng rác thì các tệp này mất hẳn.
+6. Sao lưu `restored_complete_20261028` (hoặc ít nhất `runs/ufm_full_v1`, `foundation_clip_b32_v1` và `content/`) sang Google Drive hoặc ổ ngoài. Model đã train không có trên GitHub; ngoài máy này chỉ còn bản gốc trên FITLAB theo ghi nhận ngày 28/10, mà container FITLAB có thể bị thu hồi.
