@@ -1,12 +1,12 @@
 # Hướng làm tiếp theo của UFM-Rec
 
-> **Cập nhật 03/11/2026:** nhóm chốt đồ án với kết quả hiện có; [bộ nộp và việc còn lại](../reports/final_20261103/README.md). Kế hoạch dưới đây (mốc 28–29/10) trở thành **hướng phát triển**, áp dụng khi nhóm quay lại phần train.
+> **Cập nhật 03/11/2026:** nhóm chốt đồ án với kết quả hiện có; [bộ nộp và việc còn lại](../../reports/final_20261103/README.md). Kế hoạch dưới đây (mốc 28–29/10) trở thành **hướng phát triển**, áp dụng khi nhóm quay lại phần train.
 
 Cập nhật 28/10/2026. **Phạm vi giảng viên đã chốt theo thông tin nhóm cung cấp:** hệ khuyến nghị sản phẩm dùng lịch sử hành vi, hình ảnh và tên/mô tả sản phẩm. Toys & Games là tập thực nghiệm chính; cold-start sản phẩm là phân tích trọng tâm trong phạm vi hệ gợi ý này. Trường hợp người dùng không có lịch sử hiện là fallback; chưa có kết quả chứng minh cá nhân hóa người dùng mới. Cold macro NDCG@10 và ba seed dưới đây là **giao thức nhóm khóa để kiểm chứng**, không ghi là giảng viên đã duyệt từng chi tiết.
 
 ## Căn cứ để chọn hướng
 
-Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed 42. Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only CLIP 0,190036; UFM full 0,182056**. Full chưa vượt hai đối chứng này. Bảy ablation đã có kết quả, nhưng chưa có độ biến thiên giữa các seed. Nguồn: [kết quả và hash](../reports/continuation_20261028/README.md).
+Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed 42. Cold macro NDCG@10: **TF-IDF 0,195682; semantic-only CLIP 0,190036; UFM full 0,182056**. Full chưa vượt hai đối chứng này. Bảy ablation đã có kết quả, nhưng chưa có độ biến thiên giữa các seed. Nguồn: [kết quả và hash](../../reports/continuation_20261028/README.md).
 
 Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi giúp hay làm giảm chất lượng ở từng mức train count, và điều chỉnh theo tần suất có giúp không?** Kết quả semantic-only tốt hơn full là bằng chứng để khảo sát; chưa tự chứng minh ID embedding hoặc gate là nguyên nhân.
 
@@ -15,7 +15,7 @@ Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi 
 - Phạm vi ba nguồn tín hiệu đã được nhóm xác nhận với giảng viên. Trước vòng train mới, xin chốt chỉ số nghiệm thu, nguồn đánh giá cuối và yêu cầu tập dữ liệu thứ hai bằng [tin nhắn và bảng câu hỏi cho 15 lượt](trao_doi_gvhd_2026_10_30.md). Đây chưa phải những chi tiết đã được giảng viên duyệt.
 - Giữ riêng v1/v2/v3; mọi mô hình trong một bảng dùng cùng candidate hash. V3 vẫn là negative sampling hồi cứu theo regime của target, không phải đánh giá online/full-catalog.
 - Test v2 đã được xem. V3 dùng lại quần thể validation đã tham gia chọn checkpoint, chưa tạo holdout độc lập. Nếu có nguồn holdout cuối, chọn mô hình/seed trên validation trước và chỉ dùng holdout để đánh giá cuối; không chọn lại theo điểm holdout. Nếu không có nguồn độc lập, ghi rõ kết luận thăm dò.
-- Đã khóa source, dữ liệu, features, candidates, selection rule, ngân sách và thứ tự 15 run trong [manifest thực nghiệm](../configs/multimodal_followup_20261028.json). [Runner](../scripts/run_locked_ufm_followup.py) đã qua dry-run trên bản sao FITLAB, kiểm tra 9 đầu vào SHA; chưa có train mới.
+- Đã khóa source, dữ liệu, features, candidates, selection rule, ngân sách và thứ tự 15 run trong [manifest thực nghiệm](../../configs/multimodal_followup_20261028.json). [Runner](../../scripts/run_locked_ufm_followup.py) đã qua dry-run trên bản sao FITLAB, kiểm tra 9 đầu vào SHA; chưa có train mới.
 
 **Đầu ra cần có:** cấu hình/manifest của vòng chạy mới và phạm vi nghiệm thu rõ ràng.
 
@@ -28,11 +28,11 @@ Vì vậy câu hỏi nghiên cứu tiếp theo là: **dung hợp thêm hành vi 
 
 **Đầu ra cần có:** bảng so sánh tái lập được, từng seed, config và predictions. Chỉ mở job train khi có tài nguyên phù hợp; không dừng job khác để lấy GPU.
 
-Trạng thái 28/10: máy local chỉ có PyTorch CPU. FITLAB-01 đã mở lại qua code-server; checkout `8c4ee94` qua dry-run 9/9 đầu vào SHA, đủ kế hoạch 15 job. FITLAB-02 dùng GPU riêng, truy cập cùng dữ liệu, cũng qua preflight 9/9. SSH cổng 22 của cổng 01 vẫn không kết nối. Khi kiểm tra, cả hai GPU đều có tiến trình khác; GPU 02 đã có lúc giảm dùng bộ nhớ xuống 10.662/24.576 MiB nhưng tải vẫn 100%. Chưa chạy 15 run mới. Receipt: [cổng 01](../reports/continuation_20261028/fitlab01_reopen_20261028.json), [cổng 02](../reports/continuation_20261028/fitlab02_check_20261028.json). Runner mặc định chỉ kiểm tra; `--execute` cần GPU trống phù hợp và môi trường Python có CUDA.
+Trạng thái 28/10: máy local chỉ có PyTorch CPU. FITLAB-01 đã mở lại qua code-server; checkout `8c4ee94` qua dry-run 9/9 đầu vào SHA, đủ kế hoạch 15 job. FITLAB-02 dùng GPU riêng, truy cập cùng dữ liệu, cũng qua preflight 9/9. SSH cổng 22 của cổng 01 vẫn không kết nối. Khi kiểm tra, cả hai GPU đều có tiến trình khác; GPU 02 đã có lúc giảm dùng bộ nhớ xuống 10.662/24.576 MiB nhưng tải vẫn 100%. Chưa chạy 15 run mới. Receipt: [cổng 01](../../reports/continuation_20261028/fitlab01_reopen_20261028.json), [cổng 02](../../reports/continuation_20261028/fitlab02_check_20261028.json). Runner mặc định chỉ kiểm tra; `--execute` cần GPU trống phù hợp và môi trường Python có CUDA.
 
-Colab đã chạy [smoke CUDA 5/5 biến thể](../reports/continuation_20261028/colab_cuda_smoke_20261028.json) trên Tesla T4. Đây chỉ là forward/backward với dữ liệu giả lập; Colab chưa có bộ dữ liệu/CLIP cache đã khóa và phiên T4 miễn phí bị giới hạn thời gian, nên chưa dùng kết quả này làm bảng chất lượng hay khởi chạy 15 run đầy đủ.
+Colab đã chạy [smoke CUDA 5/5 biến thể](../../reports/continuation_20261028/colab_cuda_smoke_20261028.json) trên Tesla T4. Đây chỉ là forward/backward với dữ liệu giả lập; Colab chưa có bộ dữ liệu/CLIP cache đã khóa và phiên T4 miễn phí bị giới hạn thời gian, nên chưa dùng kết quả này làm bảng chất lượng hay khởi chạy 15 run đầy đủ.
 
-Lệnh checkout, chạy từng run và khôi phục gói sao lưu có trong [runbook FITLAB](gpu_followup_runbook.md). Gói chỉ chứa artifact của một run để tránh sao lưu lặp và phải được xác minh SHA trên máy trước khi dọn `latest.pt` phía FITLAB.
+Lệnh checkout, chạy từng run và khôi phục gói sao lưu có trong [runbook FITLAB](../gpu_followup_runbook.md). Gói chỉ chứa artifact của một run để tránh sao lưu lặp và phải được xác minh SHA trên máy trước khi dọn `latest.pt` phía FITLAB.
 
 ## 3. Kiểm chứng cải tiến theo train count
 
@@ -42,13 +42,13 @@ Lệnh checkout, chạy từng run và khôi phục gói sao lưu có trong [run
 
 Không lấy trọng số CF dưới một ngưỡng tùy ý làm tiêu chí thành công. Kết luận dựa trên chất lượng cold, ảnh hưởng ở warm và độ ổn định qua seed. Nếu không cải thiện, báo giới hạn một cách trung thực; đây vẫn là kết quả thực nghiệm có ích.
 
-Đã phân tích [dự đoán v3 theo train count](../reports/continuation_20261028/count_effect_v3.json): full − semantic-only lần lượt **−0,002424** (count 0), **−0,024101** (1–5), **+0,002586** (6–20), **+0,014865** (21+). Đây là chênh lệch trên checkpoint cũ một seed, không phải kết quả của cải tiến mới. Mã `count_aware_fusion` đã được tách khỏi `adaptive_dropout`: biến thể thứ nhất giữ fixed ID dropout như full; biến thể thứ hai chỉ đổi dropout theo count. Bằng chứng tác dụng sau train còn chờ 15 run.
+Đã phân tích [dự đoán v3 theo train count](../../reports/continuation_20261028/count_effect_v3.json): full − semantic-only lần lượt **−0,002424** (count 0), **−0,024101** (1–5), **+0,002586** (6–20), **+0,014865** (21+). Đây là chênh lệch trên checkpoint cũ một seed, không phải kết quả của cải tiến mới. Mã `count_aware_fusion` đã được tách khỏi `adaptive_dropout`: biến thể thứ nhất giữ fixed ID dropout như full; biến thể thứ hai chỉ đổi dropout theo count. Bằng chứng tác dụng sau train còn chờ 15 run.
 
 ## 4. Nghiệm thu ứng dụng trên máy
 
-- UFM thật trên FITLAB đã qua 6 ca API và UI zero-shot. UFM trên Windows cũng đã khởi động từ bản sao SHA và qua 6/6 ca API với 767.045 item, checkpoint SHA `5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8`: [receipt Windows](../reports/continuation_20261028/windows_ufm_verification.json). Thêm [ca thiếu modality](../reports/continuation_20261028/windows_ufm_missing_modalities.json): history chứa item chỉ có text hoặc chỉ có ảnh vẫn trả gợi ý, tìm kiếm và loại history đúng; không có item thiếu cả hai trong cache thực. JPEG local thiếu trả 404 có kiểm soát. [Kiểm tra giao diện Chrome local](../reports/continuation_20261028/windows_ufm_ui_visual_check.json) đã tìm LEGO, chọn history, trả Top 5 zero-shot và tải được 5/5 ảnh kết quả; file export local chưa xác minh tải xuống. Export UFM đã có bằng chứng trên FITLAB.
+- UFM thật trên FITLAB đã qua 6 ca API và UI zero-shot. UFM trên Windows cũng đã khởi động từ bản sao SHA và qua 6/6 ca API với 767.045 item, checkpoint SHA `5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8`: [receipt Windows](../../reports/continuation_20261028/windows_ufm_verification.json). Thêm [ca thiếu modality](../../reports/continuation_20261028/windows_ufm_missing_modalities.json): history chứa item chỉ có text hoặc chỉ có ảnh vẫn trả gợi ý, tìm kiếm và loại history đúng; không có item thiếu cả hai trong cache thực. JPEG local thiếu trả 404 có kiểm soát. [Kiểm tra giao diện Chrome local](../../reports/continuation_20261028/windows_ufm_ui_visual_check.json) đã tìm LEGO, chọn history, trả Top 5 zero-shot và tải được 5/5 ảnh kết quả; file export local chưa xác minh tải xuống. Export UFM đã có bằng chứng trên FITLAB.
 - File export UFM thật đã được tải về và chuyển vào `reports/continuation_20261028/ui_export_ufm_zero_shot.json`; đây là bằng chứng luồng export, không phải metric recommendation.
-- Đã đo [benchmark HTTP Windows](../reports/continuation_20261028/windows_ufm_benchmark.json) trên UFM thật: 2 warm-up, 10 request có một item lịch sử và K=5, p50 **21,25 giây**, p95 **26,35 giây**; RSS server cao nhất quan sát **2.551,5 MiB**. Với hai request đồng thời, một thành công và một trả 429 vì server chỉ chạy một suy luận tại một thời điểm. Đây là số của một máy CPU/một cấu hình request, chưa phải throughput đồng thời hoặc peak training RAM.
+- Đã đo [benchmark HTTP Windows](../../reports/continuation_20261028/windows_ufm_benchmark.json) trên UFM thật: 2 warm-up, 10 request có một item lịch sử và K=5, p50 **21,25 giây**, p95 **26,35 giây**; RSS server cao nhất quan sát **2.551,5 MiB**. Với hai request đồng thời, một thành công và một trả 429 vì server chỉ chạy một suy luận tại một thời điểm. Đây là số của một máy CPU/một cấu hình request, chưa phải throughput đồng thời hoặc peak training RAM.
 **Đầu ra cần có:** demo UFM chạy lại từ bản sao local, toàn bộ ca API/UI và benchmark có bằng chứng.
 
 ## 5. Báo cáo và bàn giao
@@ -59,10 +59,10 @@ Không lấy trọng số CF dưới một ngưỡng tùy ý làm tiêu chí th�
 
 **Đầu ra cần có:** hướng dẫn cài/chạy, CI đạt và bộ báo cáo cùng phiên bản.
 
-Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40700844278) ở mốc trước. [PDF tiến độ 2 trang](../output/history/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi. Ngày 29/10 đã xuất Word/PDF toàn văn hiện trạng bằng generator mới và rà từng trang; `Mau_Bao_Cao_Nhom_4.docx` vẫn thiếu nên chưa áp mẫu UFM.
+Nhánh [`followup/multimodal-20261028`](https://github.com/anky06-ky/UFM-Rec/tree/followup/multimodal-20261028) đã được đẩy lên GitHub; [CI Windows và Ubuntu đều đạt](https://github.com/anky06-ky/UFM-Rec/actions/runs/40700844278) ở mốc trước. [PDF tiến độ 2 trang](../../output/history/pdf/UFM_Rec_Tien_Do_2026_10_28.pdf) đã render và kiểm tra trang; đây là tài liệu trao đổi. Ngày 29/10 đã xuất Word/PDF toàn văn hiện trạng bằng generator mới và rà từng trang; `Mau_Bao_Cao_Nhom_4.docx` vẫn thiếu nên chưa áp mẫu UFM.
 
 ## Sau khi hoàn tất phần chính
 
 UFM trên All Beauty chỉ ưu tiên nếu giảng viên giữ yêu cầu dataset thứ hai. Retrieval/ANN, fine-tune encoder và các tính năng mở rộng nên để sau khi có kết quả đối chứng ổn định.
 
-Xem [checklist chi tiết](../reports/project_readiness_20261029.md) ([bản 27/10](history/checklist_hoan_thien_2026_10_27.md)), [bản sao dữ liệu đã kiểm tra](../reports/continuation_20261028/backup_handoff.md) và [hướng dẫn demo](demo.md).
+Xem [checklist chi tiết](../../reports/project_readiness_20261029.md) ([bản 27/10](checklist_hoan_thien_2026_10_27.md)), [bản sao dữ liệu đã kiểm tra](../../reports/continuation_20261028/backup_handoff.md) và [hướng dẫn demo](../demo.md).

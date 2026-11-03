@@ -12,7 +12,7 @@ lịch sử từ 28/09, không phải trạng thái hiện tại.
 
 Catalog phải được khôi phục từ metadata có nguồn, đối chiếu hash và mapping của đúng
 767.045 item trước khi chạy [hướng dẫn train UFM](train.md). Tiến độ/bằng chứng mới:
-[reports/progress.md](../reports/progress.md), các bước tiếp theo:
+[reports/progress.md](../../reports/progress.md), các bước tiếp theo:
 [docs/next.md](next.md).
 
 Nguồn metadata thay thế được tìm thấy trong

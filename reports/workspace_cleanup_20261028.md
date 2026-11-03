@@ -24,4 +24,4 @@ Việc dọn này thu gọn folder dự án; dữ liệu trong Recycle Bin và t
 
 File export UFM được kiểm tra độc lập bằng [receipt](continuation_20261028/ui_export_verification.json). `tmp/` chỉ còn catalog demo offline; các cache được dọn không bị tạo lại trong lượt kiểm thử này.
 
-Hướng đi tiếp theo: [kế hoạch ưu tiên](../docs/next.md).
+Hướng đi tiếp theo: [kế hoạch ưu tiên](../docs/history/next.md).

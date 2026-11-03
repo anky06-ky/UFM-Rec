@@ -1,6 +1,6 @@
 # Hoàn thiện đồ án UFM Rec ngày 03/11/2026
 
-Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không chạy train. Lần hoàn thiện đầu được nhóm commit (`eaca833`) và đẩy lên cả `main` lẫn `followup/multimodal-20261028`; CI Windows/Ubuntu đạt. Báo cáo 60 trang và đợt lọc trùng bên dưới là thay đổi sau commit đó.
+Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không chạy train. Lần hoàn thiện đầu là commit `eaca833`; báo cáo 60 trang và đợt lọc trùng là commit `7376900`. Cả hai đã có trên `main` lẫn `followup/multimodal-20261028`, CI Windows/Ubuntu đạt. Phần "Sắp xếp lại tài liệu" bên dưới là thay đổi sau `7376900`.
 
 ## Quyết định của nhóm
 
@@ -33,6 +33,18 @@ Quét SHA-256 toàn bộ project và thư mục sao lưu: project chỉ có 11 n
 - Trong thư mục sao lưu: bản sao 928 MB parquet trùng `data/raw`; hai thư mục giải nén `restored_delta_20261028` và `restored_local_source_final_20261028` (mọi tệp có trong ZIP gốc hoặc bản sao đầy đủ); `bundle_005/` giải nén dở; slide nháp; bộ cài LibreOffice/Pandoc/Poppler đã giải nén; các tệp mẫu `evaluation_v2` trùng trong bản dọn 28/10; bản sao tài liệu trong `git_lost_found_20261103`.
 - Giữ có chủ đích: ba tệp `graph_report.json` của ba seed BPR-MF (kết quả của ba lượt chạy, trùng vì cùng đồ thị); `restored_complete_20261028` và các ZIP đầu vào Colab (bản sao lưu đầy đủ mà demo và notebook dùng).
 
+## Sắp xếp lại tài liệu
+
+`docs/` chỉ còn 7 tệp: mục lục, nguồn báo cáo, nguồn slide, kịch bản bảo vệ, hướng dẫn demo, hướng dẫn Colab và runbook GPU.
+
+- 14 tài liệu theo mốc chuyển vào `docs/history/`: proposal 2.0, phạm vi, giao thức, kế hoạch 28–29/10, tin nhắn GVHD 30/10, thí nghiệm 03/10, sáu ghi chép FITLAB (môi trường, CLIP, huấn luyện, GPU, vận hành, khôi phục), sao lưu và trang giới thiệu HTML cũ. Link trong mọi tệp Markdown/HTML được cập nhật theo.
+- Đưa vào Thùng rác `docs/proposal.html` (trùng 99,9% `proposal.md`; PDF lịch sử còn trong `output/history/pdf/`). `build_proposal.py` nay chỉ dựng PDF và SVG từ `docs/history/proposal.md`; chạy thử trong thư mục tạm cho văn bản PDF và 5 SVG giống hệt bản cũ.
+- Đưa vào Thùng rác `build_report_docx.py`, `polish_report_docx.py`, `latex_to_omml.py`: bộ dựng Word 27/10 cần `Mau_Bao_Cao_Nhom_4.docx` và `report_equations_omml.json`, hai tệp chưa từng có trong Git, nên không chạy được. Bản Word 27/10 vẫn ở `output/history/docx/`.
+- Giữ `proposal-v1.html` và hai báo cáo tiến độ 28/09 vì đo độ trùng cho thấy chúng là tài liệu riêng: đề xuất TF-IDF/SVD/RRF tháng 9 khác proposal UFM v1; hai báo cáo 28/09 chỉ trùng 2–17% với bản 22:23.
+- `status.py` và notebook `00_status` trỏ sang runbook GPU thay cho `docs/next.md`.
+- [Hướng dẫn demo](../../docs/demo.md) viết lại và đối chiếu với mã demo cùng bằng chứng: lịch sử `B004S8F7QM` như ảnh dự phòng, độ trễ 15–28 giây toàn catalog và 6–11 giây khi lọc nhóm, nhãn "CF · Semantic", lỗi 429/400, thiếu thư viện.
+- Báo cáo mục 6.3 sửa một câu: chế độ `auto` chọn UFM chỉ dựa vào checkpoint hoàn tất; thiếu tệp hoặc sai mã băm thì demo dừng chứ không chuyển sang chế độ nội dung. Dựng lại vẫn 60 trang; so văn bản từng trang, chỉ trang 8 (mục 6.5 sang trang 40) và trang 38–40 thay đổi.
+
 ## Sửa lỗi
 
 - Hai chỗ trong `tests/test_ufm_core.py` đổi tensor có gradient sang số bằng `float()`, gây cảnh báo; nay dùng `.item()`.
@@ -41,14 +53,14 @@ Quét SHA-256 toàn bộ project và thư mục sao lưu: project chỉ có 11 n
 
 ## Kiểm tra
 
-- `python -m pytest tests/ -q`: **120 passed, 3 skipped, 10 subtests passed**, không cảnh báo.
+- `python -m pytest tests/ -q`: **120 passed, 3 skipped, 10 subtests passed**, không cảnh báo; chạy lại sau khi sắp xếp tài liệu cho cùng kết quả.
 - Đã render và xem cả 60 trang PDF; LibreOffice không báo lỗi công thức nào; mục lục và danh mục bảng/hình giống nhau giữa hai lượt dàn trang. Font được nhúng. File Word có 16 hình với id không trùng, đủ liên kết và thứ tự thẻ section hợp lệ. Word chưa được mở trên máy này vì không cài Microsoft Office.
-- Kiểm tra 393 link nội bộ Markdown/HTML: không còn link hỏng.
+- Kiểm tra 395 link nội bộ Markdown/HTML sau khi sắp xếp lại: không còn link hỏng.
 
 ## Việc còn lại
 
 1. Điền họ tên, MSSV, nhiệm vụ và mức hoàn thành của Hân vào `TEAM` trong `scripts/build_school_report_docx.py`, rồi chạy lại script. Sửa chữ "Hân" trên slide 1 bằng PowerPoint.
 2. Mở bản Word, nhấn F9 nếu số trang trong mục lục lệch. Rà lại mô tả nhiệm vụ của ba thành viên (lấy từ bản 27/10) và lời cảm ơn (đang dùng "giảng viên hướng dẫn"; có thể đổi thành "Thầy" hoặc "Cô").
 3. Diễn tập demo và phần trình bày trên máy bảo vệ, phân công người nói.
-4. Commit và push các thay đổi sau `eaca833`, rồi xem CI.
+4. Commit và push đợt sắp xếp tài liệu (sau `7376900`), rồi xem CI.
 5. Dọn Thùng rác nếu muốn thật sự giải phóng khoảng 2,9 GB.

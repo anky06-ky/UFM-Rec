@@ -186,7 +186,7 @@ nội dung đã triển khai; dữ liệu, checkpoint, log và bản sao phục 
 Queue chỉ khởi chạy sau hai probe GPU rảnh; không ép tranh GPU. Hai queue mới chưa
 nối autostart khi container reboot; cửa sổ khởi chạy lần lượt 7 và 14 ngày.
 SIGTERM/lỗi invariant dừng để kiểm tra. Cách chạy lại và protocol:
-[docs/followup.md](../docs/followup.md). Xem realtime bằng `python3 status.py` trên FITLAB.
+[docs/history/followup.md](../docs/history/followup.md). Xem realtime bằng `python3 status.py` trên FITLAB.
 
 ## Kiểm thử
 
@@ -203,4 +203,4 @@ Cùng thư mục có SVG/PDF để đưa vào báo cáo; tái tạo bằng `scri
 
 [Snapshot trước 02/10](../docs/history/Tien_do_UFM_2026-10-02.md) · [Nguồn All Beauty](second_dataset_preparation.json)
 · [Kế hoạch dataset thứ hai đã khóa hash](second_dataset_plan_v1.json)
-· [Protocol bổ sung](../docs/followup.md).
+· [Protocol bổ sung](../docs/history/followup.md).

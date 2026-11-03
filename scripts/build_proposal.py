@@ -1,4 +1,4 @@
-"""Build proposal PDF/HTML and vector figures from docs/proposal.md.
+"""Build proposal PDF and vector figures from docs/history/proposal.md.
 
 Requires reportlab; defaults to Windows Arial or Linux DejaVu Sans fonts.
 Run from any directory: python scripts/build_proposal.py
@@ -133,12 +133,11 @@ def figures():
     return result
 
 
-def inline(text, pdf=True):
+def inline(text):
     text = html.escape(text)
     text = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', text)
-    text = re.sub(r'`([^`]+)`', r'\1' if pdf else r'<code>\1</code>', text)
-    tag = 'link' if pdf else 'a'
-    return re.sub(r'\[([^\]]+)\]\(([^)]+)\)', lambda m: f'<{tag} href="{m[2]}">{m[1]}</{tag}>', text)
+    text = re.sub(r'`([^`]+)`', r'\1', text)
+    return re.sub(r'\[([^\]]+)\]\(([^)]+)\)', lambda m: f'<link href="{m[2]}">{m[1]}</link>', text)
 
 
 def main():
@@ -153,11 +152,10 @@ def main():
     styles = {1: ParagraphStyle('title', parent=body, fontName='Bold', fontSize=28, leading=34, spaceAfter=18),
               2: ParagraphStyle('section', parent=body, fontName='Bold', fontSize=18, leading=23, spaceAfter=16),
               3: ParagraphStyle('sub', parent=body, fontName='Bold', fontSize=11, leading=15, spaceBefore=8, spaceAfter=8)}
-    source = (ROOT/'docs/proposal.md').read_text(encoding='utf-8')
-    story, web = [], []
+    source = (ROOT/'docs/history/proposal.md').read_text(encoding='utf-8')
+    story = []
     for number, page in enumerate(source.split('<!-- page -->')):
         if number: story.append(PageBreak())
-        web.append('<section>')
         for block in re.split(r'\n\s*\n', page.strip()):
             if block.startswith('#'):
                 for line in block.splitlines():
@@ -165,7 +163,6 @@ def main():
                     if match:
                         level, value = len(match[1]), match[2]
                         story.append(Paragraph(inline(value), styles[level]))
-                        web.append(f'<h{level}>{inline(value, False)}</h{level}>')
             elif block.startswith('|'):
                 rows = [[cell.strip() for cell in row.strip().strip('|').split('|')]
                         for row in block.splitlines() if not re.match(r'^\|\s*---', row)]
@@ -176,18 +173,14 @@ def main():
                     ('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),
                     ('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5)]))
                 story.extend([table, Spacer(1,10)])
-                web.append('<table>'+''.join('<tr>'+''.join(f'<td>{inline(c,False)}</td>' for c in row)+'</tr>' for row in rows)+'</table>')
             elif block.startswith('!['):
                 m = re.fullmatch(r'!\[(.*?)\]\((.*?)\)', block)
                 name = Path(m[2]).stem.removeprefix('proposal_')
                 story.extend([drawings[name], Paragraph(inline(m[1]), small), Spacer(1,5)])
-                web.append(f'<figure><img src="{m[2]}" alt="{html.escape(m[1])}"><figcaption>{m[1]}</figcaption></figure>')
             else:
                 lines = block.splitlines() if block.startswith('- ') or re.match(r'^1\. ', block) else [block.replace('\n',' ')]
                 for line in lines:
                     story.append(Paragraph(inline(line), body))
-                    web.append('<p>'+inline(line, False)+'</p>')
-        web.append('</section>')
     def footer(canvas, doc):
         canvas.setTitle('UFM-Rec - Proposal 2.0')
         canvas.setAuthor('UFM-Rec project')
@@ -198,9 +191,7 @@ def main():
     (OUT/'history/pdf').mkdir(parents=True, exist_ok=True)
     SimpleDocTemplate(str(OUT/'history/pdf/proposal.pdf'), pagesize=A4, leftMargin=50, rightMargin=50,
                       topMargin=43, bottomMargin=45).build(story, onFirstPage=footer, onLaterPages=footer)
-    css = 'body{font:16px/1.65 Arial,sans-serif;color:#182e35;background:#eaf1ee;margin:0}section{max-width:850px;margin:30px auto;padding:45px;background:white}h1{font-size:42px;color:black}h2{font-size:27px}h3{font-size:19px}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:10px;vertical-align:top;border-bottom:1px solid #dae5df}tr:first-child{background:#dcebe6;font-weight:bold}tr:nth-child(even){background:#eff5f3}img{width:100%}figure{margin:20px 0}figcaption{font-size:13px;color:#586b73}a{color:#177566}@media print{body{background:white}section{margin:0;padding:0;break-after:page}}@media(max-width:600px){section{padding:20px;margin:10px}table{font-size:12px}}'
-    (ROOT/'docs/proposal.html').write_text('<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UFM-Rec Proposal 2.0</title><style>'+css+'</style><body>'+''.join(web)+'</body></html>', encoding='utf-8')
-    print('Created historical output/history/pdf/proposal.pdf, docs/proposal.html and 5 vector figures.')
+    print('Created historical output/history/pdf/proposal.pdf and 5 vector figures.')
 
 
 if __name__ == '__main__':

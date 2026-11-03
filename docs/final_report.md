@@ -875,7 +875,7 @@ Một dải cảnh báo luôn hiển thị phía trên, nói rõ điểm số, t
 
 #### 6.3. Chế độ dự phòng và catalog mẫu
 
-Bộ đầy đủ để chạy UFM (checkpoint, đặc trưng CLIP, catalog) có dung lượng lớn và nằm ngoài Git. Để demo vẫn chạy được trên máy không có dữ liệu, trình khởi động `Start_Demo.cmd` tự chọn backend: dùng UFM khi tìm thấy checkpoint hoàn tất cùng dữ liệu đúng mã băm, ngược lại dùng chế độ nội dung (TF-IDF). Người trình bày cũng có thể chọn rõ bằng `Start_Demo.cmd --backend ufm` hoặc `--backend content`.
+Bộ đầy đủ để chạy UFM (checkpoint, đặc trưng CLIP, catalog) có dung lượng lớn và nằm ngoài Git. Để demo vẫn chạy được trên máy không có dữ liệu, trình khởi động `Start_Demo.cmd` tự chọn backend: dùng UFM khi tìm thấy checkpoint hoàn tất, ngược lại dùng chế độ nội dung (TF-IDF); người trình bày cũng có thể chọn rõ bằng `Start_Demo.cmd --backend ufm` hoặc `--backend content`. Khi đã chọn UFM mà thiếu tệp hoặc đặc trưng sai mã băm, demo dừng và báo lỗi chứ không âm thầm chuyển sang chế độ nội dung.
 
 Ở chế độ nội dung, nếu thiếu catalog, trình khởi động tự dựng một **catalog mẫu 30 sản phẩm** thật của Toys & Games, kèm ảnh lưu cục bộ trong `demo/demo_images/` và nguồn URL, mã băm trong `demo/catalog_products.json`. Số tương tác của catalog mẫu là **mô phỏng** để có đủ bốn nhóm; giao diện và phản hồi API ghi rõ điều này (`counts_simulated = true`) để người xem không nhầm với kết quả của mô hình thật.
 

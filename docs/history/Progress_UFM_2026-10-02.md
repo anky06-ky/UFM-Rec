@@ -72,7 +72,7 @@ FITLAB không có cron hay user systemd đang hoạt động. Task code-server �
 cài để gọi `bash scripts/start_campaign.sh` khi mở lại workspace; checkpoint và
 venv trên iDragonCloud vẫn còn. Nếu container chưa được mở lại thì không có
 process nào có thể chạy.
-Hướng dẫn chi tiết: [docs/recovery.md](../recovery.md).
+Hướng dẫn chi tiết: [docs/recovery.md](recovery.md).
 
 ## Cập nhật 21:40 UTC+07
 

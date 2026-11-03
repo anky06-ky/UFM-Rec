@@ -94,7 +94,7 @@ Nguồn [1]: Amazon Reviews 2023, Toys & Games. Số liệu dưới đây thuộ
 | Catalog / item xuất hiện trong train | 767.045 / 584.846 |
 | Mốc bắt đầu validation / test, UTC | 11/08/2021 / 16/07/2022 |
 
-![Hình 1. Luồng dữ liệu và ranh giới đánh giá.](../output/figures/proposal_pipeline.svg)
+![Hình 1. Luồng dữ liệu và ranh giới đánh giá.](../../output/figures/proposal_pipeline.svg)
 
 Chỉ giữ verified_purchase=true và rating >= 4. Loại trùng theo user, parent item, rating, timestamp. Split toàn cục theo thời gian ở ranh giới ngày UTC, xấp xỉ 80/10/10; không chia ngẫu nhiên rồi tạo lịch sử. Các sự kiện cùng timestamp không nhìn thấy nhau.
 
@@ -107,7 +107,7 @@ Nguồn kiểm tra: data/processed/toys_games_full_temporal/split_manifest.json;
 <!-- page -->
 ## 4. Kiến trúc mô hình đang triển khai
 
-![Hình 2. UFM-Rec: encoder đóng băng và các thành phần được huấn luyện.](../output/figures/proposal_model.svg)
+![Hình 2. UFM-Rec: encoder đóng băng và các thành phần được huấn luyện.](../../output/figures/proposal_model.svg)
 
 ### Nhánh semantic
 
@@ -221,7 +221,7 @@ Dataset thứ hai chưa chọn; cần giữ bài toán sản phẩm và xác nh�
 <!-- page -->
 ## 8. Kết quả thực nghiệm đã có
 
-![Hình 3. NDCG@10 validation, 40.000 trường hợp, 100 candidates.](../output/figures/proposal_results.svg)
+![Hình 3. NDCG@10 validation, 40.000 trường hợp, 100 candidates.](../../output/figures/proposal_results.svg)
 
 | NDCG@10 validation | TF-IDF | UFM best epoch 9 |
 | --- | --- | --- |
@@ -269,7 +269,7 @@ Mọi trạng thái tiến trình cần thời gian heartbeat và PID thực; kh
 <!-- page -->
 ## 10. Demo và vận hành đáng tin cậy
 
-![Hình 4. Luồng demo và cổng kiểm tra trước inference.](../output/figures/proposal_demo.svg)
+![Hình 4. Luồng demo và cổng kiểm tra trước inference.](../../output/figures/proposal_demo.svg)
 
 ### Kịch bản trình bày
 
@@ -295,7 +295,7 @@ Chỉ đánh dấu hoàn tất khi checkpoint production hợp lệ, status đú
 <!-- page -->
 ## 11. Kế hoạch hoàn thiện và quản lý rủi ro
 
-![Hình 5. Kế hoạch phụ thuộc; mỗi cột là một giai đoạn dự kiến.](../output/figures/proposal_plan.svg)
+![Hình 5. Kế hoạch phụ thuộc; mỗi cột là một giai đoạn dự kiến.](../../output/figures/proposal_plan.svg)
 
 Các giai đoạn dưới đây là ước lượng công việc sau khi storage ổn định, không là cam kết ngày hoàn thành. Thời gian GPU phải đo từ run đầu và cộng thời gian chờ tài nguyên chia sẻ.
 

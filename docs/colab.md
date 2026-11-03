@@ -40,4 +40,4 @@ Tải các artifact cần bàn giao về local và đối chiếu SHA. Drive che
 
 ## Giới hạn khi báo cáo kết quả
 
-Checkpoint được chọn theo validation v1; v3 là đánh giá thăm dò trên quần thể liên quan, không phải holdout độc lập. Test v2 đã được xem và không dùng để chọn mô hình/seed. Kết quả v3 dùng 100 candidates/ca, không đại diện trực tiếp cho full-catalog ranking. Xem [giao thức](protocol_current.md), [runbook](gpu_followup_runbook.md) và [checklist còn thiếu](../reports/project_readiness_20261029.md).
+Checkpoint được chọn theo validation v1; v3 là đánh giá thăm dò trên quần thể liên quan, không phải holdout độc lập. Test v2 đã được xem và không dùng để chọn mô hình/seed. Kết quả v3 dùng 100 candidates/ca, không đại diện trực tiếp cho full-catalog ranking. Xem [giao thức](history/protocol_current.md), [runbook](gpu_followup_runbook.md) và [checklist còn thiếu](../reports/project_readiness_20261029.md).
