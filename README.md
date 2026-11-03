@@ -6,7 +6,7 @@ Hệ khuyến nghị sản phẩm dùng lịch sử hành vi, ảnh và tên/mô
 
 ## Bộ nộp
 
-- [Báo cáo Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) · [PDF 20 trang](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) · [nguồn báo cáo](docs/final_report.md). Dựng lại bằng `python scripts/build_school_report_docx.py`.
+- [Báo cáo Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) · [PDF 60 trang](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) · [nguồn báo cáo](docs/final_report.md): bảy chương, 36 bảng, 13 hình, 26 công thức, phụ lục. Dựng lại bằng `python scripts/build_report_figures.py` rồi `python scripts/build_school_report_docx.py`.
 - [Slide bảo vệ 14 trang](output/presentation/UFM_Rec_Bao_Ve_20261103.pptx) · [nguồn slide](docs/presentation_slides.md) · [kịch bản bảo vệ và câu hỏi](docs/defense_guide.md).
 - [Demo](docs/demo.md): mở [Start_Demo.cmd](Start_Demo.cmd).
 - [Bắt đầu](START.md) · [mục lục tài liệu](docs/README.md) · [mục lục bằng chứng](reports/README.md) · [các bản xuất](output/README.md).
@@ -17,7 +17,7 @@ Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed lịch sử 42. Cold
 
 Checkpoint chọn bằng validation v1; v3 dùng lại quần thể validation liên quan nên không phải holdout độc lập. Test v2 đã được xem. Sampling theo regime target và thống kê cuối split có tính hồi cứu; kết quả không tương đương full-catalog hoặc online. [Giao thức](docs/protocol_current.md) và [ledger test](reports/test_evaluation_ledger.json) ghi giới hạn.
 
-Demo UFM trên Windows dùng checkpoint epoch 9, catalog 767.045 sản phẩm và counts thật: [API 6/6 ca](reports/nontraining_20261029/demo_api_verification.json), [UI tự động 4/4 ca](reports/nontraining_20261029/demo_ui_end_to_end_20261029.json). Kiểm thử local ngày 03/11 đạt **119 passed, 3 skipped, 10 subtests passed**.
+Demo UFM trên Windows dùng checkpoint epoch 9, catalog 767.045 sản phẩm và counts thật: [API 6/6 ca](reports/nontraining_20261029/demo_api_verification.json), [UI tự động 4/4 ca](reports/nontraining_20261029/demo_ui_end_to_end_20261029.json). Kiểm thử local ngày 03/11 đạt **120 passed, 3 skipped, 10 subtests passed**.
 
 ## Chạy và tái lập
 
@@ -28,6 +28,7 @@ Máy hiện tại có bản sao đầy đủ ở `D:\Nam3_ki1\UFM-Rec_Backups\re
 ```powershell
 python -m pytest tests/ -q
 python scripts/build_current_evidence.py
+python scripts/build_report_figures.py
 python scripts/build_school_report_docx.py
 ```
 

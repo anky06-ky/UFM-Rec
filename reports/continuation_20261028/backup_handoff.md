@@ -1,5 +1,7 @@
 # Bàn giao bản sao dữ liệu ngày 28/10/2026
 
+> **Cập nhật 03/11/2026:** đã bỏ các bản trùng `restored_delta_20261028/`, `restored_local_source_final_20261028/` (mọi tệp khớp ZIP gốc hoặc `restored_complete_20261028`) và `raw_meta_Toys_and_Games_20261028/` (trùng SHA với `data/raw`, tải lại được bằng `scripts/download_toys_metadata.py`). Danh sách và bản được giữ: [biên nhận lọc trùng](../final_20261103/dedup_20261103.json).
+
 ## Đã kiểm tra trên máy Windows
 
 - **22/22 gói chính**: SHA-256 hợp lệ, tổng archive **13.150.278.921 byte**.

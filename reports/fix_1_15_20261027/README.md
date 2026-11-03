@@ -1,5 +1,7 @@
 # Sửa và xác minh mục 1–15 — FITLAB-01, ngày 27/10/2026
 
+> **Cập nhật 03/11/2026:** trong `fitlab01_finish1/executed_source/` chỉ giữ `src/reevaluate_ufm_checkpoints.py` (khác mã hiện tại). Chín tệp còn lại trùng từng byte với mã cùng đường dẫn trong repo nên đã bỏ; `fitlab01_finish1/current_source_manifest.json` trùng [source_manifest.json](source_manifest.json). SHA của mọi tệp vẫn nằm trong manifest và lịch sử Git; xem [biên nhận](../final_20261103/dedup_20261103.json).
+
 Đã làm trên `/home/coder/iDragonCloud/DA_AI` của FITLAB-01. Bằng chứng thực thi ghi ngày 27/10; hoàn tất đối chiếu và bàn giao ngày 28/10/2026. Kiểm tra checkpoint, cache và baseline dùng CPU. Không huấn luyện lại mô hình hoặc chạy suy luận trên test trong đợt này. Các JSON v2 nhập trước đó được giữ nguyên byte.
 
 ## Kết quả quan trọng
