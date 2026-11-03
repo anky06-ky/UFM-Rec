@@ -22,7 +22,7 @@ def save_formats(fig, output, stem):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--report', type=Path, default=ROOT/'reports/ufm_validation_audit_v2/report.json')
-    parser.add_argument('--output', type=Path, default=ROOT/'output/figures/validation_20261003')
+    parser.add_argument('--output', type=Path, default=ROOT/'output/history/figures/validation_20261003')
     args = parser.parse_args()
     report = json.loads(args.report.read_text(encoding='utf-8'))
     assert report['protocol']['split'] == 'validation' and report['test_evaluated'] is False

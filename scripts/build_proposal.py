@@ -142,11 +142,11 @@ def inline(text):
 
 def main():
     fonts()
-    (OUT/'figures').mkdir(parents=True, exist_ok=True)
+    (OUT/'history/figures').mkdir(parents=True, exist_ok=True)
     (OUT/'pdf').mkdir(parents=True, exist_ok=True)
     drawings = figures()
     for name, drawing in drawings.items():
-        renderSVG.drawToFile(drawing, str(OUT/'figures'/f'proposal_{name}.svg'))
+        renderSVG.drawToFile(drawing, str(OUT/'history/figures'/f'proposal_{name}.svg'))
     body = ParagraphStyle('body', fontName='Body', fontSize=9.2, leading=13.3, textColor=INK, spaceAfter=7)
     small = ParagraphStyle('small', parent=body, fontSize=8.1, leading=11, spaceAfter=4)
     styles = {1: ParagraphStyle('title', parent=body, fontName='Bold', fontSize=28, leading=34, spaceAfter=18),

@@ -197,8 +197,8 @@ Chi tiết: [verification_20261003.txt](verification_20261003.txt).
 GPU smoke và benchmark dài còn chờ; không coi CPU PASS là nghiệm thu GPU.
 
 Biểu đồ đã render và kiểm tra trực quan:
-[NDCG theo regime](../output/figures/validation_20261003/ranking_by_regime.png),
-[calibration](../output/figures/validation_20261003/calibration_reliability.png).
+[NDCG theo regime](../output/history/figures/validation_20261003/ranking_by_regime.png),
+[calibration](../output/history/figures/validation_20261003/calibration_reliability.png).
 Cùng thư mục có SVG/PDF để đưa vào báo cáo; tái tạo bằng `scripts/plot_validation_audit.py`.
 
 [Snapshot trước 02/10](../docs/history/Tien_do_UFM_2026-10-02.md) · [Nguồn All Beauty](second_dataset_preparation.json)

@@ -9,6 +9,8 @@
 
 Ô họ tên/MSSV/nhiệm vụ của Hân trên bìa và bảng phân công đang để trống có đánh dấu `[...]`; điền rồi dựng lại trước khi nộp.
 
+Mở tệp Word bằng Microsoft Word. Extension Office Viewer của VS Code lưu đè tệp khi mở và làm mất dòng thành viên trên bìa cùng một dòng mục lục.
+
 ## Bản lịch sử
 
 `history/` giữ mọi bản cũ, không dùng để nộp:
@@ -16,5 +18,5 @@
 - `history/docx/`: báo cáo Word theo mẫu trường ngày 27/10 (số liệu giao thức cũ, khôi phục từ Git và là nguồn bìa của bản hiện hành) và Word hiện trạng 29/10.
 - `history/pdf/`: proposal, báo cáo chi tiết 28/09, tiến trình 30/09, tiến độ Nhóm 4 ngày 27/10, tiến độ 28/10 và PDF hiện trạng 29/10.
 - `history/presentation/`: PPTX hiện trạng 29/10 (GVHD và tên nhóm chưa sửa).
-
-Các hình cũ trong `figures/` vẫn được tài liệu lịch sử/proposal tham chiếu. `demo/` là bằng chứng demo cũ, không phải ảnh hay JSON từ lượt nghiệm thu 29/10.
+- `history/figures/`: hình của proposal, báo cáo 28/09–30/09 và validation 03/10; tài liệu trong `docs/history/` vẫn tham chiếu.
+- `history/demo/`: ảnh và JSON demo ngày 30/09, không phải lượt nghiệm thu 29/10.

@@ -20,6 +20,7 @@ import json
 import os
 import re
 import subprocess
+import tempfile
 from pathlib import Path
 
 from docx import Document
@@ -41,7 +42,8 @@ RUNTIME = Path(os.environ.get(
     "UFM_DOC_RUNTIME", r"D:\Nam3_ki1\UFM-Rec_Backups\colab_training_inputs_20261029\document_runtime"))
 PANDOC = Path(os.environ.get("UFM_PANDOC", RUNTIME / "pandoc_extracted/Pandoc/pandoc.exe"))
 LO_PYTHON = RUNTIME / "lo_extracted/program/python.exe"
-BUILD = ROOT / "tmp/school_report"
+# Staging files and the throwaway LibreOffice profile stay outside the repository.
+BUILD = Path(tempfile.gettempdir()) / "ufm_rec_school_report"
 OUTPUT_DOCX = ROOT / "output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx"
 OUTPUT_PDF = ROOT / "output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf"
 
