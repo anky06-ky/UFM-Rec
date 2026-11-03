@@ -43,7 +43,7 @@ Lệnh dựng báo cáo không train. Nó cần python-docx và bộ Pandoc/Libr
 - `src/`, `tests/`, `scripts/`: mô hình, pipeline, demo và công cụ tái lập.
 - `docs/`: nguồn báo cáo/slide, kịch bản bảo vệ, hướng dẫn demo/Colab/GPU; `docs/history/` giữ tài liệu theo mốc (proposal, giao thức, ghi chép FITLAB/huấn luyện/sao lưu, báo cáo tiến độ, tin nhắn GVHD, spec Kiro).
 - `reports/`: metric, receipt, manifest và snapshot nguồn.
-- `output/`: chỉ chứa bộ nộp hiện hành; `output/history/` giữ mọi bản Word/PDF/PPTX cũ.
+- `output/`: chỉ chứa bộ nộp hiện hành; `output/history/` giữ mọi bản Word/PDF/PPTX, hình và demo cũ.
 - `notebooks/`: notebook Colab, notebook FITLAB cũ và notebook All Beauty.
 - `data/`, `runs/`: dữ liệu/checkpoint; không xóa khi dọn cache. `tmp/`, `__pycache__/`, `.pytest_cache/` có thể tái tạo.
 

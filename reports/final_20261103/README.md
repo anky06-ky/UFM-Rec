@@ -1,6 +1,6 @@
 # Hoàn thiện đồ án UFM Rec ngày 03/11/2026
 
-Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không chạy train. Lần hoàn thiện đầu là commit `eaca833`; báo cáo 60 trang và đợt lọc trùng là commit `7376900`. Cả hai đã có trên `main` lẫn `followup/multimodal-20261028`, CI Windows/Ubuntu đạt. Phần "Sắp xếp lại tài liệu" bên dưới là thay đổi sau `7376900`.
+Rà từ commit `4b72a2d` cùng các thay đổi chưa commit từ 29/10. Không chạy train. Lần hoàn thiện đầu là commit `eaca833`; báo cáo 60 trang và đợt lọc trùng là commit `7376900`. Cả hai đã có trên `main` lẫn `followup/multimodal-20261028`, CI Windows/Ubuntu đạt. Phần "Sắp xếp lại tài liệu" là commit `9e92aba`; phần "Tinh gọn thư mục" là thay đổi sau commit đó.
 
 ## Quyết định của nhóm
 
@@ -45,6 +45,15 @@ Quét SHA-256 toàn bộ project và thư mục sao lưu: project chỉ có 11 n
 - [Hướng dẫn demo](../../docs/demo.md) viết lại và đối chiếu với mã demo cùng bằng chứng: lịch sử `B004S8F7QM` như ảnh dự phòng, độ trễ 15–28 giây toàn catalog và 6–11 giây khi lọc nhóm, nhãn "CF · Semantic", lỗi 429/400, thiếu thư viện.
 - Báo cáo mục 6.3 sửa một câu: chế độ `auto` chọn UFM chỉ dựa vào checkpoint hoàn tất; thiếu tệp hoặc sai mã băm thì demo dừng chứ không chuyển sang chế độ nội dung. Dựng lại vẫn 60 trang; so văn bản từng trang, chỉ trang 8 (mục 6.5 sang trang 40) và trang 38–40 thay đổi.
 
+## Tinh gọn thư mục
+
+Quét SHA-256 toàn repo: 388 tệp, chỉ còn một nhóm trùng có chủ đích (`graph_report.json` của ba seed BPR-MF); không cặp thư mục nào chung từ một nửa nội dung trở lên.
+
+- `tmp/` (255 tệp, 157 thư mục, phần lớn là hồ sơ tạm của LibreOffice khi dựng báo cáo) và ba thư mục `__pycache__` được đưa vào Thùng rác. `build_school_report_docx.py` nay để tệp tạm trong `%TEMP%\ufm_rec_school_report`; dựng thử ra PDF 60 trang có văn bản giống hệt bản đã commit.
+- Bản cũ trong `output/` chuyển vào `output/history/`: `demo/` ngày 30/09 cùng các hình proposal, báo cáo 28/09–30/09 và `validation_20261003/`. `build_proposal.py` và `plot_validation_audit.py` ghi vào vị trí mới. `output/figures/` chỉ còn hai bộ hình báo cáo đang dùng.
+- Sau commit `9e92aba`, tệp Word bị extension Office Viewer của VS Code lưu đè: mất dòng "SVTH 4" trên bìa và dòng "LỜI CẢM ƠN" trong mục lục. Đã khôi phục bản trong commit; SHA khớp receipt.
+- Thư mục sao lưu giữ nguyên: phần còn chồng nhau là có chủ đích (ZIP để tải lên Colab, bản khôi phục đầy đủ cho demo, ZIP gốc kèm biên nhận).
+
 ## Sửa lỗi
 
 - Hai chỗ trong `tests/test_ufm_core.py` đổi tensor có gradient sang số bằng `float()`, gây cảnh báo; nay dùng `.item()`.
@@ -62,5 +71,5 @@ Quét SHA-256 toàn bộ project và thư mục sao lưu: project chỉ có 11 n
 1. Điền họ tên, MSSV, nhiệm vụ và mức hoàn thành của Hân vào `TEAM` trong `scripts/build_school_report_docx.py`, rồi chạy lại script. Sửa chữ "Hân" trên slide 1 bằng PowerPoint.
 2. Mở bản Word, nhấn F9 nếu số trang trong mục lục lệch. Rà lại mô tả nhiệm vụ của ba thành viên (lấy từ bản 27/10) và lời cảm ơn (đang dùng "giảng viên hướng dẫn"; có thể đổi thành "Thầy" hoặc "Cô").
 3. Diễn tập demo và phần trình bày trên máy bảo vệ, phân công người nói.
-4. Commit và push đợt sắp xếp tài liệu (sau `7376900`), rồi xem CI.
+4. Commit đợt tinh gọn thư mục, rồi push cùng `9e92aba` và xem CI.
 5. Dọn Thùng rác nếu muốn thật sự giải phóng khoảng 2,9 GB.
