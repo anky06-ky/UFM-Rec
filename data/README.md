@@ -23,8 +23,8 @@ revision and hashes. Parquet files are ignored by Git. To build the image URL
 catalog, the prepared `content/items.csv.gz`, `content/products_text.csv.gz`,
 and `split_manifest.json` must also be present; `text` is used only for the
 existing row alignment and does not supply image URLs. Install
-`requirements-catalog-parquet.txt` before passing the ordered Parquet shards to
-`src/prepare_ufm_catalog.py`.
+`requirements.txt` (it includes `pyarrow`) before passing the ordered Parquet
+shards to `src/prepare_ufm_catalog.py`.
 
 The interaction file is the public [Amazon Reviews 2023 Toys and Games dataset](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/review_categories/Toys_and_Games.jsonl.gz). Its expected SHA-256 and record count are stored in `raw/toys_games_full/source_manifest.json`.
 

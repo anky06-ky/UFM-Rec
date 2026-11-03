@@ -1,14 +1,26 @@
+# All Python dependencies: pipeline, demo, CLIP features, tests and report builders.
+# Exact pins are tested in CI (Python 3.12).
+
+# Pipeline, model and demo
 joblib==1.6.0
-
 numpy==2.2.6
-
 pandas==2.2.3
-
 scikit-learn==1.6.1
-
 scipy==1.17.1
-
 pillow==12.3.0
+torch>=2.2.0  # keeps an existing CUDA build (FITLAB, Colab); CI installs the CPU wheel first
 
-torch>=2.2.0  # chon ban CPU hoac CUDA tuy may
+# Frozen CLIP text/image features
+transformers==4.57.6
+huggingface-hub==0.36.2
 
+# Amazon Reviews 2023 Parquet metadata for src/prepare_ufm_catalog.py
+pyarrow==26.0.0
+
+# Tests, figures and the Word/PDF report builders
+pytest
+pytest-cov
+psutil
+matplotlib
+reportlab
+python-docx

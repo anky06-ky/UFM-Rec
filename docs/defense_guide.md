@@ -11,7 +11,7 @@ Cập nhật 03/11/2026: nhóm chốt đồ án với checkpoint và bằng ch�
 1. **Phút 0–1:** bài toán, ba nguồn tín hiệu và ý nghĩa các nhóm train count 0, 1–5, 6–20, 21+. Phân biệt sản phẩm mới với người dùng không có history.
 2. **Phút 1–3:** CLIP đóng băng → adapter → trung bình history ở nhánh semantic; ID embedding → causal Transformer ở nhánh hành vi; uncertainty proxy và fusion. Nêu mask khi nhánh không khả dụng.
 3. **Phút 3–4:** split thời gian 80/10/10, cùng bộ 100 candidates; checkpoint lịch sử chọn bằng v1, kết quả đang trình bày là v3 thăm dò.
-4. **Phút 4–6:** bảng v3 và hai hình trong báo cáo; full thua cold macro, chênh lệch lớn ở 1–5 tương tác. Không quy nguyên nhân cho gate/ID chỉ từ chênh lệch điểm. Bảng test v2 là lịch sử riêng.
+4. **Phút 4–6:** bảng v3 và hai hình trong báo cáo; full thua cold macro, chênh lệch lớn ở 1–5 tương tác. Không quy nguyên nhân cho gate/ID chỉ từ chênh lệch điểm. Sau đó nêu kết quả ghép UFM + TF-IDF ở §5.12: 0,2155 so với 0,2038 của TF-IDF trên 20.000 ca muộn, α chọn trên 20.000 ca sớm. Bảng test v2 là lịch sử riêng.
 5. **Phút 6–7:** calibration ECE/NLL/Brier; giải thích confidence có điều kiện trên candidate set và temperature không cải thiện thứ hạng.
 6. **Phút 7–8:** giới hạn, phần đã chạy và phần cần kiểm chứng. Hai biến thể count-aware và adaptive dropout là hai can thiệp riêng.
 
@@ -43,7 +43,7 @@ Các ca API đã kiểm tra: không history, có history và bốn regime đều
 
 **3. Vì sao full UFM thua baseline?** Kết quả hiện tại chứng minh có suy giảm trên cold macro của giao thức này. Nó chưa chứng minh nguyên nhân. Chênh lệch full − semantic-only tại nhóm 1–5 tương tác là −0,024101; nhóm có history cần phân tích gate/uncertainty và đối chứng nhiều seed để kiểm chứng giả thuyết.
 
-**4. Vậy đóng góp hiện tại là gì?** Một hệ thống tái lập được từ dữ liệu đa phương thức đến suy luận, thiết kế fusion/proxy và thực nghiệm phân tích cả điểm mạnh lẫn hạn chế. Chưa tuyên bố vượt đối chứng hoặc tính mới toàn diện của kiến trúc. CLIP, Transformer và BPR là thành phần kế thừa.
+**4. Vậy đóng góp hiện tại là gì?** Một hệ thống tái lập được từ dữ liệu đa phương thức đến suy luận, thiết kế fusion/proxy và thực nghiệm phân tích cả điểm mạnh lẫn hạn chế. UFM đứng riêng chưa vượt đối chứng; khi ghép điểm với TF-IDF thì vượt TF-IDF trên phần validation không dùng để chọn tham số (§5.12). Không tuyên bố tính mới toàn diện của kiến trúc. CLIP, Transformer và BPR là thành phần kế thừa.
 
 **5. Uncertainty có phải Bayes không?** Đây là proxy học được với đầu ra dương, dùng để điều chỉnh trọng số. Chưa có bằng chứng cho posterior Bayes hoặc uncertainty được hiệu chuẩn tuyệt đối.
 
@@ -56,6 +56,8 @@ Các ca API đã kiểm tra: không history, có history và bốn regime đều
 **9. Nhiều seed và hai cải tiến đã chạy chưa?** Chưa. Kết quả lịch sử hiện có một seed 42. Kế hoạch khóa 15 run gồm năm biến thể × ba seed; count-aware và adaptive dropout là hai biến thể riêng. Nhóm chốt đồ án trước vòng này và trình bày nó là hướng phát triển, kèm notebook Colab có resume.
 
 **10. All Beauty đã chứng minh khả năng tổng quát chưa?** Chưa. Có dữ liệu và baseline tham chiếu, chưa có UFM được xác minh trên All Beauty. Dataset thứ hai chỉ cần triển khai nếu nằm trong phạm vi nghiệm thu; train riêng hai dataset cũng không tự là transfer learning.
+
+**11. Ghép UFM với TF-IDF có phải chọn trên chính dữ liệu báo cáo không?** Không. α được chọn trên 20.000 ca sớm theo thời gian; kết quả lấy trên 20.000 ca muộn chưa dùng để chọn. Trước khi trộn, điểm tính lại của hai mô hình khớp hoàn toàn số đã công bố. Mức tăng cold macro so với TF-IDF là 0,011789, khoảng tin cậy 95% [0,009796; 0,013744]. Đây vẫn là phân tích sau: v3 không phải test độc lập, chỉ một seed, và demo chưa dùng điểm ghép.
 
 ## Việc nhóm còn cần làm trước khi bảo vệ
 

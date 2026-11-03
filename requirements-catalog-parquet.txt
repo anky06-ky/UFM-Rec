@@ -1,3 +1,0 @@
-# Optional dependency for reading the official Hugging Face Parquet conversion
-# of Amazon Reviews 2023 metadata. Training does not require PyArrow.
-pyarrow==26.0.0
