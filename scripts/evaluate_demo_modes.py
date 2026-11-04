@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from common import write_json  # noqa: E402
-from recommend_catalog import FAST_CANDIDATES, HYBRID_ALPHA, Catalog, UFMBackend  # noqa: E402
+from recommend_catalog import FAST_CANDIDATES, HYBRID_ALPHA, HYBRID_SAMPLE, Catalog, UFMBackend  # noqa: E402
 
 REGIMES = ("all", "zero_shot", "extreme_cold", "cold", "warm")
 MODES = [("ufm", "full"), ("ufm", "fast"), ("hybrid", "full"), ("hybrid", "fast")]
@@ -62,8 +62,9 @@ def main():
     catalog = Catalog(args.data)
     backend = UFMBackend(catalog, args.run, features=args.features, training_source=args.training_source)
     load_seconds = time.perf_counter() - started
-    rss_mib = psutil.Process().memory_info().rss / 2**20
-    print(f"Loaded in {load_seconds:.1f}s, RSS {rss_mib:.0f} MiB", flush=True)
+    memory = psutil.Process().memory_info()
+    rss_mib, private_mib = memory.rss / 2**20, getattr(memory, "private", 0) / 2**20  # private: Windows only
+    print(f"Loaded in {load_seconds:.1f}s, RSS {rss_mib:.0f} MiB, private {private_mib:.0f} MiB", flush=True)
 
     # 1. The faster implementation must reproduce the recorded full-catalog answers.
     replay = []
@@ -119,11 +120,13 @@ def main():
         observed_at_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         scope=("In-process ranking on CPU (no HTTP); full catalog of 767,045 items, checkpoint epoch 9. "
                "Fast scope: UFM rescores the union of the nearest items by its own semantic and behaviour "
-               "embeddings, TF-IDF and popularity."),
+               "embeddings, TF-IDF and popularity. The hybrid blend standardizes against every allowed item in "
+               "both scopes (UFM statistics from a fixed sample in the fast scope)."),
         hardware=dict(platform=platform.platform(), logical_cpu=os.cpu_count(),
                       physical_ram_mib=round(psutil.virtual_memory().total / 2**20, 1), torch_threads=4),
-        load_seconds=round(load_seconds, 1), rss_after_load_mib=round(rss_mib, 1),
-        fast_candidates_per_source=FAST_CANDIDATES, hybrid_alpha=HYBRID_ALPHA,
+        model=backend.provenance, load_seconds=round(load_seconds, 1), rss_after_load_mib=round(rss_mib, 1),
+        private_after_load_mib=round(private_mib, 1),
+        fast_candidates_per_source=FAST_CANDIDATES, hybrid_alpha=HYBRID_ALPHA, hybrid_sample=HYBRID_SAMPLE,
         replay_29_10_full_catalog=replay, latency_seconds=latency,
         fast_vs_full_top10=fidelity, sampled_histories=len(histories),
         limitations=[

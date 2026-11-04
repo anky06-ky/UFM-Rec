@@ -6,7 +6,7 @@
 
 | Tệp nguồn | Nội dung | Bản nộp |
 | --- | --- | --- |
-| [final_report.md](final_report.md) | Báo cáo 61 trang: bảy chương, tài liệu tham khảo, phụ lục | [Word](../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) |
+| [final_report.md](final_report.md) | Báo cáo 63 trang: bảy chương, tài liệu tham khảo, phụ lục | [Word](../output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx), [PDF](../output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) |
 | [presentation_slides.md](presentation_slides.md) | Nội dung 14 slide | [PPTX](../output/presentation/UFM_Rec_Bao_Ve_20261103.pptx) |
 | [defense_guide.md](defense_guide.md) | Kịch bản trình bày và câu hỏi dễ gặp | |
 | [demo.md](demo.md) | Chạy demo, kiểm tra trước buổi bảo vệ, xử lý sự cố | |

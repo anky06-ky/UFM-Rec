@@ -12,7 +12,7 @@
 - **Học phần**: Học máy ứng dụng
 - **Lĩnh vực**: Hệ thống gợi ý (Recommender Systems), Học sâu đa phương thức (Multimodal Deep Learning), Ước lượng độ tin cậy (Reliability Proxy).
 - **Tập dữ liệu thực nghiệm chính**: Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11,57 triệu tương tác). All Beauty đã chuẩn bị dữ liệu; chưa có kết quả UFM đã xác minh trên tập thứ hai.
-- **Nhóm thực hiện**: Nguyễn Thành Phong, Trần An Kỳ, Nguyễn Hoàng Hải, Hân
+- **Nhóm thực hiện**: Nguyễn Thành Phong, Trần An Kỳ, Nguyễn Hoàng Hải
 - **Giảng viên hướng dẫn**: Phan Hồ Viết Trường
 - **Thời gian**: 11/2026 — bản bảo vệ, chốt với kết quả hiện có
 
@@ -137,27 +137,28 @@ Nguồn: `reports/continuation_20261028/summary.json`; [Guo và cộng sự 2017
 
 ---
 
-### SLIDE 10: HIỆU NĂNG UFM TRÊN WINDOWS
+### SLIDE 10: TĂNG TỐC DEMO UFM TRÊN WINDOWS
 
-- Catalog 767.045 item, checkpoint full epoch 9, backend UFM CPU.
-- Hai warm-up + 10 request, history một item và K=5: **p50 21,25 giây; p95 26,35 giây**.
-- RSS cao nhất quan sát **2.551,5 MiB**; QPS tuần tự khoảng **0,0457**.
+- Catalog 767.045 item, checkpoint full epoch 9, backend UFM CPU (i7-8565U, 16 GB RAM).
+- Tính sẵn vector ngữ nghĩa của sản phẩm: chấm toàn catalog từ 15–16 giây (29/10) xuống **p50 7,5 giây**; 6/6 ca 29/10 cho cùng kết quả.
+- Chế độ Nhanh chấm lại tối đa 5.500 ứng viên: **p50 0,42 giây** (UFM), **0,60 giây** (UFM + TF-IDF).
+- Top 10 của chế độ Nhanh trùng **84,4%** với toàn catalog (UFM, mọi nhóm): 100% ở nhóm lạnh và ấm, 70,8% ở zero-shot; UFM + TF-IDF trùng 98,8%.
 - Hai request đồng thời trả một 200 và một 429; chưa phải hệ phục vụ nhiều suy luận đồng thời.
-- Chưa có peak VRAM train đủ để nghiệm thu mục tiêu GPU 16 GiB.
 
-Ghi chú nói: 10 request chưa mô tả p99 ổn định. Số đo FITLAB 03/10 là request đơn; số catalog content 30 item là demo mẫu, không đặt cạnh số UFM đầy đủ như cùng benchmark. Nguồn: `windows_ufm_benchmark.json`; không suy thời gian Colab từ lượt train lịch sử 4,13 giờ.
+Ghi chú nói: Độ trễ phụ thuộc RAM trống: 7,5 giây khi còn khoảng 5 GB, 13,3 giây khi chỉ còn khoảng 1 GB. Độ trùng chỉ so chế độ Nhanh với toàn catalog, không phải chất lượng gợi ý. Nguồn: `reports/demo_20261103/demo_modes.json`; số 28/10 (p50 21,25 giây) trong `windows_ufm_benchmark.json`. Peak VRAM khi train chưa được đo riêng.
 
 ---
 
 ### SLIDE 11: DEMO UFM THẬT
 
 - Tìm sản phẩm, chọn history, lọc regime và nhận Top-K; xem backend, train count, điểm, trọng số nhánh và uncertainty.
+- Chọn mô hình UFM hoặc UFM + TF-IDF, phạm vi Nhanh (mặc định) hoặc Toàn catalog; dòng tóm tắt ghi thời gian và số sản phẩm đã chấm.
 - UFM đã có sáu ca API và UI zero-shot trên catalog 767.045 item; counts thật và checkpoint được kiểm SHA.
 - `Start_Demo.cmd` tự chọn UFM khi có checkpoint hoàn tất hoặc content khi chưa có; kiểm tra backend hiển thị trước khi trình diễn.
 - Ảnh JPEG trên UI để hiển thị; suy luận dùng CLIP cache, ảnh UI lỗi không tự đổi điểm.
-- API đạt 6/6; UI Chrome headless đạt 4/4, gồm export JSON, ảnh lỗi và mất mạng. [Receipt UI](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json) và [ảnh zero-shot](../reports/nontraining_20261029/demo_ui_zero_shot_20261029.png) đã lưu; cần thử lại trên máy bảo vệ.
+- API đạt 6/6; UI Chrome headless đạt 5/5, gồm export JSON, ảnh lỗi, chế độ UFM + TF-IDF và mất mạng. [Receipt UI](../reports/demo_20261103/demo_ui_end_to_end_20261103.json) và [ảnh zero-shot](../reports/demo_20261103/demo_ui_zero_shot_20261103.png) đã lưu; cần thử lại trên máy bảo vệ.
 
-Ghi chú nói: Mở bản sao UFM đã kiểm SHA. Chuẩn bị ảnh/video đúng backend và báo trước thời gian chờ. Người dùng không history nhận fallback, không gọi đó là cá nhân hóa người dùng mới. Nguồn: `docs/demo.md` và các receipt Windows.
+Ghi chú nói: Mở bản sao UFM đã kiểm SHA. Trình diễn bằng chế độ Nhanh; nếu chọn Toàn catalog thì báo trước thời gian chờ. Người dùng không history nhận fallback, không gọi đó là cá nhân hóa người dùng mới. Nguồn: `docs/demo.md` và các receipt Windows.
 
 ---
 

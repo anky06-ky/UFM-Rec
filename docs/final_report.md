@@ -6,7 +6,7 @@
 
 - **Học phần**: Học máy ứng dụng
 - **Giảng viên hướng dẫn**: Phan Hồ Viết Trường
-- **Nhóm thực hiện**: Nguyễn Thành Phong, Trần An Kỳ, Nguyễn Hoàng Hải, Hân
+- **Nhóm thực hiện**: Nguyễn Thành Phong, Trần An Kỳ, Nguyễn Hoàng Hải
 - **Phiên bản**: 03/11/2026 — bản nộp, chốt với kết quả hiện có
 
 ---
@@ -29,7 +29,7 @@ Bài toán khởi đầu lạnh (cold-start) và đặc biệt là cực lạnh 
 
 Đề tài xây dựng và thực nghiệm kiến trúc **UFM-Rec (Uncertainty-aware Fusion Model Recommender)**. Mô hình kết hợp biểu diễn đa phương thức đóng băng từ **CLIP ViT-B/32** (văn bản tên, mô tả và hình ảnh sản phẩm) với biểu diễn tuần tự của lịch sử tương tác qua một Transformer nhân quả. Hai nhánh được hợp nhất bằng **proxy độ tin cậy học được** và **cổng căn chỉnh chéo**, cho phép mạng điều tiết trọng số giữa nhánh ngữ nghĩa và nhánh hành vi theo mức khả dụng của từng nguồn tín hiệu.
 
-Thực nghiệm dùng Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11.572.689 tương tác dương sau làm sạch, 6.158.534 người dùng), chia theo thời gian 80/10/10. Mô hình được huấn luyện 12 epoch trên GPU Quadro RTX 6000; checkpoint epoch 9 được chọn theo validation. Đánh giá chính dùng validation v3 cố định: 40.000 ca, mỗi ca 1 sản phẩm đúng và 99 sản phẩm âm, 10.000 ca cho mỗi nhóm zero-shot, cực lạnh, lạnh và ấm. Trên cùng bộ ứng viên, Cold macro NDCG@10 của TF-IDF là **0,195682**, semantic-only dùng CLIP **0,190036**, UFM full **0,182056**, popularity **0,042527**. Mô hình đầy đủ tốt hơn semantic-only ở nhóm có từ 6 tương tác trở lên nhưng thấp hơn rõ ở nhóm 1–5 tương tác (−0,024101). Ghép điểm UFM với TF-IDF mà không huấn luyện lại, với trọng số chọn trên 20.000 ca sớm của validation, đạt cold macro **0,215540** trên 20.000 ca muộn so với **0,203751** của TF-IDF (chênh lệch 0,011789, khoảng tin cậy 95% từ 0,009796 đến 0,013744). Hiệu chuẩn temperature scaling giảm ECE từ **0,082061** xuống **0,037478** trên phần validation dùng để kiểm tra. Demo trên Windows phục vụ toàn bộ catalog với checkpoint thật, đạt 6/6 ca API và 4/4 ca giao diện.
+Thực nghiệm dùng Amazon Reviews 2023 — Toys & Games (767.045 sản phẩm, 11.572.689 tương tác dương sau làm sạch, 6.158.534 người dùng), chia theo thời gian 80/10/10. Mô hình được huấn luyện 12 epoch trên GPU Quadro RTX 6000; checkpoint epoch 9 được chọn theo validation. Đánh giá chính dùng validation v3 cố định: 40.000 ca, mỗi ca 1 sản phẩm đúng và 99 sản phẩm âm, 10.000 ca cho mỗi nhóm zero-shot, cực lạnh, lạnh và ấm. Trên cùng bộ ứng viên, Cold macro NDCG@10 của TF-IDF là **0,195682**, semantic-only dùng CLIP **0,190036**, UFM full **0,182056**, popularity **0,042527**. Mô hình đầy đủ tốt hơn semantic-only ở nhóm có từ 6 tương tác trở lên nhưng thấp hơn rõ ở nhóm 1–5 tương tác (−0,024101). Ghép điểm UFM với TF-IDF mà không huấn luyện lại, với trọng số chọn trên 20.000 ca sớm của validation, đạt cold macro **0,215540** trên 20.000 ca muộn so với **0,203751** của TF-IDF (chênh lệch 0,011789, khoảng tin cậy 95% từ 0,009796 đến 0,013744). Hiệu chuẩn temperature scaling giảm ECE từ **0,082061** xuống **0,037478** trên phần validation dùng để kiểm tra. Demo trên Windows phục vụ toàn bộ catalog với checkpoint thật, đạt 6/6 ca API và 5/5 ca giao diện; chế độ Nhanh trả gợi ý trong khoảng 0,4–0,6 giây trên CPU.
 
 Các kết quả chỉ có một seed và validation v3 dùng lại quần thể đã tham gia chọn checkpoint nên mang tính thăm dò. Hai can thiệp theo số tương tác (count-aware fusion và adaptive ID dropout) đã được cài đặt, kiểm thử và khóa kế hoạch 15 lượt huấn luyện, là hướng phát triển của đồ án.
 
@@ -125,7 +125,7 @@ Do giới hạn thời gian và tài nguyên GPU dùng chung, các kết quả U
 - **Phần nhóm thiết kế và cài đặt.** Bộ chuyển đổi (adapter) đa phương thức có mặt nạ cho phương thức thiếu; cơ chế đánh dấu khả dụng cho từng nhánh; hai đầu ước lượng độ bất định dùng làm proxy độ tin cậy; hợp nhất có trọng số kèm căn chỉnh chéo có cổng; hai biến thể can thiệp theo số tương tác (count-aware fusion và adaptive ID dropout).
 - **Quy trình thực nghiệm.** Chia dữ liệu theo thời gian ở quy mô 11,57 triệu tương tác; bộ ứng viên cố định có mã băm cho 40.000 ca cân bằng bốn nhóm; mười mô hình và biến thể được đánh giá trên cùng một bộ ứng viên; tách bạch ba phiên bản giao thức đánh giá v1, v2, v3.
 - **Phát hiện thực nghiệm.** Mô hình đầy đủ chưa vượt đối chứng nội dung, và phần thua tập trung ở nhóm 1–5 tương tác. Đây là chỉ dẫn cụ thể cho hướng cải tiến tiếp theo. Ghép điểm UFM với TF-IDF, không cần huấn luyện lại, vượt đối chứng mạnh nhất trên phần validation không dùng để chọn tham số (mục 5.12).
-- **Hệ thống.** Ứng dụng demo chạy trên 767.045 sản phẩm với checkpoint thật; bộ 123 ca kiểm thử tự động; quy trình sao lưu và khôi phục có kiểm tra SHA-256.
+- **Hệ thống.** Ứng dụng demo chạy trên 767.045 sản phẩm với checkpoint thật, có chế độ Nhanh trả gợi ý dưới 1 giây và chế độ ghép UFM + TF-IDF; bộ 124 ca kiểm thử tự động; quy trình sao lưu và khôi phục có kiểm tra SHA-256.
 
 #### 1.7. Quy trình thực hiện và tiến độ
 
@@ -139,7 +139,7 @@ Do giới hạn thời gian và tài nguyên GPU dùng chung, các kết quả U
 | 2. Đặc trưng | Cuối tháng 9 – đầu tháng 10/2026 | Trích xuất CLIP văn bản và ảnh trên GPU FITLAB | 767.044 vector văn bản, 758.692 vector ảnh |
 | 3. Huấn luyện | Đầu tháng 10/2026 | Huấn luyện UFM full, sau đó bảy biến thể ablation | Checkpoint epoch 9; bảy biến thể một seed |
 | 4. Kiểm định | Cuối tháng 10/2026 | Sửa giao thức đánh giá (v2, v3), hiệu chuẩn, đánh giá lại tám checkpoint | Bộ bằng chứng validation v3 có mã băm |
-| 5. Ứng dụng và bàn giao | 28/10 – 03/11/2026 | Demo trên toàn catalog, kiểm thử, sao lưu, báo cáo và slide | 6/6 ca API, 4/4 ca giao diện, 120 test đạt |
+| 5. Ứng dụng và bàn giao | 28/10 – 04/11/2026 | Demo trên toàn catalog, tăng tốc suy luận, kiểm thử, sao lưu, báo cáo và slide | 6/6 ca API, 5/5 ca giao diện, 121 test đạt |
 
 #### 1.8. Cấu trúc báo cáo
 
@@ -376,8 +376,8 @@ Bảng dưới liệt kê các yêu cầu đặt ra cho hệ thống và mức �
 | PCN-01 | Tái lập: mọi đầu vào có mã băm, không ghi đè kết quả cũ | Đạt: manifest SHA-256, kiểm thử chặn ghi đè |
 | PCN-02 | Huấn luyện chịu được gián đoạn trên máy chủ dùng chung | Đạt: checkpoint mỗi 1.000 bước và resume |
 | PCN-03 | Bảo mật demo: chỉ phục vụ nội bộ, kiểm tra nguồn gọi | Đạt: chỉ lắng nghe loopback, từ chối origin lạ |
-| PCN-04 | Độ trễ phù hợp tương tác trực tiếp | Chưa đạt: p50 21,25 giây trên CPU (mục 5.11) |
-| PCN-05 | Kiểm thử tự động cho các thành phần chính | Đạt: 123 ca kiểm thử, 120 đạt trên Windows |
+| PCN-04 | Độ trễ phù hợp tương tác trực tiếp | Đạt ở chế độ Nhanh: p50 0,42 giây (UFM), 0,60 giây (UFM + TF-IDF); toàn catalog p50 7,5 giây trên CPU (mục 5.11) |
+| PCN-05 | Kiểm thử tự động cho các thành phần chính | Đạt: 124 ca kiểm thử, 121 đạt trên Windows |
 
 #### 3.9. Kiến trúc tổng thể và luồng xử lý
 
@@ -570,7 +570,7 @@ FITLAB là máy chủ dùng chung của khoa: GPU có thể đang được tiế
 
 #### 4.12. Kiểm thử tự động
 
-Bộ kiểm thử dùng pytest, gồm 123 ca trong 25 tệp. Trên máy Windows ngày 03/11/2026: **120 đạt, 3 bỏ qua** (ba ca chỉ chạy trên Linux), không có cảnh báo. CI trên GitHub Actions chạy cùng bộ kiểm thử trên Windows và Ubuntu cho mỗi lần đẩy mã.
+Bộ kiểm thử dùng pytest, gồm 124 ca trong 25 tệp. Trên máy Windows ngày 04/11/2026: **121 đạt, 3 bỏ qua** (ba ca chỉ chạy trên Linux), không có cảnh báo. CI trên GitHub Actions chạy cùng bộ kiểm thử trên Windows và Ubuntu cho mỗi lần đẩy mã.
 
 *Bảng: Bộ kiểm thử tự động theo nhóm chức năng*
 
@@ -582,7 +582,7 @@ Bộ kiểm thử dùng pytest, gồm 123 ca trong 25 tệp. Trên máy Windows 
 | Mẫu đánh giá | test_sample_builder.py, test_candidate_audit.py, test_calibration_candidates.py | 15 | 1 dương + 99 âm duy nhất, không trùng lịch sử, báo lỗi khi thiếu ứng viên |
 | Hiệu chuẩn | test_calibration_validation.py | 2 | Chia theo thời gian, nhiệt độ tính tay |
 | Đối chứng | test_bpr_mf.py, test_sasrec.py, test_comparison_models.py, test_content_baseline_cli.py | 9 | BPR-MF, SASRec, các mô hình so sánh, TF-IDF |
-| Demo | test_recommend_demo.py | 8 | Catalog mẫu, chặn URL ảnh lạ, từ chối origin lạ, che ID lạ |
+| Demo | test_recommend_demo.py | 9 | Catalog mẫu, chặn URL ảnh lạ, từ chối origin lạ, che ID lạ, chế độ Nhanh và UFM + TF-IDF, bảng ngữ nghĩa tính sẵn cho cùng điểm |
 | Vận hành và sao lưu | test_artifact_backup.py, test_campaign_*.py, test_foundation_queue.py, test_fitlab_layout.py, test_trained_source.py | 19 | Sao lưu từ chối gói hỏng, watchdog, nguồn huấn luyện đúng mã băm |
 | Kế hoạch và sổ test | test_followup_plan.py, test_locked_followup_summary.py, test_evaluation_ledger.py | 7 | Kế hoạch 15 lượt khóa, tổng hợp từ chối dữ liệu lẫn test |
 | Notebook và tài liệu | test_colab_notebook_resume.py, test_school_report.py | 24 | Khôi phục từ Drive có kiểm SHA, dựng báo cáo |
@@ -814,20 +814,37 @@ All Beauty dùng giao thức lấy mẫu khác Toys: 100 ứng viên/ca với m�
 
 **Huấn luyện.** Lượt UFM full mất khoảng 4,13 giờ cho tiến trình cuối trên Quadro RTX 6000 24 GB, với 198.232 bước. Checkpoint tốt nhất (chỉ trọng số) có dung lượng 396,7 MB; checkpoint mới nhất có thêm trạng thái bộ tối ưu nên lớn khoảng 1,19 GB. Ma trận TF-IDF chiếm 532 MB trên đĩa. Đỉnh VRAM của lượt huấn luyện chưa được đo riêng, nên đồ án không đưa ra cam kết chạy được trên GPU 16 GB.
 
-**Suy luận trên catalog.** Demo chạy UFM trên CPU của một máy Windows (8 luồng, 16 GB RAM), chấm điểm toàn bộ 767.045 sản phẩm cho mỗi yêu cầu.
+**Suy luận trên catalog.** Demo chạy UFM trên CPU của một máy Windows (Intel Core i7-8565U, 4 nhân 8 luồng, 16 GB RAM). Phiên bản đầu chấm điểm toàn bộ 767.045 sản phẩm cho mỗi yêu cầu; lượt đo ngày 28/10 qua HTTP (2 lượt khởi động, 10 lượt đo, lịch sử 1 sản phẩm, K = 5) cho p50 21,25 giây, p95 26,35 giây và RSS cao nhất 2.551,5 MiB ([`windows_ufm_benchmark.json`](../reports/continuation_20261028/windows_ufm_benchmark.json)). Máy chủ chỉ cho phép một lượt suy luận tại một thời điểm và trả HTTP 429 cho yêu cầu đến sau, thay vì để hai lượt tranh tài nguyên.
 
-*Bảng: Đo độ trễ demo UFM trên CPU (2 lượt khởi động, 10 lượt đo, lịch sử 1 sản phẩm, K = 5)*
+Nhóm tăng tốc suy luận theo hai hướng, không huấn luyện lại và không đổi mô hình:
 
-| Chỉ số | Giá trị |
-| --- | ---: |
-| Độ trễ p50 | 21,25 giây |
-| Độ trễ p95 | 26,35 giây |
-| Nhỏ nhất / lớn nhất | 19,25 / 28,44 giây |
-| Thông lượng tuần tự | 0,0457 yêu cầu/giây |
-| Bộ nhớ tiến trình (RSS) lúc khởi động / cao nhất | 2.512,6 / 2.551,5 MiB |
-| Hai yêu cầu đồng thời | Một trả 200, một trả 429 |
+1. **Tính sẵn phía sản phẩm của nhánh ngữ nghĩa.** Vector ngữ nghĩa của sản phẩm chỉ phụ thuộc bảng CLIP và bộ chuyển đổi đã đóng băng, nên được tính một lần lúc khởi động thay vì ở mọi yêu cầu. Bảng CLIP được ánh xạ từ tệp (memory-map) và chỉ được đọc khi khởi động. Kết quả không đổi: phát lại sáu ca nghiệm thu ngày 29/10 ở chế độ toàn catalog cho đúng cùng sản phẩm và thứ tự, điểm lệch tối đa 3,3 × 10⁻⁶ (mục 6.4).
+2. **Chế độ Nhanh: truy hồi rồi xếp hạng lại.** Lấy hợp của bốn nguồn ứng viên: 2.000 sản phẩm gần nhất theo vector ngữ nghĩa của UFM, 2.000 theo vector hành vi, 1.000 theo TF-IDF và 500 sản phẩm phổ biến nhất; UFM chỉ chấm lại tập này, tối đa 5.500 sản phẩm.
 
-Nguồn: [`windows_ufm_benchmark.json`](../reports/continuation_20261028/windows_ufm_benchmark.json). Máy chủ chỉ cho phép một lượt suy luận tại một thời điểm và trả HTTP 429 cho yêu cầu đến sau, thay vì để hai lượt tranh tài nguyên. Mười lượt đo chưa đủ để ước lượng p99 ổn định. Độ trễ hơn 20 giây là điểm yếu lớn nhất của demo; nguyên nhân chính là phải chấm điểm toàn catalog bằng mô hình phụ thuộc ứng viên trên CPU. Hướng cải thiện là truy hồi một tập ứng viên nhỏ trước rồi mới xếp hạng lại bằng UFM (mục 7.3).
+*Bảng: Độ trễ theo chế độ (đo trong tiến trình, 1 lượt khởi động và 5 lượt đo, lịch sử 1 sản phẩm, K = 5)*
+
+| Mô hình | Phạm vi | Số sản phẩm được chấm | p50 | Nhỏ nhất – lớn nhất |
+| --- | --- | ---: | ---: | ---: |
+| UFM | Toàn catalog | 767.044 | 7,53 giây | 7,40 – 7,70 giây |
+| UFM | Nhanh | 4.949 | 0,42 giây | 0,39 – 0,51 giây |
+| UFM + TF-IDF | Toàn catalog | 767.044 | 7,73 giây | 7,73 – 7,87 giây |
+| UFM + TF-IDF | Nhanh | 4.949 | 0,60 giây | 0,54 – 0,61 giây |
+
+Nguồn: [`demo_modes.json`](../reports/demo_20261103/demo_modes.json). Độ trễ phụ thuộc lượng RAM trống: số đo trên lấy khi máy còn khoảng 5 GB trống; trong lượt nghiệm thu giao diện, khi chỉ còn khoảng 1 GB trống, một lượt UFM + TF-IDF trên toàn catalog mất 13,3 giây. Sau khi khởi động, tiến trình dùng khoảng 2,7 GiB bộ nhớ riêng, cao nhất 2,9 GiB trong lượt nghiệm thu giao diện; working set khoảng 3,9 GiB vì gồm cả các trang ánh xạ từ tệp CLIP mà hệ điều hành có thể thu hồi.
+
+Chế độ Nhanh là xấp xỉ: bước truy hồi có thể bỏ sót sản phẩm mà UFM chấm cao. Bảng dưới so top 10 của chế độ Nhanh với top 10 khi chấm toàn catalog, trên lịch sử của 25 ca validation v3 có người dùng đã biết (chỉ đọc lịch sử, không đọc sản phẩm đích).
+
+*Bảng: Độ trùng top 10 giữa chế độ Nhanh và chế độ toàn catalog (25 lịch sử)*
+
+| Bộ lọc nhóm | UFM: trùng top 10 | UFM: cùng hạng 1 | UFM + TF-IDF: trùng top 10 | UFM + TF-IDF: cùng hạng 1 |
+| --- | ---: | ---: | ---: | ---: |
+| Tất cả | 84,4% | 84% | 98,8% | 100% |
+| Zero-shot | 70,8% | 76% | 99,2% | 100% |
+| Cực lạnh | 88,0% | 92% | 99,6% | 100% |
+| Lạnh | 100% | 100% | 100% | 100% |
+| Ấm | 100% | 100% | 99,2% | 100% |
+
+Với UFM, độ trùng thấp nhất ở nhóm zero-shot: các sản phẩm này không có vector hành vi, nên ứng viên chỉ đến từ vector ngữ nghĩa và TF-IDF, trong khi điểm UFM do các lớp MLP tính trên từng cặp người dùng – sản phẩm chứ không chỉ là tích vô hướng. Chế độ ghép trùng gần như hoàn toàn vì thứ hạng đầu do các sản phẩm khớp từ khóa chi phối, và các sản phẩm này đã nằm trong nguồn ứng viên TF-IDF. Độ trùng chỉ cho biết chế độ Nhanh bám sát xếp hạng toàn catalog đến đâu, không phải chất lượng gợi ý.
 
 #### 5.12. Kết hợp UFM với TF-IDF không cần huấn luyện lại
 
@@ -869,7 +886,7 @@ Như vậy tín hiệu của UFM và tín hiệu từ vựng của TF-IDF bổ s
 
 Ứng dụng demo cho phép người xem tự tạo một lịch sử mua sắm và xem mô hình gợi ý gì, đặc biệt với sản phẩm chưa từng có tương tác. Yêu cầu quan trọng nhất là **trung thực**: demo phải chạy mô hình thật trên catalog thật, và nói rõ khi nào nó đang chạy chế độ minh họa. Demo gồm ba thành phần:
 
-- **Lõi suy luận** (`src/recommend_catalog.py`): lớp `Catalog` nạp 767.045 sản phẩm, số tương tác train, tìm kiếm theo tên hoặc mã ASIN và xác định nhóm của từng sản phẩm; lớp `UFMBackend` nạp checkpoint, mã nguồn huấn luyện đã lưu trữ kèm mã băm và bảng đặc trưng CLIP, rồi chấm điểm toàn catalog theo từng khối 1.024 sản phẩm; lớp `ContentBackend` là chế độ dự phòng dùng TF-IDF.
+- **Lõi suy luận** (`src/recommend_catalog.py`): lớp `Catalog` nạp 767.045 sản phẩm, số tương tác train, tìm kiếm theo tên hoặc mã ASIN và xác định nhóm của từng sản phẩm; lớp `UFMBackend` nạp checkpoint, mã nguồn huấn luyện đã lưu trữ kèm mã băm và bảng đặc trưng CLIP, tính sẵn vector ngữ nghĩa của mọi sản phẩm, rồi chấm điểm theo từng khối 8.192 sản phẩm trên toàn catalog hoặc trên tập ứng viên của chế độ Nhanh (mục 5.11); lớp `ContentBackend` là chế độ dự phòng dùng TF-IDF.
 - **Máy chủ HTTP** (`src/demo_recommender.py`): chỉ lắng nghe trên địa chỉ nội bộ (loopback), kiểm tra nguồn gọi (origin) và chỉ xử lý một lượt suy luận tại một thời điểm.
 - **Giao diện web** (`demo/index.html`): một trang HTML duy nhất với giao diện tối.
 
@@ -877,13 +894,13 @@ Như vậy tín hiệu của UFM và tín hiệu từ vựng của TF-IDF bổ s
 
 | Phương thức | Đường dẫn | Chức năng |
 | ------ | --------------- | ------------------------ |
-| GET | `/api/status` | Trạng thái, tên backend, cảnh báo, mã băm checkpoint, nguồn đặc trưng, số sản phẩm |
+| GET | `/api/status` | Trạng thái, tên backend, cảnh báo, mã băm checkpoint, nguồn đặc trưng, số sản phẩm, các chế độ xếp hạng hỗ trợ |
 | GET | `/api/examples` | Một số sản phẩm phổ biến để bắt đầu |
 | GET | `/api/search?q=` | Tìm sản phẩm theo tên hoặc mã ASIN |
 | GET | `/api/product-image?asin=` | Ảnh sản phẩm lưu cục bộ (chế độ mẫu) |
-| POST | `/api/recommend` | Nhận lịch sử (tối đa 20 ASIN), số lượng K và bộ lọc nhóm; trả danh sách gợi ý |
+| POST | `/api/recommend` | Nhận lịch sử (tối đa 20 ASIN), số lượng K, bộ lọc nhóm, mô hình và phạm vi chấm; trả gợi ý |
 
-Mỗi kết quả trả về gồm mã ASIN, tên, ảnh, số tương tác train, nhóm, điểm xếp hạng, cặp trọng số [hành vi, ngữ nghĩa], cặp độ bất định và cờ phương thức. Kèm theo mỗi phản hồi là mã băm của checkpoint, mã nguồn huấn luyện và đặc trưng đã dùng, để kết quả trên màn hình truy được về đúng mô hình.
+Mỗi kết quả trả về gồm mã ASIN, tên, ảnh, số tương tác train, nhóm, điểm xếp hạng, cặp trọng số [hành vi, ngữ nghĩa], cặp độ bất định và cờ phương thức; ở chế độ ghép có thêm điểm UFM và điểm TF-IDF trước khi trộn. Phản hồi ghi rõ mô hình, phạm vi chấm và số sản phẩm đã chấm. Yêu cầu không nêu mô hình và phạm vi được xếp hạng như trước: UFM trên toàn catalog. Kèm theo mỗi phản hồi là mã băm của checkpoint, mã nguồn huấn luyện và đặc trưng đã dùng, để kết quả trên màn hình truy được về đúng mô hình.
 
 #### 6.2. Giao diện và luồng sử dụng
 
@@ -892,10 +909,14 @@ Mỗi kết quả trả về gồm mã ASIN, tên, ảnh, số tương tác trai
 Người dùng thao tác theo ba bước, tương ứng ba khối trên giao diện:
 
 1. **Tạo lịch sử:** tìm sản phẩm theo tên hoặc mã (có gợi ý nhanh như LEGO, Puzzle, Thú bông, Montessori), thêm tối đa 20 sản phẩm vào lịch sử. Thứ tự từ cũ đến mới; mô hình dùng tối đa 20 sản phẩm gần nhất và loại các sản phẩm đã chọn khỏi kết quả.
-2. **Chọn cách khám phá:** chọn nhóm sản phẩm muốn xem (tất cả, zero-shot, cực lạnh, lạnh, ấm) và số kết quả K, rồi bấm "Tìm gợi ý cho tôi".
-3. **Xem và so sánh:** mỗi thẻ kết quả hiển thị ảnh, nhóm, số tương tác, điểm xếp hạng, tỷ lệ trọng số hành vi/ngữ nghĩa và proxy độ bất định. Người xem có thể thêm kết quả vào lịch sử để thử tiếp, hoặc xuất toàn bộ kết quả ra tệp JSON để trình bày.
+2. **Chọn cách khám phá:** chọn nhóm sản phẩm muốn xem (tất cả, zero-shot, cực lạnh, lạnh, ấm), mô hình (UFM hoặc UFM + TF-IDF), phạm vi chấm (Nhanh hoặc Toàn catalog) và số kết quả K, rồi bấm "Tìm gợi ý cho tôi". Trong lúc chờ, nút hiển thị số giây đã trôi qua.
+3. **Xem và so sánh:** dòng tóm tắt phía trên cho biết thời gian, mô hình, phạm vi và số sản phẩm đã chấm. Mỗi thẻ kết quả hiển thị ảnh, nhóm, số tương tác, điểm xếp hạng, thanh tỷ lệ trọng số hành vi/ngữ nghĩa và proxy độ bất định. Người xem có thể thêm kết quả vào lịch sử để thử tiếp, hoặc xuất toàn bộ kết quả ra tệp JSON để trình bày.
 
-Một dải cảnh báo luôn hiển thị phía trên, nói rõ điểm số, trọng số và độ bất định là tín hiệu của mô hình, không phải xác suất mua hàng, và ảnh trên màn hình chỉ để xem: mô hình dùng đặc trưng CLIP đã trích xuất sẵn, nên ảnh tải lỗi không làm đổi điểm. Với gợi ý zero-shot như trong hình, trọng số luôn là 0% hành vi và 100% ngữ nghĩa, đúng với thiết kế ở mục 4.4.
+Một dải cảnh báo luôn hiển thị phía trên (rút gọn một dòng, bấm "Chi tiết" để đọc đủ), nói rõ điểm số, trọng số và độ bất định là tín hiệu của mô hình, không phải xác suất mua hàng, và ảnh trên màn hình chỉ để xem: mô hình dùng đặc trưng CLIP đã trích xuất sẵn, nên ảnh tải lỗi không làm đổi điểm. Với gợi ý zero-shot như trong hình, trọng số luôn là 0% hành vi và 100% ngữ nghĩa, đúng với thiết kế ở mục 4.4.
+
+![Chế độ UFM + TF-IDF trên toàn catalog với cùng lịch sử](../output/figures/report_20261103/demo_hybrid.png)
+
+Ở chế độ UFM + TF-IDF, thẻ hiển thị điểm kết hợp, bên dưới là điểm UFM và điểm TF-IDF trước khi trộn. Hai điểm được chuẩn hóa theo toàn bộ sản phẩm được phép xếp hạng; ở chế độ Nhanh, phân phối điểm UFM được ước lượng từ một mẫu cố định 4.096 sản phẩm. Cách này tương tự mục 5.12, nơi điểm được chuẩn hóa trên 100 ứng viên gồm 99 mẫu âm. Vì đa số sản phẩm có điểm TF-IDF gần 0, vài sản phẩm trùng từ khóa với lịch sử có điểm chuẩn hóa rất cao và thường đứng đầu: với lịch sử chỉ gồm Cards Against Humanity, năm gợi ý đầu đều là bộ bài Cards Against Humanity khác hoặc bản mở rộng dùng chung với trò chơi này.
 
 #### 6.3. Chế độ dự phòng và catalog mẫu
 
@@ -905,37 +926,42 @@ Bộ đầy đủ để chạy UFM (checkpoint, đặc trưng CLIP, catalog) có
 
 #### 6.4. Nghiệm thu API và giao diện
 
-Demo UFM được nghiệm thu trên máy Windows ngày 29/10/2026 với checkpoint epoch 9 (SHA-256 bắt đầu bằng `5630013d`), catalog 767.045 sản phẩm và số tương tác thật.
+Demo UFM được nghiệm thu trên máy Windows ngày 29/10/2026 với checkpoint epoch 9 (SHA-256 bắt đầu bằng `5630013d`), catalog 767.045 sản phẩm và số tương tác thật. Sau khi tăng tốc (mục 5.11), sáu ca này được phát lại ngày 04/11 ở chế độ UFM trên toàn catalog: cả sáu cho đúng cùng sản phẩm và thứ tự, điểm lệch tối đa 3,3 × 10⁻⁶, trọng số nhánh lệch tối đa 6 × 10⁻⁸.
 
 *Bảng: Sáu ca nghiệm thu API trên catalog thật*
 
-| Ca | Yêu cầu | Kết quả | Thời gian |
-| --------- | ------------ | --------------- | -----: |
-| Không lịch sử | Lịch sử rỗng, K = 5 | Đạt: trả gợi ý theo popularity | 14,8 giây |
-| Có lịch sử | 1 sản phẩm, mọi nhóm | Đạt | 16,2 giây |
-| Zero-shot | 1 sản phẩm, lọc zero-shot | Đạt: trọng số [0; 1], nhóm đúng | 8,4 giây |
-| Extreme cold | 1 sản phẩm, lọc cực lạnh | Đạt | 10,6 giây |
-| Cold | 1 sản phẩm, lọc lạnh | Đạt | 7,5 giây |
-| Warm | 1 sản phẩm, lọc ấm | Đạt | 6,2 giây |
+| Ca | Yêu cầu | Kết quả | 29/10 (giây) | 04/11 (giây) |
+| --------- | ------------ | --------------- | -----: | -----: |
+| Không lịch sử | Lịch sử rỗng, K = 5 | Đạt: trả gợi ý theo popularity | 14,8 | 7,5 |
+| Có lịch sử | 1 sản phẩm, mọi nhóm | Đạt | 16,2 | 7,5 |
+| Zero-shot | 1 sản phẩm, lọc zero-shot | Đạt: trọng số [0; 1], nhóm đúng | 8,4 | 2,0 |
+| Extreme cold | 1 sản phẩm, lọc cực lạnh | Đạt | 10,6 | 3,8 |
+| Cold | 1 sản phẩm, lọc lạnh | Đạt | 7,5 | 1,2 |
+| Warm | 1 sản phẩm, lọc ấm | Đạt | 6,2 | 0,9 |
 
-Yêu cầu có lọc nhóm nhanh hơn vì chỉ chấm điểm sản phẩm thuộc nhóm đó. Ngoài sáu ca trên, một lịch sử chỉ gồm mã sản phẩm không tồn tại bị từ chối với **HTTP 400** ("Unknown ASIN"), thay vì âm thầm trả gợi ý như người dùng không có lịch sử. Các ca thiếu phương thức cũng được kiểm tra: lịch sử chứa sản phẩm chỉ có văn bản hoặc chỉ có ảnh vẫn trả gợi ý đúng; ảnh cục bộ không tồn tại trả 404 có kiểm soát.
+Thời gian ngày 29/10 đo qua HTTP, ngày 04/11 đo trong tiến trình, cùng một máy; phần HTTP chỉ tốn vài mili giây. Yêu cầu có lọc nhóm nhanh hơn vì chỉ chấm điểm sản phẩm thuộc nhóm đó. Ngoài sáu ca trên, một lịch sử chỉ gồm mã sản phẩm không tồn tại bị từ chối với **HTTP 400** ("Unknown ASIN"), thay vì âm thầm trả gợi ý như người dùng không có lịch sử. Các ca thiếu phương thức cũng được kiểm tra: lịch sử chứa sản phẩm chỉ có văn bản hoặc chỉ có ảnh vẫn trả gợi ý đúng; ảnh cục bộ không tồn tại trả 404 có kiểm soát.
 
-*Bảng: Bốn ca nghiệm thu giao diện bằng Chrome chạy tự động*
+Ngày 04/11, các ca giao diện được chạy lại trên catalog thật bằng Chrome không giao diện (headless), điều khiển qua giao thức DevTools.
+
+*Bảng: Năm ca nghiệm thu giao diện bằng Chrome chạy tự động*
 
 | Ca | Nội dung kiểm tra | Kết quả |
 | --------- | ------------------------ | ------ |
 | Giao diện sẵn sàng | Hiển thị backend "UFM Rec", 767.045 sản phẩm, tìm kiếm trả kết quả | Đạt |
-| Zero-shot và ảnh lỗi | Chọn lịch sử, lọc zero-shot, Top 5; ảnh không tải được vẫn có ô thay thế | Đạt |
+| Zero-shot và ảnh lỗi | Chọn lịch sử, lọc zero-shot, Top 5 ở chế độ Nhanh mặc định; ảnh không tải được vẫn có ô thay thế | Đạt |
 | Xuất JSON | Tệp tải về khớp yêu cầu, mô hình và Top 5 trên màn hình | Đạt |
+| UFM + TF-IDF toàn catalog | Đổi mô hình và phạm vi; dòng tóm tắt, nhãn "Điểm kết hợp" và thanh trọng số đúng | Đạt |
 | Mất kết nối | Hiện thông báo lỗi, khóa nút xuất, làm mờ kết quả cũ | Đạt |
+
+Hình dưới là ca mất kết nối: thông báo lỗi hiện ngay dưới nút gợi ý, còn kết quả của lượt trước bị làm mờ.
 
 ![Trạng thái báo lỗi khi mất kết nối tới máy chủ](../output/figures/report_20261103/demo_offline.png)
 
-Bằng chứng gồm phản hồi API đầy đủ, ảnh chụp màn hình và tệp JSON tải về, lưu trong `reports/nontraining_20261029/`. Đây là nghiệm thu tự động trên một máy; trước buổi bảo vệ, nhóm cần chạy lại các ca này trên máy trình chiếu.
+Phản hồi API đầy đủ ngày 29/10 nằm trong `reports/nontraining_20261029/`. Kết quả phát lại, độ trễ, ảnh chụp màn hình và tệp JSON tải về ngày 04/11 nằm trong `reports/demo_20261103/`. Đây là nghiệm thu tự động trên một máy; trước buổi bảo vệ, nhóm cần chạy lại các ca này trên máy trình chiếu.
 
 #### 6.5. Hướng dẫn chạy
 
-Trên máy có bản sao dữ liệu đầy đủ, mở `Start_UFM_From_Backup.cmd` trong thư mục sao lưu; trình khởi động in ra địa chỉ cục bộ để mở bằng trình duyệt. Trên máy khác, mở `Start_Demo.cmd` trong thư mục dự án để chạy chế độ nội dung với catalog mẫu. Trước khi trình bày, kiểm tra nhãn backend trên giao diện: "UFM Rec" nghĩa là đang chạy mô hình thật trên toàn catalog. Vì một lượt gợi ý trên toàn catalog mất khoảng 20 giây trên CPU, nên chuẩn bị sẵn lịch sử và dùng bộ lọc nhóm để rút ngắn thời gian chờ; ảnh chụp kết quả thật được lưu sẵn làm phương án dự phòng.
+Trên máy có bản sao dữ liệu đầy đủ, mở `Start_UFM_From_Backup.cmd` trong thư mục sao lưu; trình khởi động in ra địa chỉ cục bộ để mở bằng trình duyệt. Trên máy khác, mở `Start_Demo.cmd` trong thư mục dự án để chạy chế độ nội dung với catalog mẫu. Trước khi trình bày, kiểm tra nhãn backend trên giao diện: "UFM Rec" nghĩa là đang chạy mô hình thật trên catalog thật. Giao diện mặc định dùng chế độ Nhanh; khi cần đúng thứ hạng của mô hình trên toàn catalog, chọn Toàn catalog và báo trước thời gian chờ (mục 5.11). Ảnh chụp kết quả thật được lưu sẵn làm phương án dự phòng.
 
 ---
 
@@ -961,9 +987,9 @@ Kết quả quan trọng nhất của đồ án vì vậy là hai phát hiện: 
 3. **Đánh giá trên tập ứng viên lấy mẫu.** 100 ứng viên mỗi ca, mẫu âm hồi cứu theo nhóm; kết quả không tương đương xếp hạng toàn catalog hay thử nghiệm trực tuyến.
 4. **Hai can thiệp chưa được huấn luyện.** `count_aware_fusion` và `adaptive_dropout` mới có mã và kiểm thử.
 5. **Giới hạn của CLIP.** Bộ mã hóa văn bản chỉ đọc 77 token đầu của mô tả; CLIP được đóng băng nên không thích nghi với miền đồ chơi.
-6. **Độ trễ demo cao.** Khoảng 21 giây mỗi lượt trên CPU khi chấm toàn catalog.
+6. **Chế độ Nhanh là xấp xỉ.** Chế độ Nhanh trả gợi ý dưới 1 giây nhưng chỉ chấm lại các ứng viên được truy hồi; với UFM, top 10 trùng trung bình 84,4% với xếp hạng toàn catalog khi xét mọi nhóm và 70,8% ở nhóm zero-shot. Chấm toàn catalog vẫn mất 7,5–13 giây trên CPU tùy lượng RAM trống.
 7. **Một miền dữ liệu.** All Beauty mới có dữ liệu và baseline; chưa có UFM.
-8. **Kết hợp là phân tích sau.** Trọng số trộn ở mục 5.12 được chọn trên nửa sớm của validation v3, chưa kiểm chứng trên tập kiểm tra độc lập và chưa đưa vào demo.
+8. **Kết hợp là phân tích sau.** Trọng số trộn ở mục 5.12 được chọn trên nửa sớm của validation v3 với 100 ứng viên mỗi ca và chưa kiểm chứng trên tập kiểm tra độc lập; demo dùng lại α = 0,55 khi xếp hạng trên catalog mà không hiệu chỉnh lại.
 
 #### 7.3. Hướng phát triển
 
@@ -984,7 +1010,7 @@ Các hướng tiếp theo, theo thứ tự ưu tiên:
 1. **Đưa tín hiệu từ vựng vào mô hình:** thêm nhánh TF-IDF hoặc BM25 vào UFM để cổng hợp nhất học trọng số theo từng ca thay cho hệ số cố định α ở mục 5.12, rồi dùng điểm này cho demo.
 2. **Phân tích cổng và độ bất định** trên checkpoint thật cho nhóm 1–5 tương tác, để biết cổng phân bổ trọng số thế nào trước và sau can thiệp.
 3. **Đánh giá trên tập kiểm tra độc lập** được thống nhất trước khi mở nhãn, chỉ dùng một lần cho mô hình đã chọn trên validation.
-4. **Truy hồi rồi xếp hạng lại:** dùng một bước truy hồi nhanh (ví dụ tìm láng giềng gần đúng trên vector ngữ nghĩa) để chọn vài trăm ứng viên rồi mới chấm bằng UFM, kèm đo recall của bước truy hồi, chất lượng cuối và độ trễ.
+4. **Đánh giá chất lượng của truy hồi rồi xếp hạng lại:** chế độ Nhanh (mục 5.11) mới được đo độ trùng với xếp hạng toàn catalog; cần đo recall của bước truy hồi và NDCG khi xếp hạng trên toàn catalog, thử chỉ mục láng giềng gần đúng, và cải thiện cách chọn ứng viên cho nhóm zero-shot, nơi độ trùng thấp nhất.
 5. **Bộ mã hóa văn bản dài hơn hoặc tinh chỉnh nhẹ** (ví dụ LoRA) để khắc phục giới hạn 77 token của CLIP.
 6. **Huấn luyện UFM trên All Beauty** để kiểm chứng trên miền thứ hai.
 
@@ -1023,7 +1049,7 @@ Các hướng tiếp theo, theo thứ tự ưu tiên:
 | ------ | --------------------- |
 | `src/` | Mô hình UFM-Rec, quy trình dữ liệu, huấn luyện, đánh giá, đối chứng và lõi demo |
 | `scripts/` | Công cụ phụ trợ: kế hoạch đa seed, sao lưu, đo tài nguyên, dựng hình và báo cáo |
-| `tests/` | 123 ca kiểm thử pytest |
+| `tests/` | 124 ca kiểm thử pytest |
 | `configs/` | Giao thức đánh giá v2 và kế hoạch 15 lượt huấn luyện đã khóa |
 | `notebooks/` | Notebook Colab cho vòng huấn luyện tiếp theo, notebook giám sát FITLAB, notebook All Beauty |
 | `demo/` | Giao diện web và catalog mẫu 30 sản phẩm |
@@ -1057,5 +1083,8 @@ Lệnh cuối mặc định chỉ kiểm tra trước (preflight) 9 đầu vào 
 | Checkpoint UFM full epoch 9 | `runs/ufm_full_v1/best.pt` | `5630013d…` |
 | Bảng tổng hợp mười mô hình | `reports/nontraining_20261029/evidence.json` | ghi kèm mã băm nguồn |
 | Lịch sử huấn luyện 12 epoch | `reports/final_20261103/ufm_full_v1_training_history.json` | ghi kèm mã băm từng epoch |
+| Ghép UFM + TF-IDF | `reports/hybrid_20261103/hybrid_v3.json` | ghi kèm mã băm bộ ứng viên |
 | Nghiệm thu demo | `reports/nontraining_20261029/demo_api_verification.json` | ghi kèm mã băm checkpoint |
+| Chế độ demo, độ trễ và phát lại | `reports/demo_20261103/demo_modes.json` | ghi kèm mã băm checkpoint |
+| Nghiệm thu giao diện 04/11 | `reports/demo_20261103/demo_ui_end_to_end_20261103.json` | ghi kèm mã băm checkpoint |
 | Sao lưu và khôi phục | `reports/continuation_20261028/backup_receipts.json` | 796 tệp đã đối chiếu SHA-256 |

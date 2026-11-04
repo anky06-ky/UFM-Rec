@@ -23,17 +23,18 @@ Chuẩn bị trước giờ trình bày:
 
 - Khởi động bằng `D:\Nam3_ki1\UFM-Rec_Backups\Start_UFM_From_Backup.cmd`; xác nhận nhãn **UFM Rec**, catalog **767.045**, counts không mô phỏng. Launcher này nằm ngoài Git và cần bản backup trên máy. Không mặc định endpoint FITLAB còn sống.
 - Đợi khởi động xong, kiểm tra `/api/status`; đường dẫn localhost do launcher in ra. Lượt nghiệm thu ngày 29/10 dùng cổng 8773 riêng.
-- Chuẩn bị history `B004S8F7QM`, K=5; thử trước các regime. Máy Windows CPU từng đo p50 khoảng 21,25 giây, p95 26,35 giây trên 10 request; không hứa phản hồi tức thì.
-- Dùng [ảnh zero-shot](../reports/nontraining_20261029/demo_ui_zero_shot_20261029.png), [ảnh lỗi mạng](../reports/nontraining_20261029/demo_ui_offline_20261029.png) và [JSON đã xuất](../reports/nontraining_20261029/demo_ui_downloads/ufm-rec-demo.json) làm dự phòng. Nút xuất JSON đã đạt 4/4 ca UI tự động trên Windows; thử lại trên máy bảo vệ. Chưa quay video.
+- Chuẩn bị history `B004S8F7QM`, K=5; thử trước các regime. Chế độ Nhanh (mặc định) trả kết quả khoảng 0,4–0,8 giây; Toàn catalog khoảng 7,5 giây, tới 13 giây khi RAM chật, nên báo trước khi chọn. Tắt máy ảo và ứng dụng nặng trước giờ trình bày.
+- Dùng [ảnh zero-shot](../reports/demo_20261103/demo_ui_zero_shot_20261103.png), [ảnh UFM + TF-IDF](../reports/demo_20261103/demo_ui_hybrid_20261103.png), [ảnh lỗi mạng](../reports/demo_20261103/demo_ui_offline_20261103.png) và [JSON đã xuất](../reports/demo_20261103/demo_ui_downloads/ufm-rec-demo.json) làm dự phòng. Nút xuất JSON đã đạt trong 5/5 ca UI tự động trên Windows; thử lại trên máy bảo vệ. Chưa quay video.
 
 Trong buổi trình bày:
 
 1. Cho thấy backend/catalog thật. Chạy một lần không history, giải thích đây là fallback, chưa cá nhân hóa người dùng mới.
 2. Thêm sản phẩm `B004S8F7QM`, chọn `Zero-shot`, chạy Top 5. Trong lúc chờ, giải thích zero-shot là sản phẩm có train count bằng 0.
-3. Chỉ ra `score`, trọng số nhánh và uncertainty: đây là tín hiệu mô hình, không phải xác suất mua. Ảnh hiển thị tải lỗi không làm thay đổi CLIP embedding đã lưu.
-4. Xuất JSON sau khi request thành công; kiểm tra model hash, history, regime, kết quả và trường giải thích. Ca Chrome headless đã đạt và lưu [receipt](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json); khi trình bày vẫn bấm lại trên máy bảo vệ.
+3. Chỉ ra `score`, thanh trọng số Hành vi/Ngữ nghĩa và uncertainty: đây là tín hiệu mô hình, không phải xác suất mua. Ảnh hiển thị tải lỗi không làm thay đổi CLIP embedding đã lưu.
+4. Đổi Mô hình sang UFM + TF-IDF, Phạm vi Toàn catalog, chạy lại: chỉ ra điểm kết hợp và dòng điểm UFM · TF-IDF. α = 0,55 lấy từ mục 5.12, chưa hiệu chỉnh cho xếp hạng trên catalog.
+5. Xuất JSON sau khi request thành công; kiểm tra model hash, history, regime, mô hình, phạm vi, kết quả và trường giải thích. Ca Chrome headless đã đạt và lưu [receipt](../reports/demo_20261103/demo_ui_end_to_end_20261103.json); khi trình bày vẫn bấm lại trên máy bảo vệ.
 
-Các ca API đã kiểm tra: không history, có history và bốn regime đều đạt 6/6. Bốn ca UI đạt 4/4 gồm zero-shot, export JSON, placeholder và lỗi mạng. History toàn ASIN không có trong catalog trả HTTP 400 với thông báo `Unknown ASIN`; API không âm thầm coi nó là history rỗng. Nguồn: [receipt API](../reports/nontraining_20261029/demo_api_verification.json), [receipt UI](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json), [ca unknown](../reports/nontraining_20261029/demo_unknown_history.json).
+Các ca API đã kiểm tra: không history, có history và bốn regime đều đạt 6/6; sau khi tăng tốc, sáu ca được phát lại ngày 04/11 và cho cùng sản phẩm, cùng thứ tự. Năm ca UI đạt 5/5 gồm zero-shot, export JSON, placeholder, chế độ UFM + TF-IDF và lỗi mạng. History toàn ASIN không có trong catalog trả HTTP 400 với thông báo `Unknown ASIN`; API không âm thầm coi nó là history rỗng. Nguồn: [receipt API](../reports/nontraining_20261029/demo_api_verification.json), [phát lại và độ trễ](../reports/demo_20261103/demo_modes.json), [receipt UI](../reports/demo_20261103/demo_ui_end_to_end_20261103.json), [ca unknown](../reports/nontraining_20261029/demo_unknown_history.json).
 
 ## Câu hỏi dễ gặp
 
@@ -57,11 +58,11 @@ Các ca API đã kiểm tra: không history, có history và bốn regime đều
 
 **10. All Beauty đã chứng minh khả năng tổng quát chưa?** Chưa. Có dữ liệu và baseline tham chiếu, chưa có UFM được xác minh trên All Beauty. Dataset thứ hai chỉ cần triển khai nếu nằm trong phạm vi nghiệm thu; train riêng hai dataset cũng không tự là transfer learning.
 
-**11. Ghép UFM với TF-IDF có phải chọn trên chính dữ liệu báo cáo không?** Không. α được chọn trên 20.000 ca sớm theo thời gian; kết quả lấy trên 20.000 ca muộn chưa dùng để chọn. Trước khi trộn, điểm tính lại của hai mô hình khớp hoàn toàn số đã công bố. Mức tăng cold macro so với TF-IDF là 0,011789, khoảng tin cậy 95% [0,009796; 0,013744]. Đây vẫn là phân tích sau: v3 không phải test độc lập, chỉ một seed, và demo chưa dùng điểm ghép.
+**11. Ghép UFM với TF-IDF có phải chọn trên chính dữ liệu báo cáo không?** Không. α được chọn trên 20.000 ca sớm theo thời gian; kết quả lấy trên 20.000 ca muộn chưa dùng để chọn. Trước khi trộn, điểm tính lại của hai mô hình khớp hoàn toàn số đã công bố. Mức tăng cold macro so với TF-IDF là 0,011789, khoảng tin cậy 95% [0,009796; 0,013744]. Đây vẫn là phân tích sau: v3 không phải test độc lập và chỉ có một seed. Demo có chế độ UFM + TF-IDF dùng lại α này khi xếp hạng trên catalog, nhưng α chưa được hiệu chỉnh lại cho bối cảnh đó.
 
 ## Việc nhóm còn cần làm trước khi bảo vệ
 
-- Điền họ tên đầy đủ, MSSV và nhiệm vụ của Hân trong `TEAM` ở `scripts/build_school_report_docx.py`, chạy lại script; sửa tên tương ứng trên slide 1.
+- Kiểm tra Word/PDF và slide 1 ghi đúng ba thành viên Nguyễn Thành Phong, Trần An Kỳ và Nguyễn Hoàng Hải; thông tin dựng báo cáo nằm trong `TEAM` ở `scripts/build_school_report_docx.py`.
 - Phân công người trình bày từng phần.
 - Diễn tập có bấm giờ và phân công; thử lại xuất JSON, mạng và ảnh trên máy bảo vệ. Có ảnh dự phòng từ UFM thật; quay video nếu nhóm cần trình diễn khi không có mạng.
 - Nếu sau này chạy thêm train, thay bảng/hình và câu trả lời bằng bằng chứng của model mới; không giữ kết luận cũ nếu số liệu đã đổi.

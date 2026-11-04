@@ -1,30 +1,29 @@
 {
-  "observed_at_utc": "2026-11-03T15:42:39+00:00",
-  "source": "docs/final_report.md (7 chương + phụ lục; số liệu validation v3, seed 42); slides patched from output/history/presentation/UFM_Rec_Bao_Ve_Hien_Trang_20261029.pptx",
+  "observed_at_utc": "2026-11-04T10:05:58+00:00",
+  "source": "docs/final_report.md (7 chapters + appendices; validation v3, seed 42); three confirmed members; slide 1 updated in the existing PPTX",
   "builder": "python scripts/build_report_figures.py; python scripts/build_school_report_docx.py (Pandoc 3.13 + LibreOffice 26.8 portable, two layout passes)",
   "cover": {
     "advisor": "Phan Hồ Viết Trường",
-    "members": 4,
-    "pending": "Họ tên đầy đủ, MSSV và nhiệm vụ của Hân"
+    "members": 3
   },
   "artifacts": [
     {
       "path": "output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx",
-      "bytes": 2648337,
-      "sha256": "926707d6b18e3a300aa2dc954e5d0f324e42ae0033bd9665d3d80c7aa7a23950",
+      "bytes": 2516388,
+      "sha256": "79406774c7a37b8f4a02033b608c6619bf4467a6090aa102a164865ffe5ce3b2",
       "note": "Mục lục và danh mục bảng/hình lưu sẵn số trang theo bản PDF; trong Word nhấn F9 nếu lệch."
     },
     {
       "path": "output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf",
-      "bytes": 3143044,
-      "sha256": "d5ebd040c16862d8fca4a2d68596518c75dd9ee4e8dd162a3821208293a48061",
-      "pages": 61,
+      "bytes": 3180608,
+      "sha256": "588a59479b57a83132348dcba2dcaa1a284355188f9b3ef0186f6dbba73bc024",
+      "pages": 63,
       "fonts": "Times New Roman, Consolas, Cambria Math embedded"
     },
     {
       "path": "output/presentation/UFM_Rec_Bao_Ve_20261103.pptx",
-      "bytes": 967060,
-      "sha256": "5131517dcde2b23e47aafe014410a6f432db8b10779ac7b2b017878658efaa39",
+      "bytes": 308393,
+      "sha256": "3ccb631f0471192ca547d430c02ccb32dc7f353d6ffc3827fb7e631705bb54b9",
       "slides": 14
     }
   ],
@@ -50,14 +49,19 @@
       "sha256": "779cfffe64c59ed49acb5b0c2c6c9dcb1dc3d8fd6bc6d12aa7d333d99609f6e4"
     },
     {
+      "path": "output/figures/report_20261103/demo_hybrid.png",
+      "bytes": 255890,
+      "sha256": "1d8423045b870823622216da1af8bb79e2ba774cc40e36a9de1fd2f3aaa3b962"
+    },
+    {
       "path": "output/figures/report_20261103/demo_offline.png",
-      "bytes": 732182,
-      "sha256": "bd75dfb503cdf8ac4bfb01d8b962ce4f27b0f7cae8de157353e77cda6284c334"
+      "bytes": 335180,
+      "sha256": "1dc115f456f32d10169c4e35a288abad5e774355790b5f205b16531a0ddbb38a"
     },
     {
       "path": "output/figures/report_20261103/demo_overview.png",
-      "bytes": 558689,
-      "sha256": "0b9f179efd85e9f7bf5dcb92a870b4d2aa1ca2b1a44363853a8966ad14d77fed"
+      "bytes": 566301,
+      "sha256": "da355ceba7ef9e3a560a4612be505b1caae67db6703d9ca08a5d4c71f8c8f87c"
     },
     {
       "path": "output/figures/report_20261103/history_split_v3.png",
@@ -66,8 +70,8 @@
     },
     {
       "path": "output/figures/report_20261103/pipeline.png",
-      "bytes": 231435,
-      "sha256": "b5445348fa8ada40cac472eab0d153d11db30ca3107709d96b86ce40b864a40a"
+      "bytes": 231211,
+      "sha256": "f95112d1ddb7257fcc266b58ce0548f1d8d573b5fa5698027bf0780fb968f73c"
     },
     {
       "path": "output/figures/report_20261103/regime_ndcg_v3.png",
@@ -81,10 +85,12 @@
     }
   ],
   "checks": {
-    "pytest": "120 passed, 3 skipped, 10 subtests passed (Python 3.14, CPU torch)",
-    "pdf_pages_reviewed": "1-60 rendered with pdftoppm and inspected; 0 LibreOffice math parse errors",
-    "docx_structure": "16 images with unique ids, all relationships present, valid section order, no unsupported namespaces",
-    "layout_passes": "table of contents and table/figure lists identical between the two LibreOffice passes",
-    "slides_reviewed": "1, 13, 14 rendered after text patch"
+    "pytest": "121 passed, 3 skipped, 10 subtests passed (Python 3.14, CPU torch), 04/11",
+    "pdf_pages_reviewed": "04/11: report rendered again after confirming three members; cover and task table inspected at full size; overview of all 63 pages reviewed; PDF text differs from the preceding submission only on pages 1 and 5.",
+    "pdf_fonts": "all fonts embedded (pdffonts)",
+    "docx_structure": "17 images with unique ids, every image relationship present",
+    "layout_passes": "Table of contents and table/figure lists identical between the two LibreOffice passes on 04/11 after the three-member update.",
+    "slides_reviewed": "Slide 1 rendered and inspected after the three-member update; only slide1.xml changed from the existing 14-slide deck. Slides 10 and 11 reviewed earlier on 04/11.",
+    "team": "Three confirmed members on cover, task table, author metadata and slide 1; no fourth-member placeholder."
   }
 }

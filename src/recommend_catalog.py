@@ -19,6 +19,8 @@ DATA = ROOT/'data/processed/toys_games_full_temporal'
 HYBRID_ALPHA = 0.55
 # Candidates taken from each source in the fast scope; UFM rescores their union.
 FAST_CANDIDATES = dict(semantic=2000, behavior=2000, tfidf=1000, popularity=500)
+# Fixed random sample of allowed items whose UFM scores estimate the blend statistics in the fast scope.
+HYBRID_SAMPLE = 4096
 
 
 def tfidf_scores(matrix,history,popularity):
@@ -31,9 +33,10 @@ def tfidf_scores(matrix,history,popularity):
     return scores+popularity/(float(popularity.max()) or 1)*1e-7
 
 
-def standardize(scores):
-    std = scores.std()
-    return (scores-scores.mean())/std if std>0 else np.zeros_like(scores)
+def standardize(scores,reference=None):
+    reference = scores if reference is None else reference
+    std = reference.std()
+    return (scores-reference.mean())/std if std>0 else np.zeros_like(scores)
 
 
 def top_allowed(scores,mask,n):
@@ -223,6 +226,14 @@ class UFMBackend:
             pools.append(top_allowed(lexical,allowed,n['tfidf']))
         return np.unique(np.concatenate(pools))
 
+    def score(self,h,rows):
+        scores = np.empty(len(rows),dtype=np.float64)
+        for start in range(0,len(rows),self.chunk):
+            part = rows[start:start+self.chunk]
+            scores[start:start+len(part)] = self.model(h,self.torch.from_numpy(part[None]+1),*self.tables)['scores'][0].numpy()
+        if not np.isfinite(scores).all(): raise FloatingPointError('Nonfinite inference scores.')
+        return scores
+
     def recommend(self,asins,k=10,regime='all',model='ufm',scope='full'):
         torch = self.torch
         history = self.catalog.rows(asins)
@@ -239,15 +250,16 @@ class UFMBackend:
         lexical = tfidf_scores(self.matrix,history,popularity) if self.matrix is not None and (
             model=='hybrid' or scope=='fast') else None
         with torch.inference_mode():
-            rows = np.flatnonzero(allowed) if scope=='full' else self.retrieve(h,allowed,popularity,lexical)
-            scores = np.empty(len(rows),dtype=np.float64)
-            for start in range(0,len(rows),self.chunk):
-                part = rows[start:start+self.chunk]
-                scores[start:start+len(part)] = self.model(h,torch.from_numpy(part[None]+1),*self.tables)['scores'][0].numpy()
-            if not np.isfinite(scores).all(): raise FloatingPointError('Nonfinite inference scores.')
+            pool = np.flatnonzero(allowed)
+            rows = pool if scope=='full' else self.retrieve(h,allowed,popularity,lexical)
+            scores = self.score(h,rows)
             ranking = scores
             if model=='hybrid' and len(rows):
-                ranking = HYBRID_ALPHA*standardize(scores)+(1-HYBRID_ALPHA)*standardize(lexical[rows])
+                # Both scopes standardize against every allowed item, as the 100-candidate evaluation does
+                # against mostly random items; the fast scope estimates the UFM statistics from a sample.
+                reference = scores if scope=='full' else self.score(
+                    h,np.random.default_rng(0).choice(pool,min(len(pool),HYBRID_SAMPLE),replace=False))
+                ranking = HYBRID_ALPHA*standardize(scores,reference)+(1-HYBRID_ALPHA)*standardize(lexical[rows],lexical[pool])
             best = np.argsort(-(ranking+tie_noise(rows)*1e-10),kind='stable')[:k]
             top = rows[best]
             # Branch weights and uncertainty only for the returned items.

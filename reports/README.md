@@ -8,6 +8,7 @@
 - [Bảng bằng chứng đã chuẩn hóa](nontraining_20261029/evidence.json): cùng candidates/source, đủ 10 mô hình; các biểu đồ và báo cáo hiện tại dùng nguồn này.
 - [Ghép UFM + TF-IDF ngày 03/11](hybrid_20261103/hybrid_v3.json): không huấn luyện lại; điểm tính lại khớp số v3 đã công bố, α chọn trên 20.000 ca sớm, kết quả trên 20.000 ca muộn. Dựng bằng `scripts/evaluate_hybrid_v3.py`.
 - [API Windows 6/6 ngày 29/10](nontraining_20261029/demo_api_verification.json) và [history toàn unknown](nontraining_20261029/demo_unknown_history.json).
+- [Chế độ demo ngày 04/11](demo_20261103/demo_modes.json): phát lại 6 ca 29/10 ở chế độ toàn catalog, độ trễ từng chế độ và độ trùng top-10 giữa chế độ Nhanh với toàn catalog; [UI Chrome 5/5](demo_20261103/demo_ui_end_to_end_20261103.json) kèm ảnh chụp. Dựng bằng `scripts/evaluate_demo_modes.py` và `scripts/verify_demo_ui_chrome.mjs`.
 - [Kiểm thử local](nontraining_20261029/pytest.txt) · [kiểm tra PDF](nontraining_20261029/pdf_verification.json).
 - [Bàn giao backup](continuation_20261028/backup_handoff.md) · [receipt dữ liệu Colab local](continuation_20261028/colab_data_transfer_verification_20261029.json). Receipt local không thay nghiệm thu trên GPU.
 - [Ledger test](test_evaluation_ledger.json): test v2 đã được xem; không gọi v3 là test độc lập.
