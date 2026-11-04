@@ -43,5 +43,6 @@ data/processed/**/demo_images/
 *.key
 
 # Local-only course references and working notes
+/CLAUDE.md
 docs/references/
 docs/notes/
