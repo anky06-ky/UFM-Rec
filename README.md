@@ -2,11 +2,11 @@
 
 Hệ khuyến nghị sản phẩm dùng lịch sử hành vi, ảnh và tên/mô tả trên Amazon Reviews 2023 Toys & Games. Nhánh hành vi dùng Transformer; nhánh semantic dùng CLIP đóng băng và adapter. Cold-start sản phẩm là nhóm phân tích trọng tâm.
 
-**Trạng thái ngày 03/11/2026:** nhóm chốt đồ án với checkpoint và bằng chứng hiện có. Bộ nộp theo mẫu Trường Đại học Văn Lang đã dựng và rà từng trang. Còn điền họ tên/MSSV/nhiệm vụ của thành viên Hân, diễn tập và commit/push. Chi tiết: [hồ sơ hoàn thiện 03/11](reports/final_20261103/README.md).
+**Trạng thái ngày 04/11/2026:** nhóm chốt đồ án với checkpoint và bằng chứng hiện có. Bộ nộp theo mẫu Trường Đại học Văn Lang gồm ba thành viên: Nguyễn Thành Phong, Trần An Kỳ và Nguyễn Hoàng Hải. Còn diễn tập bảo vệ. Chi tiết: [hồ sơ hoàn thiện 03/11](reports/final_20261103/README.md).
 
 ## Bộ nộp
 
-- [Báo cáo Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) · [PDF 61 trang](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) · [nguồn báo cáo](docs/final_report.md): bảy chương, 37 bảng, 13 hình, 27 công thức, phụ lục. Dựng lại bằng `python scripts/build_report_figures.py` rồi `python scripts/build_school_report_docx.py`.
+- [Báo cáo Word theo mẫu trường](output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx) · [PDF 63 trang](output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf) · [nguồn báo cáo](docs/final_report.md): bảy chương, 38 bảng, 14 hình, 27 công thức, phụ lục. Dựng lại bằng `python scripts/build_report_figures.py` rồi `python scripts/build_school_report_docx.py`.
 - [Slide bảo vệ 14 trang](output/presentation/UFM_Rec_Bao_Ve_20261103.pptx) · [nguồn slide](docs/presentation_slides.md) · [kịch bản bảo vệ và câu hỏi](docs/defense_guide.md).
 - [Demo](docs/demo.md): mở [Start_Demo.cmd](Start_Demo.cmd).
 - [Bắt đầu](START.md) · [mục lục tài liệu](docs/README.md) · [mục lục bằng chứng](reports/README.md) · [các bản xuất](output/README.md).
@@ -17,7 +17,7 @@ Validation v3 có 40.000 ca, 100 ứng viên/ca, một seed lịch sử 42. Cold
 
 Checkpoint chọn bằng validation v1; v3 dùng lại quần thể validation liên quan nên không phải holdout độc lập. Test v2 đã được xem. Sampling theo regime target và thống kê cuối split có tính hồi cứu; kết quả không tương đương full-catalog hoặc online. [Giao thức](docs/history/protocol_current.md) và [ledger test](reports/test_evaluation_ledger.json) ghi giới hạn.
 
-Demo UFM trên Windows dùng checkpoint epoch 9, catalog 767.045 sản phẩm và counts thật: [API 6/6 ca](reports/nontraining_20261029/demo_api_verification.json), [UI tự động 4/4 ca](reports/nontraining_20261029/demo_ui_end_to_end_20261029.json). Kiểm thử local ngày 03/11 đạt **120 passed, 3 skipped, 10 subtests passed**.
+Demo UFM trên Windows dùng checkpoint epoch 9, catalog 767.045 sản phẩm và counts thật: [API 6/6 ca](reports/nontraining_20261029/demo_api_verification.json), [UI tự động 5/5 ca](reports/demo_20261103/demo_ui_end_to_end_20261103.json). Chế độ Nhanh trả gợi ý trong khoảng 0,4–0,6 giây, chấm toàn catalog khoảng 7,5 giây trên CPU ([đo ngày 04/11](reports/demo_20261103/demo_modes.json)). Kiểm thử local ngày 04/11 đạt **121 passed, 3 skipped, 10 subtests passed**.
 
 ## Chạy và tái lập
 

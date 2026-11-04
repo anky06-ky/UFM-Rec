@@ -1,7 +1,7 @@
 """Draw the figures of the full report from saved evidence only (no training).
 
 Outputs PNGs into output/figures/report_20261103/. Every number comes from a
-JSON file in the repository; the cropped demo views come from the 29/10 UI
+JSON file in the repository; the cropped demo views come from the 03/11 UI
 acceptance screenshots.
 """
 from __future__ import annotations
@@ -22,7 +22,7 @@ TOYS = ROOT / "data/processed/toys_games_full_temporal"
 BEAUTY = ROOT / "data/processed/all_beauty_full_temporal"
 EVIDENCE = ROOT / "reports/nontraining_20261029/evidence.json"
 HISTORY = ROOT / "reports/final_20261103/ufm_full_v1_training_history.json"
-SHOTS = ROOT / "reports/nontraining_20261029"
+SHOTS = ROOT / "reports/demo_20261103"
 
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3de"
 # Fixed categorical order of the validated palette; colour follows the entity in every chart.
@@ -222,8 +222,8 @@ def diagram_figures() -> None:
          ("Huấn luyện UFM-Rec", ["GPU FITLAB, AMP, 12 epoch", "Chọn epoch 9 theo validation v1"]),
          ("7 biến thể ablation", ["Một seed 42, cùng ngân sách", "Đánh giá cùng candidate hash"])],
         [("Đánh giá và hiệu chuẩn", ["NDCG/Recall/MRR@10 theo nhóm", "Temperature scaling thăm dò"]),
-         ("Demo UFM toàn catalog", ["API + giao diện web", "6/6 ca API, 4/4 ca giao diện"]),
-         ("Báo cáo và bàn giao", ["Bằng chứng có SHA-256", "120 test tự động đạt"])],
+         ("Demo UFM toàn catalog", ["API + giao diện web", "6/6 ca API, 5/5 ca giao diện"]),
+         ("Báo cáo và bàn giao", ["Bằng chứng có SHA-256", "121 test tự động đạt"])],
     ]
     for r, row in enumerate(rows):
         for c, (title, lines) in enumerate(row):
@@ -264,8 +264,9 @@ def diagram_figures() -> None:
 
 
 def demo_figures() -> None:
-    crops = {"demo_overview.png": ("demo_ui_zero_shot_20261029.png", (0, 0, 1403, 1480)),
-             "demo_offline.png": ("demo_ui_offline_20261029.png", (0, 640, 1403, 1880))}
+    crops = {"demo_overview.png": ("demo_ui_zero_shot_20261103.png", (0, 600, 1403, 2030)),
+             "demo_hybrid.png": ("demo_ui_hybrid_20261103.png", (420, 600, 1403, 1400)),
+             "demo_offline.png": ("demo_ui_offline_20261103.png", (0, 1280, 1403, 2030))}
     for name, (source, area) in crops.items():
         Image.open(SHOTS / source).convert("RGB").crop(area).save(OUT / name, optimize=True)
         print(OUT / name)

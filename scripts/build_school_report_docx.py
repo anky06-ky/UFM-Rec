@@ -48,7 +48,7 @@ OUTPUT_DOCX = ROOT / "output/docx/UFM_Rec_Bao_Cao_Do_An_20261103.docx"
 OUTPUT_PDF = ROOT / "output/pdf/UFM_Rec_Bao_Cao_Do_An_20261103.pdf"
 
 ADVISOR = "Phan Hồ Viết Trường"
-# (họ tên, MSSV, nhiệm vụ, mức hoàn thành). Điền thông tin của Hân trước khi nộp.
+# (họ tên, MSSV, nhiệm vụ, mức hoàn thành).
 TEAM = [
     ("Nguyễn Thành Phong", "2474802010304",
      "Trưởng nhóm: thiết kế kiến trúc UFM-Rec, lập trình PyTorch (Causal Transformer, cổng fusion, "
@@ -61,7 +61,6 @@ TEAM = [
     ("Nguyễn Hoàng Hải", "2474802010099",
      "Hiện thực các mô hình đối chứng (TF-IDF, popularity), hiệu chuẩn temperature scaling (ECE, NLL), "
      "đo tài nguyên (RAM, VRAM, độ trễ) và kiểm thử tự động.", "100%"),
-    ("[Họ tên đầy đủ của Hân]", "[MSSV]", "[Bổ sung nhiệm vụ]", "[...]"),
 ]
 ACKNOWLEDGEMENTS = [
     "Nhóm xin chân thành cảm ơn Ban Giám hiệu Trường Đại học Văn Lang và Khoa Công nghệ Thông tin đã "
@@ -511,9 +510,6 @@ def insert_cover(doc, before) -> None:
         position.find(qn("wp:posOffset")).text = str(page[axis])
     paragraphs = doc.paragraphs
     set_texts(paragraphs[14], f"GVHD:  {ADVISOR}")
-    line_four = copy.deepcopy(paragraphs[17]._p)
-    paragraphs[18]._p.addprevious(line_four)
-    paragraphs[18]._p.getparent().remove(paragraphs[18]._p)
     for number, (name, student_id, *_rest) in enumerate(TEAM, start=1):
         set_texts(doc.paragraphs[14 + number], f"SVTH {number}:  ", f"{name} – MSSV: {student_id}")
 

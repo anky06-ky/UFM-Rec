@@ -15,28 +15,38 @@ Demo có hai chế độ. Chương 6 của [báo cáo](final_report.md) mô tả
 
 Dữ liệu lớn (checkpoint, CLIP, catalog) không nằm trên GitHub; cách khôi phục và mã băm ở [bàn giao backup](../reports/continuation_20261028/backup_handoff.md).
 
+Với UFM Rec, giao diện có thêm hai ô (chế độ content ẩn hai ô này):
+
+| Ô | Lựa chọn | Ý nghĩa |
+| --- | --- | --- |
+| **Mô hình** | UFM; UFM + TF-IDF | UFM + TF-IDF trộn 55% điểm UFM với 45% điểm TF-IDF sau khi chuẩn hóa (mục 5.12 của báo cáo) |
+| **Phạm vi chấm** | Nhanh (mặc định); Toàn catalog | Nhanh: UFM chấm lại tối đa 5.500 ứng viên gần nhất. Toàn catalog: chấm mọi sản phẩm, đúng thứ hạng của mô hình nhưng chậm hơn |
+
 ## Kiểm tra trước khi trình bày
 
 1. Nhãn backend trên giao diện là **UFM Rec** và số sản phẩm là **767.045**. Nếu thấy chế độ content, đang chạy catalog mẫu chứ không phải mô hình thật.
 2. Tìm "Cards Against Humanity", thêm `B004S8F7QM` vào lịch sử và chạy thử một lượt.
-3. Không hứa phản hồi tức thì: trên CPU, một lượt gợi ý toàn catalog mất 15–28 giây (trung vị 21 giây), lọc theo một nhóm sản phẩm mất 6–11 giây.
-4. Mở sẵn ảnh dự phòng [zero-shot](../reports/nontraining_20261029/demo_ui_zero_shot_20261029.png) và [mất mạng](../reports/nontraining_20261029/demo_ui_offline_20261029.png) phòng khi không chạy được.
+3. Thời gian trên CPU: chế độ Nhanh khoảng 0,4–0,8 giây; Toàn catalog khoảng 7,5 giây khi máy còn nhiều RAM trống, tới 13 giây khi RAM chật; lọc theo một nhóm sản phẩm nhanh hơn. Tắt máy ảo và ứng dụng nặng trước khi trình bày; nút "Tìm gợi ý" đếm số giây trong lúc chờ.
+4. Mở sẵn ảnh dự phòng [zero-shot](../reports/demo_20261103/demo_ui_zero_shot_20261103.png), [UFM + TF-IDF](../reports/demo_20261103/demo_ui_hybrid_20261103.png) và [mất mạng](../reports/demo_20261103/demo_ui_offline_20261103.png) phòng khi không chạy được.
 
 ## Kịch bản 3 phút
 
 1. Giới thiệu catalog Toys & Games 767.045 sản phẩm và chỉ nhãn backend đang chạy.
 2. Tìm "Cards Against Humanity", thêm `B004S8F7QM` vào lịch sử. Lịch sử xếp từ cũ đến mới, tối đa 20 sản phẩm, không trùng.
-3. Chọn Top K = 5, nhóm **Zero-shot**, bấm "Tìm gợi ý cho tôi". Chỉ ra mọi kết quả có 0 tương tác train và dòng **CF 0% · Semantic 100%**: mô hình vẫn gợi ý được sản phẩm chưa có tương tác nhờ văn bản và ảnh.
-4. Đổi sang nhóm **Warm** và chạy lại: CF khoảng 46–48% vì các sản phẩm này đã có tương tác trong train.
-5. Bấm "Xuất JSON" để lưu đầu vào, mô hình và kết quả. Khi đổi lịch sử hoặc bộ lọc, kết quả cũ bị làm mờ và nút xuất bị khóa đến khi chạy lại.
-6. Bấm "Xóa tất cả" rồi chạy với mọi nhóm: không có lịch sử thì demo xếp theo độ phổ biến trong train, chưa cá nhân hóa cho người dùng mới.
+3. Giữ Mô hình **UFM**, Phạm vi **Nhanh**; chọn Top K = 5, nhóm **Zero-shot**, bấm "Tìm gợi ý cho tôi". Chỉ ra mọi kết quả có 0 tương tác train và dòng **Hành vi 0% · Ngữ nghĩa 100%**: mô hình vẫn gợi ý được sản phẩm chưa có tương tác nhờ văn bản và ảnh.
+4. Đổi sang nhóm **Warm** và chạy lại: phần Hành vi khoảng 46–48% vì các sản phẩm này đã có tương tác trong train.
+5. Đổi Mô hình sang **UFM + TF-IDF**, Phạm vi **Toàn catalog**, nhóm **Tất cả sản phẩm**; báo trước thời gian chờ. Chỉ ra "Điểm kết hợp" và dòng điểm UFM · TF-IDF; các gợi ý đầu là sản phẩm khớp từ khóa với lịch sử.
+6. Bấm "Xuất JSON" để lưu đầu vào, mô hình và kết quả. Khi đổi lịch sử, bộ lọc hoặc chế độ, kết quả cũ bị làm mờ và nút xuất bị khóa đến khi chạy lại.
+7. Bấm "Xóa tất cả" rồi chạy với mọi nhóm: không có lịch sử thì demo xếp theo độ phổ biến trong train, chưa cá nhân hóa cho người dùng mới.
 
 ## Cách giải thích đúng
 
 - Zero-shot nghĩa là không có tương tác trong tập train, không nhất thiết là sản phẩm vừa ra mắt.
 - Điểm xếp hạng, trọng số và độ bất định là tín hiệu của mô hình, không phải xác suất mua hàng; không so điểm giữa hai mô hình.
 - Ảnh trên màn hình chỉ để xem: mô hình dùng đặc trưng CLIP đã trích xuất sẵn, nên ảnh tải lỗi không làm đổi điểm.
-- Demo xếp hạng toàn catalog hoặc toàn nhóm đã lọc; số liệu trong báo cáo đo trên 100 ứng viên mỗi ca, nên không phải chất lượng của demo.
+- Chế độ Nhanh là xấp xỉ: với UFM, top 10 trùng trung bình 84% với Toàn catalog (100% ở nhóm Cold và Warm, 71% ở Zero-shot); với UFM + TF-IDF trùng 99%. Cần đúng thứ hạng của mô hình thì chọn Toàn catalog.
+- Trọng số trộn của UFM + TF-IDF được chọn trên đánh giá 100 ứng viên, chưa hiệu chỉnh cho xếp hạng trên catalog.
+- Demo xếp hạng trên catalog hoặc nhóm đã lọc; số liệu trong báo cáo đo trên 100 ứng viên mỗi ca, nên không phải chất lượng của demo.
 
 ## Xử lý sự cố
 
@@ -48,4 +58,4 @@ Dữ liệu lớn (checkpoint, CLIP, catalog) không nằm trên GitHub; cách k
 
 ## Bằng chứng nghiệm thu
 
-[6/6 ca API](../reports/nontraining_20261029/demo_api_verification.json), [4/4 ca giao diện](../reports/nontraining_20261029/demo_ui_end_to_end_20261029.json), [lịch sử toàn mã lạ trả 400](../reports/nontraining_20261029/demo_unknown_history.json), [đo độ trễ](../reports/continuation_20261028/windows_ufm_benchmark.json), [ca thiếu phương thức](../reports/continuation_20261028/windows_ufm_missing_modalities.json).
+[6/6 ca API ngày 29/10](../reports/nontraining_20261029/demo_api_verification.json), [phát lại 6 ca, độ trễ và độ trùng của chế độ Nhanh ngày 04/11](../reports/demo_20261103/demo_modes.json), [5/5 ca giao diện](../reports/demo_20261103/demo_ui_end_to_end_20261103.json), [lịch sử toàn mã lạ trả 400](../reports/nontraining_20261029/demo_unknown_history.json), [đo độ trễ 28/10](../reports/continuation_20261028/windows_ufm_benchmark.json), [ca thiếu phương thức](../reports/continuation_20261028/windows_ufm_missing_modalities.json).

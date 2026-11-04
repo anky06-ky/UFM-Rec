@@ -1,0 +1,139 @@
+{
+  "created_at": "2026-11-04T03:31:12.485Z",
+  "request": {
+    "history": [
+      "B004S8F7QM"
+    ],
+    "k": 5,
+    "regime": "zero_shot",
+    "model": "ufm",
+    "scope": "fast"
+  },
+  "backend": "UFM Rec",
+  "warning": "UFM dùng lịch sử hành vi cùng CLIP embedding đã trích xuất từ mô tả và ảnh sản phẩm. JPEG trên màn hình chỉ để xem; ảnh tải lỗi không đổi embedding đã lưu. Điểm, trọng số và uncertainty là tín hiệu mô hình, không phải xác suất mua hàng.",
+  "data": {
+    "mode": "catalog_from_disk",
+    "catalog": "toys_games_full_temporal",
+    "items": 767045,
+    "counts_simulated": false,
+    "display_images_affect_scores": false
+  },
+  "model": {
+    "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+    "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+    "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+    "variant": "full",
+    "checkpoint_epoch": 9,
+    "training_source": "D:\\Nam3_ki1\\UFM-Rec_Backups\\restored_complete_20261028\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+  },
+  "results": [
+    {
+      "asin": "B0B2BQXPPJ",
+      "title": "Cards Against Humanity: Tiny Edition • Miniature Main Game with 600 Ridiculously Tiny Cards",
+      "image": "https://m.media-amazon.com/images/I/31TRHqalHXL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 7.629579544067383,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.28280109167099,
+        0.02236565575003624
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B0B97KMX3D",
+      "title": "Carcassonne 20th Anniversary Edition| Family Board Game for Adults and Kids | Strategy /Adventure Game | Ages 7+ | 2-5 Players | Avg. Playtime 30-45 Minutes | Made by Z-Man Games",
+      "image": "https://m.media-amazon.com/images/I/5155VqGmgjL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 4.830232620239258,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.28280109167099,
+        0.12080568820238113
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B0B8ZR46YP",
+      "title": "Dixit Board Game 2021 Refresh | Storytelling Game for Kids and Adults | Fun Family Party Game | Creative Kids Game | Ages 8+ | 3-8 Players | Average Playtime 30 Minutes | Made by Libellud",
+      "image": "https://m.media-amazon.com/images/I/51ppstGppqL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 4.815561294555664,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.28280109167099,
+        0.12155379354953766
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B093RB185K",
+      "title": "Façade Games Dark Cities Collection - 4 Game Set Including Salem 1692, Bristol 1350, Tortuga 1667, and Deadwood 1876",
+      "image": "https://m.media-amazon.com/images/I/41PZ1bSXHHS._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 4.269320487976074,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.28280109167099,
+        0.18566441535949707
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    },
+    {
+      "asin": "B08ZSJ1V8X",
+      "title": "Card Games, Card Games for Children and Adults, Party Entertainment.The Classic Family Card Game That's Easy to Learn and so Much Fun to Play",
+      "image": "https://m.media-amazon.com/images/I/51dxmGnQTNL._AC_.jpg",
+      "train_count": 0,
+      "regime": "zero_shot",
+      "score": 4.157702922821045,
+      "weights": [
+        0,
+        1
+      ],
+      "uncertainty": [
+        0.28280109167099,
+        0.09864608198404312
+      ],
+      "modalities": [
+        true,
+        true
+      ]
+    }
+  ],
+  "ranking": {
+    "model": "ufm",
+    "scope": "fast",
+    "candidates": 3142
+  },
+  "elapsed_ms": 804.2,
+  "regime": "zero_shot",
+  "history_count": 1
+}

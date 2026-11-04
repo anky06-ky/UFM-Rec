@@ -1,0 +1,241 @@
+{
+  "observed_at_utc": "2026-11-04T03:52:05Z",
+  "scope": "In-process ranking on CPU (no HTTP); full catalog of 767,045 items, checkpoint epoch 9. Fast scope: UFM rescores the union of the nearest items by its own semantic and behaviour embeddings, TF-IDF and popularity. The hybrid blend standardizes against every allowed item in both scopes (UFM statistics from a fixed sample in the fast scope).",
+  "hardware": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "logical_cpu": 8,
+    "physical_ram_mib": 16190.3,
+    "torch_threads": 4
+  },
+  "model": {
+    "checkpoint_sha256": "5630013d0cbb6db633c4f4cf5bcd840fb703dbfc64a13c0352278624e03e11c8",
+    "model_source_sha256": "12c5b5f070ec0353b0a11e345acc2055b7a322aa6c952f982a8d3fba4adf0ba6",
+    "feature_marker_sha256": "c50d8a06647390bb44e433ad4d49bd606ee547a39ff959978ce1ada34ff4db98",
+    "variant": "full",
+    "checkpoint_epoch": 9,
+    "training_source": "D:\\Nam3_ki1\\UFM-Rec\\reports\\fix_1_15_20261027\\fitlab01_finish1\\trained_snapshot"
+  },
+  "load_seconds": 78.4,
+  "rss_after_load_mib": 3909.1,
+  "private_after_load_mib": 2690.7,
+  "fast_candidates_per_source": {
+    "semantic": 2000,
+    "behavior": 2000,
+    "tfidf": 1000,
+    "popularity": 500
+  },
+  "hybrid_alpha": 0.55,
+  "hybrid_sample": 4096,
+  "replay_29_10_full_catalog": [
+    {
+      "name": "no_history",
+      "request": {
+        "history": [],
+        "k": 5,
+        "regime": "all"
+      },
+      "same_items": true,
+      "max_score_gap": 0.0,
+      "max_weight_gap": 0.0,
+      "seconds_29_10": 14.79,
+      "seconds_now": 7.54
+    },
+    {
+      "name": "history",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "all"
+      },
+      "same_items": true,
+      "max_score_gap": 9.5367431640625e-07,
+      "max_weight_gap": 2.9802322387695312e-08,
+      "seconds_29_10": 16.17,
+      "seconds_now": 7.45
+    },
+    {
+      "name": "zero_shot",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "zero_shot"
+      },
+      "same_items": true,
+      "max_score_gap": 1.9073486328125e-06,
+      "max_weight_gap": 0.0,
+      "seconds_29_10": 8.36,
+      "seconds_now": 2.02
+    },
+    {
+      "name": "extreme_cold",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "extreme_cold"
+      },
+      "same_items": true,
+      "max_score_gap": 2.1457672119140625e-06,
+      "max_weight_gap": 2.9802322387695312e-08,
+      "seconds_29_10": 10.62,
+      "seconds_now": 3.8
+    },
+    {
+      "name": "cold",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "cold"
+      },
+      "same_items": true,
+      "max_score_gap": 1.430511474609375e-06,
+      "max_weight_gap": 2.9802322387695312e-08,
+      "seconds_29_10": 7.5,
+      "seconds_now": 1.17
+    },
+    {
+      "name": "warm",
+      "request": {
+        "history": [
+          "B004S8F7QM"
+        ],
+        "k": 5,
+        "regime": "warm"
+      },
+      "same_items": true,
+      "max_score_gap": 3.337860107421875e-06,
+      "max_weight_gap": 5.960464477539063e-08,
+      "seconds_29_10": 6.21,
+      "seconds_now": 0.85
+    }
+  ],
+  "latency_seconds": {
+    "ufm_full": {
+      "n": 5,
+      "mean": 7.551,
+      "min": 7.3964,
+      "p50": 7.5265,
+      "max": 7.6958,
+      "candidates": 767044
+    },
+    "ufm_fast": {
+      "n": 5,
+      "mean": 0.4427,
+      "min": 0.3914,
+      "p50": 0.422,
+      "max": 0.5055,
+      "candidates": 4949
+    },
+    "hybrid_full": {
+      "n": 5,
+      "mean": 7.7611,
+      "min": 7.7276,
+      "p50": 7.7312,
+      "max": 7.8736,
+      "candidates": 767044
+    },
+    "hybrid_fast": {
+      "n": 5,
+      "mean": 0.5784,
+      "min": 0.537,
+      "p50": 0.5965,
+      "max": 0.6052,
+      "candidates": 4949
+    }
+  },
+  "fast_vs_full_top10": {
+    "ufm_all": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.844,
+      "min_overlap_at_10": 0.0,
+      "same_top1": 0.84,
+      "full_seconds_p50": 7.567,
+      "fast_seconds_p50": 0.516
+    },
+    "ufm_zero_shot": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.708,
+      "min_overlap_at_10": 0.1,
+      "same_top1": 0.76,
+      "full_seconds_p50": 1.802,
+      "fast_seconds_p50": 0.358
+    },
+    "ufm_extreme_cold": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.88,
+      "min_overlap_at_10": 0.2,
+      "same_top1": 0.92,
+      "full_seconds_p50": 3.914,
+      "fast_seconds_p50": 0.446
+    },
+    "ufm_cold": {
+      "histories": 25,
+      "mean_overlap_at_10": 1.0,
+      "min_overlap_at_10": 1.0,
+      "same_top1": 1.0,
+      "full_seconds_p50": 1.304,
+      "fast_seconds_p50": 0.381
+    },
+    "ufm_warm": {
+      "histories": 25,
+      "mean_overlap_at_10": 1.0,
+      "min_overlap_at_10": 1.0,
+      "same_top1": 1.0,
+      "full_seconds_p50": 0.801,
+      "fast_seconds_p50": 0.366
+    },
+    "hybrid_all": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.988,
+      "min_overlap_at_10": 0.7,
+      "same_top1": 1.0,
+      "full_seconds_p50": 7.774,
+      "fast_seconds_p50": 0.588
+    },
+    "hybrid_zero_shot": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.992,
+      "min_overlap_at_10": 0.9,
+      "same_top1": 1.0,
+      "full_seconds_p50": 2.481,
+      "fast_seconds_p50": 0.463
+    },
+    "hybrid_extreme_cold": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.996,
+      "min_overlap_at_10": 0.9,
+      "same_top1": 1.0,
+      "full_seconds_p50": 4.059,
+      "fast_seconds_p50": 0.476
+    },
+    "hybrid_cold": {
+      "histories": 25,
+      "mean_overlap_at_10": 1.0,
+      "min_overlap_at_10": 1.0,
+      "same_top1": 1.0,
+      "full_seconds_p50": 1.423,
+      "fast_seconds_p50": 0.396
+    },
+    "hybrid_warm": {
+      "histories": 25,
+      "mean_overlap_at_10": 0.992,
+      "min_overlap_at_10": 0.9,
+      "same_top1": 1.0,
+      "full_seconds_p50": 0.966,
+      "fast_seconds_p50": 0.394
+    }
+  },
+  "sampled_histories": 25,
+  "limitations": [
+    "Latency on one Windows laptop with other programs running; not a concurrent benchmark.",
+    "Overlap compares the fast scope with the full-catalog ranking of the same model; it is not recommendation-quality evidence.",
+    "The hybrid alpha was chosen on 100-candidate validation cases; it is not tuned for full-catalog or fast-scope ranking."
+  ]
+}
