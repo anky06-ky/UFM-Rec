@@ -1,0 +1,403 @@
+{
+  "protocol": "validation v3; parameters chosen on the earlier half by time (fit), reported on the later half (audit); trend uses train interactions only; test never read.",
+  "ufm_run": "runs/ufm_v2",
+  "folds": {
+    "boundary_timestamp_ms": 1642298760227,
+    "fit": 20000,
+    "audit": 20000
+  },
+  "selected": {
+    "empty_history": {
+      "window_days": 90,
+      "beta": 0.75
+    },
+    "known_history": {
+      "window_days": 180,
+      "beta": 1.5,
+      "alpha": 0.8,
+      "gamma": 0.8
+    },
+    "hybrid_alpha": 0.7
+  },
+  "fit_best": {
+    "empty": 0.15409351352145853,
+    "known": 0.3973186519144966
+  },
+  "audit_cold_macro": {
+    "tfidf": 0.203726,
+    "ufm": 0.211542,
+    "hybrid": 0.220666,
+    "hybrid_trend": 0.293591
+  },
+  "audit_by_regime": {
+    "tfidf": {
+      "zero_shot": 0.186921,
+      "extreme_cold": 0.225377,
+      "cold": 0.198881,
+      "warm": 0.146345
+    },
+    "ufm": {
+      "zero_shot": 0.193247,
+      "extreme_cold": 0.227565,
+      "cold": 0.213813,
+      "warm": 0.17288
+    },
+    "hybrid": {
+      "zero_shot": 0.198706,
+      "extreme_cold": 0.243719,
+      "cold": 0.219573,
+      "warm": 0.17166
+    },
+    "hybrid_trend": {
+      "zero_shot": 0.199394,
+      "extreme_cold": 0.357534,
+      "cold": 0.323845,
+      "warm": 0.274784
+    }
+  },
+  "audit_cold_macro_by_history": {
+    "empty_history": {
+      "tfidf": 0.0428960736060274,
+      "ufm": 0.0428960736060274,
+      "hybrid": 0.0428960736060274,
+      "hybrid_trend": 0.146770135847907
+    },
+    "known_history": {
+      "tfidf": 0.34319984539559395,
+      "ufm": 0.35778683720188914,
+      "hybrid": 0.37477787841187543,
+      "hybrid_trend": 0.42134708337119225
+    }
+  },
+  "gain_vs_hybrid": {
+    "value": 0.072925,
+    "ci95": [
+      0.069212,
+      0.076742
+    ]
+  },
+  "gain_vs_tfidf": {
+    "value": 0.089865,
+    "ci95": [
+      0.085537,
+      0.094128
+    ]
+  },
+  "grid_empty_fit": {
+    "30d_beta0.0": 0.14536051968432465,
+    "30d_beta0.25": 0.15085963097461905,
+    "30d_beta0.5": 0.151044509828884,
+    "30d_beta0.75": 0.15005305066262273,
+    "30d_beta1.0": 0.14235673113686895,
+    "30d_beta1.25": 0.1385274852874104,
+    "30d_beta1.5": 0.1343700754950116,
+    "30d_beta2.0": 0.11156755959929847,
+    "30d_beta3.0": 0.0934854656347069,
+    "90d_beta0.0": 0.14624364390592826,
+    "90d_beta0.25": 0.15215606972767148,
+    "90d_beta0.5": 0.15343924075301443,
+    "90d_beta0.75": 0.15409351352145853,
+    "90d_beta1.0": 0.1491053950254661,
+    "90d_beta1.25": 0.14626948767982373,
+    "90d_beta1.5": 0.14474280904247663,
+    "90d_beta2.0": 0.12958099309961,
+    "90d_beta3.0": 0.10984266396820064,
+    "180d_beta0.0": 0.13034653416754793,
+    "180d_beta0.25": 0.13340946135771392,
+    "180d_beta0.5": 0.13519228970104843,
+    "180d_beta0.75": 0.13720131537677013,
+    "180d_beta1.0": 0.134984872772732,
+    "180d_beta1.25": 0.1321797091762118,
+    "180d_beta1.5": 0.13058456186996678,
+    "180d_beta2.0": 0.12358921686538277,
+    "180d_beta3.0": 0.10798365430765983,
+    "365d_beta0.0": 0.10736111567599184,
+    "365d_beta0.25": 0.109375920204334,
+    "365d_beta0.5": 0.11038789398240396,
+    "365d_beta0.75": 0.11228493062288132,
+    "365d_beta1.0": 0.1107905097318294,
+    "365d_beta1.25": 0.10916489056815226,
+    "365d_beta1.5": 0.10871032702000201,
+    "365d_beta2.0": 0.10588954969649439,
+    "365d_beta3.0": 0.09871721435729341
+  },
+  "audit": {
+    "tfidf": {
+      "overall": {
+        "samples": 20000,
+        "recall@10": 0.29045,
+        "ndcg@10": 0.188926,
+        "mrr@10": 0.157953,
+        "mean_rank": 37.389
+      },
+      "known_user": {
+        "samples": 10542,
+        "recall@10": 0.467274,
+        "ndcg@10": 0.320674,
+        "mrr@10": 0.275501,
+        "mean_rank": 24.369
+      },
+      "empty_history": {
+        "samples": 9458,
+        "recall@10": 0.09336,
+        "ndcg@10": 0.042077,
+        "mrr@10": 0.026933,
+        "mean_rank": 51.902
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 6161,
+          "recall@10": 0.282909,
+          "ndcg@10": 0.186921,
+          "mrr@10": 0.157595,
+          "mean_rank": 38.419
+        },
+        "extreme_cold": {
+          "samples": 4536,
+          "recall@10": 0.337302,
+          "ndcg@10": 0.225377,
+          "mrr@10": 0.191121,
+          "mean_rank": 34.468
+        },
+        "cold": {
+          "samples": 4628,
+          "recall@10": 0.307908,
+          "ndcg@10": 0.198881,
+          "mrr@10": 0.16565,
+          "mean_rank": 35.604
+        },
+        "warm": {
+          "samples": 4675,
+          "recall@10": 0.237647,
+          "ndcg@10": 0.146345,
+          "mrr@10": 0.118625,
+          "mean_rank": 40.636
+        }
+      },
+      "repeat_purchases": {
+        "samples": 28,
+        "recall@10": 0.964286,
+        "ndcg@10": 0.924742,
+        "mrr@10": 0.910714,
+        "mean_rank": 1.643
+      },
+      "new_purchases": {
+        "samples": 19972,
+        "recall@10": 0.289505,
+        "ndcg@10": 0.187894,
+        "mrr@10": 0.156898,
+        "mean_rank": 37.44
+      },
+      "cold_macro_ndcg@10": 0.203726
+    },
+    "ufm": {
+      "overall": {
+        "samples": 20000,
+        "recall@10": 0.3087,
+        "ndcg@10": 0.201028,
+        "mrr@10": 0.16804,
+        "mean_rank": 35.906
+      },
+      "known_user": {
+        "samples": 10542,
+        "recall@10": 0.501897,
+        "ndcg@10": 0.343636,
+        "mrr@10": 0.294637,
+        "mean_rank": 21.554
+      },
+      "empty_history": {
+        "samples": 9458,
+        "recall@10": 0.09336,
+        "ndcg@10": 0.042077,
+        "mrr@10": 0.026933,
+        "mean_rank": 51.902
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 6161,
+          "recall@10": 0.295731,
+          "ndcg@10": 0.193247,
+          "mrr@10": 0.16183,
+          "mean_rank": 36.759
+        },
+        "extreme_cold": {
+          "samples": 4536,
+          "recall@10": 0.344356,
+          "ndcg@10": 0.227565,
+          "mrr@10": 0.191595,
+          "mean_rank": 34.139
+        },
+        "cold": {
+          "samples": 4628,
+          "recall@10": 0.323898,
+          "ndcg@10": 0.213813,
+          "mrr@10": 0.180138,
+          "mean_rank": 34.537
+        },
+        "warm": {
+          "samples": 4675,
+          "recall@10": 0.27615,
+          "ndcg@10": 0.17288,
+          "mrr@10": 0.141392,
+          "mean_rank": 37.85
+        }
+      },
+      "repeat_purchases": {
+        "samples": 28,
+        "recall@10": 0.964286,
+        "ndcg@10": 0.905381,
+        "mrr@10": 0.8875,
+        "mean_rank": 2.321
+      },
+      "new_purchases": {
+        "samples": 19972,
+        "recall@10": 0.307781,
+        "ndcg@10": 0.200041,
+        "mrr@10": 0.167031,
+        "mean_rank": 35.953
+      },
+      "cold_macro_ndcg@10": 0.211542
+    },
+    "hybrid": {
+      "overall": {
+        "samples": 20000,
+        "recall@10": 0.3151,
+        "ndcg@10": 0.207422,
+        "mrr@10": 0.174392,
+        "mean_rank": 35.414
+      },
+      "known_user": {
+        "samples": 10542,
+        "recall@10": 0.514039,
+        "ndcg@10": 0.355765,
+        "mrr@10": 0.306688,
+        "mean_rank": 20.621
+      },
+      "empty_history": {
+        "samples": 9458,
+        "recall@10": 0.09336,
+        "ndcg@10": 0.042077,
+        "mrr@10": 0.026933,
+        "mean_rank": 51.902
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 6161,
+          "recall@10": 0.298653,
+          "ndcg@10": 0.198706,
+          "mrr@10": 0.168107,
+          "mean_rank": 36.564
+        },
+        "extreme_cold": {
+          "samples": 4536,
+          "recall@10": 0.363095,
+          "ndcg@10": 0.243719,
+          "mrr@10": 0.206967,
+          "mean_rank": 33.035
+        },
+        "cold": {
+          "samples": 4628,
+          "recall@10": 0.333621,
+          "ndcg@10": 0.219573,
+          "mrr@10": 0.184577,
+          "mean_rank": 33.855
+        },
+        "warm": {
+          "samples": 4675,
+          "recall@10": 0.271872,
+          "ndcg@10": 0.17166,
+          "mrr@10": 0.140986,
+          "mean_rank": 37.749
+        }
+      },
+      "repeat_purchases": {
+        "samples": 28,
+        "recall@10": 0.964286,
+        "ndcg@10": 0.933247,
+        "mrr@10": 0.922619,
+        "mean_rank": 1.643
+      },
+      "new_purchases": {
+        "samples": 19972,
+        "recall@10": 0.31419,
+        "ndcg@10": 0.206404,
+        "mrr@10": 0.173343,
+        "mean_rank": 35.461
+      },
+      "cold_macro_ndcg@10": 0.220666
+    },
+    "hybrid_trend": {
+      "overall": {
+        "samples": 20000,
+        "recall@10": 0.45275,
+        "ndcg@10": 0.281681,
+        "mrr@10": 0.229593,
+        "mean_rank": 24.093
+      },
+      "known_user": {
+        "samples": 10542,
+        "recall@10": 0.58746,
+        "ndcg@10": 0.402697,
+        "mrr@10": 0.345754,
+        "mean_rank": 16.72
+      },
+      "empty_history": {
+        "samples": 9458,
+        "recall@10": 0.302601,
+        "ndcg@10": 0.146794,
+        "mrr@10": 0.100118,
+        "mean_rank": 32.31
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 6161,
+          "recall@10": 0.300601,
+          "ndcg@10": 0.199394,
+          "mrr@10": 0.168422,
+          "mean_rank": 36.55
+        },
+        "extreme_cold": {
+          "samples": 4536,
+          "recall@10": 0.58157,
+          "ndcg@10": 0.357534,
+          "mrr@10": 0.28951,
+          "mean_rank": 17.106
+        },
+        "cold": {
+          "samples": 4628,
+          "recall@10": 0.524417,
+          "ndcg@10": 0.323845,
+          "mrr@10": 0.262673,
+          "mean_rank": 18.287
+        },
+        "warm": {
+          "samples": 4675,
+          "recall@10": 0.457326,
+          "ndcg@10": 0.274784,
+          "mrr@10": 0.219323,
+          "mean_rank": 20.201
+        }
+      },
+      "repeat_purchases": {
+        "samples": 28,
+        "recall@10": 0.964286,
+        "ndcg@10": 0.906962,
+        "mrr@10": 0.889031,
+        "mean_rank": 2.429
+      },
+      "new_purchases": {
+        "samples": 19972,
+        "recall@10": 0.452033,
+        "ndcg@10": 0.280804,
+        "mrr@10": 0.228668,
+        "mean_rank": 24.123
+      },
+      "cold_macro_ndcg@10": 0.293591
+    }
+  },
+  "limitations": [
+    "Validation v3 was already used to select checkpoints; the audit half is not an independent holdout.",
+    "Part of the gain comes from how negatives are sampled (train+validation popularity); recent popularity is still a legitimate train-only signal."
+  ],
+  "runtime_seconds": 548.6
+}

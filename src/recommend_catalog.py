@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlsplit, urlencode
+import re
 import warnings
 
 import numpy as np
@@ -15,8 +16,9 @@ from demo_product_images import image_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT/'data/processed/toys_games_full_temporal'
-# Blend weight chosen on the earlier half of validation v3 (reports/hybrid_20261103/hybrid_v3.json).
-HYBRID_ALPHA = 0.55
+# Blend weight chosen on the earlier half of validation v3 for the served checkpoint
+# (rebuilt epoch-4 checkpoint: reports/rebuild_20261108/hybrid_v3.json; published epoch 9 used 0.55).
+HYBRID_ALPHA = 0.60
 # Candidates taken from each source in the fast scope; UFM rescores their union.
 FAST_CANDIDATES = dict(semantic=2000, behavior=2000, tfidf=1000, popularity=500)
 # Fixed random sample of allowed items whose UFM scores estimate the blend statistics in the fast scope.
@@ -46,6 +48,11 @@ def top_allowed(scores,mask,n):
     return rows[np.argpartition(-values,n-1)[:n]]
 
 
+def title_key(title):
+    """Listings of one product often repeat the title with small variations; compare a normalized prefix."""
+    return re.sub(r'[^0-9a-z]+',' ',title.lower()).strip()[:60]
+
+
 def safe_image(url):
     p = urlsplit(url)
     return url if (p.scheme=='https' and p.hostname=='m.media-amazon.com' and p.port in (None,443)
@@ -68,6 +75,7 @@ class Catalog:
                 if i>=len(self.asins) or r['parent_asin'] != self.asins[i]: raise ValueError('Title mapping mismatch.')
                 self.titles.append(r.get('title','')[:240] or r['parent_asin'])
         if len(self.titles)!=len(self.asins): raise ValueError('Title coverage mismatch.')
+        self.lower_titles = [t.lower() for t in self.titles]
         self.images = ['']*len(self.asins)
         path = self.data/'foundation_catalog_v1/catalog.csv.gz'
         if path.exists():
@@ -101,15 +109,41 @@ class Catalog:
                     catalog=self.data.name, items=len(self.asins),
                     counts_simulated=simulated, display_images_affect_scores=False)
 
-    def search(self,q,limit=20):
+    def search(self,q,limit=20,scan=600):
+        """Every word must appear in the title (or the query is an ASIN); most-interacted matches first."""
         q = q.strip().lower()[:80]
         if len(q)<2: return []
-        found = []
-        for i,(asin,title) in enumerate(zip(self.asins,self.titles)):
-            if q in asin.lower() or q in title.lower():
-                found.append(self.item(i))
-                if len(found)>=limit: break
-        return found
+        exact = self.lookup.get(q.upper())
+        words = q.split()
+        found = [] if exact is None else [exact]
+        for i,title in enumerate(self.lower_titles):
+            if i!=exact and all(w in title for w in words):
+                found.append(i)
+                if len(found)>=scan: break
+        found.sort(key=lambda i:(i!=exact,-int(self.counts[i])))
+        return self.distinct(found,limit,[])
+
+    def distinct(self,order,k,history):
+        """First k rows of order, skipping repeated listings of one product (same normalized title)."""
+        seen = {title_key(self.titles[r]) for r in history}
+        picked = []
+        for r in order:
+            key = title_key(self.titles[int(r)])
+            if key in seen: continue
+            seen.add(key); picked.append(int(r))
+            if len(picked)>=k: break
+        return [self.item(r) for r in picked]
+
+    def pick(self,order,k,history):
+        """Positions in order of the first k distinct products (see distinct)."""
+        seen = {title_key(self.titles[r]) for r in history}
+        picked = []
+        for position,r in enumerate(order):
+            key = title_key(self.titles[int(r)])
+            if key in seen: continue
+            seen.add(key); picked.append(position)
+            if len(picked)>=k: break
+        return np.asarray(picked,dtype=np.int64)
 
     def regime_mask(self,regime='all'):
         n = self.counts
@@ -118,9 +152,9 @@ class Catalog:
         if regime not in masks: raise ValueError('Unknown item regime.')
         return masks[regime]
 
-    def examples(self,limit=8):
-        rows = np.argsort(-self.counts,kind='stable')[:limit]
-        return [self.item(int(row)) for row in rows]
+    def examples(self,limit=12):
+        rows = np.argsort(-self.counts,kind='stable')[:limit*3]
+        return self.distinct(rows,limit,[])
 
 
 class ContentBackend:
@@ -147,7 +181,8 @@ class ContentBackend:
         scores[~self.catalog.regime_mask(regime)] = -np.inf
         scores[np.asarray(history,dtype=np.int64)] = -np.inf
         rows = np.flatnonzero(np.isfinite(scores))
-        best = rows[np.argsort(-scores[rows],kind='stable')[:k]]
+        order = rows[np.argsort(-scores[rows],kind='stable')[:k*20]]
+        best = order[self.catalog.pick(order,k,history)]
         self.last_stats = dict(model=model,scope=scope,candidates=int(len(rows)))
         return [dict(self.catalog.item(int(r)),score=float(scores[r])) for r in best]
 
@@ -260,7 +295,8 @@ class UFMBackend:
                 reference = scores if scope=='full' else self.score(
                     h,np.random.default_rng(0).choice(pool,min(len(pool),HYBRID_SAMPLE),replace=False))
                 ranking = HYBRID_ALPHA*standardize(scores,reference)+(1-HYBRID_ALPHA)*standardize(lexical[rows],lexical[pool])
-            best = np.argsort(-(ranking+tie_noise(rows)*1e-10),kind='stable')[:k]
+            order = np.argsort(-(ranking+tie_noise(rows)*1e-10),kind='stable')[:k*20]
+            best = order[self.catalog.pick(rows[order],k,history)]
             top = rows[best]
             # Branch weights and uncertainty only for the returned items.
             detail = self.model(h,torch.from_numpy(top[None]+1),*self.tables) if len(top) else None

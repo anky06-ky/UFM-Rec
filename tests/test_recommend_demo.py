@@ -20,7 +20,7 @@ import test_ufm_training as training_fixture
 import train_ufm_recommender as trainer
 from train_gpu_recommender import fingerprint
 from prepare_ufm_catalog import sha256
-from recommend_catalog import Catalog,ContentBackend,UFMBackend,safe_image
+from recommend_catalog import Catalog,ContentBackend,UFMBackend,HYBRID_ALPHA,safe_image
 from demo_recommender import handler_for,ThreadingHTTPServer
 
 
@@ -149,11 +149,11 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(sorted(r['asin'] for r in hybrid),sorted(r['asin'] for r in full))
         ufm,lexical = (np.array([r[key] for r in hybrid]) for key in ('ufm_score','tfidf_score'))
         z = lambda x: (x-x.mean())/x.std() if x.std()>0 else np.zeros_like(x)
-        np.testing.assert_allclose([r['score'] for r in hybrid],0.55*z(ufm)+0.45*z(lexical),atol=1e-9)
+        np.testing.assert_allclose([r['score'] for r in hybrid],HYBRID_ALPHA*z(ufm)+(1-HYBRID_ALPHA)*z(lexical),atol=1e-9)
         # Both scopes standardize against all allowed items, so here the fast blend matches the full one.
         hybrid_fast = backend.recommend(['ASIN1','ASIN2'],10,model='hybrid',scope='fast')
         self.assertEqual([r['asin'] for r in hybrid_fast],[r['asin'] for r in hybrid])
-        np.testing.assert_allclose([r['score'] for r in hybrid_fast],[r['score'] for r in hybrid],atol=1e-9)
+        np.testing.assert_allclose([r['score'] for r in hybrid_fast],[r['score'] for r in hybrid],atol=1e-7)  # float32 rounding
         for bad in (dict(model='bm25'),dict(scope='partial')):
             with self.assertRaisesRegex(ValueError,'model or scope'): backend.recommend(['ASIN1'],5,**bad)
 

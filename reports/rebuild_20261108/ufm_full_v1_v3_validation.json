@@ -1,0 +1,226 @@
+{
+  "checkpoint": "runs/ufm_full_v1/best.pt",
+  "checkpoint_sha256": "97658ef6f8843e3940aa6bd6aac366671a1b91d31df06272ed3b787489ccd2f1",
+  "checkpoint_epoch": 4,
+  "checkpoint_variant": "full",
+  "checkpoint_seed": 42,
+  "recorded_code_sha256": {
+    "train_ufm_recommender.py": "a391936dcae4b13808a9bed30518d18a779244d4740bf0466f2db8e121200d1d",
+    "ufm_model.py": "3f6fad5dcd847f431716cf410412ab32b81ce1bc8d706edc269a3a46a67eaaca",
+    "train_gpu_recommender.py": "3913d4696943008f2f833ecace2e0136cb7d74b9a8f3a344bd73756459f27ad2"
+  },
+  "training_source": "src",
+  "model_config": {
+    "items": 767045,
+    "feature_dim": 512,
+    "dim": 128,
+    "history_size": 20,
+    "heads": 4,
+    "layers": 2,
+    "dropout": 0.1,
+    "id_dropout": 0.5,
+    "variant": "full",
+    "fixed_alpha": 0.5
+  },
+  "evaluation": "data/processed/toys_games_full_temporal/evaluation",
+  "sources": {
+    "features_complete": "44cacb7b282189b8baf3491d312eb4a8e0e359ffefb08c50dbb3e8c3323a215a",
+    "text_npy": "783ef461f71c8aaafd7b0d3b3c9ae0ee88b87b9eba887480103189338f189ee6",
+    "image_npy": "e31006f46561e8cce5cfe8311edcd14a26afb2f98a5b5e083b55c16e96c98a20",
+    "modalities_npy": "85337c5ba3990495f1f834c5b5fd31ed5fe1d8ef2d90a91ec2fc753bd7a77650",
+    "train_counts": "b8c37d48e55654eb091d3d8e9a3a61efa76c2e2c988747fbecd1b16f536f9564",
+    "samples_validation": "9387e66e9f1905c44d02b65c3809f5fa8b6c022f6abf0c1a37d52cb57767a60e"
+  },
+  "splits": {
+    "validation": {
+      "overall": {
+        "samples": 40000,
+        "recall@10": 0.264025,
+        "ndcg@10": 0.164489,
+        "mrr@10": 0.134127,
+        "mean_rank": 38.478
+      },
+      "known_user": {
+        "samples": 20601,
+        "recall@10": 0.425319,
+        "ndcg@10": 0.279917,
+        "mrr@10": 0.235142,
+        "mean_rank": 25.683
+      },
+      "empty_history": {
+        "samples": 19399,
+        "recall@10": 0.092737,
+        "ndcg@10": 0.041908,
+        "mrr@10": 0.026853,
+        "mean_rank": 52.066
+      },
+      "by_regime": {
+        "zero_shot": {
+          "samples": 10000,
+          "recall@10": 0.253,
+          "ndcg@10": 0.158011,
+          "mrr@10": 0.129044,
+          "mean_rank": 38.88
+        },
+        "extreme_cold": {
+          "samples": 10000,
+          "recall@10": 0.3134,
+          "ndcg@10": 0.20085,
+          "mrr@10": 0.166364,
+          "mean_rank": 35.854
+        },
+        "cold": {
+          "samples": 10000,
+          "recall@10": 0.3095,
+          "ndcg@10": 0.197692,
+          "mrr@10": 0.163496,
+          "mean_rank": 35.059
+        },
+        "warm": {
+          "samples": 10000,
+          "recall@10": 0.1802,
+          "ndcg@10": 0.101401,
+          "mrr@10": 0.077604,
+          "mean_rank": 44.118
+        }
+      },
+      "repeat_purchases": {
+        "samples": 58,
+        "recall@10": 0.931034,
+        "ndcg@10": 0.896234,
+        "mrr@10": 0.885345,
+        "mean_rank": 2.207
+      },
+      "new_purchases": {
+        "samples": 39942,
+        "recall@10": 0.263056,
+        "ndcg@10": 0.163426,
+        "mrr@10": 0.133036,
+        "mean_rank": 38.53
+      },
+      "cold_macro_ndcg@10": 0.18551766666666666,
+      "calibration_unscaled": {
+        "scope": "top1_given_sampled_candidate_set",
+        "n": 40000,
+        "tie_policy": "uniform_among_equal_maxima",
+        "ece": 0.07273407981424374,
+        "nll": 4.490347044289106,
+        "brier_multiclass": 0.9681415349664274,
+        "temperature": 1.0,
+        "bins": [
+          {
+            "bin": 0,
+            "n": 15871,
+            "accuracy": 0.010380199327329719,
+            "confidence": 0.017991066397002663
+          },
+          {
+            "bin": 1,
+            "n": 8150,
+            "accuracy": 0.033006134969325154,
+            "confidence": 0.09943342608693802
+          },
+          {
+            "bin": 2,
+            "n": 5321,
+            "accuracy": 0.057695921819206915,
+            "confidence": 0.1637836994080104
+          },
+          {
+            "bin": 3,
+            "n": 3219,
+            "accuracy": 0.07859583721652687,
+            "confidence": 0.23148875918094125
+          },
+          {
+            "bin": 4,
+            "n": 2023,
+            "accuracy": 0.12555610479485912,
+            "confidence": 0.29776173930697025
+          },
+          {
+            "bin": 5,
+            "n": 1271,
+            "accuracy": 0.20928402832415421,
+            "confidence": 0.3642298031016728
+          },
+          {
+            "bin": 6,
+            "n": 897,
+            "accuracy": 0.27759197324414714,
+            "confidence": 0.43246121226202566
+          },
+          {
+            "bin": 7,
+            "n": 654,
+            "accuracy": 0.3318042813455658,
+            "confidence": 0.4982479964290774
+          },
+          {
+            "bin": 8,
+            "n": 560,
+            "accuracy": 0.40714285714285714,
+            "confidence": 0.5634967450334205
+          },
+          {
+            "bin": 9,
+            "n": 436,
+            "accuracy": 0.4426605504587156,
+            "confidence": 0.6319067859863998
+          },
+          {
+            "bin": 10,
+            "n": 347,
+            "accuracy": 0.553314121037464,
+            "confidence": 0.6970237164803431
+          },
+          {
+            "bin": 11,
+            "n": 298,
+            "accuracy": 0.5469798657718121,
+            "confidence": 0.7643806913532631
+          },
+          {
+            "bin": 12,
+            "n": 298,
+            "accuracy": 0.6577181208053692,
+            "confidence": 0.831014818617036
+          },
+          {
+            "bin": 13,
+            "n": 290,
+            "accuracy": 0.7551724137931034,
+            "confidence": 0.9008948464729628
+          },
+          {
+            "bin": 14,
+            "n": 365,
+            "accuracy": 0.915068493150685,
+            "confidence": 0.9666553697131455
+          }
+        ]
+      },
+      "positive_mean_branch_weights": {
+        "zero_shot": [
+          0.0,
+          0.5128999948501587
+        ],
+        "extreme_cold": [
+          0.2551801800727844,
+          0.26951995491981506
+        ],
+        "cold": [
+          0.2544407546520233,
+          0.2755594849586487
+        ],
+        "warm": [
+          0.2272433340549469,
+          0.2652571201324463
+        ]
+      },
+      "no_signal_pairs": 1939900,
+      "protocol": "Fixed validation candidates; 1 positive + 99 negatives on real dataset; sampled ranking, not full catalog."
+    }
+  },
+  "test_evaluated": false
+}
