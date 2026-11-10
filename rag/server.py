@@ -13,8 +13,9 @@ def handler_for(get_pipeline, allowed_origin='', base_path=''):
     lock = threading.Lock()
     allowed_origin = allowed_origin.rstrip('/')
     origin_host = urlsplit(allowed_origin).netloc
-    page = (ROOT / 'rag/chat.html').read_bytes().replace(
-        b'<meta name="demo-base-path" content="">', f'<meta name="demo-base-path" content="{base_path}">'.encode())
+    def page():  # re-read per request so UI edits need no restart (models stay loaded)
+        return (ROOT / 'rag/chat.html').read_bytes().replace(
+            b'<meta name="demo-base-path" content="">', f'<meta name="demo-base-path" content="{base_path}">'.encode())
 
     class Handler(BaseHTTPRequestHandler):
         def send(self, status, value, content='application/json; charset=utf-8'):
@@ -49,7 +50,7 @@ def handler_for(get_pipeline, allowed_origin='', base_path=''):
             path = self.route()
             p = get_pipeline()
             if path == '/':
-                self.send(200, page, 'text/html; charset=utf-8')
+                self.send(200, page(), 'text/html; charset=utf-8')
             elif path == '/api/status':
                 if p is None:
                     return self.send(200, {'ready': False})
