@@ -53,7 +53,7 @@ def handler_for(get_pipeline, allowed_origin='', base_path=''):
             elif path == '/api/status':
                 if p is None:
                     return self.send(200, {'ready': False})
-                self.send(200, dict(ready=True, llm=p.llm.name, llm_device=p.llm.device, pipeline=type(p).__name__,
+                self.send(200, dict(ready=True, llm=p.llm.name, llm_device=p.llm.device, answer_llm=getattr(getattr(p, 'answer_llm', None), 'name', None), pipeline=type(p).__name__,
                                     items=len(p.retriever.catalog.asins),
                                     ufm=f'UFM v2 epoch {p.retriever.ufm.epoch}' if p.retriever.ufm else None))
             elif path == '/api/search':
@@ -132,6 +132,9 @@ def main():
     ap.add_argument('--ufm-run', default=str(ROOT / 'runs/ufm_v2'))
     ap.add_argument('--llm-device', default='auto')
     ap.add_argument('--llm-model', default='auto', help='auto picks 3B or 1.5B by free GPU memory')
+    ap.add_argument('--llm-adapter', default=None, help='LoRA adapter.pt from rag/distill_train.py (merged at load)')
+    ap.add_argument('--answer-model', default=None, help='optional separate LLM for the answer step (v2)')
+    ap.add_argument('--answer-adapter', default=None)
     ap.add_argument('--pipeline', choices=['v1', 'v2'], default='v2')
     args = ap.parse_args()
     holder = {}
@@ -140,12 +143,13 @@ def main():
         from retriever import QueryRetriever
         from llm import LocalLLM
         from pipeline import RAGPipeline
-        llm = LocalLLM(model=args.llm_model, device=args.llm_device)
+        llm = LocalLLM(model=args.llm_model, device=args.llm_device, adapter=args.llm_adapter)
         retriever = QueryRetriever(ufm_run=args.ufm_run or None)
         retriever.encode('warm up')
         if args.pipeline == 'v2':
             from pipeline_v2 import AdvancedRAG
-            holder['p'] = AdvancedRAG(retriever, llm)
+            ans = LocalLLM(model=args.answer_model, device=args.llm_device, adapter=args.answer_adapter) if args.answer_model else None
+            holder['p'] = AdvancedRAG(retriever, llm, answer_llm=ans)
         else:
             holder['p'] = RAGPipeline(retriever, llm)
         print('RAG ready', flush=True)

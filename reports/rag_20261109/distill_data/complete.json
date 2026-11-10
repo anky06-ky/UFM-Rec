@@ -1,0 +1,7 @@
+{
+  "messages": 445,
+  "intent_examples": 554,
+  "answer_examples": 249,
+  "teacher": "Qwen/Qwen2.5-3B-Instruct",
+  "seconds": 17413
+}

@@ -1,0 +1,16 @@
+lora modules 168, trainable 8.8M, train 763, holdout 40, steps 144
+  warn_once(FP_FUSION_DEFAULT_WARNING)
+holdout loss before 1.2105
+`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  run += float(out.loss); cnt += 1
+ep 1 step 20/144 loss 1.1138 lr 1.33e-04 6.3min vram 3.13GiB
+ep 1 step 40/144 loss 0.9552 lr 1.64e-04 12.3min vram 3.20GiB
+{'epoch': 1, 'step': 47, 'holdout_loss': 0.8679, 'minutes': 14.7}
+ep 2 step 60/144 loss 0.7686 lr 1.26e-04 18.8min vram 3.20GiB
+ep 2 step 80/144 loss 0.7529 lr 8.26e-05 24.7min vram 3.20GiB
+{'epoch': 2, 'step': 94, 'holdout_loss': 0.822, 'minutes': 29.3}
+ep 3 step 100/144 loss 0.5958 lr 4.26e-05 31.1min vram 3.20GiB
+ep 3 step 120/144 loss 0.6263 lr 1.34e-05 36.5min vram 3.20GiB
+ep 3 step 140/144 loss 0.6275 lr 1.00e-05 42.5min vram 3.20GiB
+{'epoch': 3, 'step': 141, 'holdout_loss': 0.8269, 'minutes': 43.2}

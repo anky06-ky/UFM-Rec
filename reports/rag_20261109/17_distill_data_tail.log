@@ -1,0 +1,4 @@
+answers 368 / 380 kept 242 17069 s
+answers 376 / 380 kept 245 17272 s
+answers 380 / 380 kept 249 17413 s
+{'messages': 445, 'intent_examples': 554, 'answer_examples': 249, 'teacher': 'Qwen/Qwen2.5-3B-Instruct', 'seconds': 17413}

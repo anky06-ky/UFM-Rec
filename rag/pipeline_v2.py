@@ -25,8 +25,9 @@ def _num_tokens(s):
 
 
 class AdvancedRAG:
-    def __init__(self, retriever, llm, reranker=None, k=6):
+    def __init__(self, retriever, llm, reranker=None, k=6, answer_llm=None):
         self.r, self.llm, self.k = retriever, llm, k
+        self.answer_llm = answer_llm  # optional separate (e.g. distilled) model for the answer step
         self.rk = reranker or Reranker('minilm')
         self.retriever = retriever
 
@@ -167,7 +168,7 @@ class AdvancedRAG:
         if filters.get('age_years') is not None:
             notes.append(f"child age {filters['age_years']:g}")
         extra = (f"\nAll products above already satisfy: {', '.join(notes)}." if notes else '') + (f'\nNOTE: {note}' if note else '')
-        obj, text, st = self.llm.generate_json([{'role': 'system', 'content': ANSWER_SYSTEM},
+        obj, text, st = (self.answer_llm or self.llm).generate_json([{'role': 'system', 'content': ANSWER_SYSTEM},
                                                 {'role': 'user', 'content': f'CONTEXT:\n{ctx}{extra}\n\nUSER REQUEST: {message}'}], 260)
         obj, dropped = self.ground(obj, products, ctx_by_n)
         ans, cited, invalid = render_answer(obj, products)

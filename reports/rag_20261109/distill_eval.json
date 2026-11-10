@@ -1,0 +1,91 @@
+{
+  "protocol": "Compare LLMs for the two RAG steps on the held-out synthetic queries (products disjoint from training).\n\nIntent step (all queries): JSON validity and retrieval quality of the produced plan through the served\nv2 retrieval (multi-query + HyDE averaged, cross-encoder, filters): exact-target recall@10 / MRR in\nthe top-100 and leaf-category precision of the shown 6.\nAnswer step (first --answers queries): identical product contexts for every model (built once from the\n1.5B plans); JSON validity, >=2 valid picks, Vietnamese reasons, grounding (numbers in a reason must\nappear in that product's context), agreement with the teacher's picks, latency per answer (unbatched).\n",
+  "n_intent": 296,
+  "n_answer": 80,
+  "results": {
+    "Qwen/Qwen2.5-0.5B-Instruct": {
+      "intent": {
+        "json_ok": 0.8953,
+        "has_hyde": 0.8953,
+        "recall10": 0.1182,
+        "mrr100": 0.0766,
+        "category_p6": 0.2607
+      },
+      "answer": {
+        "json_ok": 0.9625,
+        "two_plus_valid": 0.3875,
+        "invalid_pick_rate": 0.0183,
+        "vietnamese": 0.5875,
+        "ungrounded_reason_rate": 0.2523,
+        "seconds_p50": 5.79,
+        "seconds_mean": 6.14,
+        "jaccard_top3_vs_teacher": 0.2807
+      },
+      "minutes": 24.4,
+      "vram_gib": 1.28
+    },
+    "Qwen/Qwen2.5-0.5B-Instruct@runs/rag_student_0.5b/adapter.pt": {
+      "intent": {
+        "json_ok": 0.9561,
+        "has_hyde": 0.9561,
+        "recall10": 0.098,
+        "mrr100": 0.0442,
+        "category_p6": 0.3035
+      },
+      "answer": {
+        "json_ok": 0.9875,
+        "two_plus_valid": 0.9875,
+        "invalid_pick_rate": 0.0,
+        "vietnamese": 0.9875,
+        "ungrounded_reason_rate": 0.0886,
+        "seconds_p50": 6.59,
+        "seconds_mean": 6.77,
+        "jaccard_top3_vs_teacher": 0.3103
+      },
+      "minutes": 24.3,
+      "vram_gib": 1.28
+    },
+    "Qwen/Qwen2.5-1.5B-Instruct": {
+      "intent": {
+        "json_ok": 0.9966,
+        "has_hyde": 0.9966,
+        "recall10": 0.1622,
+        "mrr100": 0.1022,
+        "category_p6": 0.366
+      },
+      "answer": {
+        "json_ok": 0.95,
+        "two_plus_valid": 0.5125,
+        "invalid_pick_rate": 0.0,
+        "vietnamese": 0.875,
+        "ungrounded_reason_rate": 0.275,
+        "seconds_p50": 7.41,
+        "seconds_mean": 7.76,
+        "jaccard_top3_vs_teacher": 0.4013
+      },
+      "minutes": 31.1,
+      "vram_gib": 3.32
+    },
+    "Qwen/Qwen2.5-3B-Instruct": {
+      "intent": {
+        "json_ok": 0.973,
+        "has_hyde": 0.973,
+        "recall10": 0.1486,
+        "mrr100": 0.0847,
+        "category_p6": 0.3812
+      },
+      "answer": {
+        "json_ok": 1.0,
+        "two_plus_valid": 0.75,
+        "invalid_pick_rate": 0.0,
+        "vietnamese": 0.95,
+        "ungrounded_reason_rate": 0.1172,
+        "seconds_p50": 188.75,
+        "seconds_mean": 207.09,
+        "jaccard_top3_vs_teacher": 1.0
+      },
+      "minutes": 443.6,
+      "vram_gib": 5.42
+    }
+  }
+}

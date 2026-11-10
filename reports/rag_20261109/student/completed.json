@@ -1,0 +1,19 @@
+{
+  "best_holdout_loss": 0.822,
+  "holdout_loss_before": 1.2105,
+  "train": 763,
+  "holdout": 40,
+  "steps": 141,
+  "args": {
+    "student": "Qwen/Qwen2.5-0.5B-Instruct",
+    "out": "runs/rag_student_0.5b",
+    "epochs": "3",
+    "lr": "0.0002",
+    "r": "16",
+    "alpha": "32",
+    "batch": "1",
+    "accum": "16",
+    "max_len": "1280",
+    "holdout": "0.05"
+  }
+}
